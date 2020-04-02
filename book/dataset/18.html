@@ -1,0 +1,393 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                18讲散列表（上）：Word文档中的单词拼写检查功能是如何实现的
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/b1/02/b1b5da27544870c9376004006387db02.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>Word这种文本编辑器你平时应该经常用吧，那你有没有留意过它的拼写检查功能呢？一旦我们在Word里输入一个错误的英文单词，它就会用标红的方式提示“拼写错误”。<strong><span class="orange">Word的这个单词拼写检查功能，虽然很小但却非常实用。你有没有想过，这个功能是如何实现的呢？</span></strong></p><p>其实啊，一点儿都不难。只要你学完今天的内容，<strong>散列表</strong>（Hash Table）。你就能像微软Office的工程师一样，轻松实现这个功能。</p><h2>散列思想</h2><p>散列表的英文叫“Hash Table”，我们平时也叫它“哈希表”或者“Hash表”，你一定也经常听过它，我在前面的文章里，也不止一次提到过，但是你是不是真的理解这种数据结构呢？</p><p><strong>散列表用的是数组支持按照下标随机访问数据的特性，所以散列表其实就是数组的一种扩展，由数组演化而来。可以说，如果没有数组，就没有散列表。</strong></p><p>我用一个例子来解释一下。假如我们有89名选手参加学校运动会。为了方便记录成绩，每个选手胸前都会贴上自己的参赛号码。这89名选手的编号依次是1到89。现在我们希望编程实现这样一个功能，通过编号快速找到对应的选手信息。你会怎么做呢？</p><p>我们可以把这89名选手的信息放在数组里。编号为1的选手，我们放到数组中下标为1的位置；编号为2的选手，我们放到数组中下标为2的位置。以此类推，编号为k的选手放到数组中下标为k的位置。</p><!-- [[[read_end]]] --><p>因为参赛编号跟数组下标一一对应，当我们需要查询参赛编号为x的选手的时候，我们只需要将下标为x的数组元素取出来就可以了，时间复杂度就是O(1)。这样按照编号查找选手信息，效率是不是很高？</p><p>实际上，这个例子已经用到了散列的思想。在这个例子里，参赛编号是自然数，并且与数组的下标形成一一映射，所以利用数组支持根据下标随机访问的时候，时间复杂度是O(1)这一特性，就可以实现快速查找编号对应的选手信息。</p><p>你可能要说了，这个例子中蕴含的散列思想还不够明显，那我来改造一下这个例子。</p><p>假设校长说，参赛编号不能设置得这么简单，要加上年级、班级这些更详细的信息，所以我们把编号的规则稍微修改了一下，用6位数字来表示。比如051167，其中，前两位05表示年级，中间两位11表示班级，最后两位还是原来的编号1到89。这个时候我们该如何存储选手信息，才能够支持通过编号来快速查找选手信息呢？</p><p>思路还是跟前面类似。尽管我们不能直接把编号作为数组下标，但我们可以截取参赛编号的后两位作为数组下标，来存取选手信息数据。当通过参赛编号查询选手信息的时候，我们用同样的方法，取参赛编号的后两位，作为数组下标，来读取数组中的数据。</p><p>这就是典型的散列思想。其中，参赛选手的编号我们叫作<strong>键</strong>（key）或者<strong>关键字</strong>。我们用它来标识一个选手。我们把参赛编号转化为数组下标的映射方法就叫作<strong>散列函数</strong>（或“Hash函数”“哈希函数”），而散列函数计算得到的值就叫作<strong>散列值</strong>（或“Hash值”“哈希值”）。</p><p><img src="https://static001.geekbang.org/resource/image/92/73/92c89a57e21f49d2f14f4424343a2773.jpg" alt=""></p><p>通过这个例子，我们可以总结出这样的规律：散列表用的就是数组支持按照下标随机访问的时候，时间复杂度是O(1)的特性。我们通过散列函数把元素的键值映射为下标，然后将数据存储在数组中对应下标的位置。当我们按照键值查询元素时，我们用同样的散列函数，将键值转化数组下标，从对应的数组下标的位置取数据。</p><h2>散列函数</h2><p>从上面的例子我们可以看到，散列函数在散列表中起着非常关键的作用。现在我们就来学习下散列函数。</p><p>散列函数，顾名思义，它是一个函数。我们可以把它定义成<strong>hash(key)</strong>，其中key表示元素的键值，hash(key)的值表示经过散列函数计算得到的散列值。</p><p>那第一个例子中，编号就是数组下标，所以hash(key)就等于key。改造后的例子，写成散列函数稍微有点复杂。我用伪代码将它写成函数就是下面这样：</p><pre><code>int hash(String key) {
+  // 获取后两位字符
+  string lastTwoChars = key.substr(length-2, length);
+  // 将后两位字符转换为整数
+  int hashValue = convert lastTwoChas to int-type;
+  return hashValue;
+}
+</code></pre><p>刚刚举的学校运动会的例子，散列函数比较简单，也比较容易想到。但是，如果参赛选手的编号是随机生成的6位数字，又或者用的是a到z之间的字符串，<strong>该如何构造散列函数呢？<strong>我总结了三点</strong>散列函数<strong><strong>设计的</strong></strong>基本要求</strong>：</p><ol>
+<li>
+<p>散列函数计算得到的散列值是一个非负整数；</p>
+</li>
+<li>
+<p>如果key1 = key2，那hash(key1) == hash(key2)；</p>
+</li>
+<li>
+<p>如果key1 ≠ key2，那hash(key1) ≠ hash(key2)。</p>
+</li>
+</ol><p>我来解释一下这三点。其中，第一点理解起来应该没有任何问题。因为数组下标是从0开始的，所以散列函数生成的散列值也要是非负整数。第二点也很好理解。相同的key，经过散列函数得到的散列值也应该是相同的。</p><p>第三点理解起来可能会有问题，我着重说一下。这个要求看起来合情合理，但是在真实的情况下，要想找到一个不同的key对应的散列值都不一样的散列函数，几乎是不可能的。即便像业界著名的<a href="https://zh.wikipedia.org/wiki/MD5">MD5</a>、<a href="https://zh.wikipedia.org/wiki/SHA%E5%AE%B6%E6%97%8F">SHA</a>、<a href="https://zh.wikipedia.org/wiki/%E5%BE%AA%E7%92%B0%E5%86%97%E9%A4%98%E6%A0%A1%E9%A9%97">CRC</a>等哈希算法，也无法完全避免这种<strong>散列冲突</strong>。而且，因为数组的存储空间有限，也会加大散列冲突的概率。</p><p>所以我们几乎无法找到一个完美的无冲突的散列函数，即便能找到，付出的时间成本、计算成本也是很大的，所以针对散列冲突问题，我们需要通过其他途径来解决。</p><h2>散列冲突</h2><p>再好的散列函数也无法避免散列冲突。那究竟该如何解决散列冲突问题呢？我们常用的散列冲突解决方法有两类，开放寻址法（open addressing）和链表法（chaining）。</p><h3>1.开放寻址法</h3><p>开放寻址法的核心思想是，如果出现了散列冲突，我们就重新探测一个空闲位置，将其插入。那如何重新探测新的位置呢？我先讲一个比较简单的探测方法，<strong>线性探测</strong>（Linear Probing）。</p><p>当我们往散列表中插入数据时，如果某个数据经过散列函数散列之后，存储位置已经被占用了，我们就从当前位置开始，依次往后查找，看是否有空闲位置，直到找到为止。</p><p>我说的可能比较抽象，我举一个例子具体给你说明一下。这里面黄色的色块表示空闲位置，橙色的色块表示已经存储了数据。</p><p><img src="https://static001.geekbang.org/resource/image/5c/d5/5c31a3127cbc00f0c63409bbe1fbd0d5.jpg" alt=""></p><p>从图中可以看出，散列表的大小为10，在元素x插入散列表之前，已经6个元素插入到散列表中。x经过Hash算法之后，被散列到位置下标为7的位置，但是这个位置已经有数据了，所以就产生了冲突。于是我们就顺序地往后一个一个找，看有没有空闲的位置，遍历到尾部都没有找到空闲的位置，于是我们再从表头开始找，直到找到空闲位置2，于是将其插入到这个位置。</p><p>在散列表中查找元素的过程有点儿类似插入过程。我们通过散列函数求出要查找元素的键值对应的散列值，然后比较数组中下标为散列值的元素和要查找的元素。如果相等，则说明就是我们要找的元素；否则就顺序往后依次查找。如果遍历到数组中的空闲位置，还没有找到，就说明要查找的元素并没有在散列表中。</p><p><img src="https://static001.geekbang.org/resource/image/91/ff/9126b0d33476777e7371b96e676e90ff.jpg" alt=""></p><p>散列表跟数组一样，不仅支持插入、查找操作，还支持删除操作。对于使用线性探测法解决冲突的散列表，删除操作稍微有些特别。我们不能单纯地把要删除的元素设置为空。这是为什么呢？</p><p>还记得我们刚讲的查找操作吗？在查找的时候，一旦我们通过线性探测方法，找到一个空闲位置，我们就可以认定散列表中不存在这个数据。但是，如果这个空闲位置是我们后来删除的，就会导致原来的查找算法失效。本来存在的数据，会被认定为不存在。这个问题如何解决呢？</p><p>我们可以将删除的元素，特殊标记为deleted。当线性探测查找的时候，遇到标记为deleted的空间，并不是停下来，而是继续往下探测。</p><p><img src="https://static001.geekbang.org/resource/image/fe/1d/fe7482ba09670cbe05a9dfe4dd49bd1d.jpg" alt=""></p><p>你可能已经发现了，线性探测法其实存在很大问题。当散列表中插入的数据越来越多时，散列冲突发生的可能性就会越来越大，空闲位置会越来越少，线性探测的时间就会越来越久。极端情况下，我们可能需要探测整个散列表，所以最坏情况下的时间复杂度为O(n)。同理，在删除和查找时，也有可能会线性探测整张散列表，才能找到要查找或者删除的数据。</p><p>对于开放寻址冲突解决方法，除了线性探测方法之外，还有另外两种比较经典的探测方法，<strong>二次探测</strong>（Quadratic probing）和<strong>双重散列</strong>（Double hashing）。</p><p>所谓二次探测，跟线性探测很像，线性探测每次探测的步长是1，那它探测的下标序列就是hash(key)+0，hash(key)+1，hash(key)+2……而二次探测探测的步长就变成了原来的“二次方”，也就是说，它探测的下标序列就是hash(key)+0，hash(key)+1<sup>2</sup>，hash(key)+2<sup>2</sup>……</p><p>所谓双重散列，意思就是不仅要使用一个散列函数。我们使用一组散列函数hash1(key)，hash2(key)，hash3(key)……我们先用第一个散列函数，如果计算得到的存储位置已经被占用，再用第二个散列函数，依次类推，直到找到空闲的存储位置。</p><p>不管采用哪种探测方法，当散列表中空闲位置不多的时候，散列冲突的概率就会大大提高。为了尽可能保证散列表的操作效率，一般情况下，我们会尽可能保证散列表中有一定比例的空闲槽位。我们用<strong>装载因子</strong>（load factor）来表示空位的多少。</p><p>装载因子的计算公式是：</p><pre><code>散列表的装载因子=填入表中的元素个数/散列表的长度
+</code></pre><p>装载因子越大，说明空闲位置越少，冲突越多，散列表的性能会下降。</p><h3>2.链表法</h3><p>链表法是一种更加常用的散列冲突解决办法，相比开放寻址法，它要简单很多。我们来看这个图，在散列表中，每个“桶（bucket）”或者“槽（slot）”会对应一条链表，所有散列值相同的元素我们都放到相同槽位对应的链表中。</p><p><img src="https://static001.geekbang.org/resource/image/a4/7f/a4b77d593e4cb76acb2b0689294ec17f.jpg" alt=""></p><p>当插入的时候，我们只需要通过散列函数计算出对应的散列槽位，将其插入到对应链表中即可，所以插入的时间复杂度是O(1)。当查找、删除一个元素时，我们同样通过散列函数计算出对应的槽，然后遍历链表查找或者删除。那查找或删除操作的时间复杂度是多少呢？</p><p>实际上，这两个操作的时间复杂度跟链表的长度k成正比，也就是O(k)。对于散列比较均匀的散列函数来说，理论上讲，k=n/m，其中n表示散列中数据的个数，m表示散列表中“槽”的个数。</p><h2>解答开篇</h2><p>有了前面这些基本知识储备，我们来看一下开篇的思考题：Word文档中单词拼写检查功能是如何实现的？</p><p>常用的英文单词有20万个左右，假设单词的平均长度是10个字母，平均一个单词占用10个字节的内存空间，那20万英文单词大约占2MB的存储空间，就算放大10倍也就是20MB。对于现在的计算机来说，这个大小完全可以放在内存里面。所以我们可以用散列表来存储整个英文单词词典。</p><p>当用户输入某个英文单词时，我们拿用户输入的单词去散列表中查找。如果查到，则说明拼写正确；如果没有查到，则说明拼写可能有误，给予提示。借助散列表这种数据结构，我们就可以轻松实现快速判断是否存在拼写错误。</p><h2>内容小结</h2><p>今天我讲了一些比较基础、比较偏理论的散列表知识，包括散列表的由来、散列函数、散列冲突的解决方法。</p><p>散列表来源于数组，它借助散列函数对数组这种数据结构进行扩展，利用的是数组支持按照下标随机访问元素的特性。散列表两个核心问题是<strong>散列函数设计</strong>和<strong>散列冲突解决</strong>。散列冲突有两种常用的解决方法，开放寻址法和链表法。散列函数设计的好坏决定了散列冲突的概率，也就决定散列表的性能。</p><p>针对散列函数和散列冲突，今天我只讲了一些基础的概念、方法，下一节我会更贴近实战、更加深入探讨这两个问题。</p><h2>课后思考</h2><ol>
+<li>
+<p>假设我们有10万条URL访问日志，如何按照访问次数给URL排序？</p>
+</li>
+<li>
+<p>有两个字符串数组，每个数组大约有10万条字符串，如何快速找出两个数组中相同的字符串？</p>
+</li>
+</ol><p>欢迎留言和我分享，我会第一时间给你反馈。</p><p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt=""></p>
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/78/51/4790e13e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Smallfly</span>
+                            </div>
+                            <div class="bd"><br>1. 假设我们有 10 万条 URL 访问日志，如何按照访问次数给 URL 排序？<br><br>遍历 10 万条数据，以 URL 为 key，访问次数为 value，存入散列表，同时记录下访问次数的最大值 K，时间复杂度 O(N)。<br><br>如果 K 不是很大，可以使用桶排序，时间复杂度 O(N)。如果 K 非常大（比如大于 10 万），就使用快速排序，复杂度 O(NlogN)。<br><br>2. 有两个字符串数组，每个数组大约有 10 万条字符串，如何快速找出两个数组中相同的字符串？<br><br>以第一个字符串数组构建散列表，key 为字符串，value 为出现次数。再遍历第二个字符串数组，以字符串为 key 在散列表中查找，如果 value 大于零，说明存在相同字符串。时间复杂度 O(N)。 <br></div>
+                            <span class="time">2018-10-31 11:01</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍 这条留言可以顶上去了 其他同学都看看吧</p>
+                                <p class="reply-time">2018-11-01 09:52</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/08/eb/fed61050.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">五岳寻仙</span>
+                            </div>
+                            <div class="bd">今天学习了散列表的原理，以及两种解决hash冲突的方法：开放地址法和链表法。<br>课后思考题第一题，我觉得可以用hash表的链表法解决。访问次数作为slot，访问次数相同的URL放入同一个slot所对应的一条链表中，这样只需要扫一遍所有的URL就排好序了，时间复杂度为O(n)<br>第二题跟老师讲的word拼写检查有点像，我觉得可以将一个字符串数组做成hash表，然后扫描另一个字符串数组，就能找到重复的字符串。制作和扫描hash表的算法复杂度都是O(n) <br></div>
+                            <span class="time">2018-10-31 07:39</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/fb/93/f19a5364.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">姜威</span>
+                            </div>
+                            <div class="bd">总结：<br>一、散列表的由来？<br>1.散列表来源于数组，它借助散列函数对数组这种数据结构进行扩展，利用的是数组支持按照下标随机访问元素的特性。<br>2.需要存储在散列表中的数据我们称为键，将键转化为数组下标的方法称为散列函数，散列函数的计算结果称为散列值。<br>3.将数据存储在散列值对应的数组下标位置。<br>二、如何设计散列函数？<br>总结3点设计散列函数的基本要求<br>1.散列函数计算得到的散列值是一个非负整数。<br>2.若key1=key2，则hash(key1)=hash(key2)<br>3.若key≠key2，则hash(key1)≠hash(key2)<br>正是由于第3点要求，所以产生了几乎无法避免的散列冲突问题。<br>三、散列冲突的解放方法？<br>1.常用的散列冲突解决方法有2类：开放寻址法（open addressing）和链表法（chaining）<br>2.开放寻址法<br>①核心思想：如果出现散列冲突，就重新探测一个空闲位置，将其插入。<br>②线性探测法（Linear Probing）：<br>插入数据：当我们往散列表中插入数据时，如果某个数据经过散列函数之后，存储的位置已经被占用了，我们就从当前位置开始，依次往后查找，看是否有空闲位置，直到找到为止。<br>查找数据：我们通过散列函数求出要查找元素的键值对应的散列值，然后比较数组中下标为散列值的元素和要查找的元素是否相等，若相等，则说明就是我们要查找的元素；否则，就顺序往后依次查找。如果遍历到数组的空闲位置还未找到，就说明要查找的元素并没有在散列表中。<br>删除数据：为了不让查找算法失效，可以将删除的元素特殊标记为deleted，当线性探测查找的时候，遇到标记为deleted的空间，并不是停下来，而是继续往下探测。<br>结论：最坏时间复杂度为O(n)<br>③二次探测（Quadratic probing）：线性探测每次探测的步长为1，即在数组中一个一个探测，而二次探测的步长变为原来的平方。<br>④双重散列（Double hashing）：使用一组散列函数，直到找到空闲位置为止。<br>⑤线性探测法的性能描述：<br>用“装载因子”来表示空位多少，公式：散列表装载因子=填入表中的个数&#47;散列表的长度。<br>装载因子越大，说明空闲位置越少，冲突越多，散列表的性能会下降。<br>3.链表法（更常用）<br>插入数据：当插入的时候，我们需要通过散列函数计算出对应的散列槽位，将其插入到对应的链表中即可，所以插入的时间复杂度为O(1)。<br>查找或删除数据：当查找、删除一个元素时，通过散列函数计算对应的槽，然后遍历链表查找或删除。对于散列比较均匀的散列函数，链表的节点个数k=n&#47;m，其中n表示散列表中数据的个数，m表示散列表中槽的个数，所以是时间复杂度为O(k)。<br>四、思考<br>1.Word文档中单词拼写检查功能是如何实现的？<br>字符串占用内存大小为8字节，20万单词占用内存大小不超过20MB，所以用散列表存储20万英文词典单词，然后对每个编辑进文档的单词进行查找，若未找到，则提示拼写错误。<br>2.假设我们有10万条URL访问日志，如何按照访问次数给URL排序？<br>字符串占用内存大小为8字节，10万条URL访问日志占用内存不超过10MB，通过散列表统计url访问次数，然后用TreeMap存储散列表的元素值（作为key）和数组下标值（作为value）<br>3.有两个字符串数组，每个数组大约有10万条字符串，如何快速找出两个数组中相同的字符串？<br>分别将2个数组的字符串通过散列函数映射到散列表，散列表中的元素值为次数。注意，先存储的数组中的相同元素值不进行次数累加。最后，统计散列表中元素值大于等于2的散列值对应的字符串就是两个数组中相同的字符串。 <br></div>
+                            <span class="time">2018-10-31 08:39</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="http://thirdwx.qlogo.cn/mmopen/vi_32/sU18jltmXALwsGt5FYeEaMa7SmIMAkbNDgnYQ8xgjCLfj4uFCSEcNh5h7fEYdHwkLfJBP80cRjbX8vvjAAvXMw/132" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">leo</span>
+                            </div>
+                            <div class="bd">Redis的字典是使用链式法来解决散列冲突的，并且使用了渐进式rehash的方式来进行哈希表的弹性扩容（https:&#47;&#47;cloud.tencent.com&#47;developer&#47;article&#47;1353754，请大家斧正）。<br>两道思考题使用哈希表都可以解决，第二道题也可以对字符串数组进行排序后使用双指针判断，但字符串的比较成本较高，如果是整数类型更加适用。另外，哈希表比较经典的应用还有bitmap和布隆过滤器，其中布隆过滤器也可以用于文本判重，但是有一定的误判概率，可以根据场景使用。 <br></div>
+                            <span class="time">2018-10-31 11:24</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/dc/b7/e59c22f0.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">黄金的太阳</span>
+                            </div>
+                            <div class="bd">请教老师，当我在查找元素时候，在相同散列值的链表中遍历如何区分哪个是我要找的元素？毕竟查找时查询条件只包含KEY的信息吧 <br></div>
+                            <span class="time">2018-10-31 07:51</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">相同散列值 但是key不同的 可以再对比key</p>
+                                <p class="reply-time">2018-10-31 09:32</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/0c/8f/4ebd303a.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">醉比</span>
+                            </div>
+                            <div class="bd">看到链表那一块感觉是hashmap的实现原理呀 <br></div>
+                            <span class="time">2018-10-31 08:16</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/f2/74/36a86f4b.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">他城之途</span>
+                            </div>
+                            <div class="bd">关于课后习题，基于某种语言的sdk实现起来可能比较容易，显然老师问的是思想，下面是我的理解，望老师和大家指正。<br>习题1，先分组累加次数再排序: 遍历10万数据，通过hash把相同url分组到同一个bucket下，如果bucket已存在，则取出已有次数+当前次数后再set进去，遍历完了整体再排序。<br>习题2，显然不是循环嵌套循环，那样时间复杂度不可接受。应该分别独立遍历两个数组，通过hash把相同的字符串扔到同一个bucket, 完了之后统计bucket长度＞1的就行了。 <br></div>
+                            <span class="time">2018-10-31 09:44</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/19/74/2ac4edd8.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">追风者</span>
+                            </div>
+                            <div class="bd">关于100万URL排序问题？<br>我看了半天置顶的回答，没太明白。<br>url为key，出现次数count为value。数组的下标为hash(key)得到的值，保存的内容为count。<br>排序阶段根据count排序，不是只是改变count的位置么，对应的地址没有改变啊。<br>如果说散列表是链表法的形式，难道排序的时候也会改变链表的头指针地址？那再要查找对应url的访问次数不就不行了。 <br></div>
+                            <span class="time">2018-11-10 11:48</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/03/6b/f31d4538.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">这么写的闫</span>
+                            </div>
+                            <div class="bd">当散列冲突，表中存储了多个相同散列值时，查询数据怎么确定查询到的是我想要的那个？<br>这一点很疑惑，求指点 <br></div>
+                            <span class="time">2018-11-05 14:04</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">再全量对比 因为散列表中存储的不仅仅是哈希值 还有全量的数据信息</p>
+                                <p class="reply-time">2018-11-06 09:36</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/d0/ce/1784a12e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">万里晴空</span>
+                            </div>
+                            <div class="bd">可以写代码进行分析讲解不，这样更能感受到 <br></div>
+                            <span class="time">2018-10-31 08:53</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/62/a7/a86da59a.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">K战神</span>
+                            </div>
+                            <div class="bd">今天在新公司转正述职上提到了一些基础的编程原理类的学习计划。被领导和同事嗤之以鼻，现在都怀疑学习深度理论有必要么？我是一个开发6年的程序员。同事在追着最近的技术跑，而我最近阶段总觉得技术原理理论方面基础薄弱。不知道这样的坚持对不对。比如我说学习数据结构算法，他们抛开异样的眼光，觉得在说有什么用。 <br></div>
+                            <span class="time">2018-11-20 17:39</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">你的领导 同事也有可能是水货 别局限于身边的人的观点 多上网看看大牛们都咋说</p>
+                                <p class="reply-time">2018-11-21 10:03</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTIaOAxRlZjFkGfRBn420LuAcyWkMrpq5iafGdqthX5icJPjql0ibZOAdafaqbfvw4ZpVzDmsaYglVXDw/132" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">唐朝农民</span>
+                            </div>
+                            <div class="bd">Word 单词验证 是不是用 Trie 树更好，大神讲讲这个数据结构，尤其是编码这块 <br></div>
+                            <span class="time">2018-11-02 18:28</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">马上就要讲了 别急</p>
+                                <p class="reply-time">2018-11-05 10:14</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/ff/89/32e3f682.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">肖小强</span>
+                            </div>
+                            <div class="bd">老师，关于置顶的那个回答有些疑问。<br>比如第一题的解答说到“url为key，出现次数为value”<br>我的疑问是，hash(key)=VALUE，这个VALUE经过处理后不应该是一个随机的数组的下标吗？然后把出现次数value存入到这个位置中并不断更新。我对上面那句话的理解是hash(url)=value，所以为什么可以把出现次数作为value，value不应该是一个随机值吗？还是这个value本来就不是那个VALUE？ <br></div>
+                            <span class="time">2018-11-04 12:06</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">value并不是hash函数的值。更好的表述应该是声明一个count字段</p>
+                                <p class="reply-time">2018-11-05 09:57</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/e5/71/cc94469a.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">吴彪</span>
+                            </div>
+                            <div class="bd">为什么数组的存储空间有限，也会加大散列冲突的概率呢？hash函数得出来的散列值相同的概率应该是很低的，比如git hash-object，几乎不可能有碰撞，为啥在散列表里碰撞的可能性就这么大 <br></div>
+                            <span class="time">2018-10-31 16:10</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">我们还要把散列值转化为数组下标的 单纯散列值是没法直接拿来当下标的</p>
+                                <p class="reply-time">2018-11-01 09:41</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d3/c0/d38daa2d.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">yaya</span>
+                            </div>
+                            <div class="bd">第一题，利用次数作为键值，冲突用链表解决，时间复杂度o(n)<br>第二题，将第一个字符串数组中的字符串，hash到各个区域，然后将第二个数组中的字符串利用同样的hash值处理，冲突遍历对应链表，时间复杂度o(n). <br></div>
+                            <span class="time">2018-10-31 10:15</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/11/3e/c8a1bd6e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">回家</span>
+                            </div>
+                            <div class="bd">假设我们有 10 万条 URL 访问日志，如何按照访问次数给 URL 排序？<br>1.访问次数作为key，URL和访问次数作为存储对象，存在散列表中。解决冲突的方法使用链表法，相当于实现了对URL根据访问次数进行了分组。<br>2.将信息存储在散列表中的过程中，构造数组，数组元素是访问次数。在存入散列表的过程中，如果出现散列冲突，就不将该次数放入到数组中。<br>3.使用快速排序对数组进行排序。排序后的数组相当于是排序后的URL，即利用次数可以索引到该访问次数对应的URL。 <br></div>
+                            <span class="time">2019-01-01 18:29</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/2a/0c/b9eafe83.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">王荣慧</span>
+                            </div>
+                            <div class="bd">有个疑问，如果在冲突的位置的下一个空闲位置存储数据，文中提到，根据key算出的位置存储的值和要查询的数据进行对比，确定是否是要查询的数据，如果我已经知道了要查询的数据，应该就不用查询了吧，这个地方不大理解。 <br></div>
+                            <span class="time">2018-11-19 22:12</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">表述的不准确 我的意思是散列表中存储对象 对象包含key和附属字段 根据key构建散列表 查询的时候也是根据key  但是同一个散列值可能对应多个key 在查询的时候不能仅仅通过key的散列值 还要对比key</p>
+                                <p class="reply-time">2018-11-20 09:48</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJicwphCoQ0S1DaibWNarUJq3DrGOeADY02AreVbKCLkm0PWJmZR0f1rMrrXDRzOwLCmIQbqeibQ4uHQ/132" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">樱桃子77</span>
+                            </div>
+                            <div class="bd">请教第一个问题：如果用访问次数为key， URＬ为value 并记下最大访问次数K 然后遍历哈希表就行了。这样行吗？ <br></div>
+                            <span class="time">2018-11-10 16:47</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">散列表存对象 对象包含url和访问次数。url为key 访问次数是一个附属数据字段</p>
+                                <p class="reply-time">2018-11-12 09:49</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/63/01/cc4d66ea.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">马小平</span>
+                            </div>
+                            <div class="bd">请教老师，当我在查找元素时候，在相同散列值的链表中遍历如何区分哪个是我要找的元素？毕竟查找时查询条件只包含KEY的信息吧<br><br>这个问题我看您回答过了今天，但是我还是没懂怎么对比Key  <br></div>
+                            <span class="time">2018-11-07 09:16</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">散列表中存储的每个数据单元包含两部分 key和卫星数据 也就是一个对象中的其他字段。<br><br>你的问题我没太看懂 你能举个例子吗</p>
+                                <p class="reply-time">2018-11-08 09:53</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Ionizing</span>
+                            </div>
+                            <div class="bd">个人的疑问：<br>1. 关于开放空间的散列冲突：既然存在散列冲突问题，插入时可以通过分配新的 key 来插入存在散列冲突的元素，那么在访问时又是如何解决散列冲突的呢？比如有两个键值对 {key1: val1}, {key2: val2} 它们的 key 在生成时是冲突的，key2 经过重新分配，现在访问 {key2: val2} 时应该如何通过hash函数得到正确的 key2 呢？假如删除 {key1: val1}，现在要访问 {key2: val2} ，那么执行 hash(string) 后得到的 key1 并不存在，应该怎么实现对 {key2: val2} 的正确访问呢？ <br></div>
+                            <span class="time">2018-11-01 00:24</span>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

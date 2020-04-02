@@ -1,0 +1,461 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                24讲二叉树基础（下）：有了如此高效的散列表，为什么还需要二叉树
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/06/8d/06f9b45611d0c76761550851fdae858d.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>上一节我们学习了树、二叉树以及二叉树的遍历，今天我们再来学习一种特殊的的二叉树，二叉查找树。二叉查找树最大的特点就是，支持动态数据集合的快速插入、删除、查找操作。</p><p>我们之前说过，散列表也是支持这些操作的，并且散列表的这些操作比二叉查找树更高效，时间复杂度是O(1)。<strong><span class="orange">既然有了这么高效的散列表，使用二叉树的地方是不是都可以替换成散列表呢？有没有哪些地方是散列表做不了，必须要用二叉树来做的呢？</span></strong></p><p>带着这些问题，我们就来学习今天的内容，二叉查找树！</p><h2>二叉查找树（Binary Search Tree）</h2><p>二叉查找树是二叉树中最常用的一种类型，也叫二叉搜索树。顾名思义，二叉查找树是为了实现快速查找而生的。不过，它不仅仅支持快速查找一个数据，还支持快速插入、删除一个数据。它是怎么做到这些的呢？</p><p>这些都依赖于二叉查找树的特殊结构。<strong>二叉查找树要求，在树中的任意一个节点，其左子树中的每个节点的值，都要小于这个节点的值，而右子树节点的值都大于这个节点的值。</strong> 我画了几个二叉查找树的例子，你一看应该就清楚了。</p><p><img src="https://static001.geekbang.org/resource/image/f3/ae/f3bb11b6d4a18f95aa19e11f22b99bae.jpg" alt=""></p><p>前面我们讲到，二叉查找树支持快速查找、插入、删除操作，现在我们就依次来看下，这三个操作是如何实现的。</p><h3>1.二叉查找树的查找操作</h3><!-- [[[read_end]]] --><p>首先，我们看如何在二叉查找树中查找一个节点。我们先取根节点，如果它等于我们要查找的数据，那就返回。如果要查找的数据比根节点的值小，那就在左子树中递归查找；如果要查找的数据比根节点的值大，那就在右子树中递归查找。</p><p><img src="https://static001.geekbang.org/resource/image/96/2a/96b3d86ed9b7c4f399e8357ceed0db2a.jpg" alt=""></p><p>这里我把查找的代码实现了一下，贴在下面了，结合代码，理解起来会更加容易。</p><pre><code>public class BinarySearchTree {
+  private Node tree;
+
+  public Node find(int data) {
+    Node p = tree;
+    while (p != null) {
+      if (data &lt; p.data) p = p.left;
+      else if (data &gt; p.data) p = p.right;
+      else return p;
+    }
+    return null;
+  }
+
+  public static class Node {
+    private int data;
+    private Node left;
+    private Node right;
+
+    public Node(int data) {
+      this.data = data;
+    }
+  }
+}
+</code></pre><h3>2.二叉查找树的插入操作</h3><p>二叉查找树的插入过程有点类似查找操作。新插入的数据一般都是在叶子节点上，所以我们只需要从根节点开始，依次比较要插入的数据和节点的大小关系。</p><p>如果要插入的数据比节点的数据大，并且节点的右子树为空，就将新数据直接插到右子节点的位置；如果不为空，就再递归遍历右子树，查找插入位置。同理，如果要插入的数据比节点数值小，并且节点的左子树为空，就将新数据插入到左子节点的位置；如果不为空，就再递归遍历左子树，查找插入位置。</p><p><img src="https://static001.geekbang.org/resource/image/da/c5/daa9fb557726ee6183c5b80222cfc5c5.jpg" alt=""></p><p>同样，插入的代码我也实现了一下，贴在下面，你可以看看。</p><pre><code>public void insert(int data) {
+  if (tree == null) {
+    tree = new Node(data);
+    return;
+  }
+
+  Node p = tree;
+  while (p != null) {
+    if (data &gt; p.data) {
+      if (p.right == null) {
+        p.right = new Node(data);
+        return;
+      }
+      p = p.right;
+    } else { // data &lt; p.data
+      if (p.left == null) {
+        p.left = new Node(data);
+        return;
+      }
+      p = p.left;
+    }
+  }
+}
+</code></pre><h3>3.二叉查找树的删除操作</h3><p>二叉查找树的查找、插入操作都比较简单易懂，但是它的删除操作就比较复杂了 。针对要删除节点的子节点个数的不同，我们需要分三种情况来处理。</p><p>第一种情况是，如果要删除的节点没有子节点，我们只需要直接将父节点中，指向要删除节点的指针置为null。比如图中的删除节点55。</p><p>第二种情况是，如果要删除的节点只有一个子节点（只有左子节点或者右子节点），我们只需要更新父节点中，指向要删除节点的指针，让它指向要删除节点的子节点就可以了。比如图中的删除节点13。</p><p>第三种情况是，如果要删除的节点有两个子节点，这就比较复杂了。我们需要找到这个节点的右子树中的最小节点，把它替换到要删除的节点上。然后再删除掉这个最小节点，因为最小节点肯定没有左子节点（如果有左子结点，那就不是最小节点了），所以，我们可以应用上面两条规则来删除这个最小节点。比如图中的删除节点18。</p><p><img src="https://static001.geekbang.org/resource/image/29/2c/299c615bc2e00dc32225f4d9e3490e2c.jpg" alt=""></p><p>老规矩，我还是把删除的代码贴在这里。</p><pre><code>public void delete(int data) {
+  Node p = tree; // p指向要删除的节点，初始化指向根节点
+  Node pp = null; // pp记录的是p的父节点
+  while (p != null &amp;&amp; p.data != data) {
+    pp = p;
+    if (data &gt; p.data) p = p.right;
+    else p = p.left;
+  }
+  if (p == null) return; // 没有找到
+
+  // 要删除的节点有两个子节点
+  if (p.left != null &amp;&amp; p.right != null) { // 查找右子树中最小节点
+    Node minP = p.right;
+    Node minPP = p; // minPP表示minP的父节点
+    while (minP.left != null) {
+      minPP = minP;
+      minP = minP.left;
+    }
+    p.data = minP.data; // 将minP的数据替换到p中
+    p = minP; // 下面就变成了删除minP了
+    pp = minPP;
+  }
+
+  // 删除节点是叶子节点或者仅有一个子节点
+  Node child; // p的子节点
+  if (p.left != null) child = p.left;
+  else if (p.right != null) child = p.right;
+  else child = null;
+
+  if (pp == null) tree = child; // 删除的是根节点
+  else if (pp.left == p) pp.left = child;
+  else pp.right = child;
+}
+</code></pre><p>实际上，关于二叉查找树的删除操作，还有个非常简单、取巧的方法，就是单纯将要删除的节点标记为“已删除”，但是并不真正从树中将这个节点去掉。这样原本删除的节点还需要存储在内存中，比较浪费内存空间，但是删除操作就变得简单了很多。而且，这种处理方法也并没有增加插入、查找操作代码实现的难度。</p><h3>4.二叉查找树的其他操作</h3><p>除了插入、删除、查找操作之外，二叉查找树中还可以支持<strong>快速地查找最大节点和最小节点、前驱节点和后继节点</strong>。这些操作我就不一一展示了。我会将相应的代码放到GitHub上，你可以自己先实现一下，然后再去上面看。</p><p>二叉查找树除了支持上面几个操作之外，还有一个重要的特性，就是<strong>中序遍历二叉查找树，可以输出有序的数据序列，时间复杂度是O(n)，非常高效</strong>。因此，二叉查找树也叫作二叉排序树。</p><h2>支持重复数据的二叉查找树</h2><p>前面讲二叉查找树的时候，我们默认树中节点存储的都是数字。很多时候，在实际的软件开发中，我们在二叉查找树中存储的，是一个包含很多字段的对象。我们利用对象的某个字段作为键值（key）来构建二叉查找树。我们把对象中的其他字段叫作卫星数据。</p><p>前面我们讲的二叉查找树的操作，针对的都是不存在键值相同的情况。那如果存储的两个对象键值相同，这种情况该怎么处理呢？我这里有两种解决方法。</p><p>第一种方法比较容易。二叉查找树中每一个节点不仅会存储一个数据，因此我们通过链表和支持动态扩容的数组等数据结构，把值相同的数据都存储在同一个节点上。</p><p>第二种方法比较不好理解，不过更加优雅。</p><p>每个节点仍然只存储一个数据。在查找插入位置的过程中，如果碰到一个节点的值，与要插入数据的值相同，我们就将这个要插入的数据放到这个节点的右子树，也就是说，把这个新插入的数据当作大于这个节点的值来处理。</p><p><img src="https://static001.geekbang.org/resource/image/3f/5f/3f59a40e3d927f567022918d89590a5f.jpg" alt=""></p><p>当要查找数据的时候，遇到值相同的节点，我们并不停止查找操作，而是继续在右子树中查找，直到遇到叶子节点，才停止。这样就可以把键值等于要查找值的所有节点都找出来。</p><p><img src="https://static001.geekbang.org/resource/image/fb/ff/fb7b320efd59a05469d6d6fcf0c98eff.jpg" alt=""></p><p>对于删除操作，我们也需要先查找到每个要删除的节点，然后再按前面讲的删除操作的方法，依次删除。</p><p><img src="https://static001.geekbang.org/resource/image/25/17/254a4800703d31612c0af63870260517.jpg" alt=""></p><h2>二叉查找树的时间复杂度分析</h2><p>好了，对于二叉查找树常用操作的实现方式，你应该掌握得差不多了。现在，我们来分析一下，二叉查找树的插入、删除、查找操作的时间复杂度。</p><p>实际上，二叉查找树的形态各式各样。比如这个图中，对于同一组数据，我们构造了三种二叉查找树。它们的查找、插入、删除操作的执行效率都是不一样的。图中第一种二叉查找树，根节点的左右子树极度不平衡，已经退化成了链表，所以查找的时间复杂度就变成了O(n)。</p><p><img src="https://static001.geekbang.org/resource/image/e3/d9/e3d9b2977d350526d2156f01960383d9.jpg" alt=""></p><p>我刚刚其实分析了一种最糟糕的情况，我们现在来分析一个最理想的情况，二叉查找树是一棵完全二叉树（或满二叉树）。这个时候，插入、删除、查找的时间复杂度是多少呢？</p><p>从我前面的例子、图，以及还有代码来看，不管操作是插入、删除还是查找，<strong>时间复杂度<strong><strong>其实</strong></strong>都跟树的高度成正比，也就是O(height)</strong>。既然这样，现在问题就转变成另外一个了，也就是，如何求一棵包含n个节点的完全二叉树的高度？</p><p>树的高度就等于最大层数减一，为了方便计算，我们转换成层来表示。从图中可以看出，包含n个节点的完全二叉树中，第一层包含1个节点，第二层包含2个节点，第三层包含4个节点，依次类推，下面一层节点个数是上一层的2倍，第K层包含的节点个数就是2^(K-1)。</p><p>不过，对于完全二叉树来说，最后一层的节点个数有点儿不遵守上面的规律了。它包含的节点个数在1个到2^(L-1)个之间（我们假设最大层数是L）。如果我们把每一层的节点个数加起来就是总的节点个数n。也就是说，如果节点的个数是n，那么n满足这样一个关系：</p><pre><code>n &gt;= 1+2+4+8+...+2^(L-2)+1
+n &lt;= 1+2+4+8+...+2^(L-2)+2^(L-1)
+</code></pre><p>借助等比数列的求和公式，我们可以计算出，L的范围是[log<sub>2</sub>(n+1), log<sub>2</sub>n +1]。完全二叉树的层数小于等于log<sub>2</sub>n +1，也就是说，完全二叉树的高度小于等于log<sub>2</sub>n。</p><p>显然，极度不平衡的二叉查找树，它的查找性能肯定不能满足我们的需求。我们需要构建一种不管怎么删除、插入数据，在任何时候，都能保持任意节点左右子树都比较平衡的二叉查找树，这就是我们下一节课要详细讲的，一种特殊的二叉查找树，平衡二叉查找树。平衡二叉查找树的高度接近logn，所以插入、删除、查找操作的时间复杂度也比较稳定，是O(logn)。</p><h2>解答开篇</h2><p>我们在散列表那节中讲过，散列表的插入、删除、查找操作的时间复杂度可以做到常量级的O(1)，非常高效。而二叉查找树在比较平衡的情况下，插入、删除、查找操作时间复杂度才是O(logn)，相对散列表，好像并没有什么优势，那我们为什么还要用二叉查找树呢？</p><p>我认为有下面几个原因：</p><p>第一，散列表中的数据是无序存储的，如果要输出有序的数据，需要先进行排序。而对于二叉查找树来说，我们只需要中序遍历，就可以在O(n)的时间复杂度内，输出有序的数据序列。</p><p>第二，散列表扩容耗时很多，而且当遇到散列冲突时，性能不稳定，尽管二叉查找树的性能不稳定，但是在工程中，我们最常用的平衡二叉查找树的性能非常稳定，时间复杂度稳定在O(logn)。</p><p>第三，笼统地来说，尽管散列表的查找等操作的时间复杂度是常量级的，但因为哈希冲突的存在，这个常量不一定比logn小，所以实际的查找速度可能不一定比O(logn)快。加上哈希函数的耗时，也不一定就比平衡二叉查找树的效率高。</p><p>第四，散列表的构造比二叉查找树要复杂，需要考虑的东西很多。比如散列函数的设计、冲突解决办法、扩容、缩容等。平衡二叉查找树只需要考虑平衡性这一个问题，而且这个问题的解决方案比较成熟、固定。</p><p>最后，为了避免过多的散列冲突，散列表装载因子不能太大，特别是基于开放寻址法解决冲突的散列表，不然会浪费一定的存储空间。</p><p>综合这几点，平衡二叉查找树在某些方面还是优于散列表的，所以，这两者的存在并不冲突。我们在实际的开发过程中，需要结合具体的需求来选择使用哪一个。</p><h2>内容小结</h2><p>今天我们学习了一种特殊的二叉树，二叉查找树。它支持快速地查找、插入、删除操作。</p><p>二叉查找树中，每个节点的值都大于左子树节点的值，小于右子树节点的值。不过，这只是针对没有重复数据的情况。对于存在重复数据的二叉查找树，我介绍了两种构建方法，一种是让每个节点存储多个值相同的数据；另一种是，每个节点中存储一个数据。针对这种情况，我们只需要稍加改造原来的插入、删除、查找操作即可。</p><p>在二叉查找树中，查找、插入、删除等很多操作的时间复杂度都跟树的高度成正比。两个极端情况的时间复杂度分别是O(n)和O(logn)，分别对应二叉树退化成链表的情况和完全二叉树。</p><p>为了避免时间复杂度的退化，针对二叉查找树，我们又设计了一种更加复杂的树，平衡二叉查找树，时间复杂度可以做到稳定的O(logn)，下一节我们具体来讲。</p><h2>课后思考</h2><p>今天我讲了二叉树高度的理论分析方法，给出了粗略的数量级。如何通过编程，求出一棵给定二叉树的确切高度呢？</p><p>欢迎留言和我分享，我会第一时间给你反馈。</p><hr></hr><p><span class="orange">我已将本节内容相关的详细代码更新到GitHub，<a href="https://github.com/wangzheng0822/algo">戳此</a>即可查看。</span></p><p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt=""></p>
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/f2/aa/c04fda0e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">失火的夏天</span>
+                            </div>
+                            <div class="bd">确定二叉树高度有两种思路：第一种是深度优先思想的递归，分别求左右子树的高度。当前节点的高度就是左右子树中较大的那个+1；第二种可以采用层次遍历的方式，每一层记录都记录下当前队列的长度，这个是队尾，每一层队头从0开始。然后每遍历一个元素，队头下标+1。直到队头下标等于队尾下标。这个时候表示当前层遍历完成。每一层刚开始遍历的时候，树的高度+1。最后队列为空，就能得到树的高度。 <br></div>
+                            <span class="time">2018-11-14 00:27</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍 大家可以看看这条留言</p>
+                                <p class="reply-time">2018-11-14 09:39</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/69/4d/81c44f45.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">拉欧</span>
+                            </div>
+                            <div class="bd">递归法，根节点高度=max(左子树高度，右子树高度)+1 <br></div>
+                            <span class="time">2018-11-14 08:55</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍 精髓</p>
+                                <p class="reply-time">2018-11-14 09:37</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/43/af/08fc10fe.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">一般社员</span>
+                            </div>
+                            <div class="bd">老师，不理解删除有两个子节点那段代码，最后删除minp，不是minpp.left =null,minp =null吗 <br></div>
+                            <span class="time">2018-11-14 10:07</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/78/51/4790e13e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Smallfly</span>
+                            </div>
+                            <div class="bd">老师我有一个疑问，二叉树删除时，如果待删除节点有两个子节点，能否用左子树中的最大值来替换待删除节点呢？ <br></div>
+                            <span class="time">2018-11-15 23:38</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">好像也可以 👍</p>
+                                <p class="reply-time">2018-11-16 10:08</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/e5/b2/f8f056be.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">🌟</span>
+                            </div>
+                            <div class="bd">姜威老大没写总结笔记了吗？我是个算法菜鸟萌新，一直看着姜大佬的笔记总结学习。。。 <br></div>
+                            <span class="time">2018-11-26 21:10</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/16/5b/83a35681.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Monday</span>
+                            </div>
+                            <div class="bd">1、思考题：leetcode 104 题，可以使用递归法。<br>递归公式： depth =Math.max(maxDepth(node.left), maxDepth(node.right) )+ 1;<br>递归出口： depth = 0 (node == null)<br>2、二叉查找树的删除操作（无重复的数据）leetcode 450。<br>根据老师的思路，先不看代码，自己写了好长段时间，写出来都跑过leetcode的所有案例。回过头来再看老师的删除的代码，感觉到了巧妙之处就是：当删除节点有两个子节点的情况，很巧得一起套用了删除结点子节点个数小于1的两种场景。 <br></div>
+                            <span class="time">2018-11-17 00:24</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">是的 钻研精神值得称赞👍</p>
+                                <p class="reply-time">2018-11-20 10:19</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/eb/aa/db213a66.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">莫弹弹</span>
+                            </div>
+                            <div class="bd">在sf的微信公众号上刚好看到二叉树相关的文章，二叉树常规操作都有了，基本思路是：<br><br>- 只有一个根结点时，二叉树深度为 1<br>- 只有左子树时，二叉树深度为左子树深度加 1<br>- 只有右子树时，二叉树深度为右子树深度加 1<br>- 同时存在左右子树时，二叉树深度为左右子树中深度最大者加 1<br><br>https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;ONKJyusGCIE2ctwT9uLv9g <br></div>
+                            <span class="time">2018-11-14 08:45</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍</p>
+                                <p class="reply-time">2018-11-14 09:38</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/19/74/2ac4edd8.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">追风者</span>
+                            </div>
+                            <div class="bd">更新二十多篇了，王老师把前面文章的课后思考题都总结回答一下吧。 <br></div>
+                            <span class="time">2018-11-15 11:38</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">好的 基础篇完了后会集中答疑一下</p>
+                                <p class="reply-time">2018-11-15 19:07</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/1e/96/3162d51f.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">等风来</span>
+                            </div>
+                            <div class="bd">老师:删除示例的25节点的右节点[21]错误;<br>删除节点有两个节点<br>p = minP; &#47;&#47; 下面就变成了删除 minP 了...<br>pp = minPP;<br>是不是应该改成: minPP.Left = minP.Right; <br></div>
+                            <span class="time">2018-11-14 17:00</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">图已经改正 多谢指出。<br>代码应该没错</p>
+                                <p class="reply-time">2018-11-15 10:03</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/0a/dd/88fa7b52.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">spark</span>
+                            </div>
+                            <div class="bd">p.data = minP.data; &#47;&#47; 将 minP 的数据替换到 p 中<br>p = minP; &#47;&#47; 下面就变成了删除 minP 了<br>pp = minPP;<br><br><br>总于看明白这段代码了……各位老铁，单纯看这3行代码是看不出是删除后继节点的，是要结合后面的代码来看的……不过说实话这种代码是不好看的懂…… <br></div>
+                            <span class="time">2018-11-15 11:27</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">😄 是不好看懂</p>
+                                <p class="reply-time">2018-11-15 19:07</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/36/75/e346e04e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">一个慢慢爬行的普通人</span>
+                            </div>
+                            <div class="bd">p = minP; &#47;&#47; 下面就变成了删除 minP 了...<br>pp = minPP;<br>老师，对这里不太搞懂，似乎也有些人对这里感到困惑，老师可以对这两句集中解释下嘛 <br></div>
+                            <span class="time">2018-11-14 23:55</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">好的。我们用后继节点替换到要删除节点的位置。 然后就变成删除后继节点的问题了。为了逻辑统一 代码书写简洁。我们把后继节点赋给了p</p>
+                                <p class="reply-time">2018-11-15 09:57</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/5d/10/0acf7cbc.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Ryan-Hou</span>
+                            </div>
+                            <div class="bd">平衡树相比于哈希表，保存了节点数据间的顺序信息，所以操作的时间复杂度上会比哈希表大(因为额外的提供了顺序性，对应的会有代价)。也正因为保存了顺序性，平衡树可以方便的实现min, max, ceil, floor 等操作，所以个人认为这两种数据结构最大的不同在于这里，有不同的取舍 <br></div>
+                            <span class="time">2018-11-14 10:11</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/e1/31/eb103bdc.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">kakasi</span>
+                            </div>
+                            <div class="bd">老师，看了二叉树的优点和适用场景，跳表不是都满足吗？ <br></div>
+                            <span class="time">2018-11-28 23:13</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/3b/bd/f9f780a4.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">james</span>
+                            </div>
+                            <div class="bd">散列表装载因子不能太大，特别是基于开放寻址法解决冲突的散列表，不然会浪费内存空间。<br>修改：应该是装在因子不能太小吧 <br></div>
+                            <span class="time">2018-11-22 17:27</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/9a/0a/3dc11700.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Phil</span>
+                            </div>
+                            <div class="bd">对于二叉搜索树各种操作的复杂度，有更容易理解的解释方法:每次操作后数据量都减少了一半，所以复杂度自然是logN。 <br></div>
+                            <span class="time">2018-11-18 14:13</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍 </p>
+                                <p class="reply-time">2018-11-19 08:57</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/19/74/2ac4edd8.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">追风者</span>
+                            </div>
+                            <div class="bd">老师，删除操作的代码有点不明白下面这三行在搞什么？<br><br>p.data = minP.data; &#47;&#47; 将minP的数据替换到p中<br>p = minP; &#47;&#47; 下面就变成了删除minP了<br>pp = minPP;<br> <br></div>
+                            <span class="time">2018-11-15 17:07</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">已经回复其他同学的留言了 你扒拉扒拉看看</p>
+                                <p class="reply-time">2018-11-15 19:01</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/de/17/75e2b624.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">feifei</span>
+                            </div>
+                            <div class="bd"><br>  &#47;**<br>   * 计算层级的重点于在写出递推公式<br>   *<br>   * count(level) = max(count(level.left),count(level.right))<br>   *<br>   * @param root <br>   * @param index<br>   * @return<br>   *&#47;<br>  public int getBinaryLevel(treeNode root, int index) {<br>    if (null == root) {<br>      return index;<br>    }<br><br>    int maxleftLevel = 0;<br>    if (root.left != null) {<br>      maxleftLevel = getBinaryLevel(root.left, index + 1);<br>    }<br><br>    int maxRightLevel = 0;<br><br>    if (root.right != null) {<br>      maxRightLevel = getBinaryLevel(root.right, index + 1);<br>    }<br><br>    return Math.max(maxleftLevel, maxRightLevel) + 1;<br>  } <br></div>
+                            <span class="time">2018-11-15 11:56</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/49/a5/e4c1c2d4.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">qpm</span>
+                            </div>
+                            <div class="bd">hi，老师。一直都每天在专栏里学习，我希望可以向你提点课程设计上的建议。<br>算法的学习过程整体来说还是由浅入深的，从线性结构到非线性结构，从树概念深入学习二叉树等等，我觉得文章末尾的习题可以有一道和下一篇文章有所关联的问题，方便我们思考过后可以更容易地学习下一篇文章，也算是一个链表的思维方式。<br>专栏至此非常有用，深入浅出，谈及了很多算法书本上没说到的点。感谢老师 <br></div>
+                            <span class="time">2018-11-14 15:29</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">嗯嗯 多谢建议 非常好。不过专栏已经定稿的差不多了。估计临时改也来不及了。抱歉</p>
+                                <p class="reply-time">2018-11-15 10:07</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/e8/fd/035f4c94.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Sharry</span>
+                            </div>
+                            <div class="bd">template&lt;typename T&gt;<br>int getTreeHeight(TreeNode&lt;T&gt; *node) {<br>	if (node == NULL) {<br>		return -1;<br>	}<br>	int leftHeight = getTreeHeight(node-&gt;left);<br>	int rightHeight = getTreeHeight(node-&gt;right);<br>	return (leftHeight &gt; rightHeight ? leftHeight : rightHeight) + 1;<br>} <br></div>
+                            <span class="time">2018-11-14 12:13</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/ff/3f/bbb8a88c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">徐凯</span>
+                            </div>
+                            <div class="bd">int ret_height（treenode* T）<br>｛<br>   if（！T）<br>     return 0；<br>  int Lh=0,Rh=0;<br>   if（T-&gt;left)<br>     Lh=ret_height(T-&gt;left);<br>   If(T-&gt;right)<br>     Rh =ret_height(T-&gt;right);<br>return max(Lh,Rh)+1;<br>}<br>刚起床写的一段 不知道漏没漏东西。zz <br></div>
+                            <span class="time">2018-11-14 10:34</span>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

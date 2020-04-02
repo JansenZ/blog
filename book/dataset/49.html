@@ -1,0 +1,325 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                49讲搜索：如何用A*搜索算法实现游戏中的寻路功能
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/05/b3/059c152aaa2cf0203a48bc6137052fb3.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>魔兽世界、仙剑奇侠传这类MMRPG游戏，不知道你有没有玩过？在这些游戏中，有一个非常重要的功能，那就是人物角色自动寻路。<strong><span class="orange">当人物处于游戏地图中的某个位置的时候，我们用鼠标点击另外一个相对较远的位置，人物就会自动地绕过障碍物走过去。玩过这么多游戏，不知你是否思考过，这个功能是怎么实现的呢？</span></strong></p><h2>算法解析</h2><p>实际上，这是一个非常典型的搜索问题。人物的起点就是他当下所在的位置，终点就是鼠标点击的位置。我们需要在地图中，找一条从起点到终点的路径。这条路径要绕过地图中所有障碍物，并且看起来要是一种非常聪明的走法。所谓“聪明”，笼统地解释就是，走的路不能太绕。理论上讲，最短路径显然是最聪明的走法，是这个问题的最优解。</p><p>不过，在<a href="https://time.geekbang.org/column/article/76468">第44节</a>最优出行路线规划问题中，我们也讲过，如果图非常大，那Dijkstra最短路径算法的执行耗时会很多。在真实的软件开发中，我们面对的是超级大的地图和海量的寻路请求，算法的执行效率太低，这显然是无法接受的。</p><p>实际上，像出行路线规划、游戏寻路，这些真实软件开发中的问题，一般情况下，我们都不需要非得求最优解（也就是最短路径）。在权衡路线规划质量和执行效率的情况下，我们只需要寻求一个次优解就足够了。那<strong>如何快速找出一条接近于最短路线的次优路线呢？</strong></p><!-- [[[read_end]]] --><p>这个快速的路径规划算法，就是我们今天要学习的<strong>A*算法</strong>。实际上，A*算法是对Dijkstra算法的优化和改造。如何将Dijkstra算法改造成A*算法呢？为了更好地理解接下来要讲的内容，我建议你先温习下第44节中的Dijkstra算法的实现原理。</p><p>Dijkstra算法有点儿类似BFS算法，它每次找到跟起点最近的顶点，往外扩展。这种往外扩展的思路，其实有些盲目。为什么这么说呢？我举一个例子来给你解释一下。下面这个图对应一个真实的地图，每个顶点在地图中的位置，我们用一个二维坐标（x，y）来表示，其中，x表示横坐标，y表示纵坐标。</p><p><img src="https://static001.geekbang.org/resource/image/11/dd/11840cc13071fe2da67675338e46cadd.jpg" alt=""></p><p>在Dijkstra算法的实现思路中，我们用一个优先级队列，来记录已经遍历到的顶点以及这个顶点与起点的路径长度。顶点与起点路径长度越小，就越先被从优先级队列中取出来扩展，从图中举的例子可以看出，尽管我们找的是从s到t的路线，但是最先被搜索到的顶点依次是1，2，3。通过肉眼来观察，这个搜索方向跟我们期望的路线方向（s到t是从西向东）是反着的，路线搜索的方向明显“跑偏”了。</p><p>之所以会“跑偏”，那是因为我们是按照顶点与起点的路径长度的大小，来安排出队列顺序的。与起点越近的顶点，就会越早出队列。我们并没有考虑到这个顶点到终点的距离，所以，在地图中，尽管1，2，3三个顶点离起始顶点最近，但离终点却越来越远。</p><p>如果我们综合更多的因素，把这个顶点到终点可能还要走多远，也考虑进去，综合来判断哪个顶点该先出队列，那是不是就可以避免“跑偏”呢？</p><p>当我们遍历到某个顶点的时候，从起点走到这个顶点的路径长度是确定的，我们记作g(i)（i表示顶点编号）。但是，从这个顶点到终点的路径长度，我们是未知的。虽然确切的值无法提前知道，但是我们可以用其他估计值来代替。</p><p>这里我们可以通过这个顶点跟终点之间的直线距离，也就是欧几里得距离，来近似地估计这个顶点跟终点的路径长度（注意：路径长度跟直线距离是两个概念）。我们把这个距离记作h(i)（i表示这个顶点的编号），专业的叫法是<strong>启发函数</strong>（heuristic function）。因为欧几里得距离的计算公式，会涉及比较耗时的开根号计算，所以，我们一般通过另外一个更加简单的距离计算公式，那就是<strong>曼哈顿距离</strong>（Manhattan distance）。曼哈顿距离是两点之间横纵坐标的距离之和。计算的过程只涉及加减法、符号位反转，所以比欧几里得距离更加高效。</p><pre><code>int hManhattan(Vertex v1, Vertex v2) { // Vertex表示顶点，后面有定义
+  return Math.abs(v1.x - v2.x) + Math.abs(v1.y - v2.y);
+}
+</code></pre><p>原来只是单纯地通过顶点与起点之间的路径长度g(i)，来判断谁先出队列，现在有了顶点到终点的路径长度估计值，我们通过两者之和f(i)=g(i)+h(i)，来判断哪个顶点该最先出队列。综合两部分，我们就能有效避免刚刚讲的“跑偏”。这里f(i)的专业叫法是<strong>估价函数</strong>（evaluation function）。</p><p>从刚刚的描述，我们可以发现，A*算法就是对Dijkstra算法的简单改造。实际上，代码实现方面，我们也只需要稍微改动几行代码，就能把Dijkstra算法的代码实现，改成A*算法的代码实现。</p><p>在A*算法的代码实现中，顶点Vertex类的定义，跟Dijkstra算法中的定义，稍微有点儿区别，多了x，y坐标，以及刚刚提到的f(i)值。图Graph类的定义跟Dijkstra算法中的定义一样。为了避免重复，我这里就没有再贴出来了。</p><pre><code>private class Vertex {
+  public int id; // 顶点编号ID
+  public int dist; // 从起始顶点，到这个顶点的距离，也就是g(i)
+  public int f; // 新增：f(i)=g(i)+h(i)
+  public int x, y; // 新增：顶点在地图中的坐标（x, y）
+  public Vertex(int id, int x, int y) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+    this.f = Integer.MAX_VALUE;
+    this.dist = Integer.MAX_VALUE;
+  }
+}
+// Graph类的成员变量，在构造函数中初始化
+Vertex[] vertexes = new Vertex[this.v];
+// 新增一个方法，添加顶点的坐标
+public void addVetex(int id, int x, int y) {
+  vertexes[id] = new Vertex(id, x, y)
+}
+</code></pre><p>A*算法的代码实现的主要逻辑是下面这段代码。它跟Dijkstra算法的代码实现，主要有3点区别：</p><ul>
+<li>
+<p>优先级队列构建的方式不同。A*算法是根据f值（也就是刚刚讲到的f(i)=g(i)+h(i)）来构建优先级队列，而Dijkstra算法是根据dist值（也就是刚刚讲到的g(i)）来构建优先级队列；</p>
+</li>
+<li>
+<p>A*算法在更新顶点dist值的时候，会同步更新f值；</p>
+</li>
+<li>
+<p>循环结束的条件也不一样。Dijkstra算法是在终点出队列的时候才结束，A*算法是一旦遍历到终点就结束。</p>
+</li>
+</ul><pre><code>public void astar(int s, int t) { // 从顶点s到顶点t的路径
+  int[] predecessor = new int[this.v]; // 用来还原路径
+  // 按照vertex的f值构建的小顶堆，而不是按照dist
+  PriorityQueue queue = new PriorityQueue(this.v);
+  boolean[] inqueue = new boolean[this.v]; // 标记是否进入过队列
+  vertexes[s].dist = 0;
+  vertexes[s].f = 0;
+  queue.add(vertexes[s]);
+  inqueue[s] = true;
+  while (!queue.isEmpty()) {
+    Vertex minVertex = queue.poll(); // 取堆顶元素并删除
+    for (int i = 0; i &lt; adj[minVertex.id].size(); ++i) {
+      Edge e = adj[minVertex.id].get(i); // 取出一条minVetex相连的边
+      Vertex nextVertex = vertexes[e.tid]; // minVertex--&gt;nextVertex
+      if (minVertex.dist + e.w &lt; nextVertex.dist) { // 更新next的dist,f
+        nextVertex.dist = minVertex.dist + e.w;
+        nextVertex.f 
+           = nextVertex.dist+hManhattan(nextVertex, vertexes[t]);
+        predecessor[nextVertex.id] = minVertex.id;
+        if (inqueue[nextVertex.id] == true) {
+          queue.update(nextVertex);
+        } else {
+          queue.add(nextVertex);
+          inqueue[nextVertex.id] = true;
+        }
+      }
+      if (nextVertex.id == t) break; // 只要到达t就可以结束while了
+    }
+  }
+  // 输出路径
+  System.out.print(s);
+  print(s, t, predecessor); // print函数请参看Dijkstra算法的实现
+}
+</code></pre><p><strong>尽管A*算法可以更加快速的找到从起点到终点的路线，但是它并不能像Dijkstra算法那样，找到最短路线。这是为什么呢？</strong></p><p>要找出起点s到终点t的最短路径，最简单的方法是，通过回溯穷举所有从s到达t的不同路径，然后对比找出最短的那个。不过很显然，回溯算法的执行效率非常低，是指数级的。</p><p><img src="https://static001.geekbang.org/resource/image/38/4a/38ebd9aab387669465226fc7f644064a.jpg" alt=""></p><p>Dijkstra算法在此基础之上，利用动态规划的思想，对回溯搜索进行了剪枝，只保留起点到某个顶点的最短路径，继续往外扩展搜索。动态规划相较于回溯搜索，只是换了一个实现思路，但它实际上也考察到了所有从起点到终点的路线，所以才能得到最优解。</p><p><img src="https://static001.geekbang.org/resource/image/ca/77/caad286fc67333b77e8ed5c85ce2e377.jpg" alt=""></p><p>A*算法之所以不能像Dijkstra算法那样，找到最短路径，主要原因是两者的while循环结束条件不一样。刚刚我们讲过，Dijkstra算法是在终点出队列的时候才结束，A*算法是一旦遍历到终点就结束。对于Dijkstra算法来说，当终点出队列的时候，终点的dist值是优先级队列中所有顶点的最小值，即便再运行下去，终点的dist值也不会再被更新了。对于A*算法来说，一旦遍历到终点，我们就结束while循环，这个时候，终点的dist值未必是最小值。</p><p>A*算法利用贪心算法的思路，每次都找f值最小的顶点出队列，一旦搜索到终点就不在继续考察其他顶点和路线了。所以，它并没有考察所有的路线，也就不可能找出最短路径了。</p><p>搞懂了A*算法，我们再来看下，<strong>如何借助A*算法解决今天的游戏寻路问题？</strong></p><p>要利用A*算法解决这个问题，我们只需要把地图，抽象成图就可以了。不过，游戏中的地图跟第44节中讲的我们平常用的地图是不一样的。因为游戏中的地图并不像我们现实生活中那样，存在规划非常清晰的道路，更多的是宽阔的荒野、草坪等。所以，我们没法利用44节中讲到的抽象方法，把岔路口抽象成顶点，把道路抽象成边。</p><p>实际上，我们可以换一种抽象的思路，把整个地图分割成一个一个的小方块。在某一个方块上的人物，只能往上下左右四个方向的方块上移动。我们可以把每个方块看作一个顶点。两个方块相邻，我们就在它们之间，连两条有向边，并且边的权值都是1。所以，这个问题就转化成了，在一个有向有权图中，找某个顶点到另一个顶点的路径问题。将地图抽象成边权值为1的有向图之后，我们就可以套用A*算法，来实现游戏中人物的自动寻路功能了。</p><h2>总结引申</h2><p>我们今天讲的A*算法属于一种<strong>启发式搜索算法</strong>（Heuristically Search Algorithm）。实际上，启发式搜索算法并不仅仅只有A*算法，还有很多其他算法，比如IDA*算法、蚁群算法、遗传算法、模拟退火算法等。如果感兴趣，你可以自行研究下。</p><p>启发式搜索算法利用估价函数，避免“跑偏”，贪心地朝着最有可能到达终点的方向前进。这种算法找出的路线，并不是最短路线。但是，实际的软件开发中的路线规划问题，我们往往并不需要非得找最短路线。所以，鉴于启发式搜索算法能很好地平衡路线质量和执行效率，它在实际的软件开发中的应用更加广泛。实际上，在第44节中，我们讲到的地图App中的出行路线规划问题，也可以利用启发式搜索算法来实现。</p><h2>课后思考</h2><p>我们之前讲的“迷宫问题”是否可以借助A*算法来更快速地找到一个走出去的路线呢？如果可以，请具体讲讲该怎么来做；如果不可以，请说说原因。</p><p>欢迎留言和我分享，也欢迎点击“<span class="orange">请朋友读</span>”，把今天的内容分享给你的好友，和他一起讨论、学习。</p><p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt=""></p>
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/df/1e/cea897e8.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">传说中的成大大</span>
+                            </div>
+                            <div class="bd">今天看了A*算法 反而对dijkstra算法理解得更透彻了.... <br></div>
+                            <span class="time">2019-01-18 11:12</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/83/ef/445e1421.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">yongxiang</span>
+                            </div>
+                            <div class="bd">王争老师，我把代码输入运行，并把过程打印出来，发现代码运行的过程跟您说的A*算法的三点区别中的第三点不一样，不会在遍历到目标顶点时退出while循环。您看是不是27行的break只是退出了for循环，无法退出while循环，是不是需要增加以下的修改：<br>                if (nextVertex.id == t) {<br>                    queue.clear();<br>                    break;<br>                } <br></div>
+                            <span class="time">2019-01-19 16:06</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/14/3c/1a/1806ef25.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">皇家救星</span>
+                            </div>
+                            <div class="bd">我记得以前看过的a*算法介绍还有close和open表，这里好像没提到？ <br></div>
+                            <span class="time">2019-01-18 08:29</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">那就是俩人造的概念 并没有太大意义。</p>
+                                <p class="reply-time">2019-01-18 09:12</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/ff/73/8c64ed7f.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">辰陌</span>
+                            </div>
+                            <div class="bd">请问一下老师，Astar算法，启发式距离的设置好像是有一定原则的，如果在满足一致性原则的基础之上，然后再抛除最后一步停止准则的影响的情况下，应该是可以找到最优解的吧？ <br></div>
+                            <span class="time">2019-01-20 15:59</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/41/27/3ff1a1d6.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">hua168</span>
+                            </div>
+                            <div class="bd">我之前是打算生管理，去个小公司，发现也要会开发，去年就毅然去学java，维护懂java会有帮助，也可以搞下大数据……再学一门本职运维开发需要python……<br>我就是这样打算的…<br>同学说我们学历低只要大专，问我要大家考研究生不？我感觉我不去大公司的话没什么用吧？但一想很多要求本科，自考研究生不知道承认不？尤其公司，再说就算看完都老了吧……意义有多大？ <br></div>
+                            <span class="time">2019-01-19 20:38</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">看得到@hua168同学对职业规划很迷茫。<br><br>我来逐一回答一下你的问题：<br><br>1. 自考学历对你来说没用。绝大部分卡学历的公司，只看第一学历；不卡学历的那部分公司，你自考本科也没必要。自考学历对一小部分人有用，具体哪部分人适合我就不展开讲了，总之不适合你。但是，你没有因为学历自卑，公司这么多，总有不卡学历的。我见过很多大专文凭，技术去贼拉子好的，照样去大公司。<br><br>2. 不管是大公司还是小公司，都会卡年龄。不过所谓的卡年龄并不是说年龄大了就没人要了。而是能力跟年龄不符，年龄一大把却跟人家工作两三年经验能力差不多，要钱还贼高，那估计确实没人要。<br><br>3. 不要再去学java了。如果你还想走技术路线，那就要专精尖，这个我前一条回复说过了。<br><br>4. 我还是说了，对于技术一般的人来说，如果要升管理岗，还是那句话“要有领导气质”，另外，你要包装一下简历，一些很小公司的领导是识别不出来的：）听起来是不入流的建议，但是，我确实是认真的。<br><br>5. 实际上，年龄大了，技术没有太大竞争力，去个安稳的公司很好，比如国企性质的一些互联网保险公司，具体你自己搜搜吧，我这里不方便说公司名字。<br><br>以上建议只针对你本人的情况，并且是我的个人建议。如有不投，你自己斟酌。</p>
+                                <p class="reply-time">2019-01-24 09:23</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/41/27/3ff1a1d6.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">hua168</span>
+                            </div>
+                            <div class="bd">像我年龄35岁，学历是大专，您觉得有必须自考研究生之类的么？升级一下学历？自考类不知道去大公司是都承认？<br>英语不太好，只能勉强看懂…… <br></div>
+                            <span class="time">2019-01-19 20:18</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/41/27/3ff1a1d6.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">hua168</span>
+                            </div>
+                            <div class="bd">非常感谢…… <br></div>
+                            <span class="time">2019-01-19 20:09</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/83/ef/445e1421.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">yongxiang</span>
+                            </div>
+                            <div class="bd">王争老师，这里的每条边的权重 w 跟两个顶点之间的 x ，y 有相关关系吗？还是说可以随意定义？ <br></div>
+                            <span class="time">2019-01-19 16:10</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/ec/64/7403c694.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">ALAN</span>
+                            </div>
+                            <div class="bd">老师，我在网上看到说a star算法启发函数选的好的话，估计路径比实际路径短的话，是可以找到最短路径的。老师，你能举个例子说明找到的不是最短路径吗，在估计路径比实践路径短的情况下？ <br></div>
+                            <span class="time">2019-01-19 10:39</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/41/27/3ff1a1d6.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">hua168</span>
+                            </div>
+                            <div class="bd">大神，能问一个题外话吗，关于自己人生规划，水平和眼界所限，想不通，<br>都说大神级见识很广也多，能给我这个35岁只维护过四五十台linux服务器的运维指条路吗？<br>现在很迷茫和压力大~~<br>能力如下：<br>一.网络：CCNA水平，自过了CCNP忘记了，当过2年网管<br>二、维护过asp.net电商网站，3年，只有简单的，兼职网管<br>三、linux运维，只在一家电商做了3年多，会<br>1.web：nginx、tomcat配置（少用）+php:nignx的rewirte和反代<br>2.数据库：mysql、mongoDB、redis 配置及主从，不会mycat、Cetus之类<br>3.反代：会nginx、haproxy简单配置<br>4.存储：NFS、fastDFS、hadoop简单看了一下<br>5.版本控制：只会git及搭建gitlab+jenkins（简单的CI&#47;CD）<br>6.监控：简单配置zabbix+shell脚本<br>7.虚拟化：kvm安装及配置、docker(k8s还没学)<br>8.云计算：openstack只会安装做过实验<br>9.测试：只会ab工具<br>10.日志：ELK安装配置，还没结合java（在学中）<br>11.大数据：没使用过（不会flume、storm、spark、flink、kafka）<br>12.脚本：主要是shell为主、会点python<br><br>四、编程能力：自学，没项目经验<br>1.前端：<br>  1）HTML（HTML5不怎看）<br>  2）css（laiui、学了一下vue）<br>  3) js、jquery框架、ES6简单看了一下  <br>2.PHP：语法简单的thinkphp5框架<br>3.java：考虑要维护java web在学<br>	只看了java、jsp及servet、spring、springMVC、spring Boot（这个为主）<br>4.python：考虑运维用到<br>	python：会简单的脚本<br>	django：只会官网简单的<br>	<br>问题是：现在已35岁了，失业，怎办？年龄摆在那里，能力好像不强，学历大专。<br>能给个建议吗？非常感谢~~ <br></div>
+                            <span class="time">2019-01-19 00:43</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">我下面说的话，可能会伤害到你，不过，我是非常认真的。<br><br>从你对运维相关的技术点的描述上，可以看出，你应该没有在一个稍微大点的公司工作过吧，所以，很多技术都用的不够深，都只是略知一二，没有自己拿得出手的东西。<br><br>建议你去稍微大点公司锻炼一下技术，同时，也能给你的履历加分。<br><br>不过，以你的年龄和履历，去稍微大点的公司可能也不现实了，因为现在好点的公司都卡学历、背景，更别说技术了。<br><br>所以，我建议你找一个运维领域的风口技术去研究，比如你提到的k8s。这种技术才兴起，会的人不多，所以招聘公司都不会太卡学历、经历，只要会，是个人都要，可以借机去个大点的公司。这会是你的一个转折点。<br><br>而且。现在，经济下行，互联网行业都压缩招聘。你正好利用这1、2年，沉下心来，抓住一个技术方向，研究深、研究透。<br><br>还有一条路，那就是做管理岗位。这个要看你有没有领导气质了：）如果有领导范，年龄大，工作经历多，也可以忽悠到一些小公司的管理岗。实际上，对你来说，这条路也是不错的。<br><br>还有一条路，那就是靠去天使轮的创业公司逆袭。这条路有点赌博的意思。不过，如果公司搞大了，你也会青云直上，这辈子都不愁了：）</p>
+                                <p class="reply-time">2019-01-19 11:15</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">fy</span>
+                            </div>
+                            <div class="bd">老师，刷leetcode刷的有点苦逼，刷不动，你的专栏就看到排序就中断了，但都记好了笔记。 <br></div>
+                            <span class="time">2019-01-18 22:42</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/40/10/b6bf3c3c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">纯洁的憎恶</span>
+                            </div>
+                            <div class="bd">对于有大片无变化的地形环境，是否可以采用更大的方块表示，同时增加其与邻接顶点的权值，已表示距离更远。这样可以减少顶点数，简化图的复杂程度，提高执行效率。不过可能造成行走路线中折线过多，不够平滑。 <br></div>
+                            <span class="time">2019-01-18 18:45</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/de/04/a597d056.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">蓝心</span>
+                            </div>
+                            <div class="bd">21行代码：queue.update(nextVertex); 是不是没有这个API 。要删除在插入呢<br> <br></div>
+                            <span class="time">2019-01-18 10:54</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/22/61/bbfb2d4a.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">『LHCY』</span>
+                            </div>
+                            <div class="bd">真实游戏中也是用的小方块来做的吗？比如要往(1，1)方向走，先把模型角度调整，然后移动是一个个小方格走的，因为方格太小使肉眼分辨不出？ <br></div>
+                            <span class="time">2019-01-18 09:47</span>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,685 @@
+
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="预习篇 · 小鲸鱼大事记（一）：初出茅庐 预习篇 · 小鲸鱼大事记（二）：崭露头角 预习篇 · 小鲸鱼大事记（三）：群雄并起 预习篇 · 小鲸鱼大事记（四）：尘埃落定 白话容器基础（一）：从进程说开去 白话容器基础（二）：隔离与限制 白话容器基础（三）：深入理解容器镜像 白话容器基础（四）：重新认识Docker容器 从容器到容器云：谈谈Kubernetes的本质 Kubernetes一键部署利器">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入剖析Kubernetes">
+<meta property="og:url" content="http://yoursite.com/2019/04/25/深入剖析Kubernetes/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="预习篇 · 小鲸鱼大事记（一）：初出茅庐 预习篇 · 小鲸鱼大事记（二）：崭露头角 预习篇 · 小鲸鱼大事记（三）：群雄并起 预习篇 · 小鲸鱼大事记（四）：尘埃落定 白话容器基础（一）：从进程说开去 白话容器基础（二）：隔离与限制 白话容器基础（三）：深入理解容器镜像 白话容器基础（四）：重新认识Docker容器 从容器到容器云：谈谈Kubernetes的本质 Kubernetes一键部署利器">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-28T02:34:51.329Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深入剖析Kubernetes">
+<meta name="twitter:description" content="预习篇 · 小鲸鱼大事记（一）：初出茅庐 预习篇 · 小鲸鱼大事记（二）：崭露头角 预习篇 · 小鲸鱼大事记（三）：群雄并起 预习篇 · 小鲸鱼大事记（四）：尘埃落定 白话容器基础（一）：从进程说开去 白话容器基础（二）：隔离与限制 白话容器基础（三）：深入理解容器镜像 白话容器基础（四）：重新认识Docker容器 从容器到容器云：谈谈Kubernetes的本质 Kubernetes一键部署利器">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/04/25/深入剖析Kubernetes/">
+
+
+
+
+
+  <title>深入剖析Kubernetes | Hexo</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/25/深入剖析Kubernetes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">深入剖析Kubernetes</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-04-25T16:47:19+08:00">
+                2019-04-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <ol>
+<li><a href="01.html">预习篇 · 小鲸鱼大事记（一）：初出茅庐</a></li>
+<li><a href="02.html">预习篇 · 小鲸鱼大事记（二）：崭露头角</a></li>
+<li><a href="03.html">预习篇 · 小鲸鱼大事记（三）：群雄并起</a></li>
+<li><a href="04.html">预习篇 · 小鲸鱼大事记（四）：尘埃落定</a></li>
+<li><a href="05.html">白话容器基础（一）：从进程说开去</a></li>
+<li><a href="06.html">白话容器基础（二）：隔离与限制</a></li>
+<li><a href="07.html">白话容器基础（三）：深入理解容器镜像</a></li>
+<li><a href="08.html">白话容器基础（四）：重新认识Docker容器</a></li>
+<li><a href="09.html">从容器到容器云：谈谈Kubernetes的本质</a></li>
+<li><a href="10.html">Kubernetes一键部署利器：kubeadm</a></li>
+<li><a href="11.html">从0到1：搭建一个完整的Kubernetes集群</a></li>
+<li><a href="12.html">牛刀小试：我的第一个容器化应用</a></li>
+<li><a href="13.html">为什么我们需要Pod？</a></li>
+<li><a href="14.html">深入解析Pod对象（一）：基本概念</a></li>
+<li><a href="15.html">深入解析Pod对象（二）：使用进阶</a></li>
+<li><a href="16.html">编排其实很简单：谈谈“控制器”模型</a></li>
+<li><a href="17.html">经典PaaS的记忆：作业副本与水平扩展</a></li>
+<li><a href="18.html">深入理解StatefulSet（一）：拓扑状态</a></li>
+<li><a href="19.html">深入理解StatefulSet（二）：存储状态</a></li>
+<li><a href="20.html">深入理解StatefulSet（三）：有状态应用实践</a></li>
+<li><a href="21.html">容器化守护进程的意义：DaemonSet</a></li>
+<li><a href="22.html">撬动离线业务：Job与CronJob</a></li>
+<li><a href="23.html">声明式API与Kubernetes编程范式</a></li>
+<li><a href="24.html">深入解析声明式API（一）：API对象的奥秘</a></li>
+<li><a href="25.html">深入解析声明式API（二）：编写自定义控制器</a></li>
+<li><a href="26.html">基于角色的权限控制：RBAC</a></li>
+<li><a href="27.html">聪明的微创新：Operator工作原理解读</a></li>
+<li><a href="28.html">PV、PVC、StorageClass，这些到底在说啥？</a></li>
+<li><a href="29.html">PV、PVC体系是不是多此一举？从本地持久化卷谈起</a></li>
+<li><a href="30.html">编写自己的存储插件：FlexVolume与CSI</a></li>
+<li><a href="31.html">容器存储实践：CSI插件编写指南</a></li>
+<li><a href="32.html">浅谈容器网络</a></li>
+<li><a href="33.html">深入解析容器跨主机网络</a></li>
+<li><a href="34.html">Kubernetes网络模型与CNI网络插件</a></li>
+<li><a href="35.html">解读Kubernetes三层网络方案</a></li>
+<li><a href="36.html">为什么说Kubernetes只有soft multi-tenancy？</a></li>
+<li><a href="37.html">找到容器不容易：Service、DNS与服务发现</a></li>
+<li><a href="38.html">从外界连通Service与Service调试“三板斧”</a></li>
+<li><a href="39.html">谈谈Service与Ingress</a></li>
+<li><a href="40.html">Kubernetes的资源模型与资源管理</a></li>
+<li><a href="41.html">十字路口上的Kubernetes默认调度器</a></li>
+<li><a href="42.html">Kubernetes默认调度器调度策略解析</a></li>
+<li><a href="43.html">Kubernetes默认调度器的优先级与抢占机制</a></li>
+<li><a href="44.html">Kubernetes GPU管理与Device Plugin机制</a></li>
+<li><a href="45.html">幕后英雄：SIG-Node与CRI</a></li>
+<li><a href="46.html">解读 CRI 与 容器运行时</a></li>
+<li><a href="47.html">绝不仅仅是安全：Kata Containers 与 gVisor</a></li>
+<li><a href="48.html">Prometheus、Metrics Server与Kubernetes监控体系</a></li>
+<li><a href="49.html">阿忠伯的特别放送  答疑解惑01</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/15/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/28/跟我学，你也可以开发一款游戏/" rel="prev" title="跟我学，你也可以开发一款游戏">
+                跟我学，你也可以开发一款游戏 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

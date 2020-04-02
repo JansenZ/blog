@@ -1,0 +1,368 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                45讲位图：如何实现网页爬虫中的URL去重功能
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/01/38/01e51226d435eda4604acc019731c538.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>网页爬虫是搜索引擎中的非常重要的系统，负责爬取几十亿、上百亿的网页。爬虫的工作原理是，通过解析已经爬取页面中的网页链接，然后再爬取这些链接对应的网页。而<strong><span class="orange">同一个网页链接有可能被包含在多个页面中，这就会导致爬虫在爬取的过程中，重复爬取相同的网页。如果你是一名负责爬虫的工程师，你会如何避免这些重复的爬取呢？</span></strong></p><p>最容易想到的方法就是，我们记录已经爬取的网页链接（也就是URL），在爬取一个新的网页之前，我们拿它的链接，在已经爬取的网页链接列表中搜索。如果存在，那就说明这个网页已经被爬取过了；如果不存在，那就说明这个网页还没有被爬取过，可以继续去爬取。等爬取到这个网页之后，我们将这个网页的链接添加到已经爬取的网页链接列表了。</p><p>思路非常简单，我想你应该很容易就能想到。不过，我们该如何记录已经爬取的网页链接呢？需要用什么样的数据结构呢？</p><h2>算法解析</h2><p>关于这个问题，我们可以先回想下，是否可以用我们之前学过的数据结构来解决呢？</p><p>这个问题要处理的对象是网页链接，也就是URL，需要支持的操作有两个，添加一个URL和查询一个URL。除了这两个功能性的要求之外，在非功能性方面，我们还要求这两个操作的执行效率要尽可能高。除此之外，因为我们处理的是上亿的网页链接，内存消耗会非常大，所以在存储效率上，我们要尽可能地高效。</p><!-- [[[read_end]]] --><p>我们回想一下，满足这些条件的数据结构有哪些呢？显然，散列表、红黑树、跳表这些动态数据结构，都能支持快速地插入、查找数据，但是对内存消耗方面，是否可以接受呢？</p><p>我们拿散列表来举例。假设我们要爬取10亿个网页（像Google、百度这样的通用搜索引擎，爬取的网页可能会更多），为了判重，我们把这10亿网页链接存储在散列表中。你来估算下，大约需要多少内存？</p><p>假设一个URL的平均长度是64字节，那单纯存储这10亿个URL，需要大约60GB的内存空间。因为散列表必须维持较小的装载因子，才能保证不会出现过多的散列冲突，导致操作的性能下降。而且，用链表法解决冲突的散列表，还会存储链表指针。所以，如果将这10亿个URL构建成散列表，那需要的内存空间会远大于60GB，有可能会超过100GB。</p><p>当然，对于一个大型的搜索引擎来说，即便是100GB的内存要求，其实也不算太高，我们可以采用分治的思想，用多台机器（比如20台内存是8GB的机器）来存储这10亿网页链接。这种分治的处理思路，我们讲过很多次了，这里就不详细说了。</p><p>对于爬虫的URL去重这个问题，刚刚讲到的分治加散列表的思路，已经是可以实实在在工作的了。不过，<strong>作为一个有追求的工程师，我们应该考虑，在添加、查询数据的效率以及内存消耗方面，我们是否还有进一步的优化空间呢？</strong></p><p>你可能会说，散列表中添加、查找数据的时间复杂度已经是O(1)，还能有进一步优化的空间吗？实际上，我们前面也讲过，时间复杂度并不能完全代表代码的执行时间。大O时间复杂度表示法，会忽略掉常数、系数和低阶，并且统计的对象是语句的频度。不同的语句，执行时间也是不同的。时间复杂度只是表示执行时间随数据规模的变化趋势，并不能度量在特定的数据规模下，代码执行时间的多少。</p><p>如果时间复杂度中原来的系数是10，我们现在能够通过优化，将系数降为1，那在时间复杂度没有变化的情况下，执行效率就提高了10倍。对于实际的软件开发来说，10倍效率的提升，显然是一个非常值得的优化。</p><p>如果我们用基于链表的方法解决冲突问题，散列表中存储的是URL，那当查询的时候，通过哈希函数定位到某个链表之后，我们还需要依次比对每个链表中的URL。这个操作是比较耗时的，主要有两点原因。</p><p>一方面，链表中的结点在内存中不是连续存储的，所以不能一下子加载到CPU缓存中，没法很好地利用到CPU高速缓存，所以数据访问性能方面会打折扣。</p><p>另一方面，链表中的每个数据都是URL，而URL不是简单的数字，是平均长度为64字节的字符串。也就是说，我们要让待判重的URL，跟链表中的每个URL，做字符串匹配。显然，这样一个字符串匹配操作，比起单纯的数字比对，要慢很多。所以，基于这两点，执行效率方面肯定是有优化空间的。</p><p>对于内存消耗方面的优化，除了刚刚这种基于散列表的解决方案，貌似没有更好的法子了。实际上，如果要想内存方面有明显的节省，那就得换一种解决方案，也就是我们今天要着重讲的这种存储结构，<strong>布隆过滤器</strong>（Bloom Filter）。</p><p>在讲布隆过滤器前，我要先讲一下另一种存储结构，<strong>位图</strong>（BitMap）。因为，布隆过滤器本身就是基于位图的，是对位图的一种改进。</p><p>我们先来看一个跟开篇的问题非常类似，但稍微简单的问题。<strong>我们有1千万个整数，整数的范围在1到1亿之间。如何快速查找某个整数是否在这1千万个整数中呢？</strong></p><p>当然，这个问题还是可以用散列表来解决。不过，我们可以使用一种比较“特殊”的散列表，那就是位图。我们申请一个大小为1亿、数据类型为布尔类型（true或者false）的数组。我们将这1千万个整数作为数组下标，将对应的数组值设置成true。比如，整数5对应下标为5的数组值设置为true，也就是array[5]=true。</p><p>当我们查询某个整数K是否在这1千万个整数中的时候，我们只需要将对应的数组值array[K]取出来，看是否等于true。如果等于true，那说明1千万整数中包含这个整数K；相反，就表示不包含这个整数K。</p><p>不过，很多语言中提供的布尔类型，大小是1个字节的，并不能节省太多内存空间。实际上，表示true和false两个值，我们只需要用一个二进制位（bit）就可以了。<strong>那如何通过编程语言，来表示一个二进制位呢？</strong></p><p>这里就要用到位运算了。我们可以借助编程语言中提供的数据类型，比如int、long、char等类型，通过位运算，用其中的某个位表示某个数字。文字描述起来有点儿不好理解，我把位图的代码实现写了出来，你可以对照着代码看下，应该就能看懂了。</p><pre><code>public class BitMap {
+  private char[] bytes;
+  private int nbits;
+  
+  public BitMap(int nbits) {
+    this.nbits = nbits;
+    this.bytes = new char[nbits/8+1];
+  }
+
+  public void set(int k) {
+    if (k &gt; nbits) return;
+    int byteIndex = k / 8;
+    int bitIndex = k % 8;
+    bytes[byteIndex] |= (1 &lt;&lt; bitIndex);
+  }
+
+  public boolean get(int k) {
+    if (k &gt; nbits) return false;
+    int byteIndex = k / 8;
+    int bitIndex = k % 8;
+    return (bytes[byteIndex] &amp; (1 &lt;&lt; bitIndex)) != 0;
+  }
+}!<a href="https://static001.geekbang.org/resource/image/94/ae/94630c1c3b7657f560a1825bd9d02cae.jpg"></a>
+</code></pre><p>从刚刚位图结构的讲解中，你应该可以发现，位图通过数组下标来定位数据，所以，访问效率非常高。而且，每个数字用一个二进制位来表示，在数字范围不大的情况下，所需要的内存空间非常节省。</p><p>比如刚刚那个例子，如果用散列表存储这1千万的数据，数据是32位的整型数，也就是需要4个字节的存储空间，那总共至少需要40MB的存储空间。如果我们通过位图的话，数字范围在1到1亿之间，只需要1亿个二进制位，也就是12MB左右的存储空间就够了。</p><p>关于位图，我们就讲完了，是不是挺简单的？不过，这里我们有个假设，就是数字所在的范围不是很大。如果数字的范围很大，比如刚刚那个问题，数字范围不是1到1亿，而是1到10亿，那位图的大小就是10亿个二进制位，也就是120MB的大小，消耗的内存空间，不降反增。</p><p>这个时候，布隆过滤器就要出场了。布隆过滤器就是为了解决刚刚这个问题，对位图这种数据结构的一种改进。</p><p>还是刚刚那个例子，数据个数是1千万，数据的范围是1到10亿。布隆过滤器的做法是，我们仍然使用一个1亿个二进制大小的位图，然后通过哈希函数，对数字进行处理，让它落在这1到1亿范围内。比如我们把哈希函数设计成f(x)=x%n。其中，x表示数字，n表示位图的大小（1亿），也就是，对数字跟位图的大小进行取模求余。</p><p>不过，你肯定会说，哈希函数会存在冲突的问题啊，一亿零一和1两个数字，经过你刚刚那个取模求余的哈希函数处理之后，最后的结果都是1。这样我就无法区分，位图存储的是1还是一亿零一了。</p><p>为了降低这种冲突概率，当然我们可以设计一个复杂点、随机点的哈希函数。除此之外，还有其他方法吗？我们来看布隆过滤器的处理方法。既然一个哈希函数可能会存在冲突，那用多个哈希函数一块儿定位一个数据，是否能降低冲突的概率呢？我来具体解释一下，布隆过滤器是怎么做的。</p><p>我们使用K个哈希函数，对同一个数字进行求哈希值，那会得到K个不同的哈希值，我们分别记作$X_{1}$，$X_{2}$，$X_{3}$，…，$X_{K}$。我们把这K个数字作为位图中的下标，将对应的BitMap[$X_{1}$]，BitMap[$X_{2}$]，BitMap[$X_{3}$]，…，BitMap[$X_{K}$]都设置成true，也就是说，我们用K个二进制位，来表示一个数字的存在。</p><p>当我们要查询某个数字是否存在的时候，我们用同样的K个哈希函数，对这个数字求哈希值，分别得到$Y_{1}$，$Y_{2}$，$Y_{3}$，…，$Y_{K}$。我们看这K个哈希值，对应位图中的数值是否都为true，如果都是true，则说明，这个数字存在，如果有其中任意一个不为true，那就说明这个数字不存在。</p><p><img src="https://static001.geekbang.org/resource/image/94/ae/94630c1c3b7657f560a1825bd9d02cae.jpg" alt=""></p><p>对于两个不同的数字来说，经过一个哈希函数处理之后，可能会产生相同的哈希值。但是经过K个哈希函数处理之后，K个哈希值都相同的概率就非常低了。尽管采用K个哈希函数之后，两个数字哈希冲突的概率降低了，但是，这种处理方式又带来了新的问题，那就是容易误判。我们看下面这个例子。</p><p><img src="https://static001.geekbang.org/resource/image/d0/1a/d0a3326ef0037f64102163209301aa1a.jpg" alt=""></p><p>布隆过滤器的误判有一个特点，那就是，它只会对存在的情况有误判。如果某个数字经过布隆过滤器判断不存在，那说明这个数字真的不存在，不会发生误判；如果某个数字经过布隆过滤器判断存在，这个时候才会有可能误判，有可能并不存在。不过，只要我们调整哈希函数的个数、位图大小跟要存储数字的个数之间的比例，那就可以将这种误判的概率降到非常低。</p><p>尽管布隆过滤器会存在误判，但是，这并不影响它发挥大作用。很多场景对误判有一定的容忍度。比如我们今天要解决的爬虫判重这个问题，即便一个没有被爬取过的网页，被误判为已经被爬取，对于搜索引擎来说，也并不是什么大事情，是可以容忍的，毕竟网页太多了，搜索引擎也不可能100%都爬取到。</p><p>弄懂了布隆过滤器，我们今天的爬虫网页去重的问题，就很简单了。</p><p>我们用布隆过滤器来记录已经爬取过的网页链接，假设需要判重的网页有10亿，那我们可以用一个10倍大小的位图来存储，也就是100亿个二进制位，换算成字节，那就是大约1.2GB。之前我们用散列表判重，需要至少100GB的空间。相比来讲，布隆过滤器在存储空间的消耗上，降低了非常多。</p><p>那我们再来看下，利用布隆过滤器，在执行效率方面，是否比散列表更加高效呢？</p><p>布隆过滤器用多个哈希函数对同一个网页链接进行处理，CPU只需要将网页链接从内存中读取一次，进行多次哈希计算，理论上讲这组操作是CPU密集型的。而在散列表的处理方式中，需要读取散列冲突拉链的多个网页链接，分别跟待判重的网页链接，进行字符串匹配。这个操作涉及很多内存数据的读取，所以是内存密集型的。我们知道CPU计算可能是要比内存访问更快速的，所以，理论上讲，布隆过滤器的判重方式，更加快速。</p><h2>总结引申</h2><p>今天，关于搜索引擎爬虫网页去重问题的解决，我们从散列表讲到位图，再讲到布隆过滤器。布隆过滤器非常适合这种不需要100%准确的、允许存在小概率误判的大规模判重场景。除了爬虫网页去重这个例子，还有比如统计一个大型网站的每天的UV数，也就是每天有多少用户访问了网站，我们就可以使用布隆过滤器，对重复访问的用户，进行去重。</p><p>我们前面讲到，布隆过滤器的误判率，主要跟哈希函数的个数、位图的大小有关。当我们往布隆过滤器中不停地加入数据之后，位图中不是true的位置就越来越少了，误判率就越来越高了。所以，对于无法事先知道要判重的数据个数的情况，我们需要支持自动扩容的功能。</p><p>当布隆过滤器中，数据个数与位图大小的比例超过某个阈值的时候，我们就重新申请一个新的位图。后面来的新数据，会被放置到新的位图中。但是，如果我们要判断某个数据是否在布隆过滤器中已经存在，我们就需要查看多个位图，相应的执行效率就降低了一些。</p><p>位图、布隆过滤器应用如此广泛，很多编程语言都已经实现了。比如Java中的BitSet类就是一个位图，Redis也提供了BitMap位图类，Google的Guava工具包提供了BloomFilter布隆过滤器的实现。如果你感兴趣，你可以自己去研究下这些实现的源码。</p><h2>课后思考</h2><ol>
+<li>
+<p>假设我们有1亿个整数，数据范围是从1到10亿，如何快速并且省内存地给这1亿个数据从小到大排序？</p>
+</li>
+<li>
+<p>还记得我们在<a href="https://time.geekbang.org/column/article/67388">哈希函数（下）</a>讲过的利用分治思想，用散列表以及哈希函数，实现海量图库中的判重功能吗？如果我们允许小概率的误判，那是否可以用今天的布隆过滤器来解决呢？你可以参照我们当时的估算方法，重新估算下，用布隆过滤器需要多少台机器？</p>
+</li>
+</ol><p>欢迎留言和我分享，也欢迎点击“<span class="orange">请朋友读</span>”，把今天的内容分享给你的好友，和他一起讨论、学习。</p><p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt=""></p>
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/69/97/2044815d.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">DreamYe</span>
+                            </div>
+                            <div class="bd">bloom filter: False is always false. True is maybe true. <br></div>
+                            <span class="time">2019-01-09 01:02</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/08/eb/fed61050.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">五岳寻仙</span>
+                            </div>
+                            <div class="bd">课后思考题1<br><br>传统的做法：1亿个整数，存储需要400M空间，排序时间复杂度最优 N×log(N)<br><br>使用位图算法：数字范围是1到10亿，用位图存储125M就够了，然后将1亿个数字依次添加到位图中，然后再将位图按下标从小到大输出值为1的下标，排序就完成了，时间复杂度为 N <br></div>
+                            <span class="time">2019-01-09 07:54</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/df/1e/cea897e8.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">传说中的成大大</span>
+                            </div>
+                            <div class="bd">1亿个整数 如果完全读入内存大约是0.4G的样子 可以直接快排排序 <br>通过位图方式开辟一个十亿大小的位图缩小到0.125g的样子,虽然数字只有一亿个,但是我们却要检查1到10亿之间的数字是否存在再输出即可达到排序 <br></div>
+                            <span class="time">2019-01-09 13:43</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/77/b3/991f3f9b.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">公号-代码荣耀</span>
+                            </div>
+                            <div class="bd">在线上环境，我们采用redis的set进行去重，效果还是不错的 <br></div>
+                            <span class="time">2019-01-12 09:15</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/c7/dc/9408c8c2.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">ban</span>
+                            </div>
+                            <div class="bd">这个char代码最好还是用图解比较好理解，纯代码看不懂。<br>我这里有另外一个位的图解计算过程，再去看代码，你就会秒懂<br>https:&#47;&#47;mp.weixin.qq.com&#47;s&#47;xxauNrJY9HlVNvLrL5j2hg <br></div>
+                            <span class="time">2019-01-11 18:08</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/00/ea/6ad346c1.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">煦暖</span>
+                            </div>
+                            <div class="bd">争哥，位图的代码理解了好久还没懂(；′⌒`)，能加几行注释吗？？ <br></div>
+                            <span class="time">2019-01-11 11:44</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/72/19/84b7c212.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">越过山丘</span>
+                            </div>
+                            <div class="bd">第一题，数字重复了，有什么好方法处理吗 <br></div>
+                            <span class="time">2019-01-10 09:02</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">对于重复的 可以再维护一个小的散列表 记录出现次数超过1次的数据以及对应的个数</p>
+                                <p class="reply-time">2019-01-10 09:54</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/eb/e9/f94ee55c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">阮雅</span>
+                            </div>
+                            <div class="bd">王争哥，您好。你画这个图，用的啥软件画的啊？  比普通的黑白图更容易理解。望求解！感激不尽！ <br></div>
+                            <span class="time">2019-01-09 21:38</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">ipad paper</p>
+                                <p class="reply-time">2019-01-10 10:01</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/0a/dd/88fa7b52.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">spark</span>
+                            </div>
+                            <div class="bd">思考题1:用10亿个位的位图存储这1亿个数，然后直接按脚标从0到10亿顺序遍历整个位图，如果位为1，则打印脚标，打印出来的就是排好序的1亿个数字<br><br>思考题2:用位图的话。一个机器应该就够了 <br></div>
+                            <span class="time">2019-01-09 17:36</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/0a/dd/88fa7b52.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">spark</span>
+                            </div>
+                            <div class="bd">位图代码的实现一开始没看懂，请教了下身边一位大神同事才搞懂，原来char类型存储数字的时候，只占1个字节，也就是8位。所以计算的时候都是除8或者模8。希望我的回答可以帮助其他跟我一样基础薄弱的同学，共同进步 <br></div>
+                            <span class="time">2019-01-09 16:57</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/db/ff/b4a5cf6a.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">marvinle</span>
+                            </div>
+                            <div class="bd">老师，按照你的讲解我写了一个简单的布隆过滤器， 使用了3个简单的哈希函数，判错率在0.9左右<br>不知道是否是属于偏高了，这是代码，可以的话帮忙看看是否正确https:&#47;&#47;github.com&#47;MarvinLe&#47;tools&#47;tree&#47;master&#47;BloomFilter <br></div>
+                            <span class="time">2019-01-09 14:33</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">判错旅太高了 哈希函数不够随机均匀？位图不够大？</p>
+                                <p class="reply-time">2019-01-10 10:11</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/d2/94/8bd217f1.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Kudo</span>
+                            </div>
+                            <div class="bd">直观上感觉位图有点像学排序时桶的概念，所以使用位图也可以实现类似于桶排序的效率。 <br></div>
+                            <span class="time">2019-01-09 13:33</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/e8/fd/035f4c94.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Sharry</span>
+                            </div>
+                            <div class="bd">这个位图很精妙，因为编程语言没有提供bit类型，所以使用byte进行位运算的方式，巧妙的利用每一位，以达到减少内存开辟的消耗的问题 <br></div>
+                            <span class="time">2019-01-09 09:11</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/05/dd/b201cf13.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Alexis何春光</span>
+                            </div>
+                            <div class="bd">老师，你提到100gb的内存要求就要用分布式了，但是我在网上搜到很多服务器的内存甚至可以达到tb级别，只有pc的内存才至多16gb，请问您了解的一般的服务器的内存是多少呢？ <br></div>
+                            <span class="time">2019-01-13 12:27</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/ba/a0/4f519bf3.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">likun</span>
+                            </div>
+                            <div class="bd">char类型是两个字节 应该除以16吧？ <br></div>
+                            <span class="time">2019-01-12 15:06</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/be/d2/3d88cb8e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">NeverMore</span>
+                            </div>
+                            <div class="bd">对布隆过滤器的理解更深了。 <br></div>
+                            <span class="time">2019-01-11 11:01</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/ff/3f/bbb8a88c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">徐凯</span>
+                            </div>
+                            <div class="bd">谁能帮忙解答一下 第二题 我感觉一台计算机4gb的内存大概3.44e10 个二进制位 一张图片假设30kb的话 1亿张就是2.457e13个位 而且为了降低误判率 布隆过滤器还要维护一个阈值 这样内存会消耗得更多一点  如果内存更大的电脑应该一台就够了 一般要存储应该1-2台 <br></div>
+                            <span class="time">2019-01-10 09:31</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/1c/46/a141c7e6.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">子嘉</span>
+                            </div>
+                            <div class="bd">用位图去存一亿个数 是否存在的下标 但是有个问题 如果是有重复的数值 那就没法存了？ 每一位只能0-1 除非用多位来存储？ <br></div>
+                            <span class="time">2019-01-10 00:07</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">见我另一个留言</p>
+                                <p class="reply-time">2019-01-10 09:59</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/e0/26/4d458ce3.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">猫头鹰爱拿铁</span>
+                            </div>
+                            <div class="bd">没太明白爬虫网页链接这个例子去重为什么要用10倍大小的位图，按照同样的思路，图片size：1亿张，布隆算法算法的内存空间为10亿bit=1.16gb，假设一个机器内存空间为2gb，那么只需要2&#47;1.16约等于1台机器。刚才算错了，少除了8。。。 <br></div>
+                            <span class="time">2019-01-09 23:07</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">10倍是为了减少误判</p>
+                                <p class="reply-time">2019-01-10 10:00</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/e0/26/4d458ce3.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">猫头鹰爱拿铁</span>
+                            </div>
+                            <div class="bd">思考题1的java实现。<br>import java.util.Random;<br><br>public class BitMap {<br>	private int[] bits;<br>	private int[] input;<br><br>	public BitMap(int n, int[] input) {<br>		bits = new int[n];<br>		this.input = input;<br>	}<br><br>	public void setBit(int n) {<br>		int offset = n &#47; 32;<br>		int value = n % 32;<br>		bits[offset] |= (1 &lt;&lt; value);<br>	}<br><br>	public boolean getBit(int n) {<br>		int offset = n &#47; 32;<br>		int value = n % 32;<br>		return (bits[offset] &amp; (1 &lt;&lt; value)) != 0;<br>	}<br><br>	&#47;**<br>	 * 排序<br>	 * <br>	 * @param n<br>	 *            是数组的存储整数范围<br>	 * @param input<br>	 *            输入的未排序数组<br>	 * @return 有序的数组范围<br>	 *&#47;<br>	public int sort(int n, int[] input) {<br>		int j = 0;<br>		for (int i = 1; i &lt;= 10 * n; i++) {<br>			if (getBit(i)) {<br>				input[j++] = i;<br>			}<br>		}<br>		return j;<br>	}<br><br>	public static void main(String[] args) {<br>		int n = 1000000000;<br>		int[] input = new int[n];<br>		Random r = new Random();<br>		for (int i = 0; i &lt; n; i++) {<br>			input[i] = r.nextInt(10 * n - 1) + 1;<br>		}<br>		BitMap bitMap = new BitMap(10 * n, input);<br>		for (int i = 0; i &lt; n; i++) {<br>			bitMap.setBit(input[i]);<br>		}<br>		int size = bitMap.sort(n, input);<br>		for (int i = 0; i &lt; size; i++)<br>			System.out.print(input[i] + &quot;,&quot;);<br>	}<br>}<br> <br></div>
+                            <span class="time">2019-01-09 22:56</span>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

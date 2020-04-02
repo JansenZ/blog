@@ -1,0 +1,401 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                23讲二叉树基础（上）：什么样的二叉树适合用数组来存储
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/ab/79/abdc3641bada1a03f4444c36c1bc4879.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>前面我们讲的都是线性表结构，栈、队列等等。今天我们讲一种非线性表结构，树。树这种数据结构比线性表的数据结构要复杂得多，内容也比较多，所以我会分四节来讲解。</p><p><img src="https://static001.geekbang.org/resource/image/6c/c9/6ce8707f43e1a3e7e5368167cca6a4c9.jpg" alt=""></p><p>我反复强调过，带着问题学习，是最有效的学习方式之一，所以在正式的内容开始之前，我还是给你出一道思考题：<strong><span class="orange">二叉树有哪几种存储方式？什么样的二叉树适合用数组来存储？</span></strong></p><p>带着这些问题，我们就来学习今天的内容，树！</p><h2>树（Tree）</h2><p>我们首先来看，什么是“树”？再完备的定义，都没有图直观。所以我在图中画了几棵“树”。你来看看，这些“树”都有什么特征？</p><p><img src="https://static001.geekbang.org/resource/image/b7/29/b7043bf29a253bb36221eaec62b2e129.jpg" alt=""></p><p>你有没有发现，“树”这种数据结构真的很像我们现实生活中的“树”，这里面每个元素我们叫作“节点”；用来连线相邻节点之间的关系，我们叫作“父子关系”。</p><p>比如下面这幅图，A节点就是B节点的<strong>父节点</strong>，B节点是A节点的<strong>子节点</strong>。B、C、D这三个节点的父节点是同一个节点，所以它们之间互称为<strong>兄弟节点</strong>。我们把没有父节点的节点叫作<strong>根节点</strong>，也就是图中的节点E。我们把没有子节点的节点叫作<strong>叶子节点</strong>或者<strong>叶节点</strong>，比如图中的G、H、I、J、K、L都是叶子节点。</p><p><img src="https://static001.geekbang.org/resource/image/22/ae/220043e683ea33b9912425ef759556ae.jpg" alt=""></p><p>除此之外，关于“树”，还有三个比较相似的概念：<strong>高度</strong>（Height）、<strong>深度</strong>（Depth）、<strong>层</strong>（Level）。它们的定义是这样的：</p><!-- [[[read_end]]] --><p><img src="https://static001.geekbang.org/resource/image/40/1e/4094a733986073fedb6b9d03f877d71e.jpg" alt=""></p><p>这三个概念的定义比较容易混淆，描述起来也比较空洞。我举个例子说明一下，你一看应该就能明白。</p><p><img src="https://static001.geekbang.org/resource/image/50/b4/50f89510ad1f7570791dd12f4e9adeb4.jpg" alt=""></p><p>记这几个概念，我还有一个小窍门，就是类比“高度”“深度”“层”这几个名词在生活中的含义。</p><p>在我们的生活中，“高度”这个概念，其实就是从下往上度量，比如我们要度量第10层楼的高度、第13层楼的高度，起点都是地面。所以，树这种数据结构的高度也是一样，从最底层开始计数，并且计数的起点是0。</p><p>“深度”这个概念在生活中是从上往下度量的，比如水中鱼的深度，是从水平面开始度量的。所以，树这种数据结构的深度也是类似的，从根结点开始度量，并且计数起点也是0。</p><p>“层数”跟深度的计算类似，不过，计数起点是1，也就是说根节点的位于第1层。</p><h2>二叉树（Binary Tree）</h2><p>树结构多种多样，不过我们最常用还是二叉树。</p><p>二叉树，顾名思义，每个节点最多有两个“叉”，也就是两个子节点，分别是<strong>左子节点</strong>和<strong>右子<strong><strong>节</strong></strong>点</strong>。不过，二叉树并不要求每个节点都有两个子节点，有的节点只有左子节点，有的节点只有右子节点。我画的这几个都是二叉树。以此类推，你可以想象一下四叉树、八叉树长什么样子。</p><p><img src="https://static001.geekbang.org/resource/image/09/2b/09c2972d56eb0cf67e727deda0e9412b.jpg" alt=""></p><p>这个图里面，有两个比较特殊的二叉树，分别是编号2和编号3这两个。</p><p>其中，编号2的二叉树中，叶子节点全都在最底层，除了叶子节点之外，每个节点都有左右两个子节点，这种二叉树就叫作<strong>满二叉树</strong>。</p><p>编号3的二叉树中，叶子节点都在最底下两层，最后一层的叶子节点都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大，这种二叉树叫作<strong>完全二叉树</strong>。</p><p>满二叉树很好理解，也很好识别，但是完全二叉树，有的人可能就分不清了。我画了几个完全二叉树和非完全二叉树的例子，你可以对比着看看。</p><p><img src="https://static001.geekbang.org/resource/image/18/60/18413c6597c2850b75367393b401ad60.jpg" alt=""></p><p>你可能会说，满二叉树的特征非常明显，我们把它单独拎出来讲，这个可以理解。但是完全二叉树的特征不怎么明显啊，单从长相上来看，完全二叉树并没有特别特殊的地方啊，更像是“芸芸众树”中的一种。</p><p>那我们为什么还要特意把它拎出来讲呢？为什么偏偏把最后一层的叶子节点靠左排列的叫完全二叉树？如果靠右排列就不能叫完全二叉树了吗？这个定义的由来或者说目的在哪里？</p><p>要理解完全二叉树定义的由来，我们需要先了解，<strong>如何表示（或者存储）一棵二叉树？</strong></p><p>想要存储一棵二叉树，我们有两种方法，一种是基于指针或者引用的二叉链式存储法，一种是基于数组的顺序存储法。</p><p>我们先来看比较简单、直观的<strong>链式存储法</strong>。从图中你应该可以很清楚地看到，每个节点有三个字段，其中一个存储数据，另外两个是指向左右子节点的指针。我们只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。这种存储方式我们比较常用。大部分二叉树代码都是通过这种结构来实现的。</p><p><img src="https://static001.geekbang.org/resource/image/12/8e/12cd11b2432ed7c4dfc9a2053cb70b8e.jpg" alt=""></p><p>我们再来看，基于数组的<strong>顺序存储法</strong>。我们把根节点存储在下标i = 1的位置，那左子节点存储在下标2 * i = 2的位置，右子节点存储在2 * i + 1 = 3的位置。以此类推，B节点的左子节点存储在2 * i = 2 * 2 = 4的位置，右子节点存储在2 * i + 1 = 2 * 2 + 1 = 5的位置。</p><p><img src="https://static001.geekbang.org/resource/image/14/30/14eaa820cb89a17a7303e8847a412330.jpg" alt=""></p><p>我来总结一下，如果节点X存储在数组中下标为i的位置，下标为2 * i 的位置存储的就是左子节点，下标为2 * i + 1的位置存储的就是右子节点。反过来，下标为i/2的位置存储就是它的父节点。通过这种方式，我们只要知道根节点存储的位置（一般情况下，为了方便计算子节点，根节点会存储在下标为1的位置），这样就可以通过下标计算，把整棵树都串起来。</p><p>不过，我刚刚举的例子是一棵完全二叉树，所以仅仅“浪费”了一个下标为0的存储位置。如果是非完全二叉树，其实会浪费比较多的数组存储空间。你可以看我举的下面这个例子。</p><p><img src="https://static001.geekbang.org/resource/image/08/23/08bd43991561ceeb76679fbb77071223.jpg" alt=""></p><p>所以，如果某棵二叉树是一棵完全二叉树，那用数组存储无疑是最节省内存的一种方式。因为数组的存储方式并不需要像链式存储法那样，要存储额外的左右子节点的指针。这也是为什么完全二叉树会单独拎出来的原因，也是为什么完全二叉树要求最后一层的子节点都靠左的原因。</p><p>当我们讲到堆和堆排序的时候，你会发现，堆其实就是一种完全二叉树，最常用的存储方式就是数组。</p><h2>二叉树的遍历</h2><p>前面我讲了二叉树的基本定义和存储方法，现在我们来看二叉树中非常重要的操作，二叉树的遍历。这也是非常常见的面试题。</p><p>如何将所有节点都遍历打印出来呢？经典的方法有三种，<strong>前序遍历</strong>、<strong>中序遍历</strong>和<strong>后序遍历</strong>。其中，前、中、后序，表示的是节点与它的左右子树节点遍历打印的先后顺序。</p><ul>
+<li>
+<p>前序遍历是指，对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。</p>
+</li>
+<li>
+<p>中序遍历是指，对于树中的任意节点来说，先打印它的左子树，然后再打印它本身，最后打印它的右子树。</p>
+</li>
+<li>
+<p>后序遍历是指，对于树中的任意节点来说，先打印它的左子树，然后再打印它的右子树，最后打印这个节点本身。</p>
+</li>
+</ul><p><img src="https://static001.geekbang.org/resource/image/ab/16/ab103822e75b5b15c615b68560cb2416.jpg" alt=""></p><p><strong>实际上，二叉树的前、中、后序遍历就是一个递归的过程</strong>。比如，前序遍历，其实就是先打印根节点，然后再递归地打印左子树，最后递归地打印右子树。</p><p>写递归代码的关键，就是看能不能写出递推公式，而写递推公式的关键就是，如果要解决问题A，就假设子问题B、C已经解决，然后再来看如何利用B、C来解决A。所以，我们可以把前、中、后序遍历的递推公式都写出来。</p><pre><code>前序遍历的递推公式：
+preOrder(r) = print r-&gt;preOrder(r-&gt;left)-&gt;preOrder(r-&gt;right)
+
+中序遍历的递推公式：
+inOrder(r) = inOrder(r-&gt;left)-&gt;print r-&gt;inOrder(r-&gt;right)
+
+后序遍历的递推公式：
+postOrder(r) = postOrder(r-&gt;left)-&gt;postOrder(r-&gt;right)-&gt;print r
+</code></pre><p>有了递推公式，代码写起来就简单多了。这三种遍历方式的代码，我都写出来了，你可以看看。</p><pre><code>void preOrder(Node* root) {
+  if (root == null) return;
+  print root // 此处为伪代码，表示打印root节点
+  preOrder(root-&gt;left);
+  preOrder(root-&gt;right);
+}
+
+void inOrder(Node* root) {
+  if (root == null) return;
+  inOrder(root-&gt;left);
+  print root // 此处为伪代码，表示打印root节点
+  inOrder(root-&gt;right);
+}
+
+void postOrder(Node* root) {
+  if (root == null) return;
+  postOrder(root-&gt;left);
+  postOrder(root-&gt;right);
+  print root // 此处为伪代码，表示打印root节点
+}
+</code></pre><p>二叉树的前、中、后序遍历的递归实现是不是很简单？你知道<strong>二叉树遍历的时间复杂度是多少</strong>吗？我们一起来看看。</p><p>从我前面画的前、中、后序遍历的顺序图，可以看出来，每个节点最多会被访问两次，所以遍历操作的时间复杂度，跟节点的个数n成正比，也就是说二叉树遍历的时间复杂度是O(n)。</p><h2>解答开篇&amp;内容小结</h2><p>今天，我讲了一种非线性表数据结构，树。关于树，有几个比较常用的概念你需要掌握，那就是：根节点、叶子节点、父节点、子节点、兄弟节点，还有节点的高度、深度、层数，以及树的高度。</p><p>我们平时最常用的树就是二叉树。二叉树的每个节点最多有两个子节点，分别是左子节点和右子节点。二叉树中，有两种比较特殊的树，分别是满二叉树和完全二叉树。满二叉树又是完全二叉树的一种特殊情况。</p><p>二叉树既可以用链式存储，也可以用数组顺序存储。数组顺序存储的方式比较适合完全二叉树，其他类型的二叉树用数组存储会比较浪费存储空间。除此之外，二叉树里非常重要的操作就是前、中、后序遍历操作，遍历的时间复杂度是O(n)，你需要理解并能用递归代码来实现。</p><h2>课后思考</h2><ol>
+<li>
+<p>给定一组数据，比如1，3，5，6，9，10。你来算算，可以构建出多少种不同的二叉树？</p>
+</li>
+<li>
+<p>我们讲了三种二叉树的遍历方式，前、中、后序。实际上，还有另外一种遍历方式，也就是按层遍历，你知道如何实现吗？</p>
+</li>
+</ol><p>欢迎留言和我分享，我会第一时间给你反馈。</p><p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt=""></p>
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/f2/aa/c04fda0e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">失火的夏天</span>
+                            </div>
+                            <div class="bd">1.是卡特兰数，是C[n,2n] &#47; (n+1)种形状，c是组合数，节点的不同又是一个全排列，一共就是n!*C[n,2n] &#47; (n+1)个二叉树。可以通过数学归纳法推导得出。<br>2.层次遍历需要借助队列这样一个辅助数据结构。（其实也可以不用，这样就要自己手动去处理节点的关系，代码不太好理解，好处就是空间复杂度是o(1)。不过用队列比较好理解，缺点就是空间复杂度是o(n)）。根节点先入队列，然后队列不空，取出对头元素，如果左孩子存在就入列队，否则什么也不做，右孩子同理。直到队列为空，则表示树层次遍历结束。树的层次遍历，其实也是一个广度优先的遍历算法。 <br></div>
+                            <span class="time">2018-11-12 00:58</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">meng</span>
+                            </div>
+                            <div class="bd">关于问题1，如果是完全二叉树，老师说过可以放在数组里面，那么问题是否 可以简化为数组内的元素有多少种组合方式，这样的话，就是 n!，不知是否可以这样理解 ？ <br></div>
+                            <span class="time">2018-11-18 23:10</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍</p>
+                                <p class="reply-time">2018-11-20 10:09</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/fb/93/f19a5364.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">姜威</span>
+                            </div>
+                            <div class="bd">树，总共包含4节内容。具体如下：<br>1.树、二叉树<br>2.二叉查找树<br>3.平衡二叉树、红黑树<br>4.递归树<br><br>一、树<br>1.树的常用概念<br>根节点、叶子节点、父节点、子节点、兄弟节点，还有节点的高度、深度以及层数，树的高度。<br>2.概念解释<br>节点：树中的每个元素称为节点<br>父子关系：相邻两节点的连线，称为父子关系<br>根节点：没有父节点的节点<br>叶子节点：没有子节点的节点<br>父节点：指向子节点的节点<br>子节点：被父节点指向的节点<br>兄弟节点：具有相同父节点的多个节点称为兄弟节点关系<br>节点的高度：节点到叶子节点的最长路径所包含的边数<br>节点的深度：根节点到节点的路径所包含的边数<br>节点的层数：节点的深度+1（根节点的层数是1）<br>树的高度：等于根节点的高度<br>二、二叉树<br>1.概念<br>①什么是二叉树？<br>每个节点最多只有2个子节点的树，这两个节点分别是左子节点和右子节点。<br>②什么是满二叉树？<br>有一种二叉树，除了叶子节点外，每个节点都有左右两个子节点，这种二叉树叫做满二叉树。<br>③什么是完全二叉树？<br>有一种二叉树，叶子节点都在最底下两层，最后一层叶子节都靠左排列，并且除了最后一层，其他层的节点个数都要达到最大，这种二叉树叫做完全二叉树。<br>2.完全二叉树的存储<br>①链式存储<br>每个节点由3个字段，其中一个存储数据，另外两个是指向左右子节点的指针。我们只要拎住根节点，就可以通过左右子节点的指针，把整棵树都串起来。这种存储方式比较常用，大部分二叉树代码都是通过这种方式实现的。<br>②顺序存储<br>用数组来存储，对于完全二叉树，如果节点X存储在数组中的下标为i，那么它的左子节点的存储下标为2*i，右子节点的下标为2*i+1，反过来，下标i&#47;2位置存储的就是该节点的父节点。注意，根节点存储在下标为1的位置。完全二叉树用数组来存储时最省内存的方式。<br>3.二叉树的遍历<br>①前序遍历：对于树中的任意节点来说，先打印这个节点，然后再打印它的左子树，最后打印它的右子树。<br>②中序遍历：对于树中的任意节点来说，先打印它的左子树，然后再打印它的本身，最后打印它的右子树。<br>③后序遍历：对于树中的任意节点来说，先打印它的左子树，然后再打印它的右子树，最后打印它本身。<br>前序遍历的递推公式：<br>preOrder(r) = print r-&gt;preOrder(r-&gt;left)-&gt;preOrder(r-&gt;right)<br>中序遍历的递推公式：<br>inOrder(r) = inOrder(r-&gt;left)-&gt;print r-&gt;inOrder(r-&gt;right)<br>后序遍历的递推公式：<br>postOrder(r) = postOrder(r-&gt;left)-&gt;postOrder(r-&gt;right)-&gt;print r<br>时间复杂度：3种遍历方式中，每个节点最多会被访问2次，所以时间复杂度是O(n)。<br>三、思考<br>1.二叉树有哪几种存储方式？什么样的二叉树适合用数组来存储？<br>2.给定一组数据，比如1，3，5，6，9，10.你来算算，可以构建出多少种不同的二叉树？<br>3.我们讲了三种二叉树的遍历方式，前、中、后序。实际上，还有另一种遍历方式，也就是按层遍历，你知道如何实现吗？<br>4.如何用循环实现二叉树的遍历？ <br></div>
+                            <span class="time">2018-11-24 20:43</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/1f/89/de5b1fab.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">言志</span>
+                            </div>
+                            <div class="bd">1、既然是数组了，说明是完全二叉树，应该有n的阶乘个组合。<br>2、二叉树按层遍历，可以看作以根结点为起点，图的广度优先遍历的问题。 <br></div>
+                            <span class="time">2018-11-21 21:39</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍</p>
+                                <p class="reply-time">2018-11-22 09:52</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/4c/a1/f8aed8a9.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">LeoBing</span>
+                            </div>
+                            <div class="bd">恕我愚钝。完全二叉树最后一层叶节点都靠左。可是图上节点9是靠右的，是不是我理解有什么问题，请教老师 <br></div>
+                            <span class="time">2018-11-17 13:58</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/63/14/06eff9a4.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Jerry银银</span>
+                            </div>
+                            <div class="bd">第一题： <br>确定两点：<br>1）n个数，即n个节点，能构造出多少种不同形态的树？<br>2）n个数，有多少种不同的排列？<br>当确定以上两点，将【1)的结果】乘以 【2)的结果】，即为最终的结果。<br>但是有一个注意的点： 如果n中有相等的数，产生的总排列数就不是n！了哟<br><br>通过这一题，我学到了【卡塔兰数】：https:&#47;&#47;en.wikipedia.org&#47;wiki&#47;Catalan_number<br><br>第二题：<br>层序遍历，借用队列辅助即可，根节点先入队列，然后循环从队列中pop节点，将pop出来的节点的左子节点先入队列，右节点后入队列，依次循环，直到队列为空，遍历结束。<br><br>leetcode上有个类似的题目，链接为：https:&#47;&#47;leetcode.com&#47;problems&#47;binary-tree-level-order-traversal&#47;<br>Java代码如下：<br>&#47;**<br> * Definition for a binary tree node.<br> * public class TreeNode {<br> *     int val;<br> *     TreeNode left;<br> *     TreeNode right;<br> *     TreeNode(int x) { val = x; }<br> * }<br> *&#47;<br>class Solution {<br>    public List&lt;List&lt;Integer&gt;&gt; levelOrder(TreeNode root) {<br>        if (root == null) return new ArrayList&lt;&gt;(0);<br>        <br>        List&lt;List&lt;Integer&gt;&gt; result = new ArrayList&lt;&gt;();<br>        <br>        Queue&lt;TreeNode&gt; queue = new LinkedList&lt;TreeNode&gt;();<br>        queue.offer(root); <br>        <br>        Queue&lt;TreeNode&gt; curLevelNodes  = new LinkedList&lt;TreeNode&gt;();<br>        <br>        while (!queue.isEmpty()) {<br>            TreeNode node = queue.poll();<br>            curLevelNodes.offer(node);<br>            <br>            if (queue.isEmpty()) {<br>                List&lt;Integer&gt; list = new ArrayList&lt;&gt;(curLevelNodes.size());<br>                while (!curLevelNodes.isEmpty()) {<br>                    TreeNode curNode = curLevelNodes.poll();<br>                    list.add(curNode.val);<br>                    <br>                    if (curNode.left != null) {<br>                        queue.offer(curNode.left);    <br>                    }<br>                    <br>                    if (curNode.right != null) {<br>                        queue.offer(curNode.right);<br>                    }<br>                    <br>                }<br>                result.add(list);<br>            }<br>        }<br>        <br>        <br>        return result;<br>    }<br>    <br>}<br> <br></div>
+                            <span class="time">2018-11-18 09:21</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/4d/49/28e73b9c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">明翼</span>
+                            </div>
+                            <div class="bd">我看很多人计算第一题都按照完全二叉树计算的，实际上并没有说完全二叉树，所以n阶乘肯定不对吧，只要是二叉树按照文中规则肯定可以按照数组存储，六个数字，前面五个数字最多浪费四个位置加上本身存储五个就是九个位置，然后六可以浪费一个，那就是一共十个位置，六个数字，有多少种放法就有多少种二叉树。 <br></div>
+                            <span class="time">2018-12-16 18:07</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/57/64/7e956620.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">陶瓷杯</span>
+                            </div>
+                            <div class="bd">现在评论的小伙伴少了好多，坚持学习的小伙伴是不是越来越少了？大家的热情呢？💪 <br></div>
+                            <span class="time">2018-11-21 18:13</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">有些人学得慢 或者工作耽搁了。一直追着最新的看的不多</p>
+                                <p class="reply-time">2018-11-22 09:59</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/df/1e/cea897e8.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">传说中的成大大</span>
+                            </div>
+                            <div class="bd">刚刚思考了完全二叉树的定义 叶子结点必须要在最后两层 如果不在最后两层的话通过数组顺序存储也会浪费空间吧 <br></div>
+                            <span class="time">2018-11-12 22:59</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">是的</p>
+                                <p class="reply-time">2018-11-13 09:45</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/11/11/52a78856.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">D→_→M</span>
+                            </div>
+                            <div class="bd">老师是否可以在您专栏的github上传一下二叉树这几节的相关代码，还有除了递归遍历二叉树，循环遍历是否也可以讲一下，或者在github上上传一下相关代码，自行研究学习。 <br></div>
+                            <span class="time">2018-11-12 13:17</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">非递归遍历比较复杂 不建议非得给自己制造学习难度 除非是为了面试。其他的二叉树的代码我会放到github上</p>
+                                <p class="reply-time">2018-11-13 09:56</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/16/60/d6024ae8.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">nothing</span>
+                            </div>
+                            <div class="bd">后序遍历节点不是最多被访问三次嘛， 还有那个深度我们学的深度和层次是一样的哇 <br></div>
+                            <span class="time">2018-11-12 01:49</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">1 从图上看是两次<br>2 从生活中的理解来说 应该没有第0层之说 但是有深度为0的说法</p>
+                                <p class="reply-time">2018-11-12 08:49</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/b3/c5/7fc124e2.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Liam</span>
+                            </div>
+                            <div class="bd">1 递归地理解一下：按住根节点，如果有k个左节点，则有n-k-1个右节点，分步乘法，f(n) = f(k) * f(n - k - 1) ，k可能性从0 到 n - 1 ,分步加法： f(n) = f(0)f(n-1) + ... + f(n-1)f(0) ，怎么计算该递推公式呢？参考Catalon数 <br></div>
+                            <span class="time">2018-11-12 22:03</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/da/ec/779c1a78.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">往事随风，顺其自然</span>
+                            </div>
+                            <div class="bd">按照蹭便利使用队列，广度优先搜索 <br></div>
+                            <span class="time">2018-11-12 00:20</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/18/0e/39307052.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Laughing_Lz</span>
+                            </div>
+                            <div class="bd">&#47;**<br>	 * 层次遍历二叉树<br>	 * <br>	 * @param root<br>	 *&#47;<br>	public static void levelOrder(Node root) {<br>		if (root == null) {<br>			return;<br>		}<br>		LinkedList&lt;Node&gt; queue = new LinkedList&lt;Node&gt;();<br>		queue.add(root);<br>		while (!queue.isEmpty()) {<br>			Node currentNode = queue.poll();<br>			System.out.print(currentNode.getValue() + &quot; &quot;);<br>			if (currentNode.getLeft() != null) {<br>				queue.add(currentNode.getLeft());<br>			}<br>			if (currentNode.getRight() != null) {<br>				queue.add(currentNode.getRight());<br>			}<br>		}<br>	} <br></div>
+                            <span class="time">2018-11-30 02:16</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/e1/31/eb103bdc.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">kakasi</span>
+                            </div>
+                            <div class="bd">思考题：<br>1. 一组数能构建多少个二叉树？<br>第一时间想到只要排列位置有改变，那么就应该是新的二叉树。组合排列的公式有点忘记了。。。那么用笨方法：<br>当只有1个数的时候，能构建1个二叉树；2个数时是2个二叉树；3个数有6个二叉树；再看下4个数，原来是24个；最后得出n!<br>2. 层序遍历二叉树：<br>数组和链表的方式都一样。先打印本身的数据，然后将左右节点塞到一个队列中；从队列里取第一个节点打印数据，并将其左右节点再塞到队列，以此类推。 <br></div>
+                            <span class="time">2018-11-26 16:02</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/fd/ff/37543d35.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">🔥</span>
+                            </div>
+                            <div class="bd">老师 我想问一下，数组存储的时候跟节点为啥是在下标为1的位置而不是0 <br></div>
+                            <span class="time">2018-11-20 09:49</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/16/5b/83a35681.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Monday</span>
+                            </div>
+                            <div class="bd">知识点都很好理解。但是两道思考题难到我了，得多查查资料。 <br></div>
+                            <span class="time">2018-11-13 00:43</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">带着问题查资料的过程是最好的学习方法。比单纯填鸭式的学习好多了</p>
+                                <p class="reply-time">2018-11-13 09:44</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/0a/dd/88fa7b52.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">spark</span>
+                            </div>
+                            <div class="bd">写了下，测试了下，貌似没什么问题<br>1.定义树节点类<br>public class Tree&lt;T&gt; {<br>    public Tree left;<br>    public Tree right;<br>    public T data;<br>    public Tree(T data){<br>        this.data = data;<br>    }<br>}<br>2.测试类<br>public class TestTree {<br>    public static void main(String[] args){<br>        Tree&lt;String&gt; a = new Tree&lt;&gt;(&quot;A&quot;);<br>        Tree&lt;String&gt; b = new Tree&lt;&gt;(&quot;B&quot;);<br>        Tree&lt;String&gt; c = new Tree&lt;&gt;(&quot;C&quot;);<br>        Tree&lt;String&gt; d = new Tree&lt;&gt;(&quot;D&quot;);<br>        Tree&lt;String&gt; e= new Tree&lt;&gt;(&quot;E&quot;);<br>        Tree&lt;String&gt; f = new Tree&lt;&gt;(&quot;F&quot;);<br>        Tree&lt;String&gt; g = new Tree&lt;&gt;(&quot;G&quot;);<br>        a.left = b;<br>        a.right = c;<br>        b.left = d;<br>        b.right = e;<br>        c.left = f;<br>        c.right = g;<br>        order(a);<br>        System.out.println(a.data);<br>    }<br>3.层遍历方法<br>   public static void order(Tree r){<br>        if(r==null){<br>            return;<br>        }<br>        order(r.left);<br>        order(r.right);<br>        if(r.left != null) {<br>            System.out.println(r.left.data);<br>        }<br>        if(r.right != null){<br>           System.out.println(r.right.data);<br>       }<br>    }<br>} <br></div>
+                            <span class="time">2018-11-12 10:53</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/54/55/613ddc42.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Edison.Chen</span>
+                            </div>
+                            <div class="bd">  老师，假如我要实现一个通过拼音便能查询后台数据库中数据表的中文字段，可以通过Trie树来实现吗？还望老师给予指点 <br></div>
+                            <span class="time">2019-01-10 07:50</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">可以是可以 这种精准匹配不如用散列表 </p>
+                                <p class="reply-time">2019-01-10 09:56</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/70/e8/a0d72909.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Asurada2020</span>
+                            </div>
+                            <div class="bd">二叉树的遍历每个结点会访问3次吧？<br>第1次访问该结点<br>第2次是在访问完左子树后又回到该结点，去访问右子树<br>第3次是访问完右子树后回到该结点<br><br>前，中，后，序遍历 分别对应着 访问的第1，2，3次打印。 <br></div>
+                            <span class="time">2019-01-08 13:09</span>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

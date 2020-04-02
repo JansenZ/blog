@@ -1,0 +1,440 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                01讲为什么要学习数据结构和算法
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/73/9f/731fdcdef7b7d56ce7a6e0bf88a1a99f.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>你是不是觉得数据结构和算法，跟操作系统、计算机网络一样，是脱离实际工作的知识？可能除了面试，这辈子也用不着？</p>
+<p>尽管计算机相关专业的同学在大学都学过这门课程，甚至很多培训机构也会培训这方面的知识，但是据我了解，很多程序员对数据结构和算法依旧一窍不通。还有一些人也只听说过数组、链表、快排这些最最基本的数据结构和算法，稍微复杂一点的就完全没概念。</p>
+<p>当然，也有很多人说，自己实际工作中根本用不到数据结构和算法。所以，就算不懂这块知识，只要Java API、开发框架用得熟练，照样可以把代码写得“飞”起来。事实真的是这样吗？</p>
+<p>今天我们就来详细聊一聊，为什么要学习数据结构和算法。</p>
+<h2>想要通关大厂面试，千万别让数据结构和算法拖了后腿</h2>
+<p>很多大公司，比如BAT、Google、Facebook，面试的时候都喜欢考算法、让人现场写代码。有些人虽然技术不错，但每次去面试都会“跪”在算法上，很是可惜。那你有没有想过，为什么这些大公司都喜欢考算法呢？</p>
+<p>校招的时候，参加面试的学生通常没有实际项目经验，公司只能考察他们的基础知识是否牢固。社招就更不用说了，越是厉害的公司，越是注重考察数据结构与算法这类基础知识。相比短期能力，他们更看中你的长期潜力。</p><!-- [[[read_end]]] -->
+<p>你可能要说了，我不懂数据结构与算法，照样找到了好工作啊。那我是不是就不用学数据结构和算法呢？当然不是，你别忘了，<strong>我们学任何知识都是为了“用”的，是为了解决实际工作问题的</strong>，学习数据结构和算法自然也不例外。</p>
+<h2>业务开发工程师，你真的愿意做一辈子CRUD boy吗？</h2>
+<p>如果你是一名业务开发工程师，你可能要说，我整天就是做数据库CRUD（增删改查），哪里用得到数据结构和算法啊？</p>
+<p>是的，对于大部分业务开发来说，我们平时可能更多的是利用已经封装好的现成的接口、类库来堆砌、翻译业务逻辑，很少需要自己实现数据结构和算法。但是，<strong>不需要自己实现，并不代表什么都不需要了解</strong>。</p>
+<p>如果不知道这些类库背后的原理，不懂得时间、空间复杂度分析，你如何能用好、用对它们？存储某个业务数据的时候，你如何知道应该用ArrayList，还是Linked List呢？调用了某个函数之后，你又该如何评估代码的性能和资源的消耗呢？</p>
+<p>作为业务开发，我们会用到各种框架、中间件和底层系统，比如Spring、RPC框架、消息中间件、Redis等等。<strong>在这些基础框架中，一般都揉和了很多基础数据结构和算法的设计思想。</strong></p>
+<p>比如，我们常用的Key-Value数据库Redis中，里面的有序集合是用什么数据结构来实现的呢？为什么要用跳表来实现呢？为什么不用二叉树呢？</p>
+<p>如果你能弄明白这些底层原理，你就能更好地使用它们。即便出现问题，也很容易就能定位。因此，<strong>掌握数据结构和算法，不管对于阅读框架源码，还是理解其背后的设计思想，都是非常有用的。</strong></p>
+<p>在平时的工作中，数据结构和算法的应用到处可见。我来举一个你非常熟悉的例子：如何实时地统计业务接口的99%响应时间？</p>
+<p>你可能最先想到，每次查询时，从小到大排序所有的响应时间，如果总共有1200个数据，那第1188个数据就是99%的响应时间。很显然，每次用这个方法查询的话都要排序，效率是非常低的。但是，如果你知道“堆”这个数据结构，用两个堆可以非常高效地解决这个问题。</p>
+<h2>基础架构研发工程师，写出达到开源水平的框架才是你的目标！</h2>
+<p>现在互联网上的技术文章、架构分享、开源项目满天飞，照猫画虎做一套基础框架并不难。我就拿RPC框架举例。</p>
+<p>不同的公司、不同的人做出的RPC框架，架构设计思路都差不多，最后实现的功能也都差不多。但是有的人做出来的框架，Bug很多、性能一般、扩展性也不好，只能在自己公司仅有的几个项目里面用一下。而有的人做的框架可以开源到GitHub上给很多人用，甚至被Apache收录。为什么会有这么大的差距呢？</p>
+<p>我觉得，高手之间的竞争其实就在细节。这些细节包括：你用的算法是不是够优化，数据存取的效率是不是够高，内存是不是够节省等等。这些累积起来，决定了一个框架是不是优秀。所以，如果你还不懂数据结构和算法，没听说过大O复杂度分析，不知道怎么分析代码的时间复杂度和空间复杂度，那肯定说不过去了，赶紧来补一补吧！</p>
+<h2>对编程还有追求？不想被行业淘汰？那就不要只会写凑合能用的代码！</h2>
+<p>何为编程能力强？是代码的可读性好、健壮？还是扩展性好？我觉得没法列，也列不全。但是，在我看来，<strong>性能好坏起码是其中一个非常重要的评判标准</strong>。但是，如果你连代码的时间复杂度、空间复杂度都不知道怎么分析，怎么写出高性能的代码呢？</p>
+<p>你可能会说，我在小公司工作，用户量很少，需要处理的数据量也很少，开发中不需要考虑那么多性能的问题，完成功能就可以，用什么数据结构和算法，差别根本不大。但是你真的想“十年如一日”地做一样的工作吗？</p>
+<p>经常有人说，程序员35岁之后很容易陷入瓶颈，被行业淘汰，我觉得原因其实就在此。有的人写代码的时候，从来都不考虑非功能性的需求，只是完成功能，凑合能用就好；做事情的时候，也从来没有长远规划，只把眼前事情做好就满足了。</p>
+<p>我曾经面试过很多大龄候选人，简历能写十几页，经历的项目有几十个，但是细看下来，每个项目都是重复地堆砌业务逻辑而已，完全没有难度递进，看不出有能力提升。久而久之，十年的积累可能跟一年的积累没有任何区别。这样的人，怎么不会被行业淘汰呢？</p>
+<p>如果你在一家成熟的公司，或者BAT这样的大公司，面对的是千万级甚至亿级的用户，开发的是TB、PB级别数据的处理系统。性能几乎是开发过程中时刻都要考虑的问题。一个简单的ArrayList、Linked  List的选择问题，就可能会产生成千上万倍的性能差别。这个时候，数据结构和算法的意义就完全凸显出来了。</p>
+<p>其实，我觉得，数据结构和算法这个东西，如果你不去学，可能真的这辈子都用不到，也感受不到它的好。但是一旦掌握，你就会常常被它的强大威力所折服。之前你可能需要费很大劲儿来优化的代码，需要花很多心思来设计的架构，用了数据结构和算法之后，很容易就可以解决了。</p>
+<h2>内容小结</h2>
+<p>我们学习数据结构和算法，并不是为了死记硬背几个知识点。我们的目的是建立时间复杂度、空间复杂度意识，写出高质量的代码，能够设计基础架构，提升编程技能，训练逻辑思维，积攒人生经验，以此获得工作回报，实现你的价值，完善你的人生。</p>
+<p>所以，不管你是业务开发工程师，还是基础架构工程师；不管你是初入职场的初级工程师，还是工作多年的资深架构师，又或者是想转人工智能、区块链这些热门领域的程序员，数据结构与算法作为计算机的基础知识、核心知识，都是必须要掌握的。</p>
+<p><strong>掌握了数据结构与算法，你看待问题的深度，解决问题的角度就会完全不一样</strong>。因为这样的你，就像是站在巨人的肩膀上，拿着生存利器行走世界。数据结构与算法，会为你的编程之路，甚至人生之路打开一扇通往新世界的大门。</p>
+<h2>课后思考</h2>
+<p>你为什么要学习数据结构和算法呢？在过去的软件开发中，数据结构和算法在哪些地方帮到了你？</p>
+<p>欢迎留言和我分享，我会第一时间给你反馈。</p>
+<p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt="" /></p>
+
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/fb/93/f19a5364.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">姜威</span>
+                            </div>
+                            <div class="bd">为什么学习数据结构和算法？我认为有3点比较重要<br>1.直接好处是能够有写出性能更优的代码。<br>2.算法，是一种解决问题的思路和方法，有机会应用到生活和事业的其他方面。<br>3.长期来看，大脑思考能力是个人最重要的核心竞争力，而算法是为数不多的能够有效训练大脑思考能力的途径之一。 <br></div>
+                            <span class="time">2018-09-21 06:49</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">写的很好 同学们把这条回复顶上去</p>
+                                <p class="reply-time">2018-09-21 10:07</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/ec/95/9ac3d611.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">HouShangLing</span>
+                            </div>
+                            <div class="bd">一定要动手写 <br></div>
+                            <span class="time">2018-09-21 06:41</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">你掌握了学这门课的最有效的方法。看十遍也没自己实现一遍学的牢。同学们这条也帮忙顶上去</p>
+                                <p class="reply-time">2018-09-21 10:08</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d6/59/d19253dd.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">wistbean</span>
+                            </div>
+                            <div class="bd">其实问题的所在就是现在有很多现成的框架，器又大活又好，拿来就用，还不用太担心性能的问题。就好像那些建楼的工程师不需要懂砖瓦的构成，也能盖楼。司机不需要懂汽车引擎的原理，也能当顺风车司机载美女兜风。<br><br>遇到不会的上 Google，懒了就上 GitHub 找框架。所以写了这么多年代码，一直是个菜鸟。<br><br>或许是时候修炼自己的内功了。一直 CURD 有意思么？把设计模式，网络原理，数据结构和算法捡起来，或许就没那么容易菜鸟了。怼人也更加自信了。跳槽也不用畏畏缩缩的了。<br><br>为了不当菜鸟，我和我的小伙伴们就加入了哇！ <br></div>
+                            <span class="time">2018-09-21 03:38</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">写的太好了</p>
+                                <p class="reply-time">2018-09-21 10:12</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/e4/f7/f280e1bb.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">两颗小虎牙</span>
+                            </div>
+                            <div class="bd">可不可以每次多发布几篇？ <br></div>
+                            <span class="time">2018-09-21 00:14</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/06/1e/51ad425f.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">tdytaylor</span>
+                            </div>
+                            <div class="bd">老师，就像你说的，工作中其实好多都和业务挂钩，基本上都是针对业务做增删改查，很难把所学的算法应用起来，我平时也时不时学习算法，但总感觉学了就忘，忘了又学，如此反复，老师，这种到底是没了解算法的原理导致不会灵活应用，还是写的少导致的，感觉学习算法很少能应用起来 <br></div>
+                            <span class="time">2018-09-21 00:26</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">1. 客观的讲，有些项目确实涉及的数据结构和算法少一些，你可以再看下我文章里写的。<br>2. 你提到学了又忘，我觉得一方面你是没有掌握学习的方法，学习的重点，走马观花的看肯定比较容易忘；我们02节会具体讲；<br>3. 不会灵活应用？那估计还是没有好的教材教你如何应用，还有可能就是确实还没掌握太牢，只是懂点皮毛，很浅，灵活应用是一个比较的境界，需要一段时间的沉淀学习。<br>4. 学习算法并不是为了记住几个排序、二分查找、二叉树遍历，他还能锻炼你的逻辑思维、性能意识，而且，如果你写代码能力还有欠缺，你还可以通过把学到的数据结构和算法都实现一遍，这是一种很好很好的锻炼编程能力的方法。所以不要过度追求一定要在项目里手写快排、手写二叉树才能算是用上。</p>
+                                <p class="reply-time">2018-09-21 11:33</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/da/90/0b74748f.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">裴海港</span>
+                            </div>
+                            <div class="bd">年近40的大叔也有一颗积极向上的心 <br></div>
+                            <span class="time">2018-09-21 01:29</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">终身学习 多大年纪也不晚</p>
+                                <p class="reply-time">2018-09-21 10:17</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/08/eb/fed61050.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">五岳寻仙</span>
+                            </div>
+                            <div class="bd">老师好！看到专栏第一眼就果断订阅了。我是一个菜鸟程序员，半年的工作经验让我感受到数据结构和算法太重要了！讲一个自己亲身经历的例子。<br>入职不久，就遇到一个需求，需要建立一个3G(30亿)条键值对映射，已供后续检索。听上去很简单的问题，用python的字典就可以解决。但在实现的过程中，很快就遇到了问题：字典是基于hash的，对于每条键值对要多消耗50个字节的内存维持这种结构(即便使用redis也需要这个内存花销)，再加上键值存储消耗的内存，我大约需要3G×70=210G内存，超过服务器内存了。<br>后来，想到了可以根据键排序后线性存储，使用二分查找，解决了这个问题，大约消耗的内存也就3G×10=30G左右。<br>看似简单的问题，当规模大到一定程度，不借助算法和数据结构，就无法解决了。 <br></div>
+                            <span class="time">2018-09-21 06:55</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">哈哈 你要是看到我讲的散列那一篇你就知道了 像java里的hashmap是比较耗内存的 你用到的解决方案是一种用时间复杂度换空间复杂度的思路 我们专栏也会讲的 不过你现在的解决办法还可以更高效 利用hash函数 我们专栏也会讲到 还有二分是logn的时间复杂度 是非常高效的一种时间复杂度 2的64次方个有序数据二分查找也顶多循环64次 有没有觉得logn这个复杂度很奇妙</p>
+                                <p class="reply-time">2018-09-21 12:29</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/9a/c9/20239acc.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Haoz</span>
+                            </div>
+                            <div class="bd">一、数据结构和算法是什么<br><br>1、数据结构是指一组数据的存储结构<br>2、算法就是操作数据的方法<br>3、数据结构和算法是相辅相成的，数据结构是为算法服务的，而算法要作用在特定的数据结构之上<br><br>二、学习的重点在什么地方<br><br>数据结构和算法解决的是如何更省、更快地存储和处理数据的问题，因此，我们就需要一个考量效率和资源消耗的方法，这就是复杂度分析方法。在学习数据结构和算法的过程中，要学习它的「来历」、「自身的特点」、「适合解决的问题」以及「实际的应用场景」。<br><br>1、数据结构和算法学习的精髓-复杂度分析<br>2、最常用的、最基础的数据结构：数组、链表、栈、队列、散列表、二叉树、堆、跳表、图、Trie 树<br>3、最常用的算法：递归、排序、二分查找、搜索、哈希算法、贪心算法、分治算法、回溯算法、动态规划、字符串匹配算法<br><br>感谢老师的分析，一直以来数据结构和算法都是我的硬伤，学了很多次，也放弃了很多次，可能是方法不对，但更多的是因为自己之前的毅力不够。<br><br>在此立下 flag：从本篇文章开始，将老师的文章根据自己的理解进行输出相应的总结和思考，发表成留言，并将每周三篇文章中涉及的数据结构和算法用 Java 实现一次。 <br></div>
+                            <span class="time">2018-09-25 22:37</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">写的很好👍</p>
+                                <p class="reply-time">2018-09-25 22:44</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d5/04/b71ab42f.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">钳子钳子千</span>
+                            </div>
+                            <div class="bd">大二上，刚刚学完第二章顺序表和链表（一切为了性能xd （半夜等更居然真的刷出来了（x <br></div>
+                            <span class="time">2018-09-21 00:12</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/ed/c2/d55649ce.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">小麦2018</span>
+                            </div>
+                            <div class="bd">我还是觉得王争老师自己读的音频好，亲切，有听作者亲自讲解的感觉。 <br></div>
+                            <span class="time">2018-09-21 09:00</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/eb/e4/dabff318.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">邵峰</span>
+                            </div>
+                            <div class="bd">记得以前看金庸小说，一个人练降龙十八掌，一个人练全真教内功，刚开始练内功的被吊打，十年后练内功的依然被吊打，但是20年后，降龙十八掌就怎么也打不过练内功的了，算法和数据结构就是内功，降龙十八掌我觉得就是各种框架，再怎么熟悉框架，也不如了解它内部的算法和数据结构 <br></div>
+                            <span class="time">2018-09-21 13:33</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">太形象了：）</p>
+                                <p class="reply-time">2018-09-21 15:50</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/03/5a/6db83ec3.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">DDT</span>
+                            </div>
+                            <div class="bd">就是想升工资吧 我知道学技术必须要拿出十年磨一剑的精神 从头开始... <br></div>
+                            <span class="time">2018-09-21 08:22</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">十年磨一剑说的太好了。我也是这么认为的。做技术就是不要浮躁。要耐得住寂寞。沉得下心。</p>
+                                <p class="reply-time">2018-09-21 09:39</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d9/d0/fc6c1762.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Liar</span>
+                            </div>
+                            <div class="bd">不做一个没有追求的码农，那些说过了35就不行的码农大部分都是不求上进的人。 <br></div>
+                            <span class="time">2018-09-21 11:27</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">说得好 不管哪个行业都会淘汰不求上进的人 it也不例外</p>
+                                <p class="reply-time">2018-09-21 11:35</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/04/c7/147ae9a1.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">阿康</span>
+                            </div>
+                            <div class="bd">老师，我是一名iOS开发，怎么听完你这篇文章还是觉得算法对于我开发来说不是那么重要😂后面我有点怕自己听不懂，而且动手写，我该如何下笔，感觉自己很迷茫…… <br></div>
+                            <span class="time">2018-09-21 15:47</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">1. 假设我们现在要做这样一个功能，我们希望在app上存储一个多级地址列表，用户可以一层一层的选择地址列表中的地址，来设置自己的所在的省份、市、区，如果这个地址列表不是经常变动的，我们希望保存在app端，这样就不需要每次操作地址列表都要跟后台交互，如果让你存储这个多级地址列表，你会怎么存储呢？<br>2. 如果地址列表也并不是一直都不变的，如果地址列表改变了，我们又不希望发新版，那如何更新app上的地址列表呢？如果地址列表比较大，我们不希望app重新全量的从服务器再拉一次，那又如何来做呢？<br>3. 我会用一种语言来实现 你可以翻译成object c</p>
+                                <p class="reply-time">2018-09-21 16:48</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/00/69/3a51f830.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">小行家</span>
+                            </div>
+                            <div class="bd">为什么学习数据结构与算法？<br>1.作为一名程序员，我觉得这个是基本功，就好比建房子一样，地基一定要牢固<br>2.现在有如此多的开源项目，人们往往开发中只是照搬，调试，集成，然后很少会去注意性能和优化方面，慢慢的也就成了CRUD boy<br>3.算法提供的是一种思想，这个思想真的可以让你超神，让你对待问题有着独特的见解，我觉得这个才是最重要的。不再是原来的，没有思考<br>4.数据结构作为cs的基本专业，并且贯穿整个cs学习生涯，在cs方面的研究还是有很大的实用价值。<br>数据结构与算法的意义？<br>1.在本科开发中，曾经就自己写了一个类似于目录搜索的算法，就是简单的for循环，性能极其低下，改为二叉树后，性能大大提升<br>2.目前读研，接触机器学习理论和深度学习，原有的算法和数据结构的学习中，你所掌握的思想，确实会有很大的意义。<br> 最后，我认为，学习最重要的是你能够自己成长，这个才是最棒的。 <br></div>
+                            <span class="time">2018-09-21 12:59</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">说的好</p>
+                                <p class="reply-time">2018-09-21 15:52</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/a0/ac/a23f48e3.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">lane</span>
+                            </div>
+                            <div class="bd">现实，都是面相领导编程…………一言难尽… <br></div>
+                            <span class="time">2018-09-21 01:46</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">没事的 如果工作不满意 不顺心 更要卧薪尝胆 提高能力 沉淀自己。总有一天 机会会到来 你做好充分的抓住它的准备就好。人在职场中 只要抓住一两次大的机会 就能做到很高的职位 就怕的是机会来了我们也抓不住</p>
+                                <p class="reply-time">2018-09-21 10:17</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/42/65/f444ea39.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">grandcool</span>
+                            </div>
+                            <div class="bd">没理解统计业务接口99%响应时间啥意思 <br></div>
+                            <span class="time">2018-09-21 08:06</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">举一个例子 你写了一个接口 每天有成千上万的访问 你如何知道这个接口够不够快？响应时间是1s还是5s？如何统计度量？用平均值？显然不是太适合？那用什么值来统计度量呢？你可以自己搜索研究下</p>
+                                <p class="reply-time">2018-09-21 09:53</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/10/d9/acc787a6.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">SelfImpr李</span>
+                            </div>
+                            <div class="bd">三年小开发来说一波：上周生产系统上遇到了Java的内存溢出情况（可以买彩票了，OOM事件一直在我们的书上），经过分析dump文件，发现Java的类和Java的动态语言生成的对象没有及时释放，我尽全力就修改了代码上，该释放释放；再过了一个星期分析dump文件，发现少了很多，但是还有一些遗留着，我想是时候需要《数据结构和算法》来帮我了！PS：之前也看过红壳得《算法导论》，看了一周，然后又用来垫显示器了，来来回回几次，最终还是垫显示器了。 <br></div>
+                            <span class="time">2018-09-21 10:57</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">oom这种问题看似很遥远 实际上我还真遇到过很多次 多数是从数据库捞数据时 一不小心捞了太多的数据到内存 就oom了 而且这种情况用mat等工具也无法分析 因为这种oom是一过性的 heap dump的时候可能数据已经不可达 而mat这些工具只能分析可达对象</p>
+                                <p class="reply-time">2018-09-21 11:55</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/76/52/1898a137.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Pardo</span>
+                            </div>
+                            <div class="bd">大学的时候没意识，工作之后才发现，不熟悉数据结构和算法，写出的代码虽然能用，但完全经不起推敲。随着项目复杂度的提高，没有算法护体，代码基本上会是一塌糊涂，迷失在细节调整和障碍修复中不能自拔。 <br></div>
+                            <span class="time">2018-09-21 10:26</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/0b/0d/d3c30eed.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Mortimey</span>
+                            </div>
+                            <div class="bd">作为一枚iOS开发者，感觉里面好多的专业术语是我没听过的，请问老师，后期的课程也是这样的吗？ <br></div>
+                            <span class="time">2018-09-21 08:25</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">嗯嗯 后面会好点</p>
+                                <p class="reply-time">2018-09-21 09:36</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

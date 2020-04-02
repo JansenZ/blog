@@ -1,0 +1,338 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                32讲字符串匹配基础（上）：如何借助哈希算法实现高效字符串匹配
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/b9/66/b997edcd68d6f7393275659f8653a766.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>从今天开始，我们来学习字符串匹配算法。字符串匹配这样一个功能，我想对于任何一个开发工程师来说，应该都不会陌生。我们用的最多的就是编程语言提供的字符串查找函数，比如Java中的indexOf()，Python中的find()函数等，它们底层就是依赖接下来要讲的字符串匹配算法。</p><p>字符串匹配算法很多，我会分四节来讲解。今天我会讲两种比较简单的、好理解的，它们分别是：BF算法和RK算法。下一节，我会讲两种比较难理解、但更加高效的，它们是：BM算法和KMP算法。</p><p>这两节讲的都是单模式串匹配的算法，也就是一个串跟一个串进行匹配。第三节、第四节，我会讲两种多模式串匹配算法，也就是在一个串中同时查找多个串，它们分别是Trie树和AC自动机。</p><p>今天讲的两个算法中，RK算法是BF算法的改进，它巧妙借助了我们前面讲过的哈希算法，让匹配的效率有了很大的提升。那<strong><span class="orange">RK算法是如何借助哈希算法来实现高效字符串匹配的呢</span></strong>？你可以带着这个问题，来学习今天的内容。</p><h2>BF算法</h2><p>BF算法中的BF是Brute Force的缩写，中文叫作暴力匹配算法，也叫朴素匹配算法。从名字可以看出，这种算法的字符串匹配方式很“暴力”，当然也就会比较简单、好懂，但相应的性能也不高。</p><!-- [[[read_end]]] --><p>在开始讲解这个算法之前，我先定义两个概念，方便我后面讲解。它们分别是<strong>主串</strong>和<strong>模式串</strong>。这俩概念很好理解，我举个例子你就懂了。</p><p>比方说，我们在字符串A中查找字符串B，那字符串A就是主串，字符串B就是模式串。我们把主串的长度记作n，模式串的长度记作m。因为我们是在主串中查找模式串，所以n&gt;m。</p><p>作为最简单、最暴力的字符串匹配算法，BF算法的思想可以用一句话来概括，那就是，<strong>我们在主串中，检查起始位置分别是0、1、2…n-m且长度为m的n-m+1个子串，看有没有跟模式串匹配的</strong>。我举一个例子给你看看，你应该可以理解得更清楚。</p><p><img src="https://static001.geekbang.org/resource/image/f3/a2/f36fed972a5bdc75331d59c36eb15aa2.jpg" alt=""></p><p>从上面的算法思想和例子，我们可以看出，在极端情况下，比如主串是“aaaaa…aaaaaa”（省略号表示有很多重复的字符a），模式串是“aaaaab”。我们每次都比对m个字符，要比对n-m+1次，所以，这种算法的最坏情况时间复杂度是O(n*m)。</p><p>尽管理论上，BF算法的时间复杂度很高，是O(n*m)，但在实际的开发中，它却是一个比较常用的字符串匹配算法。为什么这么说呢？原因有两点。</p><p>第一，实际的软件开发中，大部分情况下，模式串和主串的长度都不会太长。而且每次模式串与主串中的子串匹配的时候，当中途遇到不能匹配的字符的时候，就可以就停止了，不需要把m个字符都比对一下。所以，尽管理论上的最坏情况时间复杂度是O(n*m)，但是，统计意义上，大部分情况下，算法执行效率要比这个高很多。</p><p>第二，朴素字符串匹配算法思想简单，代码实现也非常简单。简单意味着不容易出错，如果有bug也容易暴露和修复。在工程中，在满足性能要求的前提下，简单是首选。这也是我们常说的<a href="https://zh.wikipedia.org/wiki/KISS%E5%8E%9F%E5%88%99">KISS（Keep it Simple and Stupid）设计原则</a>。</p><p>所以，在实际的软件开发中，绝大部分情况下，朴素的字符串匹配算法就够用了。</p><h2>RK算法</h2><p>RK算法的全称叫Rabin-Karp算法，是由它的两位发明者Rabin和Karp的名字来命名的。这个算法理解起来也不是很难。我个人觉得，它其实就是刚刚讲的BF算法的升级版。</p><p>我在讲BF算法的时候讲过，如果模式串长度为m，主串长度为n，那在主串中，就会有n-m+1个长度为m的子串，我们只需要暴力地对比这n-m+1个子串与模式串，就可以找出主串与模式串匹配的子串。</p><p>但是，每次检查主串与子串是否匹配，需要依次比对每个字符，所以BF算法的时间复杂度就比较高，是O(n*m)。我们对朴素的字符串匹配算法稍加改造，引入哈希算法，时间复杂度立刻就会降低。</p><p>RK算法的思路是这样的：我们通过哈希算法对主串中的n-m+1个子串分别求哈希值，然后逐个与模式串的哈希值比较大小。如果某个子串的哈希值与模式串相等，那就说明对应的子串和模式串匹配了（这里先不考虑哈希冲突的问题，后面我们会讲到）。因为哈希值是一个数字，数字之间比较是否相等是非常快速的，所以模式串和子串比较的效率就提高了。</p><p><img src="https://static001.geekbang.org/resource/image/01/ee/015c85a9c2a4adc11236f9a40c6d57ee.jpg" alt=""></p><p>不过，通过哈希算法计算子串的哈希值的时候，我们需要遍历子串中的每个字符。尽管模式串与子串比较的效率提高了，但是，算法整体的效率并没有提高。有没有方法可以提高哈希算法计算子串哈希值的效率呢？</p><p>这就需要哈希算法设计的非常有技巧了。我们假设要匹配的字符串的字符集中只包含K个字符，我们可以用一个K进制数来表示一个子串，这个K进制数转化成十进制数，作为子串的哈希值。表述起来有点抽象，我举了一个例子，看完你应该就能懂了。</p><p>比如要处理的字符串只包含a～z这26个小写字母，那我们就用二十六进制来表示一个字符串。我们把a～z这26个字符映射到0～25这26个数字，a就表示0，b就表示1，以此类推，z表示25。</p><p>在十进制的表示法中，一个数字的值是通过下面的方式计算出来的。对应到二十六进制，一个包含a到z这26个字符的字符串，计算哈希的时候，我们只需要把进位从10改成26就可以。</p><p><img src="https://static001.geekbang.org/resource/image/d5/04/d5c1cb11d9fc97d0b28513ba7495ab04.jpg" alt=""></p><p>这个哈希算法你应该看懂了吧？现在，为了方便解释，在下面的讲解中，我假设字符串中只包含a～z这26个小写字符，我们用二十六进制来表示一个字符串，对应的哈希值就是二十六进制数转化成十进制的结果。</p><p>这种哈希算法有一个特点，在主串中，相邻两个子串的哈希值的计算公式有一定关系。我这有个个例子，你先找一下规律，再来看我后面的讲解。</p><p><img src="https://static001.geekbang.org/resource/image/f9/f5/f99c16f2f899d19935567102c59661f5.jpg" alt=""></p><p>从这里例子中，我们很容易就能得出这样的规律：相邻两个子串s[i-1]和s[i]（i表示子串在主串中的起始位置，子串的长度都为m），对应的哈希值计算公式有交集，也就是说，我们可以使用s[i-1]的哈希值很快的计算出s[i]的哈希值。如果用公式表示的话，就是下面这个样子：</p><p><img src="https://static001.geekbang.org/resource/image/f2/ee/f298f1e5c93b205345b9cd6d9c53fbee.jpg" alt=""></p><p>不过，这里有一个小细节需要注意，那就是26^(m-1)这部分的计算，我们可以通过查表的方法来提高效率。我们事先计算好26^0、26^1、26^2……26^(m-1)，并且存储在一个长度为m的数组中，公式中的“次方”就对应数组的下标。当我们需要计算26的x次方的时候，就可以从数组的下标为x的位置取值，直接使用，省去了计算的时间。</p><p><img src="https://static001.geekbang.org/resource/image/22/2f/224b899c6e82ec54594e2683acc4552f.jpg" alt=""></p><p>我们开头的时候提过，RK算法的效率要比BF算法高，现在，我们就来分析一下，RK算法的时间复杂度到底是多少呢？</p><p>整个RK算法包含两部分，计算子串哈希值和模式串哈希值与子串哈希值之间的比较。第一部分，我们前面也分析了，可以通过设计特殊的哈希算法，只需要扫描一遍主串就能计算出所有子串的哈希值了，所以这部分的时间复杂度是O(n)。</p><p>模式串哈希值与每个子串哈希值之间的比较的时间复杂度是O(1)，总共需要比较n-m+1个子串的哈希值，所以，这部分的时间复杂度也是O(n)。所以，RK算法整体的时间复杂度就是O(n)。</p><p>这里还有一个问题就是，模式串很长，相应的主串中的子串也会很长，通过上面的哈希算法计算得到的哈希值就可能很大，如果超过了计算机中整型数据可以表示的范围，那该如何解决呢？</p><p>刚刚我们设计的哈希算法是没有散列冲突的，也就是说，一个字符串与一个二十六进制数一一对应，不同的字符串的哈希值肯定不一样。因为我们是基于进制来表示一个字符串的，你可以类比成十进制、十六进制来思考一下。实际上，我们为了能将哈希值落在整型数据范围内，可以牺牲一下，允许哈希冲突。这个时候哈希算法该如何设计呢？</p><p>哈希算法的设计方法有很多，我举一个例子说明一下。假设字符串中只包含a～z这26个英文字母，那我们每个字母对应一个数字，比如a对应1，b对应2，以此类推，z对应26。我们可以把字符串中每个字母对应的数字相加，最后得到的和作为哈希值。这种哈希算法产生的哈希值的数据范围就相对要小很多了。</p><p>不过，你也应该发现，这种哈希算法的哈希冲突概率也是挺高的。当然，我只是举了一个最简单的设计方法，还有很多更加优化的方法，比如将每一个字母从小到大对应一个素数，而不是1，2，3……这样的自然数，这样冲突的概率就会降低一些。</p><p>那现在新的问题来了。之前我们只需要比较一下模式串和子串的哈希值，如果两个值相等，那这个子串就一定可以匹配模式串。但是，当存在哈希冲突的时候，有可能存在这样的情况，子串和模式串的哈希值虽然是相同的，但是两者本身并不匹配。</p><p>实际上，解决方法很简单。当我们发现一个子串的哈希值跟模式串的哈希值相等的时候，我们只需要再对比一下子串和模式串本身就好了。当然，如果子串的哈希值与模式串的哈希值不相等，那对应的子串和模式串肯定也是不匹配的，就不需要比对子串和模式串本身了。</p><p>所以，哈希算法的冲突概率要相对控制得低一些，如果存在大量冲突，就会导致RK算法的时间复杂度退化，效率下降。极端情况下，如果存在大量的冲突，每次都要再对比子串和模式串本身，那时间复杂度就会退化成O(n*m)。但也不要太悲观，一般情况下，冲突不会很多，RK算法的效率还是比BF算法高的。</p><h2>解答开篇&amp;内容小结</h2><p>今天我们讲了两种字符串匹配算法，BF算法和RK算法。</p><p>BF算法是最简单、粗暴的字符串匹配算法，它的实现思路是，拿模式串与主串中是所有子串匹配，看是否有能匹配的子串。所以，时间复杂度也比较高，是O(n*m)，n、m表示主串和模式串的长度。不过，在实际的软件开发中，因为这种算法实现简单，对于处理小规模的字符串匹配很好用。</p><p>RK算法是借助哈希算法对BF算法进行改造，即对每个子串分别求哈希值，然后拿子串的哈希值与模式串的哈希值比较，减少了比较的时间。所以，理想情况下，RK算法的时间复杂度是O(n)，跟BF算法相比，效率提高了很多。不过这样的效率取决于哈希算法的设计方法，如果存在冲突的情况下，时间复杂度可能会退化。极端情况下，哈希算法大量冲突，时间复杂度就退化为O(n*m)。</p><h2>课后思考</h2><p>我们今天讲的都是一维字符串的匹配方法，实际上，这两种算法都可以类比到二维空间。假设有下面这样一个二维字符串矩阵（图中的主串），借助今天讲的处理思路，如何在其中查找另一个二维字符串矩阵（图中的模式串）呢？</p><p><img src="https://static001.geekbang.org/resource/image/00/c9/00c353326466a8ce4e790e36924704c9.jpg" alt=""></p><p>欢迎留言和我分享，也欢迎点击“<span class="orange">请朋友读</span>”，把今天的内容分享给你的好友，和他一起讨论、学习。</p><p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt=""></p>
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/63/14/06eff9a4.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Jerry银银</span>
+                            </div>
+                            <div class="bd">觉得今天的hash算法真是巧妙 <br></div>
+                            <span class="time">2018-12-05 13:35</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d3/34/5dee4f70.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">P@tricK</span>
+                            </div>
+                            <div class="bd">思考题：<br>假设二维主串和模式串的维度分别是 m*n 和 i*j，横向在[0, m-i]，纵向在[0, n-j]取起始点，然后取同样的子串窗口对比，共有(m-i+1)*(n-j+1)个子串。<br><br>ps：<br>文中计算子串哈希值h[i]的公式中，第二个h[i-1]和后面的h[i+m-1]，应该是主串中的第i-1个和第i+m-1个字符的哈希值… <br></div>
+                            <span class="time">2018-12-05 08:51</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/f9/ab/374fe105.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Alan</span>
+                            </div>
+                            <div class="bd">h[i] = 26*(h[i-1]-26^(m-1)*h[i-1]) + h[i+m-1];<br><br>其中, h[i]、h[i-1] 分别对应 s[i] 和 s[i-1] 两个子串的哈希值<br>------------------<br>文中这个公式，26*(h[i-1]-26^(m-1)*h[i-1])可以化简为26*h[i-1]*(1-26^(m-1))，所以这里是不是应该改为26*(h[i-1]-26^(m-1)*s[i-1])，用s[i-1]代表当前位置的字符串的值，例如图中d的值是3，同样的公式后面加 h[i+m-1]是不是也是s[i+m-1]呢 <br></div>
+                            <span class="time">2018-12-05 10:33</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">写错了 感谢指正 已经改了</p>
+                                <p class="reply-time">2018-12-05 13:28</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/78/51/4790e13e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Smallfly</span>
+                            </div>
+                            <div class="bd">思考题：<br><br>以模式串矩阵的大小，去匹配主串矩阵，每个小矩阵可以构建成字符串，就能用 RK 算法做字符串匹配了。<br><br>如果主串的大小是 M * N，模式串大小为 m * n，则时间复杂度为 (M - m  + 1) * (N - n + 1)。 <br></div>
+                            <span class="time">2018-12-05 22:36</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/00/ea/6ad346c1.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">煦暖</span>
+                            </div>
+                            <div class="bd">“h[i] = 26*(h[i-1]-26^(m-1)*h[i-1]) + h[i+m-1];其中, h[i]、h[i-1] 分别对应 s[i] 和 s[i-1] 两个子串的哈希值。”老师你好，26^(m-1)*h[i-1]中的h[i-1]和h[i+m-1]应该是一个字符的哈希值而不应该是子串的哈希值吧？？PS：用您的例子套用公式：h0 = 3*26*26+1*26+2 = 2056；h1=26*(h0-26*26*h0)+(4*26*26+3*26+4) = -36080014 和期望的哈希值1*26*26+2*26+4=732不符。<br><br> <br></div>
+                            <span class="time">2018-12-05 15:58</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/18/d0/49b06424.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">qinggeouye</span>
+                            </div>
+                            <div class="bd">RK 算法，计算相邻两个子串哈希值的规律，比如，相邻两个子串分别为 &quot;dbc&quot; 和 &quot;bce&quot;，那么 s[i-1] = &#39;d&#39;，s[i]=&#39;b&#39; ，与 &#39;a&#39; 相减意思是，它们的 ASCII 码值的差值正好表示字母的数值；<br>评论中有同学不明白老师给的哈希值 h[i] 和 h[i-1] 之间的关系，我想应该是 s[i] 和 s[i-1] 代表什么这点没明白。 <br></div>
+                            <span class="time">2018-12-31 22:06</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/0c/e8/b0cb5616.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">大刚</span>
+                            </div>
+                            <div class="bd">老师，下面的不懂，能不能在详细讲解下<br>h[i] = 26*(h[i-1]-26^(m-1)*(s[i-1]-&#39;a&#39;)) + (s[i+m-1]-&#39;a&#39;); <br></div>
+                            <span class="time">2018-12-20 09:44</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/2a/ab/6b2475e9.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">coulson</span>
+                            </div>
+                            <div class="bd">老师，前天面试被问到一个问题，关于地图算法的，比如线路推荐。请问地图算法会讲到么 <br></div>
+                            <span class="time">2018-12-05 17:31</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">在高级篇那部分会涉及一点</p>
+                                <p class="reply-time">2018-12-06 10:12</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/1b/4b/5c04e06c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">王婵</span>
+                            </div>
+                            <div class="bd">思考题二维数组用RK算法计算哈希值要复杂一些，i-1 j-1不越界的情况下，如果模式串的行数大于列数可以通过h[i-1,j]计算h[i,j]，如果列数大于行数可以通过h[i,j-1]计算h[i,j] 还有更好的方法计算哈希值吗？<br>另外正文里的计算哈希值的公式貌似写错了，应该是<br>h[i] = 26*(h[i-1]-26^(m-1)*(s[i-1]-‘a’)) + (s[i+m-1]-‘a’);  <br></div>
+                            <span class="time">2018-12-05 11:12</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d3/c0/d38daa2d.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">yaya</span>
+                            </div>
+                            <div class="bd">二维矩阵只要如果以i&#39;j为左上角，即可定义一个i.j  i+1.j  i. j+1  i+1.j+1的子串，其本质是和字符串相同的，即可以由rf又可以由bf解 <br></div>
+                            <span class="time">2018-12-05 10:07</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="http://thirdwx.qlogo.cn/mmopen/vi_32/gM1ibHKPkrs5DSIp4aIuQ9jnYtNicc2tdG244PbaSvKw5jO9DWrhWghcVM1Y5Iq2QSpzLBUeWZQLhARst51z35mA/132" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">蒋礼锐</span>
+                            </div>
+                            <div class="bd">思考题:<br>可以先查找第一行的字符串，假设长度为m，用bf或者rk都可以，假设是n*n的数组，<br>bf的复杂度是(n-m)*n<br>rk的复杂度为n<br><br>如果有匹配，则依次匹配第2到m行字符串。每次的复杂度与第一次的相同<br><br>最坏时间复杂度为<br>bf:(m-n)^2*n^2<br>rk:n^2<br><br>但是如果第一行不匹配的话是不会进行第二行的匹配的，平均复杂度会小很多。 <br></div>
+                            <span class="time">2018-12-05 09:02</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/47/b3/4a76fccf.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">星君</span>
+                            </div>
+                            <div class="bd">好几期没看了，感觉跟不上了 <br></div>
+                            <span class="time">2018-12-12 20:43</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">不着急 慢慢来 没必要一直紧跟着</p>
+                                <p class="reply-time">2018-12-13 09:53</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/78/51/4790e13e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Smallfly</span>
+                            </div>
+                            <div class="bd">用 K 进制表示字符串应该不会出现哈希冲突吧，比如 “0” 到 “F” 的字符，用 16 进制表示， 有且仅有 &quot;FFFF&quot; 的结果是 0xFFFF 的值呀。 <br></div>
+                            <span class="time">2018-12-07 09:44</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/52/bb/084faf32.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">hunterlodge</span>
+                            </div>
+                            <div class="bd">RK算法和布隆过滤器的思想是一致的 <br></div>
+                            <span class="time">2018-12-07 09:03</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/da/7f/8069035d.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">ZX</span>
+                            </div>
+                            <div class="bd">RK算法，在对主串构建的时候，就对比是不是一样的，一样就不继续计算后面的hash，这样会不会更快一点 <br></div>
+                            <span class="time">2018-12-06 22:17</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">你说的很对 代码实现就是这样处理的</p>
+                                <p class="reply-time">2018-12-07 10:12</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/87/6b/0b6cd39a.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">朱月俊</span>
+                            </div>
+                            <div class="bd">以前刷题的时候，遇到过rk算法，当时是没太考虑hash冲突，一个字母对应一个数字，子串的hash值就是子串中的字母对应的数字想加。<br>今天大佬将之抽象提炼出来，还专门提到冲突解决方法，不可谓不妙！ <br></div>
+                            <span class="time">2018-12-05 16:34</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/f7/9d/c7295d17.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">青铜5 周群力</span>
+                            </div>
+                            <div class="bd">二维字符串匹配能用rk算法解决，那么能用kmp解决么? <br></div>
+                            <span class="time">2018-12-05 09:02</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/f8/99/8e760987.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">許敲敲</span>
+                            </div>
+                            <div class="bd">主串m*n把主串分割成m-1*n-1个子串 每个子串计算哈希值，再与模式串的哈希值比较 <br></div>
+                            <span class="time">2018-12-05 08:56</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/b3/c5/7fc124e2.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Liam</span>
+                            </div>
+                            <div class="bd">BF：遍历主串，以矩阵左上角元素作为矩阵起始位，从（0，0）到 （rowN - rowM, colN - colM), 取行列长度与模式相等的子矩阵串进行比较<br><br>hash算法同理 <br></div>
+                            <span class="time">2018-12-05 08:44</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/57/64/7e956620.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">陶瓷杯</span>
+                            </div>
+                            <div class="bd">h[i] = 26*(h[i-1]-26^(m-1)*(s[i-1]-&#39;a&#39;)) + (s[i+m-1]-&#39;a&#39;);<br>其中, h[i]、h[i-1] 分别对应 s[i] 和 s[i-1] 两个子串的哈希值<br>  好吧，这一段代码我对照上下文看了10遍，看懂了。我承认我很蠢 <br></div>
+                            <span class="time">2019-01-09 18:31</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">抱歉 没写清楚</p>
+                                <p class="reply-time">2019-01-10 10:03</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

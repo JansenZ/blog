@@ -1,0 +1,412 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                44讲最短路径：地图软件是如何计算出最优出行路径的
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/fd/2a/fd55eb7710224d61e4cea3a7ed01762a.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>基础篇的时候，我们学习了图的两种搜索算法，深度优先搜索和广度优先搜索。这两种算法主要是针对无权图的搜索算法。针对有权图，也就是图中的每条边都有一个权重，我们该如何计算两点之间的最短路径（经过的边的权重和最小）呢？今天，我就从地图软件的路线规划问题讲起，带你看看常用的<strong>最短路径算法</strong>（Shortest Path Algorithm）。</p><p>像Google地图、百度地图、高德地图这样的地图软件，我想你应该经常使用吧？如果想从家开车到公司，你只需要输入起始、结束地址，地图就会给你规划一条最优出行路线。这里的最优，有很多种定义，比如最短路线、最少用时路线、最少红绿灯路线等等。<strong><span class="orange">作为一名软件开发工程师，你是否思考过，地图软件的最优路线是如何计算出来的吗？底层依赖了什么算法呢？</span></strong></p><h2>算法解析</h2><p>我们刚提到的最优问题包含三个：最短路线、最少用时和最少红绿灯。我们先解决最简单的，最短路线。</p><p>解决软件开发中的实际问题，最重要的一点就是<strong>建模</strong>，也就是将复杂的场景抽象成具体的数据结构。针对这个问题，我们该如何抽象成数据结构呢？</p><p>我们之前也提到过，图这种数据结构的表达能力很强，显然，把地图抽象成图最合适不过了。我们把每个岔路口看作一个顶点，岔路口与岔路口之间的路看作一条边，路的长度就是边的权重。如果路是单行道，我们就在两个顶点之间画一条有向边；如果路是双行道，我们就在两个顶点之间画两条方向不同的边。这样，整个地图就被抽象成一个有向有权图。</p><!-- [[[read_end]]] --><p>具体的代码实现，我放在下面了。于是，我们要求解的问题就转化为，在一个有向有权图中，求两个顶点间的最短路径。</p><pre><code>public class Graph { // 有向有权图的邻接表表示
+  private LinkedList&lt;Edge&gt; adj[]; // 邻接表
+  private int v; // 顶点个数
+
+  public Graph(int v) {
+    this.v = v;
+    this.adj = new LinkedList[v];
+    for (int i = 0; i &lt; v; ++i) {
+      this.adj[i] = new LinkedList&lt;&gt;();
+    }
+  }
+
+  public void addEdge(int s, int t, int w) { // 添加一条边
+    this.adj[s].add(new Edge(s, t, w));
+  }
+
+  private class Edge {
+    public int sid; // 边的起始顶点编号
+    public int tid; // 边的终止顶点编号
+    public int w; // 权重
+    public Edge(int sid, int tid, int w) {
+      this.sid = sid;
+      this.tid = tid;
+      this.w = w;
+    }
+  }
+  // 下面这个类是为了dijkstra实现用的
+  private class Vertex implements Comparable&lt;Vertex&gt; {
+    public int id; // 顶点编号ID
+    public int dist; // 从起始顶点到这个顶点的距离
+    public Vertex(int id, int dist) {
+      this.id = id;
+      this.dist = dist;
+    }
+    @Override
+    public int compareTo(Vertex o) { // 按照dist从小到大排序
+      if (o.dist &gt; this.dist) return -1;
+      else return 1;
+    }
+  }
+}
+</code></pre><p>想要解决这个问题，有一个非常经典的算法，最短路径算法，更加准确地说，是<strong>单源最短路径算法</strong>（一个顶点到一个顶点）。提到最短路径算法，最出名的莫过于Dijkstra算法了。所以，我们现在来看，Dijkstra算法是怎么工作的。</p><p>这个算法的原理稍微有点儿复杂，单纯的文字描述，不是很好懂。所以，我还是结合代码来讲解。</p><pre><code>public void dijkstra(int s, int t) { // 从顶点s到顶点t的最短路径
+  int[] predecessor = new int[this.v]; // 用来还原最短路径
+  Vertex[] vertexes = new Vertex[this.v]; // 记录起始顶点到这个顶点的距离
+  for (int i = 0; i &lt; v; ++i) { // 初始化dist为无穷大
+    vertexes[i] = new Vertex(i, Integer.MAX_VALUE);
+  }
+  PriorityQueue&lt;Vertex&gt; queue = new PriorityQueue&lt;&gt;(); // 小顶堆
+  boolean[] inQueue = new boolean[this.v]; // 标记是否进入过队列
+  queue.add(vertexes[s]); // 先把起始顶点放到队列中
+  vertexes[s].dist = 0;
+  inqueue[s] = true;
+  while (!queue.isEmpty()) {
+    Vertex minVertex= queue.poll(); // 取dist最小的顶点
+    if (minVertex.id == t) break; // 最短路径产生了
+    for (int i = 0; i &lt; adj[minVertex.id].size(); ++i) {
+      Edge e = adj[minVertex.id].get(i); // 取出一条minVetex相连的边
+      Vertex nextVertex = vertexes[e.tid]; // minVertex--&gt;nextVertex
+      //找到一条到nextVertex更短的路径
+      if (minVertex.dist + e.w &lt; nextVertex.dist) {
+        nextVertex.dist = minVertex.dist + e.w; // 更新dist
+        predecessor[nextVertex.id] = minVertex.id; //更新前驱顶点
+        if (inqueue[nextVertex.id] == false) { // 如果没有在队列中
+          queue.add(nextVertex); // 就把它放到队列中
+          inqueue[nextVertex.id] = true;
+        }
+      }
+    }
+  }
+  // 输出最短路径
+  System.out.print(s);
+  print(s, t, predecessor);
+}
+
+private void print(int s, int t, int[] predecessor) {
+  if (s == t) return;
+  print(s, predecessor[t], predecessor);
+  System.out.print(&quot;-&gt;&quot; + t);
+}
+</code></pre><p>我们用vertexes数组，记录从起始顶点到每个顶点的距离（dist）。起初，我们把所有顶点的dist都初始化为无穷大（也就是代码中的Integer.MAX_VALUE）。我们把起始顶点的dist值初始化为0，然后将其放到优先级队列中。</p><p>我们从优先级队列中取出dist最小的顶点minVertex，然后考察这个顶点可达的所有顶点（代码中的nextVertex）。如果minVertex的dist值加上minVertex与nextVertex之间边的权重w小于nextVertex当前的dist值，也就是说，存在另一条更短的路径，它经过minVertex到达nextVertex。那我们就把nextVertex的dist更新为minVertex的dist值加上w。然后，我们把nextVertex加入到优先级队列中。重复这个过程，直到找到终止顶点t或者队列为空。</p><p>以上就是Dijkstra算法的核心逻辑。除此之外，代码中还有两个额外的变量，predecessor数组和inqueue数组。</p><p>predecessor数组的作用是为了还原最短路径，它记录每个顶点的前驱顶点。最后，我们通过递归的方式，将这个路径打印出来。打印路径的print递归代码我就不详细讲了，这个跟我们在图的搜索中讲的打印路径方法一样。如果不理解的话，你可以回过头去看下那一节。</p><p>inqueue数组是为了避免将一个顶点多次添加到优先级队列中。我们更新了某个顶点的dist值之后，如果这个顶点已经在优先级队列中了，就不要再将它重复添加进去了。</p><p>看完了代码和文字解释，你可能还是有点懵，那我就举个例子，再给你解释一下。</p><p><img src="https://static001.geekbang.org/resource/image/e2/a9/e20907173c458fac741e556c947bb9a9.jpg" alt=""></p><p>理解了Dijkstra的原理和代码实现，我们来看下，<strong>Dijkstra算法的时间复杂度是多少？</strong></p><p>在刚刚的代码实现中，最复杂就是while循环嵌套for循环那部分代码了。while循环最多会执行V次（V表示顶点的个数），而内部的for循环的执行次数不确定，跟每个顶点的相邻边的个数有关，我们分别记作E0，E1，E2，……，E(V-1)。如果我们把这V个顶点的边都加起来，最大也不会超过图中所有边的个数E（E表示边的个数）。</p><p>for循环内部的代码涉及从优先级队列取数据、往优先级队列中添加数据、更新优先级队列中的数据，这样三个主要的操作。我们知道，优先级队列是用堆来实现的，堆中的这几个操作，时间复杂度都是O(logV)（堆中的元素个数不会超过顶点的个数V）。</p><p>所以，综合这两部分，再利用乘法原则，整个代码的时间复杂度就是O(E*logV)。</p><p>弄懂了Dijkstra算法，我们再来回答之前的问题，如何计算最优出行路线？</p><p>从理论上讲，用Dijkstra算法可以计算出两点之间的最短路径。但是，你有没有想过，对于一个超级大地图来说，岔路口、道路都非常多，对应到图这种数据结构上来说，就有非常多的顶点和边。如果为了计算两点之间的最短路径，在一个超级大图上动用Dijkstra算法，遍历所有的顶点和边，显然会非常耗时。那我们有没有什么优化的方法呢？</p><p>做工程不像做理论，一定要给出个最优解。理论上算法再好，如果执行效率太低，也无法应用到实际的工程中。<strong>对于软件开发工程师来说，我们经常要根据问题的实际背景，对解决方案权衡取舍。类似出行路线这种工程上的问题，我们没有必要非得求出个绝对最优解。很多时候，为了兼顾执行效率，我们只需要计算出一个可行的次优解就可以了</strong>。</p><p>有了这个原则，你能想出刚刚那个问题的优化方案吗？</p><p>虽然地图很大，但是两点之间的最短路径或者说较好的出行路径，并不会很“发散”，只会出现在两点之间和两点附近的区块内。所以我们可以在整个大地图上，划出一个小的区块，这个小区块恰好可以覆盖住两个点，但又不会很大。我们只需要在这个小区块内部运行Dijkstra算法，这样就可以避免遍历整个大图，也就大大提高了执行效率。</p><p>不过你可能会说了，如果两点距离比较远，从北京海淀区某个地点，到上海黄浦区某个地点，那上面的这种处理方法，显然就不工作了，毕竟覆盖北京和上海的区块并不小。</p><p>我给你点提示，你可以现在打开地图App，缩小放大一下地图，看下地图上的路线有什么变化，然后再思考，这个问题该怎么解决。</p><p>对于这样两点之间距离较远的路线规划，我们可以把北京海淀区或者北京看作一个顶点，把上海黄浦区或者上海看作一个顶点，先规划大的出行路线。比如，如何从北京到上海，必须要经过某几个顶点，或者某几条干道，然后再细化每个阶段的小路线。</p><p>这样，最短路径问题就解决了。我们再来看另外两个问题，最少时间和最少红绿灯。</p><p>前面讲最短路径的时候，每条边的权重是路的长度。在计算最少时间的时候，算法还是不变，我们只需要把边的权重，从路的长度变成经过这段路所需要的时间。不过，这个时间会根据拥堵情况时刻变化。如何计算车通过一段路的时间呢？这是一个蛮有意思的问题，你可以自己思考下。</p><p>每经过一条边，就要经过一个红绿灯。关于最少红绿灯的出行方案，实际上，我们只需要把每条边的权值改为1即可，算法还是不变，可以继续使用前面讲的Dijkstra算法。不过，边的权值为1，也就相当于无权图了，我们还可以使用之前讲过的广度优先搜索算法。因为我们前面讲过，广度优先搜索算法计算出来的两点之间的路径，就是两点的最短路径。</p><p>不过，这里给出的所有方案都非常粗糙，只是为了给你展示，如何结合实际的场景，灵活地应用算法，让算法为我们所用，真实的地图软件的路径规划，要比这个复杂很多。而且，比起Dijkstra算法，地图软件用的更多的是类似A*的启发式搜索算法，不过也是在Dijkstra算法上的优化罢了，我们后面会讲到，这里暂且不展开。</p><h2>总结引申</h2><p>今天，我们学习了一种非常重要的图算法，<strong>Dijkstra最短路径算法</strong>。实际上，最短路径算法还有很多，比如Bellford算法、Floyd算法等等。如果感兴趣，你可以自己去研究。</p><p>关于Dijkstra算法，我只讲了原理和代码实现。对于正确性，我没有去证明。之所以这么做，是因为证明过程会涉及比较复杂的数学推导。这个并不是我们的重点，你只要掌握这个算法的思路就可以了。</p><p>这些算法实现思路非常经典，掌握了这些思路，我们可以拿来指导、解决其他问题。比如Dijkstra这个算法的核心思想，就可以拿来解决下面这个看似完全不相关的问题。这个问题是我之前工作中遇到的真实的问题，为了在较短的篇幅里把问题介绍清楚，我对背景做了一些简化。</p><p>我们有一个翻译系统，只能针对单个词来做翻译。如果要翻译一整个句子，我们需要将句子拆成一个一个的单词，再丢给翻译系统。针对每个单词，翻译系统会返回一组可选的翻译列表，并且针对每个翻译打一个分，表示这个翻译的可信程度。</p><p><img src="https://static001.geekbang.org/resource/image/91/67/91b68e47e0d8521cb3ce66bb9827c767.jpg" alt=""></p><p>针对每个单词，我们从可选列表中，选择其中一个翻译，组合起来就是整个句子的翻译。每个单词的翻译的得分之和，就是整个句子的翻译得分。随意搭配单词的翻译，会得到一个句子的不同翻译。针对整个句子，我们希望计算出得分最高的前k个翻译结果，你会怎么编程来实现呢？</p><p><img src="https://static001.geekbang.org/resource/image/76/53/769cab20f6a50c0b7a4ed571c9f28a53.jpg" alt=""></p><p>当然，最简单的办法还是借助回溯算法，穷举所有的排列组合情况，然后选出得分最高的前k个翻译结果。但是，这样做的时间复杂度会比较高，是O(m^n)，其中，m表示平均每个单词的可选翻译个数，n表示一个句子中包含多少个单词。这个解决方案，你可以当作回溯算法的练习题，自己编程实现一下，我就不多说了。</p><p>实际上，这个问题可以借助Dijkstra算法的核心思想，非常高效地解决。每个单词的可选翻译是按照分数从大到小排列的，所以$a_{0}b_{0}c_{0}$肯定是得分最高组合结果。我们把$a_{0}b_{0}c_{0}$及得分作为一个对象，放入到优先级队列中。</p><p>我们每次从优先级队列中取出一个得分最高的组合，并基于这个组合进行扩展。扩展的策略是每个单词的翻译分别替换成下一个单词的翻译。比如$a_{0}b_{0}c_{0}$扩展后，会得到三个组合，$a_{1}b_{0}c_{0}$、$a_{0}b_{1}c_{0}$、$a_{0}b_{0}c_{1}$。我们把扩展之后的组合，加到优先级队列中。重复这个过程，直到获取到k个翻译组合或者队列为空。</p><p><img src="https://static001.geekbang.org/resource/image/e7/6c/e71f307ca575d364ba2b23a022779f6c.jpg" alt=""></p><p>我们来看，这种实现思路的时间复杂度是多少？</p><p>假设句子包含n个单词，每个单词平均有m个可选的翻译，我们求得分最高的前k个组合结果。每次一个组合出队列，就对应着一个组合结果，我们希望得到k个，那就对应着k次出队操作。每次有一个组合出队列，就有n个组合入队列。优先级队列中出队和入队操作的时间复杂度都是O(logX)，X表示队列中的组合个数。所以，总的时间复杂度就是O(k*n*logX)。那X到底是多少呢？</p><p>k次出入队列，队列中的总数据不会超过k*n，也就是说，出队、入队操作的时间复杂度是O(log(k*n))。所以，总的时间复杂度就是O(k*n*log(k*n))，比之前的指数级时间复杂度降低了很多。</p><h2>课后思考</h2><ol>
+<li>
+<p>在计算最短时间的出行路线中，如何获得通过某条路的时间呢？这个题目很有意思，我之前面试的时候也被问到过，你可以思考看看。</p>
+</li>
+<li>
+<p>今天讲的出行路线问题，我假设的是开车出行，那如果是公交出行呢？如果混合地铁、公交、步行，又该如何规划路线呢？</p>
+</li>
+</ol><p>欢迎留言和我分享，也欢迎点击“<span class="orange">请朋友读</span>”，把今天的内容分享给你的好友，和他一起讨论、学习。</p><p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt=""></p>
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/08/eb/fed61050.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">五岳寻仙</span>
+                            </div>
+                            <div class="bd">课后思考题，自己能想到的。<br><br>1.获取通过某条路的时间：通过某条路的时间与①路长度②路况(是否平坦等)③拥堵情况④红绿灯个数等因素相关。获取这些因素后就可以建立一个回归模型(比如线性回归)来估算时间。其中①②④因素比较固定，容易获得。③是动态的，但也可以通过a.与交通部门合作获得路段拥堵情况；b.联合其他导航软件获得在该路段的在线人数；c.通过现在时间段正好在次路段的其他用户的真实情况等方式估算。<br><br>2.混合公交、地铁和步行时：地铁时刻表是固定的，容易估算。公交虽然没那么准时，大致时间是可以估计的，步行时间受路拥堵状况小，基本与道路长度成正比，也容易估算。总之，感觉公交、地铁、步行，时间估算会比开车更容易，也更准确些。 <br></div>
+                            <span class="time">2019-01-07 07:46</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/ff/3f/bbb8a88c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">徐凯</span>
+                            </div>
+                            <div class="bd">@五岳寻仙的答案太棒了 👏 我感觉每条道路应该还有限速，这个因素也要考察。 <br></div>
+                            <span class="time">2019-01-07 08:59</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/b3/c5/7fc124e2.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Liam</span>
+                            </div>
+                            <div class="bd">有2个疑问：<br><br>1 Dijkstra就是贪心算法吧？<br>2 它的解可能不是最优解 <br></div>
+                            <span class="time">2019-01-08 08:50</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/f8/99/8e760987.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">許敲敲</span>
+                            </div>
+                            <div class="bd">类似的python代码也会更新嘛，还不熟悉java的 <br></div>
+                            <span class="time">2019-01-07 08:10</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/83/ef/445e1421.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">yongxiang</span>
+                            </div>
+                            <div class="bd">王老师，我输入代码运行后，实际出队列的顺序跟图中的不一样，实际（15，0）出队列 在（13，3）出队列前面。我看了代码，应该是修改（25，1）为 （13，3）的时候，小顶堆不会自动更新顺序。需要对22行进行如下修改，更新已经在队列中，又改了dist的Vertex的优先级：<br>                   if (inQueue[nextVertex.id] == false){<br>                        queue.add(nextVertex);<br>                        inQueue[nextVertex.id] = true;<br>                    }<br>                    else { &#47;&#47; 更新已经在队列中，又改了dist的Vertex的优先级<br>                        queue.remove(nextVertex);<br>                        queue.add(nextVertex);<br>                    } <br></div>
+                            <span class="time">2019-01-12 18:19</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Geek_dddebb</span>
+                            </div>
+                            <div class="bd">亲测更新vertex后对象在队列中的位置不变 <br></div>
+                            <span class="time">2019-01-07 14:30</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/69/a2/4ee5cbb2.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">hughieyu</span>
+                            </div>
+                            <div class="bd">更新vertex后是否要更新一下对象在优先级队列中的位置，否则会预期更晚弹出优先级队列，会影响查找的速度，除此之外还没有可能出现其他的问题 <br></div>
+                            <span class="time">2019-01-07 08:41</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">会自动更新位置的 相当于堆中更新一个节点的值</p>
+                                <p class="reply-time">2019-01-07 09:39</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/05/dd/b201cf13.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Alexis何春光</span>
+                            </div>
+                            <div class="bd">Dijkstra算一种动态规划算法吗 <br></div>
+                            <span class="time">2019-01-13 11:53</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/dc/67/5149a60b.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">李东勇</span>
+                            </div>
+                            <div class="bd">有兴趣的可以看下LeetCode 上这道题： https:&#47;&#47;leetcode.com&#47;problems&#47;network-delay-time&#47;<br>用到的就是Dijkstra 算法 <br></div>
+                            <span class="time">2019-01-13 11:38</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/43/24/3f9f7c70.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">zixuan</span>
+                            </div>
+                            <div class="bd">想到个口水证明，不过首先需要说明下dijkstra不能用于负权图或正负混合权重的图，例如由a、b、c三个顶点构成的图：{Edge(a, b, -1), Edge(a, c, -2), Edge(b, c, -10)}, 按dijkstra算法会得出a到c的最短距离是-2，但实际是-11. 换句话说，通过把正权重取负来求最长路径是行不通的，最长路径(or 负权图的最短路径)似乎并没有高效的解法. 所以大的前提是所有权重&gt;=0.<br><br>接下来证明: PriorityQueue出队列的顶点顺序是所有顶点到单源点的最短路径按路径总权重从小到大排列的顺序. Base Case: 第1个出队列的是源点本身, 最短路径总权重=0为最小（这里就要求所有权重&gt;=0，否则base都不成立）. 假设第1, 2, ...n次出队列的顶点分别对应最短路径总权重最小的前n个顶点，那么第n+1个最短路径顶点自然就是在前n个顶点的所有邻接顶点集合中取更新后总距离离源点最小的那个，即堆顶元素. 假如排第n+1的顶点t不是堆顶元素的话，其最短路径的前驱顶点s必然不在已出队列顶点集合中(否则通过s找到的t就是对顶元素)，但又由于权重(s, t)&gt;0, 源点到s的最短距离必然是排前n+1的，则t必须是其前驱节点s，矛盾.  老师最后举的打分的例子初看上去和最短距离没太大关系，可能是指在这个基于历史状态下的单步迭代策略(DP?)使得全局最优上有点类似吧.  <br></div>
+                            <span class="time">2019-01-11 16:27</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/e9/52/f07e9001.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">想当上帝的司机</span>
+                            </div>
+                            <div class="bd">if (inqueue[nextVertex.id]==false)&#47;&#47;加了这个判断的话，就不会走2了，因为在走1的时候2已经进入inqueue了，我在本地试的是去掉这个条件结果是对的，不知道是不是语言的原因，我是用gonlang写的，优先级队列是网上找的一个插件，老师你本地跑是成功的吗 <br></div>
+                            <span class="time">2019-01-10 00:45</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">我测试过的 我再多找个数据测试一下</p>
+                                <p class="reply-time">2019-01-10 09:59</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/08/eb/fed61050.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">五岳寻仙</span>
+                            </div>
+                            <div class="bd">@Liam 有问到 Dkijstra 算法是否是贪心算法，求得的解是否是全局最优解。<br><br>答案是：它不是贪心算法，事实上它是动态规划算法，求得的解全局最优解。<br><br>这个算法很有名，网上有很多帖子，具体可以百度或谷歌。 <br></div>
+                            <span class="time">2019-01-09 07:23</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="http://thirdwx.qlogo.cn/mmopen/vi_32/LkBg3zsF2aNAN0TiagNUAohQpCxWYs1yzvSkrww6C3Wy6smCH4K5ShYg2KQRHmbW8YL2ibWxPXtuickXJUC2gib8oQ/132" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">卡罗</span>
+                            </div>
+                            <div class="bd">翻译那个例子没看懂。。。 <br></div>
+                            <span class="time">2019-01-08 18:27</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/40/10/b6bf3c3c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">纯洁的憎恶</span>
+                            </div>
+                            <div class="bd">思考题好发散啊…我也开开脑洞吧。<br><br>1.可考虑的因素有很多，在此补充一点：如果使用我的导航app用户很多，那么就有可能掌握每条道路通行车辆的实时速度、汽车数量，于是就可以结合道路长度比较精确的计算出当前通行时间。<br><br>2.公交和地铁都有固定线路，与开车、步行情境下的路线有很大不同。如果只考虑公交，可以简化问题为只保留公交车站为顶点，站与站之间为边的有向图即可。但如果把公交和步行混合起来就复杂了，也行可以考虑公交线路覆盖区域，以车站为顶点、站与站连线为边、边的通勤时间为权重，覆盖不到的区域以岔路为顶点、道路为边、步行通勤时间为权重，构建有向图。 <br></div>
+                            <span class="time">2019-01-07 23:20</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/40/10/b6bf3c3c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">纯洁的憎恶</span>
+                            </div>
+                            <div class="bd">回顾了一下31讲，广度优先算法的过程不难理解，但是广度优先算法遍历无权图中一点s到另一点t的路径，就是它的最短路径，是如何证明的呢？ <br></div>
+                            <span class="time">2019-01-07 18:33</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d2/7e/bd8c372a.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">你有资格吗？</span>
+                            </div>
+                            <div class="bd">打卡 <br></div>
+                            <span class="time">2019-01-07 11:44</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/df/1e/cea897e8.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">传说中的成大大</span>
+                            </div>
+                            <div class="bd">1. 代码中inqueue声明是 inQueue<br>2. 感觉有点类似 暴力搜索判断,起始点和截止点的之间的所有结点都考察一遍 <br></div>
+                            <span class="time">2019-01-07 11:06</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/8c/54/deb19880.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">slvher</span>
+                            </div>
+                            <div class="bd">机器翻译的例子，用于解码的启发式剪枝是 beam search 算法吧？在 NLP 领域序列解码场合有广泛应用，不保证最优解，但通过调整 beam width 参数能得到工程上可接受的结果 <br></div>
+                            <span class="time">2019-01-07 09:56</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d3/34/5dee4f70.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">P@tricK</span>
+                            </div>
+                            <div class="bd">课后思考：<br><br>1. 想到一个简单粗暴的，用道路长度&#47;限速作为权重。（实际上算上交通拥堵的话感觉复杂好多，需要去根据当前交通状况判断……）<br><br>2. 分别取离起点和终点最近的地铁站为s和t，地铁每个站权重为1（也就是无权），类似Dijkstra算法，从s开始搜索，维护一个优先级队列，遇到换乘点则添加分支。（公交车的如果也用这个想法，每个站都会是换乘点，而且每个换乘点有n个线路…… 会想用上分区的办法） <br></div>
+                            <span class="time">2019-01-07 09:25</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/a4/ee/cffd8ee6.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">魏全运</span>
+                            </div>
+                            <div class="bd">vertex compareTo有问题吧，怎么没有相等的分支呀？ <br></div>
+                            <span class="time">2019-01-07 09:00</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">有也可以 没有也可以的</p>
+                                <p class="reply-time">2019-01-07 09:39</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,496 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <style type="text/css">
+
+#watermark {
+
+  position: relative;
+  overflow: hidden;
+}
+
+#watermark .x {
+  position: absolute;
+  top: 800;
+  left: 400;
+  color: #3300ff;
+  font-size: 50px;
+  pointer-events: none;
+  opacity:0.3;
+  filter:Alpha(opacity=50);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+}
+    </style>
+
+
+    <style type="text/css">
+ html{color:#333;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;text-rendering:optimizelegibility;font-family:Helvetica Neue,PingFang SC,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif}html.borderbox *,html.borderbox :after,html.borderbox :before{box-sizing:border-box}article,aside,blockquote,body,button,code,dd,details,dl,dt,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hr,input,legend,li,menu,nav,ol,p,pre,section,td,textarea,th,ul{margin:0;padding:0}article,aside,details,figcaption,figure,footer,header,menu,nav,section{display:block}audio,canvas,video{display:inline-block}body,button,input,select,textarea{font:300 1em/1.8 PingFang SC,Lantinghei SC,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,Helvetica,sans-serif}button::-moz-focus-inner,input::-moz-focus-inner{padding:0;border:0}table{border-collapse:collapse;border-spacing:0}fieldset,img{border:0}blockquote{position:relative;color:#999;font-weight:400;border-left:1px solid #1abc9c;padding-left:1em;margin:1em 3em 1em 2em}@media only screen and (max-width:640px){blockquote{margin:1em 0}}abbr,acronym{border-bottom:1px dotted;font-variant:normal}abbr{cursor:help}del{text-decoration:line-through}address,caption,cite,code,dfn,em,th,var{font-style:normal;font-weight:400}ol,ul{list-style:none}caption,th{text-align:left}q:after,q:before{content:""}sub,sup{font-size:75%;line-height:0;position:relative}:root sub,:root sup{vertical-align:baseline}sup{top:-.5em}sub{bottom:-.25em}a{color:#1abc9c}a:hover{text-decoration:underline}.typo a{border-bottom:1px solid #1abc9c}.typo a:hover{border-bottom-color:#555;color:#555}.typo a:hover,a,ins{text-decoration:none}.typo-u,u{text-decoration:underline}mark{background:#fffdd1;border-bottom:1px solid #ffedce;padding:2px;margin:0 5px}code,pre,pre tt{font-family:Courier,Courier New,monospace}pre{background:hsla(0,0%,97%,.7);border:1px solid #ddd;padding:1em 1.5em;display:block;-webkit-overflow-scrolling:touch}hr{border:none;border-bottom:1px solid #cfcfcf;margin-bottom:.8em;height:10px}.typo-small,figcaption,small{font-size:.9em;color:#888}b,strong{font-weight:700;color:#000}[draggable]{cursor:move}.clearfix:after,.clearfix:before{content:"";display:table}.clearfix:after{clear:both}.clearfix{zoom:1}.textwrap,.textwrap td,.textwrap th{word-wrap:break-word;word-break:break-all}.textwrap-table{table-layout:fixed}.serif{font-family:Palatino,Optima,Georgia,serif}.typo-dl,.typo-form,.typo-hr,.typo-ol,.typo-p,.typo-pre,.typo-table,.typo-ul,.typo dl,.typo form,.typo hr,.typo ol,.typo p,.typo pre,.typo table,.typo ul,blockquote{margin-bottom:1rem}h1,h2,h3,h4,h5,h6{font-family:PingFang SC,Helvetica Neue,Verdana,Microsoft Yahei,Hiragino Sans GB,Microsoft Sans Serif,WenQuanYi Micro Hei,sans-serif;color:#000;line-height:1.35}.typo-h1,.typo-h2,.typo-h3,.typo-h4,.typo-h5,.typo-h6,.typo h1,.typo h2,.typo h3,.typo h4,.typo h5,.typo h6{margin-top:1.2em;margin-bottom:.6em;line-height:1.35}.typo-h1,.typo h1{font-size:2em}.typo-h2,.typo h2{font-size:1.8em}.typo-h3,.typo h3{font-size:1.6em}.typo-h4,.typo h4{font-size:1.4em}.typo-h5,.typo-h6,.typo h5,.typo h6{font-size:1.2em}.typo-ul,.typo ul{margin-left:1.3em;list-style:disc}.typo-ol,.typo ol{list-style:decimal;margin-left:1.9em}.typo-ol ol,.typo-ol ul,.typo-ul ol,.typo-ul ul,.typo li ol,.typo li ul{margin-bottom:.8em;margin-left:2em}.typo-ol ul,.typo-ul ul,.typo li ul{list-style:circle}.typo-table td,.typo-table th,.typo table caption,.typo table td,.typo table th{border:1px solid #ddd;padding:.5em 1em;color:#666}.typo-table th,.typo table th{background:#fbfbfb}.typo-table thead th,.typo table thead th{background:hsla(0,0%,95%,.7)}.typo table caption{border-bottom:none}.typo-input,.typo-textarea{-webkit-appearance:none;border-radius:0}.typo-em,.typo em,caption,legend{color:#000;font-weight:inherit}.typo-em{position:relative}.typo-em:after{position:absolute;top:.65em;left:0;width:100%;overflow:hidden;white-space:nowrap;content:"\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB\30FB"}.typo img{max-width:100%}.common-content{font-weight:400;color:#353535;line-height:1.75rem;white-space:normal;word-break:normal;font-size:1rem}.common-content img{display:block;max-width:100%;background-color:#eee}.common-content audio,.common-content video{width:100%;background-color:#eee}.common-content center,.common-content font{margin-top:1rem;display:inline-block}.common-content center{width:100%}.common-content pre{margin-top:1rem;padding-left:0;padding-right:0;position:relative;overflow:hidden}.common-content pre code{font-size:.8rem;font-family:Consolas,Liberation Mono,Menlo,monospace,Courier;display:block;width:100%;box-sizing:border-box;padding-left:1rem;padding-right:1rem;overflow-x:auto}.common-content hr{border:none;margin-top:1.5rem;margin-bottom:1.5rem;border-top:1px solid #f5f5f5;height:1px;background:none}.common-content b,.common-content h1,.common-content h2,.common-content h3,.common-content h4,.common-content h5,.common-content strong{font-weight:700}.common-content h1,.common-content h2{font-size:1.125rem;margin-bottom:.45rem}.common-content h3,.common-content h4,.common-content h5{font-size:1rem;margin-bottom:.45rem}.common-content p{font-weight:400;color:#353535;margin-top:.15rem}.common-content .orange{color:#ff5a05}.common-content .reference{font-size:1rem;color:#888}.custom-rich-content h1{margin-top:0;font-weight:400;font-size:15.25px;border-bottom:1px solid #eee;line-height:2.8}.custom-rich-content li,.custom-rich-content p{font-size:14px;color:#888;line-height:1.6}table.hljs-ln{margin-bottom:0;border-spacing:0;border-collapse:collapse}table.hljs-ln,table.hljs-ln tbody,table.hljs-ln td,table.hljs-ln tr{box-sizing:border-box}table.hljs-ln td{padding:0;border:0}table.hljs-ln td.hljs-ln-numbers{min-width:15px;color:rgba(27,31,35,.3);text-align:right;white-space:nowrap;cursor:pointer;user-select:none}table.hljs-ln td.hljs-ln-code,table.hljs-ln td.hljs-ln-numbers{font-family:SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;font-size:12px;line-height:20px;vertical-align:top}table.hljs-ln td.hljs-ln-code{position:relative;padding-right:10px;padding-left:10px;overflow:visible;color:#24292e;word-wrap:normal;white-space:pre}video::-webkit-media-controls{overflow:hidden!important}video::-webkit-media-controls-enclosure{width:calc(100% + 32px);margin-left:auto}.button-cancel{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel,.button-primary{-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary{color:#fff;background-color:#ff5a05;border-radius:3px}@font-face{font-family:iconfont;src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot);src:url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.woff) format("woff"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.ttf) format("truetype"),url(//at.alicdn.com/t/font_372689_bwwwtosxtzp.svg#iconfont) format("svg")}@font-face{font-family:player-font;src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot);src:url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.eot#iefix) format("embedded-opentype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.woff) format("woff"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.ttf) format("truetype"),url(//at.alicdn.com/t/font_509397_1cyjv4o90qiod2t9.svg#player-font) format("svg")}.iconfont{font-family:iconfont!important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:.2px;-moz-osx-font-smoothing:grayscale}html{background:#fff;min-height:100%;-webkit-tap-highlight-color:rgba(0,0,0,0)}body{width:100%}body.fixed{overflow:hidden;position:fixed;width:100vw;height:100vh}i{font-style:normal}a{word-wrap:break-word;-webkit-tap-highlight-color:rgba(0,0,0,0)}a:hover{text-decoration:none}.fade-enter-active,.fade-leave-active{transition:opacity .3s}.fade-enter,.fade-leave-to{opacity:0}.MathJax,.MathJax_CHTML,.MathJax_MathContainer,.MathJax_MathML,.MathJax_PHTML,.MathJax_PlainSource,.MathJax_SVG{outline:0}.ios-app-switch .js-audit{display:none}._loading_wrap_{position:fixed;width:100vw;height:100vh;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999}._loading_div_class_,._loading_wrap_{display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center}._loading_div_class_{word-wrap:break-word;padding:.5rem .75rem;text-align:center;z-index:9999;font-size:.6rem;max-width:60%;color:#fff;border-radius:.25rem;-ms-flex-direction:column;flex-direction:column}._loading_div_class_ .message{color:#353535;font-size:16px;line-height:3}.spinner{animation:circle-rotator 1.4s linear infinite}.spinner *{line-height:0;box-sizing:border-box}@keyframes circle-rotator{0%{transform:rotate(0deg)}to{transform:rotate(270deg)}}.path{stroke-dasharray:187;stroke-dashoffset:0;transform-origin:center;animation:circle-dash 1.4s ease-in-out infinite,circle-colors 5.6s ease-in-out infinite}@keyframes circle-colors{0%{stroke:#ff5a05}to{stroke:#ff5a05}}@keyframes circle-dash{0%{stroke-dashoffset:187}50%{stroke-dashoffset:46.75;transform:rotate(135deg)}to{stroke-dashoffset:187;transform:rotate(450deg)}}.confirm-box-wrapper,.confirm-box-wrapper .mask{position:absolute;top:0;left:0;right:0;bottom:0}.confirm-box-wrapper .mask{background:rgba(0,0,0,.6)}.confirm-box-wrapper .confirm-box{position:fixed;top:50%;left:50%;width:267px;background:#fff;transform:translate(-50%,-50%);border-radius:7px}.confirm-box-wrapper .confirm-box .head{margin:0 18px;font-size:18px;text-align:center;line-height:65px;border-bottom:1px solid #d9d9d9}.confirm-box-wrapper .confirm-box .body{padding:18px;padding-bottom:0;color:#353535;font-size:12.5px;max-height:150px;overflow:auto}.confirm-box-wrapper .confirm-box .foot{display:-ms-flexbox;display:flex;-ms-flex-direction:row;flex-direction:row;padding:18px}.confirm-box-wrapper .confirm-box .foot .button-cancel{border:1px solid #d9d9d9}.hljs{display:block;overflow-x:auto;padding:.5em;color:#333;background:#f8f8f8}.hljs-comment,.hljs-quote{color:#998;font-style:italic}.hljs-keyword,.hljs-selector-tag,.hljs-subst{color:#333;font-weight:700}.hljs-literal,.hljs-number,.hljs-tag .hljs-attr,.hljs-template-variable,.hljs-variable{color:teal}.hljs-doctag,.hljs-string{color:#d14}.hljs-section,.hljs-selector-id,.hljs-title{color:#900;font-weight:700}.hljs-subst{font-weight:400}.hljs-class .hljs-title,.hljs-type{color:#458;font-weight:700}.hljs-attribute,.hljs-name,.hljs-tag{color:navy;font-weight:400}.hljs-link,.hljs-regexp{color:#009926}.hljs-bullet,.hljs-symbol{color:#990073}.hljs-built_in,.hljs-builtin-name{color:#0086b3}.hljs-meta{color:#999;font-weight:700}.hljs-deletion{background:#fdd}.hljs-addition{background:#dfd}.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+
+
+
+
+    </style>
+    <style type="text/css">
+        .button-cancel[data-v-87ffcada]{color:#888;border:1px solid #888;border-radius:3px;margin-right:12px}.button-cancel[data-v-87ffcada],.button-primary[data-v-87ffcada]{-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1;height:35px;display:inline-block;font-size:15px;text-align:center;line-height:36px}.button-primary[data-v-87ffcada]{color:#fff;background-color:#ff5a05;border-radius:3px}.pd[data-v-87ffcada]{padding-left:1.375rem;padding-right:1.375rem}.article[data-v-87ffcada]{max-width:70rem;margin:0 auto}.article .article-unavailable[data-v-87ffcada]{color:#fa8919;font-size:15px;font-weight:600;line-height:24px;border-radius:5px;padding:12px;background-color:#f6f7fb;margin-top:20px}.article .article-unavailable .iconfont[data-v-87ffcada]{font-size:12px}.article .main[data-v-87ffcada]{padding:1.25rem 0;margin-bottom:52px}.article-title[data-v-87ffcada]{color:#353535;font-weight:400;line-height:1.65rem;font-size:1.34375rem}.article-info[data-v-87ffcada]{color:#888;font-size:.9375rem;margin-top:1.0625rem}.article-content[data-v-87ffcada]{margin-top:1.0625rem}.article-content.android video[data-v-87ffcada]::-webkit-media-controls-fullscreen-button{display:none}.copyright[data-v-87ffcada]{color:#b2b2b2;padding-bottom:20px;margin-top:20px;font-size:13px}.audio-player[data-v-87ffcada]{width:100%;margin:20px 0}.to-comment[data-v-87ffcada]{overflow:hidden;padding-top:10px;margin-bottom:-30px}.to-comment a.button-primary[data-v-87ffcada]{float:right;height:20px;font-size:12px;line-height:20px;padding:4px 8px;cursor:pointer}.article-comments[data-v-87ffcada]{margin-top:2rem}.article-comments h2[data-v-87ffcada]{text-align:center;color:#888;position:relative;z-index:1;margin-bottom:1rem}.article-comments h2[data-v-87ffcada]:before{border-top:1px dotted #888;content:"";position:absolute;top:56%;left:0;width:100%;z-index:-1}.article-comments h2 span[data-v-87ffcada]{font-size:15.25px;font-weight:400;padding:0 1rem;background:#fff;display:inline-block}.article-sub-bottom[data-v-87ffcada]{z-index:10;cursor:pointer}.switch-btns[data-v-87ffcada]{height:76px;cursor:pointer;padding-top:24px;padding-bottom:24px;border-bottom:10px solid #f6f7fb;position:relative}.switch-btns[data-v-87ffcada]:before{content:" ";height:1px;background:#e8e8e8;position:absolute;top:0;left:0;-webkit-box-sizing:border-box;box-sizing:border-box;left:1.375rem;right:1.375rem}.switch-btns .btn[data-v-87ffcada]{height:38px;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.switch-btns .btn .tag[data-v-87ffcada]{-webkit-box-flex:0;-ms-flex:0 0 62px;flex:0 0 62px;text-align:center;color:#888;font-size:14px;border-radius:10px;height:22px;line-height:22px;background:#f6f7fb;font-weight:400}.switch-btns .btn .txt[data-v-87ffcada]{margin-left:10px;-webkit-box-flex:1;-ms-flex:1 1 auto;flex:1 1 auto;color:#888;font-size:15px;height:22px;line-height:22px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:400}@media (max-width:769px){.article .breadcrumb[data-v-87ffcada]{padding-top:10px;padding-bottom:10px}}
+
+
+
+
+
+    </style>
+
+    <style type="text/css">
+        .comment-item{list-style-position:inside;width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-bottom:1rem}.comment-item a{border-bottom:none}.comment-item .avatar{width:2.625rem;height:2.625rem;-ms-flex-negative:0;flex-shrink:0;border-radius:50%}.comment-item .info{margin-left:.5rem;-webkit-box-flex:1;-ms-flex-positive:1;flex-grow:1}.comment-item .info .hd{width:100%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .username{color:#888;font-size:15.25px;font-weight:400;line-height:1.2}.comment-item .info .hd .control{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.comment-item .info .hd .control .btn-share{color:#888;font-size:.75rem;margin-right:1rem}.comment-item .info .hd .control .btn-praise{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;-webkit-box-align:center;-ms-flex-align:center;align-items:center;font-size:15.25px;text-decoration:none}.comment-item .info .hd .control .btn-praise i{color:#888;display:inline-block;font-size:.75rem;margin-right:.3rem;margin-top:-.01rem}.comment-item .info .hd .control .btn-praise i.on,.comment-item .info .hd .control .btn-praise span{color:#ff5a05}.comment-item .info .bd{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all;line-height:1.6}.comment-item .info .time{color:#888;font-size:9px;line-height:1}.comment-item .info .reply .reply-hd{font-size:15.25px}.comment-item .info .reply .reply-hd span{margin-left:-12px;color:#888;font-weight:400}.comment-item .info .reply .reply-hd i{color:#ff5a05;font-size:15.25px}.comment-item .info .reply .reply-content{color:#353535;font-size:15.25px;font-weight:400;white-space:normal;word-break:break-all}.comment-item .info .reply .reply-time{color:#888;font-size:9px}
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="app">
+
+
+    <div data-v-87ffcada="" class="article" id="watermark">
+        <p class="x">更多课程请加QQ1046877154，微信loveu_110获取</p>
+        <div data-v-87ffcada="" class="main main-app">
+            <h1 data-v-87ffcada="" class="article-title pd">
+                04讲复杂度分析（下）：浅析最好、最坏、平均、均摊时间复杂度
+            </h1>
+            <div data-v-87ffcada="" class="article-content typo common-content pd"><img data-v-87ffcada=""
+                                                                                        src="https://static001.geekbang.org/resource/image/9e/ee/9efe0a80fac815101324e1d4de1e49ee.jpg">
+
+
+                <div data-v-87ffcada="" id="article-content" class="">
+                    <div class="text">
+                        <p>上一节，我们讲了复杂度的大O表示法和几个分析技巧，还举了一些常见复杂度分析的例子，比如O(1)、O(logn)、O(n)、O(nlogn)复杂度分析。掌握了这些内容，对于复杂度分析这个知识点，你已经可以到及格线了。但是，我想你肯定不会满足于此。</p>
+<p>今天我会继续给你讲四个复杂度分析方面的知识点，<strong><span class="orange">最好情况时间复杂度</span></strong>（best case time complexity）、<strong><span class="orange">最坏情况时间复杂度</span></strong>（worst case time complexity）、<strong><span class="orange">平均情况时间复杂度</span></strong>（average case time complexity）、<strong><span class="orange">均摊时间复杂度</span></strong>（amortized time complexity）。如果这几个概念你都能掌握，那对你来说，复杂度分析这部分内容就没什么大问题了。</p>
+<h2>最好、最坏情况时间复杂度</h2>
+<p>上一节我举的分析复杂度的例子都很简单，今天我们来看一个稍微复杂的。你可以用我上节教你的分析技巧，自己先试着分析一下这段代码的时间复杂度。</p>
+<pre><code>// n表示数组array的长度
+int find(int[] array, int n, int x) {
+  int i = 0;
+  int pos = -1;
+  for (; i &lt; n; ++i) {
+    if (array[i] == x) pos = i;
+  }
+  return pos;
+}
+</code></pre>
+<p>你应该可以看出来，这段代码要实现的功能是，在一个无序的数组（array）中，查找变量x出现的位置。如果没有找到，就返回-1。按照上节课讲的分析方法，这段代码的复杂度是O(n)，其中，n代表数组的长度。</p><!-- [[[read_end]]] -->
+<p>我们在数组中查找一个数据，并不需要每次都把整个数组都遍历一遍，因为有可能中途找到就可以提前结束循环了。但是，这段代码写得不够高效。我们可以这样优化一下这段查找代码。</p>
+<pre><code>// n表示数组array的长度
+int find(int[] array, int n, int x) {
+  int i = 0;
+  int pos = -1;
+  for (; i &lt; n; ++i) {
+    if (array[i] == x) {
+       pos = i;
+       break;
+    }
+  }
+  return pos;
+}
+</code></pre>
+<p>这个时候，问题就来了。我们优化完之后，这段代码的时间复杂度还是O(n)吗？很显然，咱们上一节讲的分析方法，解决不了这个问题。</p>
+<p>因为，要查找的变量x可能出现在数组的任意位置。如果数组中第一个元素正好是要查找的变量x，那就不需要继续遍历剩下的n-1个数据了，那时间复杂度就是O(1)。但如果数组中不存在变量x，那我们就需要把整个数组都遍历一遍，时间复杂度就成了O(n)。所以，不同的情况下，这段代码的时间复杂度是不一样的。</p>
+<p>为了表示代码在不同情况下的不同时间复杂度，我们需要引入三个概念：最好情况时间复杂度、最坏情况时间复杂度和平均情况时间复杂度。</p>
+<p>顾名思义，<strong>最好情况时间复杂度就是，在最理想的情况下，执行这段代码的时间复杂度</strong>。就像我们刚刚讲到的，在最理想的情况下，要查找的变量x正好是数组的第一个元素，这个时候对应的时间复杂度就是最好情况时间复杂度。</p>
+<p>同理，<strong>最坏情况时间复杂度就是，在最糟糕的情况下，执行这段代码的时间复杂度</strong>。就像刚举的那个例子，如果数组中没有要查找的变量x，我们需要把整个数组都遍历一遍才行，所以这种最糟糕情况下对应的时间复杂度就是最坏情况时间复杂度。</p>
+<h2>平均情况时间复杂度</h2>
+<p>我们都知道，最好情况时间复杂度和最坏情况时间复杂度对应的都是极端情况下的代码复杂度，发生的概率其实并不大。为了更好地表示平均情况下的复杂度，我们需要引入另一个概念：平均情况时间复杂度，后面我简称为平均时间复杂度。</p>
+<p>平均时间复杂度又该怎么分析呢？我还是借助刚才查找变量x的例子来给你解释。</p>
+<p>要查找的变量x在数组中的位置，有n+1种情况：<strong>在数组的0～n-1位置中</strong>和<strong>不在数组中</strong>。我们把每种情况下，查找需要遍历的元素个数累加起来，然后再除以n+1，就可以得到需要遍历的元素个数的平均值，即：</p>
+<p><img src="https://static001.geekbang.org/resource/image/d8/2f/d889a358b8eccc5bbb90fc16e327a22f.jpg" alt="" /></p>
+<p>我们知道，时间复杂度的大O标记法中，可以省略掉系数、低阶、常量，所以，咱们把刚刚这个公式简化之后，得到的平均时间复杂度就是O(n)。</p>
+<p>这个结论虽然是正确的，但是计算过程稍微有点儿问题。究竟是什么问题呢？我们刚讲的这n+1种情况，出现的概率并不是一样的。我带你具体分析一下。（这里要稍微用到一点儿概率论的知识，不过非常简单，你不用担心。）</p>
+<p>我们知道，要查找的变量x，要么在数组里，要么就不在数组里。这两种情况对应的概率统计起来很麻烦，为了方便你理解，我们假设在数组中与不在数组中的概率都为1/2。另外，要查找的数据出现在0～n-1这n个位置的概率也是一样的，为1/n。所以，根据概率乘法法则，要查找的数据出现在0～n-1中任意位置的概率就是1/(2n)。</p>
+<p>因此，前面的推导过程中存在的最大问题就是，没有将各种情况发生的概率考虑进去。如果我们把每种情况发生的概率也考虑进去，那平均时间复杂度的计算过程就变成了这样：</p>
+<p><img src="https://static001.geekbang.org/resource/image/36/7f/36c0aabdac69032f8a43368f5e90c67f.jpg" alt="" /></p>
+<p>这个值就是概率论中的<strong>加权平均值</strong>，也叫作<strong>期望值</strong>，所以平均时间复杂度的全称应该叫<strong>加权平均时间复杂度</strong>或者<strong>期望时间复杂度</strong>。</p>
+<p>引入概率之后，前面那段代码的加权平均值为(3n+1)/4。用大O表示法来表示，去掉系数和常量，这段代码的加权平均时间复杂度仍然是O(n)。</p>
+<p>你可能会说，平均时间复杂度分析好复杂啊，还要涉及概率论的知识。实际上，在大多数情况下，我们并不需要区分最好、最坏、平均情况时间复杂度三种情况。像我们上一节课举的那些例子那样，很多时候，我们使用一个复杂度就可以满足需求了。只有同一块代码在不同的情况下，时间复杂度有量级的差距，我们才会使用这三种复杂度表示法来区分。</p>
+<h2>均摊时间复杂度</h2>
+<p>到此为止，你应该已经掌握了算法复杂度分析的大部分内容了。下面我要给你讲一个更加高级的概念，均摊时间复杂度，以及它对应的分析方法，摊还分析（或者叫平摊分析）。</p>
+<p>均摊时间复杂度，听起来跟平均时间复杂度有点儿像。对于初学者来说，这两个概念确实非常容易弄混。我前面说了，大部分情况下，我们并不需要区分最好、最坏、平均三种复杂度。平均复杂度只在某些特殊情况下才会用到，而均摊时间复杂度应用的场景比它更加特殊、更加有限。</p>
+<p>老规矩，我还是借助一个具体的例子来帮助你理解。（当然，这个例子只是我为了方便讲解想出来的，实际上没人会这么写。）</p>
+<pre><code> // array表示一个长度为n的数组
+ // 代码中的array.length就等于n
+ int[] array = new int[n];
+ int count = 0;
+ 
+ void insert(int val) {
+    if (count == array.length) {
+       int sum = 0;
+       for (int i = 0; i &lt; array.length; ++i) {
+          sum = sum + array[i];
+       }
+       array[0] = sum;
+       count = 1;
+    }
+
+    array[count] = val;
+    ++count;
+ }
+</code></pre>
+<p>我先来解释一下这段代码。这段代码实现了一个往数组中插入数据的功能。当数组满了之后，也就是代码中的count == array.length时，我们用for循环遍历数组求和，并清空数组，将求和之后的sum值放到数组的第一个位置，然后再将新的数据插入。但如果数组一开始就有空闲空间，则直接将数据插入数组。</p>
+<p>那这段代码的时间复杂度是多少呢？你可以先用我们刚讲到的三种时间复杂度的分析方法来分析一下。</p>
+<p>最理想的情况下，数组中有空闲空间，我们只需要将数据插入到数组下标为count的位置就可以了，所以最好情况时间复杂度为O(1)。最坏的情况下，数组中没有空闲空间了，我们需要先做一次数组的遍历求和，然后再将数据插入，所以最坏情况时间复杂度为O(n)。</p>
+<p>那平均时间复杂度是多少呢？答案是O(1)。我们还是可以通过前面讲的概率论的方法来分析。</p>
+<p>假设数组的长度是n，根据数据插入的位置的不同，我们可以分为n种情况，每种情况的时间复杂度是O(1)。除此之外，还有一种“额外”的情况，就是在数组没有空闲空间时插入一个数据，这个时候的时间复杂度是O(n)。而且，这n+1种情况发生的概率一样，都是1/(n+1)。所以，根据加权平均的计算方法，我们求得的平均时间复杂度就是：</p>
+<p><img src="https://static001.geekbang.org/resource/image/6d/ed/6df62366a60336d9de3bc34f488d8bed.jpg" alt="" /></p>
+<p>至此为止，前面的最好、最坏、平均时间复杂度的计算，理解起来应该都没有问题。但是这个例子里的平均复杂度分析其实并不需要这么复杂，不需要引入概率论的知识。这是为什么呢？我们先来对比一下这个insert()的例子和前面那个find()的例子，你就会发现这两者有很大差别。</p>
+<p>首先，find()函数在极端情况下，复杂度才为O(1)。但insert()在大部分情况下，时间复杂度都为O(1)。只有个别情况下，复杂度才比较高，为O(n)。这是insert()<strong>第一个</strong>区别于find()的地方。</p>
+<p>我们再来看<strong>第二个</strong>不同的地方。对于insert()函数来说，O(1)时间复杂度的插入和O(n)时间复杂度的插入，出现的频率是非常有规律的，而且有一定的前后时序关系，一般都是一个O(n)插入之后，紧跟着n-1个O(1)的插入操作，循环往复。</p>
+<p>所以，针对这样一种特殊场景的复杂度分析，我们并不需要像之前讲平均复杂度分析方法那样，找出所有的输入情况及相应的发生概率，然后再计算加权平均值。</p>
+<p>针对这种特殊的场景，我们引入了一种更加简单的分析方法：<strong>摊还分析法</strong>，通过摊还分析得到的时间复杂度我们起了一个名字，叫<strong>均摊时间复杂度</strong>。</p>
+<p>那究竟如何使用摊还分析法来分析算法的均摊时间复杂度呢？</p>
+<p>我们还是继续看在数组中插入数据的这个例子。每一次O(n)的插入操作，都会跟着n-1次O(1)的插入操作，所以把耗时多的那次操作均摊到接下来的n-1次耗时少的操作上，均摊下来，这一组连续的操作的均摊时间复杂度就是O(1)。这就是均摊分析的大致思路。你都理解了吗？</p>
+<p>均摊时间复杂度和摊还分析应用场景比较特殊，所以我们并不会经常用到。为了方便你理解、记忆，我这里简单总结一下它们的应用场景。如果你遇到了，知道是怎么回事儿就行了。</p>
+<p>对一个数据结构进行一组连续操作中，大部分情况下时间复杂度都很低，只有个别情况下时间复杂度比较高，而且这些操作之间存在前后连贯的时序关系，这个时候，我们就可以将这一组操作放在一块儿分析，看是否能将较高时间复杂度那次操作的耗时，平摊到其他那些时间复杂度比较低的操作上。而且，在能够应用均摊时间复杂度分析的场合，一般均摊时间复杂度就等于最好情况时间复杂度。</p>
+<p>尽管很多数据结构和算法书籍都花了很大力气来区分平均时间复杂度和均摊时间复杂度，但其实我个人认为，<strong>均摊时间复杂度就是一种特殊的平均时间复杂度</strong>，我们没必要花太多精力去区分它们。你最应该掌握的是它的分析方法，摊还分析。至于分析出来的结果是叫平均还是叫均摊，这只是个说法，并不重要。</p>
+<h2>内容小结</h2>
+<p>今天我们学习了几个复杂度分析相关的概念，分别有：最好情况时间复杂度、最坏情况时间复杂度、平均情况时间复杂度、均摊时间复杂度。之所以引入这几个复杂度概念，是因为，同一段代码，在不同输入的情况下，复杂度量级有可能是不一样的。</p>
+<p>在引入这几个概念之后，我们可以更加全面地表示一段代码的执行效率。而且，这几个概念理解起来都不难。最好、最坏情况下的时间复杂度分析起来比较简单，但平均、均摊两个复杂度分析相对比较复杂。如果你觉得理解得还不是很深入，不用担心，在后续具体的数据结构和算法学习中，我们可以继续慢慢实践！</p>
+<h2>课后思考</h2>
+<p>我们今天学的几个复杂度分析方法，你都掌握了吗？你可以用今天学习的知识，来分析一下下面这个add()函数的时间复杂度。</p>
+<pre><code>// 全局变量，大小为10的数组array，长度len，下标i。
+int array[] = new int[10]; 
+int len = 10;
+int i = 0;
+
+// 往数组中添加一个元素
+void add(int element) {
+   if (i &gt;= len) { // 数组空间不够了
+     // 重新申请一个2倍大小的数组空间
+     int new_array[] = new int[len*2];
+     // 把原来array数组中的数据依次copy到new_array
+     for (int j = 0; j &lt; len; ++j) {
+       new_array[j] = array[j];
+     }
+     // new_array复制给array，array现在大小就是2倍len了
+     array = new_array;
+     len = 2 * len;
+   }
+   // 将element放到下标为i的位置，下标i加一
+   array[i] = element;
+   ++i;
+}
+</code></pre>
+<p>欢迎留言和我分享，我会第一时间给你反馈。</p>
+<p><img src="https://static001.geekbang.org/resource/image/8e/d3/8e603e3d795fc0ab2698f6f5eabf14d3.jpg" alt="" /></p>
+
+                    </div>
+                </div>
+
+            </div>
+            <div data-v-87ffcada="" class="article-comments pd"><h2 data-v-87ffcada=""><span
+                    data-v-87ffcada="">精选留言</span></h2>
+                <ul data-v-87ffcada="">
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/ab/90/52d85edf.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Alvin</span>
+                            </div>
+                            <div class="bd">老师讲的很好，练习题最好是O(1)，最差是O(n), 均摊是O(1)。<br><br>看到好多人纠结于清空数组的问题: 对于可反复读写的存储空间，使用者认为它是空的它就是空的。如果你定义清空是全部重写为0或者某个值，那也可以！但是老师举的例子完全没必要啊！写某个值和写任意值在这里有区别吗，使用值只关心要存的新值！所以老师的例子，清空把下标指到第一个位置就可以了！ <br></div>
+                            <span class="time">2018-09-28 09:56</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">嗯嗯 是的 多谢你。同学们帮把这一条顶上去吧 可以让其他同学都看看</p>
+                                <p class="reply-time">2018-09-28 10:07</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/7b/c1/22fbcab2.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">阿杜S考特</span>
+                            </div>
+                            <div class="bd">当i &lt; len时, 即 i = 0,1,2,...,n-1的时候，for循环不走，所以这n次的时间复杂度都是O(1);<br>当i &gt;= len时, 即 i = n的时候，for循环进行数组的copy，所以只有这1次的时间复杂度是O(n);<br>由此可知:<br>该算法的最好情况时间复杂度(best case time complexity)为O(1);<br>最坏情况时间复杂度(worst case time complexity)为O(n);<br>平均情况时间复杂度(average case time complexity),<br>第一种计算方式: (1+1+...+1+n)&#47;(n+1) = 2n&#47;(n+1) 【注: 式子中1+1+...+1中有n个1】,所以平均复杂度为O(1);<br>第二种计算方式(加权平均法，又称期望): 1*(1&#47;n+1)+1*(1&#47;n+1)+...+1*(1&#47;n+1)+n*(1&#47;(n+1))=1，所以加权平均时间复杂度为O(1);<br>第三种计算方式(均摊时间复杂度): 前n个操作复杂度都是O(1)，第n+1次操作的复杂度是O(n)，所以把最后一次的复杂度分摊到前n次上，那么均摊下来每次操作的复杂度为O(1) <br></div>
+                            <span class="time">2018-09-28 07:54</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/fb/93/f19a5364.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">姜威</span>
+                            </div>
+                            <div class="bd">总结<br><br>一、复杂度分析的4个概念<br>1.最坏情况时间复杂度：代码在最理想情况下执行的时间复杂度。<br>2.最好情况时间复杂度：代码在最坏情况下执行的时间复杂度。<br>3.平均时间复杂度：用代码在所有情况下执行的次数的加权平均值表示。<br>4.均摊时间复杂度：在代码执行的所有复杂度情况中绝大部分是低级别的复杂度，个别情况是高级别复杂度且发生具有时序关系时，可以将个别高级别复杂度均摊到低级别复杂度上。基本上均摊结果就等于低级别复杂度。<br><br>二、为什么要引入这4个概念？<br>1.同一段代码在不同情况下时间复杂度会出现量级差异，为了更全面，更准确的描述代码的时间复杂度，所以引入这4个概念。<br>2.代码复杂度在不同情况下出现量级差别时才需要区别这四种复杂度。大多数情况下，是不需要区别分析它们的。<br><br>三、如何分析平均、均摊时间复杂度？<br>1.平均时间复杂度<br>代码在不同情况下复杂度出现量级差别，则用代码所有可能情况下执行次数的加权平均值表示。<br>2.均摊时间复杂度<br>两个条件满足时使用：1）代码在绝大多数情况下是低级别复杂度，只有极少数情况是高级别复杂度；2）低级别和高级别复杂度出现具有时序规律。均摊结果一般都等于低级别复杂度。 <br></div>
+                            <span class="time">2018-09-28 07:46</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/f4/3d/ec3d6348.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">小白一只</span>
+                            </div>
+                            <div class="bd">最好是O(1),最坏是O(n),平均平摊是O(1).<br><br><br>不要纠结add和insert在哪儿被调用了。。。代码都写出来反而不好看。<br><br>个人体会: 平均和平摊基本就是一个概念，平摊是特殊的平均。在分析时间复杂度是O(1)还是O(n)的时候最简单就是凭感觉，，，，，，，，出现O(1)的次数远大于出现O(n)出现的次数，那么平均平摊时间复杂度就是O(1)。。。。 <br></div>
+                            <span class="time">2018-09-29 00:10</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">留言看似很平淡 但透漏着高手的气息。说的没错。高手就是凭感觉👍</p>
+                                <p class="reply-time">2018-09-29 09:43</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/cf/b5/d1ec6a7d.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Stalary</span>
+                            </div>
+                            <div class="bd">递归的时间复杂度怎么算呀 <br></div>
+                            <span class="time">2018-09-28 08:40</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">这个话题有点大 要具体看了 重点应该分析递归调用的次数吧。然后再看每次调用的耗时。综合考虑</p>
+                                <p class="reply-time">2018-09-28 22:07</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/34/cf/0a316b48.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">蝴蝶</span>
+                            </div>
+                            <div class="bd">insert方法中有清空数组吗？抱歉，能指出哪行吗？真不明白😂 <br></div>
+                            <span class="time">2018-09-28 02:21</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">count=1；count被重置为1。之后再插入的数据就会覆盖掉原来的数据。就相当于将原数组清空了。并不需要显示的去清空</p>
+                                <p class="reply-time">2018-09-28 08:28</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/29/92/076e0f61.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Silence</span>
+                            </div>
+                            <div class="bd">老师，加权平均值那个公式是怎么来的，每个的概率都是 1&#47;2n，平均的不应该也是 1&#47;2n 吗？为什么后面成了 2*（1&#47;2n）+3*（1&#47;2n）+.....n*（1&#47;2n）+n*（1&#47;2） <br></div>
+                            <span class="time">2018-09-28 09:18</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/1f/a7/d379ca4f.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">jon</span>
+                            </div>
+                            <div class="bd">看了大家的留言总结的很好，自己把练习题的答案整理了一下与大家分享：<br>1. 最好情况时间复杂度为 O(1)<br>2.最坏情况分析： <br>最坏情况代码执行的次数跟每次数组的长度有关<br>第1次调用insert的执行的次数为 n ,<br>第2次调用insert的执行的次数为 2n ,<br>第3次调用insert的执行的次数为 2^2 * n <br>第k次调用insert的执行的次数为 2^(k-1) * n <br>最坏时间复杂度为 O(n)。<br>3. 平均情况分析<br>当每次遇到最坏情况时数组会进行2倍扩容，原数组被导入新数组，虽然数组的长度变大了，但是插入操作落在的区间的长度是一样的，分别是0~len-1, len~(2len-1),....；<br>插入的情况仍是len+1种：0~len-1和插满之后的O(len)；所以每次插入的概率是：p= 1&#47;len+1，<br>最后求出加权平均时间复杂度为 1*p + 2*p+ ▪▪▪ + len*p + len * p = O(1) ; <br>4. 均摊时间复杂度 O(1)<br>而均摊复杂度由于每次O(len)的出现都跟着len次O(1)，是前后连贯的，因而将O(len)平摊到前len次上，得出平摊复杂度是O(1) <br></div>
+                            <span class="time">2018-10-01 14:08</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍</p>
+                                <p class="reply-time">2018-10-01 21:45</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/a0/cb/aab3b3e7.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">张三丰</span>
+                            </div>
+                            <div class="bd">1+2+3....+n+n  ／ n+1  = n(n+3)&#47;2(n+1)  老师这个公式怎么推导出来的   能一步步展示下吗 <br></div>
+                            <span class="time">2018-09-29 17:38</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">公式是求平均比对多少个数组元素才能找到x。如果x再第一个位置，那需要1次比对，如果再第二个位置，就需要比对2次，一次类推，如果在第n个位置，就需要比对n次。如果不在数组中，也需要比对n次。所有的次数之和除以n+1中情况，就是平均比对元素个数。</p>
+                                <p class="reply-time">2018-09-29 18:56</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="http://thirdwx.qlogo.cn/mmopen/vi_32/sU18jltmXALwsGt5FYeEaMa7SmIMAkbNDgnYQ8xgjCLfj4uFCSEcNh5h7fEYdHwkLfJBP80cRjbX8vvjAAvXMw/132" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">leo</span>
+                            </div>
+                            <div class="bd">画的前两节思维导图：<br>https:&#47;&#47;share.weiyun.com&#47;5D2VFqS <br></div>
+                            <span class="time">2018-09-29 11:13</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">👍</p>
+                                <p class="reply-time">2018-09-29 16:08</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">ppingfann</span>
+                            </div>
+                            <div class="bd">课后题的最坏时间复杂度不应该是O(1)吗？按照上一节讲的，循环的次数如果是有限次，就算数量极大，那么也应该是O(1)不是吗？<br>如果答案如大家所说的是O(n)，那么原题的len=10这个初始条件就应该改写为len=n。 <br></div>
+                            <span class="time">2018-09-28 13:40</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">因为len并不是个确定量 初始值是10而已</p>
+                                <p class="reply-time">2018-09-28 14:34</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/28/4f/a094d08a.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">王锦啊</span>
+                            </div>
+                            <div class="bd">讲的真好！最好情况时间复杂度、最坏情况时间复杂度、平均情况时间复杂度、均摊时间复杂度。这几个复杂度概念，一下子都明白了。期待后面分析具体的算法！ <br></div>
+                            <span class="time">2018-09-28 00:51</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/11/f0/5b/a1250859.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">赤身马可</span>
+                            </div>
+                            <div class="bd">报告老师，我好像走错了教室。<br><br>我是一个文科转行过来的菜鸟，刚刚学完Python，基本搞懂了“遍历”、“循环”、“判断”等概念。<br><br>您开篇讲的课，我都基本都能明白，也提起了兴趣和信心，准备好好跟您学习。但这两次课听完，我又晕菜了。<br><br>想请问一下，如果听不太懂(也可以去掉“太”)，需要补哪些课？您能告诉我进入您课程的坡道和垫脚石么？有没有稍低一点年级的资料，让我可以补补课呢？<br><br>还请抽时间回答，谢谢。 <br></div>
+                            <span class="time">2018-09-29 09:32</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">嗯嗯，同学你好.<br><br> 你说了刚学完python，可能代码还没写熟练，所以我建议把python书上的所有实例代码都自己敲一遍，默写一遍。学编程，光看不写肯定是不行的。<br><br>等你python代码写熟练了，你可以再开始学我这个专栏。 因为你没有数据结构和算法的基础，所以我建议，配合着《大话数据结构》《算法图解》两本书一块来学习。<br><br>学习这个专栏的过程中，你可以把我讲到的数据结构和算法都用python代码实现一遍，如果实现不了，可以参照我放在Github上的代码，自己看懂之后，默写一遍。这个步骤非常锻炼你的编程能力，不要忽视！<br><br>在学习专栏的过程中，不要一觉得看不懂就放弃，师傅领进门，修行靠个人。这里没有葵花宝典一样的捷径。学习还要靠自己。看不懂？那就自己多百度一下，看不懂也可以问问你同学、同事、学长，用一个星期来看一篇文章，狠下心来，别怕麻烦，不会学不会的。<br><br>还有很多时候看不懂，你就硬着头皮看，都看完一遍，就会有感觉。之后再等有空了，再来看一遍，慢慢的都懂了。这门课很难，对于初学者来说，应该是计算机里最难的之一了，所以不要期望轻松就学会，这是不现实的。<br></p>
+                                <p class="reply-time">2018-09-29 19:19</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/0f/63/96/abb7bfe3.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">极客人</span>
+                            </div>
+                            <div class="bd">第二个例子中，为什么是n+1次遍历？ <br></div>
+                            <span class="time">2018-09-28 08:31</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/34/cf/0a316b48.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">蝴蝶</span>
+                            </div>
+                            <div class="bd">我算了下，最小是O(1)，最大是O(n)，平均和分摊都是O(1),对吗？😀 <br></div>
+                            <span class="time">2018-09-28 02:28</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">是的 分析正确。不过我们一般情况下平均 均摊说一个就好了</p>
+                                <p class="reply-time">2018-09-28 08:22</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="http://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTKLZWeLLn4WxrMen2icfJVXL86tlicJIe7DqIdpFvCTvr9mUY6WwmnINzlu6yrfe3rK1cicg3sL6ibDxw/132" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">木心</span>
+                            </div>
+                            <div class="bd">老师，我是跨行学习Python。希望每次进步一点～早安(^O^)! <br></div>
+                            <span class="time">2018-09-28 06:57</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/12/d2/52/c1665be6.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">Kealina.</span>
+                            </div>
+                            <div class="bd">调皮一下，还请老师来衡量下这例子恰当不。<br><br>举个栗子🌰：<br>今天你准备去老王家拜访下，可惜老王的爱人叫他去打个酱油，她告诉你说她限时n分钟🕒给他去买。那么你想着以他家到楼下小卖部来回最多一分钟，那么 “最好的情况”就是你只用等他一分钟。那么也有可能遇到突发情况，比如说电梯人多吖，路上摔了一胶，天知道他去干了什么，用了n分钟，没办法👐，主上有令，n分钟限时，那这就是“最坏的情况”。难点，平均时间复杂度 就是他有可能是第1.2.3...n，中的某个分钟回来，那平均就是1+2+3+...n&#47;n，把 所有可能出现的情况的时间复杂度 相加除以 情况数 。均摊的话就是把花时间多的分给花时间少的，得到一个中间值，所以说这就会和平均混淆，个人觉得主要还是概念不同。假如n是10分钟，那么9分钟分4分钟到1分钟那，8分3给2...，那均摊下来就是5分钟.编不下去了🤦🏼‍♀️ <br></div>
+                            <span class="time">2018-10-04 14:17</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">哈哈，写的太好了。留言区卧虎藏龙啊~</p>
+                                <p class="reply-time">2018-10-04 21:37</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/10/37/d0/d60767cf.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">geektime learn</span>
+                            </div>
+                            <div class="bd">最大的疑惑就是，insert()方法和add()方法是如何被调用的？？？ <br></div>
+                            <span class="time">2018-09-28 11:51</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/1b/4b/5c04e06c.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">王婵</span>
+                            </div>
+                            <div class="bd">和均摊那个例子的各种复杂度都一样 <br></div>
+                            <span class="time">2018-09-28 07:07</span>
+                            
+                        </div>
+                    </li>
+                    
+                    <li data-v-87ffcada="" class="comment-item"><img
+                            src="https://static001.geekbang.org/account/avatar/00/13/17/88/be4fe19e.jpg" class="avatar">
+                        <div class="info">
+                            <div class="hd"><span class="username">molybdenum</span>
+                            </div>
+                            <div class="bd">答案与add例子相同，<br>至于大家纠结的清空问题，可以看做是标记清除，在同一地址空间上再写上新的值即可，没有必要硬删除，再开辟空间，或者名义上重置成某个数，直接用新的值覆盖即可 <br></div>
+                            <span class="time">2018-09-29 01:01</span>
+                            
+                            <div class="reply">
+                                <div class="reply-hd"><span>作者回复</span></div>
+                                <p class="reply-content">是的 因为有些编程基础比较差的同学 他可能之前学清空就是一个一个的删 或者置为0</p>
+                                <p class="reply-time">2018-09-29 09:41</p>
+                            </div>
+                            
+                        </div>
+                    </li>
+                    
+
+
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
