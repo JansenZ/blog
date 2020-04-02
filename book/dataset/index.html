@@ -25,107 +25,6 @@
 <meta http-equiv="Cache-Control" content="no-siteapp">
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
-
-
-
-
-
-
-
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
-
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
-
-
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
-
-
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
-
-
-
-
-
-  <meta name="keywords" content="Hexo, NexT">
-
-
-
-
-
-
-
-
-
-
-<meta name="description" content="为什么要学习数据结构和算法 如何抓住重点，系统高效地学习数据结构与算法 复杂度分析（上）：如何分析、统计算法的执行效率和资源消耗 复杂度分析（下）：浅析最好、最坏、平均、均摊时间复杂度 数组：为什么很多编程语言中数组都从0开始编号 链表（上）：如何实现LRU缓存淘汰算法 链表（下）：如何轻松写出正确的链表代码 栈：如何实现浏览器的前进和后退功能 队列：队列在线程池等有限资源池中的应用 递归：如何">
-<meta property="og:type" content="article">
-<meta property="og:title" content="数据结构与算法之美">
-<meta property="og:url" content="http://yoursite.com/2019/05/24/数据结构与算法之美/index.html">
-<meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="为什么要学习数据结构和算法 如何抓住重点，系统高效地学习数据结构与算法 复杂度分析（上）：如何分析、统计算法的执行效率和资源消耗 复杂度分析（下）：浅析最好、最坏、平均、均摊时间复杂度 数组：为什么很多编程语言中数组都从0开始编号 链表（上）：如何实现LRU缓存淘汰算法 链表（下）：如何轻松写出正确的链表代码 栈：如何实现浏览器的前进和后退功能 队列：队列在线程池等有限资源池中的应用 递归：如何">
-<meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-05-24T03:10:07.150Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="数据结构与算法之美">
-<meta name="twitter:description" content="为什么要学习数据结构和算法 如何抓住重点，系统高效地学习数据结构与算法 复杂度分析（上）：如何分析、统计算法的执行效率和资源消耗 复杂度分析（下）：浅析最好、最坏、平均、均摊时间复杂度 数组：为什么很多编程语言中数组都从0开始编号 链表（上）：如何实现LRU缓存淘汰算法 链表（下）：如何轻松写出正确的链表代码 栈：如何实现浏览器的前进和后退功能 队列：队列在线程池等有限资源池中的应用 递归：如何">
-
-
-
-<script type="text/javascript" id="hexo.configurations">
-  var NexT = window.NexT || {};
-  var CONFIG = {
-    root: '/',
-    scheme: 'Muse',
-    version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
-    fancybox: true,
-    tabs: true,
-    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
-    duoshuo: {
-      userId: '0',
-      author: 'Author'
-    },
-    algolia: {
-      applicationID: '',
-      apiKey: '',
-      indexName: '',
-      hits: {"per_page":10},
-      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
-    }
-  };
-</script>
-
-
-
-  <link rel="canonical" href="http://yoursite.com/2019/05/24/数据结构与算法之美/">
-
-
-
-
-
   <title>数据结构与算法之美 | Hexo</title>
   
 
@@ -138,551 +37,66 @@
 
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="default">
-
-  
-  
-    
-  
-
-  <div class="container sidebar-position-left page-post-detail">
-    <div class="headband"></div>
-
-    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-wrapper">
-  <div class="site-meta ">
-    
-
-    <div class="custom-logo-site-title">
-      <a href="/" class="brand" rel="start">
-        <span class="logo-line-before"><i></i></span>
-        <span class="site-title">Hexo</span>
-        <span class="logo-line-after"><i></i></span>
-      </a>
-    </div>
-      
-        <p class="site-subtitle"></p>
-      
-  </div>
-
-  <div class="site-nav-toggle">
-    <button>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-      <span class="btn-bar"></span>
-    </button>
-  </div>
-</div>
-
-<nav class="site-nav">
-  
-
-  
-    <ul id="menu" class="menu">
-      
-        
-        <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
-            
-            Home
-          </a>
-        </li>
-      
-        
-        <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
-            
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
-            
-            Archives
-          </a>
-        </li>
-      
-
-      
-    </ul>
-  
-
-  
-</nav>
-
-
-
- </div>
-    </header>
-
-    <main id="main" class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          <div id="content" class="content">
-            
-
-  <div id="posts" class="posts-expand">
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/24/数据结构与算法之美/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content>
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hexo">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">数据结构与算法之美</h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-24T10:44:56+08:00">
-                2019-05-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        <ol>
-<li><a href="01.html">为什么要学习数据结构和算法</a></li>
-<li><a href="02.html">如何抓住重点，系统高效地学习数据结构与算法</a></li>
-<li><a href="03.html">复杂度分析（上）：如何分析、统计算法的执行效率和资源消耗</a></li>
-<li><a href="04.html">复杂度分析（下）：浅析最好、最坏、平均、均摊时间复杂度</a></li>
-<li><a href="05.html">数组：为什么很多编程语言中数组都从0开始编号</a></li>
-<li><a href="06.html">链表（上）：如何实现LRU缓存淘汰算法</a></li>
-<li><a href="07.html">链表（下）：如何轻松写出正确的链表代码</a></li>
-<li><a href="08.html">栈：如何实现浏览器的前进和后退功能</a></li>
-<li><a href="09.html">队列：队列在线程池等有限资源池中的应用</a></li>
-<li><a href="10.html">递归：如何用三行代码找到“最终推荐人”</a></li>
-<li><a href="11.html">排序（上）：为什么插入排序比冒泡排序更受欢迎</a></li>
-<li><a href="12.html">排序（下）：如何用快排思想在O(n)内查找第K大元素</a></li>
-<li><a href="13.html">线性排序：如何根据年龄给100万用户数据排序</a></li>
-<li><a href="14.html">排序优化：如何实现一个通用的、高性能的排序函数</a></li>
-<li><a href="15.html">二分查找（上）：如何用最省内存的方式实现快速查找功能</a></li>
-<li><a href="16.html">二分查找（下）：如何快速定位IP对应的省份地址</a></li>
-<li><a href="17.html">跳表：为什么Redis一定要用跳表来实现有序集合</a></li>
-<li><a href="18.html">散列表（上）：Word文档中的单词拼写检查功能是如何实现的</a></li>
-<li><a href="19.html">散列表（中）：如何打造一个工业级水平的散列表</a></li>
-<li><a href="20.html">散列表（下）：为什么散列表和链表经常会一起使用</a></li>
-<li><a href="21.html">哈希算法（上）：如何防止数据库中的用户信息被脱库</a></li>
-<li><a href="22.html">哈希算法（下）：哈希算法在分布式系统中有哪些应用</a></li>
-<li><a href="23.html">二叉树基础（上）：什么样的二叉树适合用数组来存储</a></li>
-<li><a href="24.html">二叉树基础（下）：有了如此高效的散列表，为什么还需要二叉树</a></li>
-<li><a href="25.html">红黑树（上）：为什么工程中都用红黑树这种二叉树</a></li>
-<li><a href="26.html">红黑树（下）：掌握这些技巧，你也可以实现一个红黑树</a></li>
-<li><a href="27.html">递归树：如何借助树来求解递归算法的时间复杂度</a></li>
-<li><a href="28.html">堆和堆排序：为什么说堆排序没有快速排序快</a></li>
-<li><a href="29.html">堆的应用：如何快速获取到Top10最热门的搜索关键词</a></li>
-<li><a href="30.html">图的表示：如何存储微博、微信等社交网络中的好友关系</a></li>
-<li><a href="31.html">深度和广度优先搜索：如何找出社交网络中的三度好友关系</a></li>
-<li><a href="32.html">字符串匹配基础（上）：如何借助哈希算法实现高效字符串匹配</a></li>
-<li><a href="33.html">字符串匹配基础（中）：如何实现文本编辑器中的查找功能</a></li>
-<li><a href="34.html">字符串匹配基础（下）：如何借助BM算法轻松理解KMP算法</a></li>
-<li><a href="35.html">Trie树：如何实现搜索引擎的搜索关键词提示功能</a></li>
-<li><a href="36.html">AC自动机：如何用多模式串匹配实现敏感词过滤功能</a></li>
-<li><a href="37.html">贪心算法：如何用贪心算法实现Huffman压缩编码</a></li>
-<li><a href="38.html">分治算法：谈一谈大规模计算框架MapReduce中的分治思想</a></li>
-<li><a href="39.html">回溯算法：从电影《蝴蝶效应》中学习回溯算法的核心思想</a></li>
-<li><a href="40.html">初识动态规划：如何巧妙解决“双十一”购物时的凑单问题</a></li>
-<li><a href="41.html">动态规划理论：一篇文章带你彻底搞懂最优子结构、无后效性和重复子问题</a></li>
-<li><a href="42.html">动态规划实战：如何实现搜索引擎中的拼写纠错功能</a></li>
-<li><a href="43.html">拓扑排序：如何确定代码源文件的编译依赖关系</a></li>
-<li><a href="44.html">最短路径：地图软件是如何计算出最优出行路径的</a></li>
-<li><a href="45.html">位图：如何实现网页爬虫中的URL去重功能</a></li>
-<li><a href="46.html">概率统计：如何利用朴素贝叶斯算法过滤垃圾短信</a></li>
-<li><a href="47.html">向量空间：如何实现一个简单的音乐推荐系统</a></li>
-<li><a href="48.html">B 树：MySQL数据库索引是如何实现的</a></li>
-<li><a href="49.html">搜索：如何用A搜索算法实现游戏中的寻路功能</a></li>
-<li><a href="50.html">索引：如何在海量数据中快速查找某个数据</a></li>
-<li><a href="51.html">并行算法：如何利用并行处理提高算法的执行效率</a></li>
-<li><a href="52.html">算法实战（一）：剖析Redis常用数据类型对应的数据结构</a></li>
-<li><a href="53.html">算法实战（二）：剖析搜索引擎背后的经典数据结构和算法</a></li>
-<li><a href="54.html">算法实战（三）：剖析高性能队列Disruptor背后的数据结构和算法</a></li>
-<li><a href="55.html">算法实战（四）：剖析微服务接口鉴权限流背后的数据结构和算法</a></li>
-<li><a href="56.html">算法实战（五）：如何用学过的数据结构和算法实现一个短网址系统</a></li>
-</ol>
-
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-      
-      
-
-      
-        <div class="post-nav">
-          <div class="post-nav-next post-nav-item">
-            
-              <a href="/2019/04/28/机器学习40讲/" rel="next" title="机器学习40讲">
-                <i class="fa fa-chevron-left"></i> 机器学习40讲
-              </a>
-            
-          </div>
-
-          <span class="post-nav-divider"></span>
-
-          <div class="post-nav-prev post-nav-item">
-            
-          </div>
-        </div>
-      
-
-      
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-
-    <div class="post-spread">
-      
-    </div>
-  </div>
-
-
-          </div>
-          
-
-
-          
-
-  
-
-
-
-        </div>
-        
-          
-  
-  <div class="sidebar-toggle">
-    <div class="sidebar-toggle-line-wrap">
-      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
-      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
-    </div>
-  </div>
-
-  <aside id="sidebar" class="sidebar">
-    
-    <div class="sidebar-inner">
-
-      
-
-      
-
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
-        <div class="site-overview">
-          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-            
-              <p class="site-author-name" itemprop="name">John Doe</p>
-              <p class="site-description motion-element" itemprop="description"></p>
-          </div>
-
-          <nav class="site-state motion-element">
-
-            
-              <div class="site-state-item site-state-posts">
-              
-                <a href="/archives/">
-              
-                  <span class="site-state-item-count">6</span>
-                  <span class="site-state-item-name">posts</span>
-                </a>
-              </div>
-            
-
-            
-
-            
-
-          </nav>
-
-          
-
-          
-
-          
-          
-
-          
-          
-
-          
-
-        </div>
-      </section>
-
-      
-
-      
-
-    </div>
-  </aside>
-
-
-        
-      </div>
-    </main>
-
-    <footer id="footer" class="footer">
-      <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
-  <span class="with-love">
-    <i class="fa fa-user"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
-
-  
-</div>
-
-
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
-
-
-
-  <span class="post-meta-divider">|</span>
-
-
-
-  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
-
-
-
-
-        
-
-
-
-
-
-
-
-        
-      </div>
-    </footer>
-
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
-    
-
-    
-
-  </div>
-
-  
-
-<script type="text/javascript">
-  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
-    window.Promise = null;
-  }
-</script>
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
-  
-
-  
-  
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
-  
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
-
-
-
-  
-
-
-  
-
-
-
-
-	
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-  
-
-  
-
-  
-
-  
+<body>
+
+  <ol>
+    <li><a href="01.html">为什么要学习数据结构和算法</a></li>
+    <li><a href="02.html">如何抓住重点，系统高效地学习数据结构与算法</a></li>
+    <li><a href="03.html">复杂度分析（上）：如何分析、统计算法的执行效率和资源消耗</a></li>
+    <li><a href="04.html">复杂度分析（下）：浅析最好、最坏、平均、均摊时间复杂度</a></li>
+    <li><a href="05.html">数组：为什么很多编程语言中数组都从0开始编号</a></li>
+    <li><a href="06.html">链表（上）：如何实现LRU缓存淘汰算法</a></li>
+    <li><a href="07.html">链表（下）：如何轻松写出正确的链表代码</a></li>
+    <li><a href="08.html">栈：如何实现浏览器的前进和后退功能</a></li>
+    <li><a href="09.html">队列：队列在线程池等有限资源池中的应用</a></li>
+    <li><a href="10.html">递归：如何用三行代码找到“最终推荐人”</a></li>
+    <li><a href="11.html">排序（上）：为什么插入排序比冒泡排序更受欢迎</a></li>
+    <li><a href="12.html">排序（下）：如何用快排思想在O(n)内查找第K大元素</a></li>
+    <li><a href="13.html">线性排序：如何根据年龄给100万用户数据排序</a></li>
+    <li><a href="14.html">排序优化：如何实现一个通用的、高性能的排序函数</a></li>
+    <li><a href="15.html">二分查找（上）：如何用最省内存的方式实现快速查找功能</a></li>
+    <li><a href="16.html">二分查找（下）：如何快速定位IP对应的省份地址</a></li>
+    <li><a href="17.html">跳表：为什么Redis一定要用跳表来实现有序集合</a></li>
+    <li><a href="18.html">散列表（上）：Word文档中的单词拼写检查功能是如何实现的</a></li>
+    <li><a href="19.html">散列表（中）：如何打造一个工业级水平的散列表</a></li>
+    <li><a href="20.html">散列表（下）：为什么散列表和链表经常会一起使用</a></li>
+    <li><a href="21.html">哈希算法（上）：如何防止数据库中的用户信息被脱库</a></li>
+    <li><a href="22.html">哈希算法（下）：哈希算法在分布式系统中有哪些应用</a></li>
+    <li><a href="23.html">二叉树基础（上）：什么样的二叉树适合用数组来存储</a></li>
+    <li><a href="24.html">二叉树基础（下）：有了如此高效的散列表，为什么还需要二叉树</a></li>
+    <li><a href="25.html">红黑树（上）：为什么工程中都用红黑树这种二叉树</a></li>
+    <li><a href="26.html">红黑树（下）：掌握这些技巧，你也可以实现一个红黑树</a></li>
+    <li><a href="27.html">递归树：如何借助树来求解递归算法的时间复杂度</a></li>
+    <li><a href="28.html">堆和堆排序：为什么说堆排序没有快速排序快</a></li>
+    <li><a href="29.html">堆的应用：如何快速获取到Top10最热门的搜索关键词</a></li>
+    <li><a href="30.html">图的表示：如何存储微博、微信等社交网络中的好友关系</a></li>
+    <li><a href="31.html">深度和广度优先搜索：如何找出社交网络中的三度好友关系</a></li>
+    <li><a href="32.html">字符串匹配基础（上）：如何借助哈希算法实现高效字符串匹配</a></li>
+    <li><a href="33.html">字符串匹配基础（中）：如何实现文本编辑器中的查找功能</a></li>
+    <li><a href="34.html">字符串匹配基础（下）：如何借助BM算法轻松理解KMP算法</a></li>
+    <li><a href="35.html">Trie树：如何实现搜索引擎的搜索关键词提示功能</a></li>
+    <li><a href="36.html">AC自动机：如何用多模式串匹配实现敏感词过滤功能</a></li>
+    <li><a href="37.html">贪心算法：如何用贪心算法实现Huffman压缩编码</a></li>
+    <li><a href="38.html">分治算法：谈一谈大规模计算框架MapReduce中的分治思想</a></li>
+    <li><a href="39.html">回溯算法：从电影《蝴蝶效应》中学习回溯算法的核心思想</a></li>
+    <li><a href="40.html">初识动态规划：如何巧妙解决“双十一”购物时的凑单问题</a></li>
+    <li><a href="41.html">动态规划理论：一篇文章带你彻底搞懂最优子结构、无后效性和重复子问题</a></li>
+    <li><a href="42.html">动态规划实战：如何实现搜索引擎中的拼写纠错功能</a></li>
+    <li><a href="43.html">拓扑排序：如何确定代码源文件的编译依赖关系</a></li>
+    <li><a href="44.html">最短路径：地图软件是如何计算出最优出行路径的</a></li>
+    <li><a href="45.html">位图：如何实现网页爬虫中的URL去重功能</a></li>
+    <li><a href="46.html">概率统计：如何利用朴素贝叶斯算法过滤垃圾短信</a></li>
+    <li><a href="47.html">向量空间：如何实现一个简单的音乐推荐系统</a></li>
+    <li><a href="48.html">B 树：MySQL数据库索引是如何实现的</a></li>
+    <li><a href="49.html">搜索：如何用A搜索算法实现游戏中的寻路功能</a></li>
+    <li><a href="50.html">索引：如何在海量数据中快速查找某个数据</a></li>
+    <li><a href="51.html">并行算法：如何利用并行处理提高算法的执行效率</a></li>
+    <li><a href="52.html">算法实战（一）：剖析Redis常用数据类型对应的数据结构</a></li>
+    <li><a href="53.html">算法实战（二）：剖析搜索引擎背后的经典数据结构和算法</a></li>
+    <li><a href="54.html">算法实战（三）：剖析高性能队列Disruptor背后的数据结构和算法</a></li>
+    <li><a href="55.html">算法实战（四）：剖析微服务接口鉴权限流背后的数据结构和算法</a></li>
+    <li><a href="56.html">算法实战（五）：如何用学过的数据结构和算法实现一个短网址系统</a></li>
+    </ol>
 
 </body>
 </html>
