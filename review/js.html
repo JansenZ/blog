@@ -1,0 +1,869 @@
+
+<!DOCTYPE html><html><head><title>ES6</title><meta charset='utf-8'><meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" /><link href='https://cdn.maxiang.io/res-min/themes/marxico.css' rel='stylesheet'><style>* {word-break: break-all;}</style></head><body><div id='preview-contents' class='note-content'>
+                        
+                    
+
+
+
+    <h3 id="es6">ES6</h3>
+    
+    <ol><li rel="1"><p>ES6中暂时性死区TDZ是什么？</p>
+    
+    <p>暂时性死区就是说如果函数外面写了一个let a = 1; <br>
+    结果里面用的时候，先用了a，又声明了let a，会报错，因为它会形成一个封闭作用域。 <br>
+    而且，用了let的话，就代表typeof不是绝对安全的了。</p></li>
+    <li rel="2"><p>BABEL是怎么编译let的？</p>
+    
+    <p>如果对应变量没有相关性的话，会直接给变成var，但是如果有类似于多个相同的，不同地方引用的话，就是改变量名，使内外层的变量名称不一样。</p></li>
+    <li rel="3"><p>什么是标签模板？模板字符串函数的参数你知道是啥吗？</p>
+    
+    <p>标签模板就是在模板字符串前面加个函数，然后通过函数处理这个模板字符串。</p>
+    
+    <p>函数里的参数第一个就是非变量的数组合集，后面的参数是…，代表各个参数。</p>
+    
+    <p>实际上这个功能意义我觉得不大，因为进了函数处理后，我要先把它拼接起来。那我为什么不直接把整个字符串拿到后在用函数处理一下呢？</p></li>
+    <li rel="4"><p>weakmap用过吗？ 知道它的使用场景吗？</p>
+    
+    <p>weakmap就是弱引用，这样对于gc会更友好，而且只支持对象，使用场景的话，比如写一个偏向公共的类</p>
+    
+    <p>可以利用它实现私有变量。xx = new WeakMap(); 比如在constructor里，把传进来的值set进this里， 然后写个get方法，那么这些props只能通过get获取了。</p></li>
+    <li rel="5"><p>class中把方法写constructor里和写外面区别是什么？</p>
+    
+    <p>写在外面就是它的原型函数 <br>
+    写在里面就是它的内置函数</p></li>
+    <li rel="6"><p>私有变量的实现方式</p>
+    
+    <ul>
+    <li><p>最新的提案可以直接前面写#，这样就成为了私有变量</p></li>
+    <li><p>或者使用weakmap，把this set进去</p></li>
+    <li><p>或者使用Symbol,这样外面根本无法使用。</p></li>
+    <li><p>或者是原来的闭包的方式</p></li></ul></li>
+    <li rel="7"><p>装饰器</p>
+    
+    <p>装饰器的话，从函数的角度来看，如果只是作用在class 组件上的话，其实和HOC没多少区别，</p>
+    
+    <ul>
+    <li><p>作用在class组件的话，它的第一个参数target指向的就是这个类组件，可以利用这个来写controller()</p></li>
+    <li><p>作用在类下的方法的话，它的第一个参数是类的原型，第二个参数就是方法名，第三个参数就是一个description对象，下面会有枚举，value,可写这样的属性.</p></li>
+    <li><p>作用在类下的get name() {} 这样的话，第三个参数就不会有value这样的东西了。第三个参数会有set get。这里就说到了数据描述符和存储描述符互斥的问题了。</p></li>
+    <li><p>如果直接作用在一个属性上的话，是没有第三个参数的，因为那个属性不是在原型本身上的，是在实例化的时候才会有，而装饰器是在编译阶段就执行的，所以也就没有第三个参数。 <br>
+    具体所有类型的我都写在了decoratorTest上了，可以去看。</p></li></ul></li>
+    <li rel="8"><p>HOC和renderprops</p>
+    
+    <p>HOC和renderprops其实都是属于增强组件</p>
+    
+    <p>HOC就是接受一个组件作为参数，返回一个新的组件。应用的话，就举例子，比如利用HOC，结合hook和context，自己写一个connect函数。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs javascript"><div class="hljs-line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">hoc</span>(<span class="hljs-params">params</span>) </span>{
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">component</span>) </span>{
+    </div><div class="hljs-line">        <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">props</span>) </span>{
+    </div><div class="hljs-line">            <span class="hljs-keyword">return</span>(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">Component</span> /&gt;</span>)</span>
+    </div><div class="hljs-line"><span class="xml">        }</span>
+    </div><div class="hljs-line"><span class="xml">    }</span>
+    </div><div class="hljs-line"><span class="xml">}</span>
+    </div></code></pre>
+    
+    <p>上述的就是接受一个参数，然后返回一个hoc函数，hoc然后接受一个组件，然后返回一个新组件。</p>
+    
+    <p>如果好多页面都有一样的代码，比如请求同一个方法，constructor初始化一个数据的话，可以用HOC包一个新组件。这样复用代码。</p>
+    
+    <p>HOC的好处有</p>
+    
+    <ul>
+    <li><p>支持ES6，光这一项就战胜了mixins</p></li>
+    <li><p>复用性强，HOC是纯函数且返回值仍为组件，在使用时可以多层嵌套，在不同情境下使用特定的HOC组合也方便调试。</p></li>
+    <li><p>同样由于HOC是纯函数，支持传入多个参数，增强了其适用范围。 <br>
+    缺点是</p></li>
+    <li><p>当有多个HOC一同使用时，无法直接判断子组件的props是哪个HOC负责传递的。在里面的组件只接受props。也不知道这是几级传下来的。</p></li>
+    <li><p>嵌套比较深，阅读起来会有一点障碍 <br>
+    render Props</p></li></ul>
+    
+    <p>就是把组件当成props，直接传给子组件，这样就有点像依赖反转，逻辑抽象在外面，然后根据不同的情况，传不同的组件下去。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs dust"><div class="hljs-line"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ProductData</span> <span class="hljs-attr">render</span>=</span></span><span class="hljs-template-variable">{({ products }</span><span class="xml"><span class="hljs-tag">) =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">ProductList</span> <span class="hljs-attr">products</span>=</span></span><span class="hljs-template-variable">{products}</span><span class="xml"><span class="hljs-tag"> /&gt;</span>} /&gt;</span>
+    </div><div class="hljs-line"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ProductData</span></span></span>
+    </div><div class="hljs-line"><span class="xml">    <span class="hljs-attr">render</span>=</span><span class="hljs-template-variable">{({ products }</span><span class="xml"><span class="hljs-tag">) =&gt;</span> <span class="hljs-tag">&lt;<span class="hljs-name">ProductTable</span> <span class="hljs-attr">products</span>=</span></span><span class="hljs-template-variable">{products}</span><span class="xml"><span class="hljs-tag"> /&gt;</span>}</span>
+    </div><div class="hljs-line"><span class="xml">/&gt;</span>
+    </div><div class="hljs-line"><span class="xml"><span class="hljs-tag">&lt;<span class="hljs-name">ProductData</span> <span class="hljs-attr">render</span>=</span></span><span class="hljs-template-variable">{({ products }</span><span class="xml"><span class="hljs-tag">) =&gt;</span> (</span>
+    </div><div class="hljs-line"><span class="xml">    <span class="hljs-tag">&lt;<span class="hljs-name">h1</span>&gt;</span></span>
+    </div><div class="hljs-line"><span class="xml">        Number of Products:</span>
+    </div><div class="hljs-line"><span class="xml">        <span class="hljs-tag">&lt;<span class="hljs-name">strong</span>&gt;</span></span><span class="hljs-template-variable">{products.length}</span><span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-name">strong</span>&gt;</span></span>
+    </div><div class="hljs-line"><span class="xml">    <span class="hljs-tag">&lt;/<span class="hljs-name">h1</span>&gt;</span></span>
+    </div><div class="hljs-line"><span class="xml">)} /&gt;</span>
+    </div></code></pre>
+    
+    <p>然后再ProductData组件的render方法里，render() { this.props.render(this.state.data) }</p></li>
+    <li rel="9"><p>箭头函数和普通函数的区别</p>
+    
+    <ul>
+    <li><p>箭头函数的this是透传的</p></li>
+    <li><p>箭头函数不能作为构造函数，所以就不能用new</p></li>
+    <li><p>箭头函数不能用arguments，只能用…args</p></li>
+    <li><p>箭头函数没有原型属性</p></li>
+    <li><p>箭头函数不能通过apply.call.bind改变this。</p></li></ul></li>
+    </ol>
+    
+    
+    
+    <h3 id="js">JS</h3>
+    
+    <ol><li rel="1"><p>reduce方法知道吗？</p>
+    
+    <p>用于处理数组，比较好用。可以用来拼接字符串，求和,数组降维以及其他一些需要的数据操作</p>
+    
+    <p><code>reduce((accumulator, currentValue, currentIndex, array))</code></p>
+    
+    <p>第一个大参数里的 第一个参数是聚合，第二个是当前的值，第三个是当前的index，第四个是原始array。</p>
+    
+    <p>第二个参数是初始值，如果没给的话，默认使用第一个值，这也是为什么如果空数组reduce的时候，如果不给初始值会报错的原因。</p></li>
+    <li rel="3"><p>array.some, array.every 方法里只写个Array.isArray是啥意思</p>
+    
+    <p>array.some里本来就是写一个函数用的，会把每一个参数自动投放进去，Array.isArray不正好是一个函数吗？</p></li>
+    <li rel="4"><p>你知道迭代器吗？如何自己写一个简单的迭代器</p>
+    
+    <p>迭代器就是一个拥有next方法的对象，每次调用会返回一个结果对象，该对象上有两个属性，<code>value</code>和<code>done</code> <br>
+    自己实现一个就是</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs actionscript"><div class="hljs-line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">createIterator</span><span class="hljs-params">(items)</span> </span>{
+    </div><div class="hljs-line">    <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>;
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> {
+    </div><div class="hljs-line">        next: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    </div><div class="hljs-line">            <span class="hljs-keyword">var</span> done = i &gt;= items.length;
+    </div><div class="hljs-line">            <span class="hljs-keyword">var</span> value = !done ? items[i++] : <span class="hljs-literal">undefined</span>;
+    </div><div class="hljs-line"><wbr>
+    </div><div class="hljs-line">            <span class="hljs-keyword">return</span> {
+    </div><div class="hljs-line">                done: done,
+    </div><div class="hljs-line">                value: value
+    </div><div class="hljs-line">            };
+    </div><div class="hljs-line">        }
+    </div><div class="hljs-line">    };
+    </div><div class="hljs-line">}
+    </div></code></pre></li>
+    <li rel="6"><p>for of, for in 的区别</p>
+    
+    <p>for of就是可以遍历拥有iterator属性的对象或数组, <br>
+    他们的原型上都会有一个Symbol.iterator的属性, <br>
+    typeof 它是一个函数。</p>
+    
+    <p>所以如果自己想让对象也能for of的话，可以自己写一个</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs javascript"><div class="hljs-line">obj[<span class="hljs-built_in">Symbol</span>.iterator] = <span class="hljs-function"><span class="hljs-keyword">function</span>* (<span class="hljs-params"></span>) </span>{
+    </div><div class="hljs-line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> [key, val] <span class="hljs-keyword">of</span> <span class="hljs-built_in">Object</span>.entires(<span class="hljs-keyword">this</span>)) {
+    </div><div class="hljs-line">        <span class="hljs-keyword">yield</span> {key, val};
+    </div><div class="hljs-line">    }
+    </div><div class="hljs-line">}
+    </div><div class="hljs-line"><span class="hljs-comment">// 使用自己的方法</span>
+    </div><div class="hljs-line">obj[<span class="hljs-built_in">Symbol</span>.iterator] = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    </div><div class="hljs-line">    <span class="hljs-keyword">var</span> arr = <span class="hljs-built_in">Object</span>.entries(obj).map(<span class="hljs-function">(<span class="hljs-params">item</span>)=&gt;</span> ({<span class="hljs-attr">key</span>: item[<span class="hljs-number">0</span>], <span class="hljs-attr">val</span>: item[<span class="hljs-number">1</span>]}))
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> createIterator(arr);
+    </div><div class="hljs-line">};
+    </div></code></pre>
+    
+    <p>对于一个数组来说，object.keys和object.values是一样的。</p>
+    
+    <p>object.entires是一个key,val数组。</p>
+    
+    <p>for in 主要用于遍历对象的属性，当然也可以用来遍历数组元素</p></li>
+    <li rel="5"><p>fetch怎么用，如何封装一下它</p>
+    
+    <ul>
+    <li><p>fetch算是新一点的api，用法简单点</p></li>
+    <li><p>通过promise链的方式来输出数据,</p></li>
+    <li><p>封装的话就是把header封装下，然后把结果封装下就可以了,</p></li>
+    <li><p>要提的就是header下的body部分，post的话需要自己拼装的,</p></li>
+    <li><p>然后credentials需要写include，代表可以带cookie参数,</p></li>
+    <li><p>mode:”cors”,是走cors模式跨域</p></li>
+    <li><p>不过fetch不支持node，所有如果是有ssr的话，可以用axios</p></li></ul></li>
+    <li rel="7"><p>Object.freeze（浅冻结）Object.seal区别，如何深冻结一个对象？</p>
+    
+    <ul>
+    <li><p>Object.freeze是把对象的属性冻结，不能修改不能添加不能删除，但是是浅冻结</p></li>
+    <li><p>Object.seal是封闭一个对象。是可以修改属性的值的（前提是本来就可写）。但是不能删除不能新增。</p></li></ul>
+    
+    <p>所以seal比freeze少一个限制修改属性值。所以更像是封闭对象结构。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs cs"><div class="hljs-line"><span class="hljs-comment">// 深冻结</span>
+    </div><div class="hljs-line"><span class="hljs-function">function <span class="hljs-title">deepFreeze</span>(<span class="hljs-params"><span class="hljs-keyword">object</span></span>) </span>{
+    </div><div class="hljs-line">    <span class="hljs-keyword">const</span> keys = Reflect.ownKeys(<span class="hljs-keyword">object</span>);
+    </div><div class="hljs-line">    <span class="hljs-keyword">for</span>(<span class="hljs-keyword">let</span> k of keys) {
+    </div><div class="hljs-line">        <span class="hljs-keyword">typeof</span> <span class="hljs-keyword">object</span>[k] === <span class="hljs-string">'object'</span> &amp;&amp; deepFreeze(<span class="hljs-keyword">object</span>[k]);
+    </div><div class="hljs-line">    }
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> Object.freeze(<span class="hljs-keyword">object</span>)
+    </div><div class="hljs-line">}
+    </div></code></pre></li>
+    <li rel="8"><p>Object.defineProperty,Proxy对象,Reflect对象</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs actionscript"><div class="hljs-line">Object.defineProperty(obj, <span class="hljs-string">'prop1'</span>, {
+    </div><div class="hljs-line">    value: <span class="hljs-number">1</span>,
+    </div><div class="hljs-line">    <span class="hljs-comment">// 数据是否可写,默认false,如果上了false,非严格模式下数据不会有任何变化。</span>
+    </div><div class="hljs-line">    <span class="hljs-comment">// 但是严格模式下会报错。prop1 is readonly</span>
+    </div><div class="hljs-line">    writable: <span class="hljs-literal">true</span>,
+    </div><div class="hljs-line"><wbr>
+    </div><div class="hljs-line">    <span class="hljs-keyword">set</span>:<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{}
+    </div><div class="hljs-line">    <span class="hljs-keyword">get</span>:<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{}
+    </div><div class="hljs-line"><wbr>
+    </div><div class="hljs-line">    <span class="hljs-keyword">set</span>，<span class="hljs-keyword">get</span> 不能和value,writable同时出现。因为前者是存取描述符，后者是数据描述符，强行会报错。
+    </div><div class="hljs-line"><wbr>
+    </div><div class="hljs-line">    enumerable: 是否是可枚举的，默认是<span class="hljs-literal">false</span>，通过字面量创建的默认是<span class="hljs-literal">true</span>。
+    </div><div class="hljs-line"><wbr>
+    </div><div class="hljs-line">    configurable: 除了value, writable 以外其他属性是否可以配置。
+    </div><div class="hljs-line">})
+    </div></code></pre>
+    
+    <p>此外，descriptor这里所有属性都是非必须的，但是，只要写了defineProperty，至少要给第三个参数一个空对象。</p>
+    
+    <p>应用实例，Vue之前就是靠它来实现数据监控的。</p>
+    
+    <p>如果某个属性你不想让人用了，可以给它的get下添加个console.warn。</p>
+    
+    <p>defineProperty 不能监控数组的变化，而且只能监听对象的属性。如果一个对象很多属性，需要遍历。</p>
+    
+    <p>proxy相当于一个中间层，proxy是直接监听对象的，而且可以操作的handler很多，比如set,has,get,apply,call等等。 <br>
+    比defineProperty强大很多。至于属性也是对象的情况下，两者都还是需要递归监听的。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs haxe"><div class="hljs-line"><span class="hljs-keyword">var</span> <span class="hljs-keyword">new</span><span class="hljs-type">O</span> = <span class="hljs-keyword">new</span> <span class="hljs-type">Proxy</span>(obj, {
+    </div><div class="hljs-line">    <span class="hljs-keyword">set</span>(target,key,val, receiver),
+    </div><div class="hljs-line">    <span class="hljs-keyword">get</span>(target,key,receiver)
+    </div><div class="hljs-line">});
+    </div></code></pre>
+    
+    <p>里面好多方法第三个参数其实就是一个新的OBJ指向。</p>
+    
+    <p>如果一个属性不可配置（configurable）且不可写（writable），则 Proxy 不能修改该属性，否则通过 Proxy 对象访问该属性会报错。</p>
+    
+    <p>Reflect和Proxy是一对。正常取值，甚至可以替代关键字符，比如 in 或者delete 这样的。 <br>
+    它可以分为一部分是是原来存在Object上的方法，将它转义到了Reflect上，并作了小改动，让方法更加合理。 <br>
+    另一部分是将原来操作符的功能，变成函数行为。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs awk"><div class="hljs-line"><span class="hljs-regexp">//</span> 老写法  <span class="hljs-string">'assign'</span> <span class="hljs-keyword">in</span> Object <span class="hljs-regexp">//</span> true
+    </div><div class="hljs-line"><span class="hljs-regexp">//</span> 新写法  Reflect.has(Object, <span class="hljs-string">'assign'</span>) <span class="hljs-regexp">//</span> true
+    </div><div class="hljs-line"><span class="hljs-regexp">//</span> 老写法 Function.prototype.apply.call(Math.floor, undefined, [<span class="hljs-number">1.75</span>]) <span class="hljs-regexp">//</span> <span class="hljs-number">1</span>
+    </div><div class="hljs-line"><span class="hljs-regexp">//</span> 新写法 Reflect.apply(Math.floor, undefined, [<span class="hljs-number">1.75</span>]) <span class="hljs-regexp">//</span> <span class="hljs-number">1</span>
+    </div><div class="hljs-line"><span class="hljs-regexp">//</span> 旧写法 <span class="hljs-keyword">delete</span> myObj.foo;
+    </div><div class="hljs-line"><span class="hljs-regexp">//</span> 新写法 Reflect.deleteProperty(myObj, <span class="hljs-string">'foo'</span>);
+    </div><div class="hljs-line"><span class="hljs-regexp">//</span> new 的写法 const instance = new Greeting(<span class="hljs-string">'张三'</span>);
+    </div><div class="hljs-line"><span class="hljs-regexp">//</span> Reflect.construct 的写法 const instance = Reflect.construct(Greeting, [<span class="hljs-string">'张三'</span>]);
+    </div><div class="hljs-line">var myObject = {
+    </div><div class="hljs-line">    foo: <span class="hljs-number">1</span>,
+    </div><div class="hljs-line">    bar: <span class="hljs-number">2</span>,
+    </div><div class="hljs-line">    get baz() {
+    </div><div class="hljs-line">        return this.foo + this.bar;
+    </div><div class="hljs-line">    },
+    </div><div class="hljs-line">};
+    </div><div class="hljs-line">var myReceiverObject = {
+    </div><div class="hljs-line">    foo: <span class="hljs-number">4</span>,
+    </div><div class="hljs-line">    bar: <span class="hljs-number">4</span>,
+    </div><div class="hljs-line">};
+    </div><div class="hljs-line">Reflect.get(myObject, <span class="hljs-string">'baz'</span>, myReceiverObject) <span class="hljs-regexp">//</span> <span class="hljs-number">8</span>
+    </div></code></pre></li>
+    <li rel="9"><p>Number.isNaN和isNaN的区别</p>
+    
+    <ul>
+    <li><p>isNaN意思是这个是不是不是一个数字，比如它是isNaN(‘abc’) 就是true。</p></li>
+    <li><p>Number.isNaN只有Number.isNaN(NaN)才是true</p></li>
+    <li><p>Number.isNaN是es6的，如果自己写的话，就是利用typeof NaN 是number来写</p></li></ul></li>
+    <li rel="10"><p>String.raw</p>
+    
+    <p>如果一串字符串，里面有\n之类的，可能会被转译，如果不想让它被转译，想直出， <br>
+    用<code>String.raw</code>abc \n ss``,会把换行符号也返回出来，就是一个未加工的值，实际应用感觉没有。</p></li>
+    <li rel="11"><p>描述一下事件传播</p>
+    
+    <p>当事件发生在DOM元素上时，该事件并不完全发生在那个元素上。 </p>
+    
+    <p>从window开始，一路向下传递到目标元素，这叫捕获阶段</p>
+    
+    <p>然后从目标元素传递回window，这叫冒泡阶段。</p>
+    
+    <p>addeventlistener就是监听目标用的，然后第三个参数是boolean类型，默认false是冒泡阶段，true就是捕获阶段。</p></li>
+    <li rel="12"><p>JavaScript 中的虚值是什么</p>
+    
+    <p><code>const falsyValues = ['', 0, null, undefined, NaN, false];</code> <br>
+    这里面的都是虚值，虚值就是在转化成boolean时为false的值。</p></li>
+    <li rel="13"><p>Object.create创建出来的对象和正常的区别是什么？如何创建一个没有原型的对象？</p>
+    
+    <p>通过Object.create创建出来的对象的原型指向传入的对象，也就是说</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs javascript"><div class="hljs-line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">P</span>(<span class="hljs-params"></span>) </span>{<span class="hljs-keyword">this</span>.name = <span class="hljs-string">'kk'</span>}
+    </div><div class="hljs-line">P.prototype.sex = <span class="hljs-string">'m'</span>
+    </div><div class="hljs-line"><span class="hljs-keyword">var</span> bb = <span class="hljs-built_in">Object</span>.create(P) 
+    </div><div class="hljs-line">bb.__proto__ == P <span class="hljs-comment">// true</span>
+    </div><div class="hljs-line"><span class="hljs-keyword">var</span> cc = <span class="hljs-built_in">Object</span>.create(P.prototype);
+    </div><div class="hljs-line">cc.__proto__ == P.prototype <span class="hljs-comment">// true</span>
+    </div><div class="hljs-line"><span class="hljs-keyword">var</span> a = <span class="hljs-keyword">new</span> P();
+    </div></code></pre>
+    
+    <p>根据这个特性，可以看出来，Object.create和new还是有区别的，new多了一个call的过程,a会有name属性，而cc没有。 <br>
+    但是，直接创建一个新的空对象的话，那就一样了。以下三下是一样的。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs dart"><div class="hljs-line"><span class="hljs-keyword">var</span> obj = {}; <span class="hljs-keyword">var</span> obj = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Object</span>(); 和 <span class="hljs-keyword">var</span> obj = <span class="hljs-built_in">Object</span>.create(<span class="hljs-built_in">Object</span>.prototype);
+    </div></code></pre>
+    
+    <p>很多时候，就是只想要一个干净的对象，不需要原型，用于节省性能的话，直接Object.create(null) 就可以了；</p>
+    
+    <p>Object.create的第二个参数和defineproperty第二个一样。也就是说，上述想给cc来个name,咋办</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line"><span class="hljs-selector-tag">Object</span><span class="hljs-selector-class">.create</span>(<span class="hljs-selector-tag">P</span><span class="hljs-selector-class">.prototype</span>, {
+    </div><div class="hljs-line">    <span class="hljs-attribute">name</span>: {
+    </div><div class="hljs-line">        value: <span class="hljs-string">'kk'</span>,
+    </div><div class="hljs-line">        writable: true
+    </div><div class="hljs-line">    }
+    </div><div class="hljs-line">});
+    </div></code></pre>
+    
+    <p>那么，写一个object.create的简单polyfill版本(不支持第二个属性)</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs javascript"><div class="hljs-line"><span class="hljs-built_in">Object</span>.create2 = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">proto</span>) </span>{
+    </div><div class="hljs-line">    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">F</span>(<span class="hljs-params"></span>) </span>{};
+    </div><div class="hljs-line">    F.prototype = proto;
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> F();
+    </div><div class="hljs-line">}
+    </div></code></pre></li>
+    <li rel="25"><p>new 关键字有什么用？它到底做了啥？</p>
+    
+    <p>new 和构造函数创造一个对象。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs abnf"><div class="hljs-line">var obj = {}<span class="hljs-comment">;</span>
+    </div><div class="hljs-line">obj.__proto__ = Obejct.prototype<span class="hljs-comment">;</span>
+    </div><div class="hljs-line">Object.call(obj)<span class="hljs-comment">;</span>
+    </div></code></pre></li>
+    <li rel="14"><p>手写一个promise</p>
+    
+    <ul>
+    <li><p>第一步，先写这里的回调函数 三个状态，then里的函数可以不传。</p></li>
+    <li><p>第二步，回调里是可以写异步的，也就是说，到了then里可能还在pending</p></li>
+    <li><p>第三步，p是一个链式调用的，所以要包装一个promise2 return出来 并且里面的执行需要try catch，抓错。</p></li>
+    <li><p>第四步，防止then里返回promise本身，以及返回的还是一个promise，需要加一个判断函数。如果是本身，reject，如果是promise，继续then，最后resolve。</p></li>
+    <li><p>第五步，加catch方法，其实就是调用this.then(null,rejectCallBack);</p></li>
+    <li><p>第六步，原型上加一个Resolve和Reject方法，就是调用自己，new Promise()执行对应的方法</p></li>
+    <li><p>第七步，all方法，all方法返回的所有promise结果的合集，然后做一个下标，挨个执行promise，然后index++,最后index = promise.length的时候，resolve(result);</p></li>
+    <li><p>第八步，race方法，这个直接挨个执行then，resolve即可。这也说明race其他的还是会跑完的。只不过不管结果而已。</p></li></ul></li>
+    <li rel="15"><p>事件委托的原理</p>
+    
+    <p>因为事件传播正常是先捕获后冒泡，那么捕获的时候，一定会经过目标元素的上级，这就是事件委托的原理。</p></li>
+    <li rel="16"><p>原型、作用域、原型链、作用域链</p>
+    
+    <ul>
+    <li><p>js本质上一切皆对象，每个对象都要有原型，这也是为什么有继承关系。</p></li>
+    <li><p>原型链的话就是比如某个a是继承于A，那么a怎么能找到A就是通过原型链，instanceof实际上就是个原型链查找。</p></li>
+    <li><p>作用域就是遍历或者函数能作用的范围，作用域链就是某一个变量在某个地方使用到了，在编译的过程中，会保留一条它的作用域链，让它能够通过该作用域链找到对应的自己那个属性。</p></li>
+    <li><p>函数有一个内部属性 [[scope]] ,当函数创建的时候，就会保存所有的父变量对象到其中。</p></li>
+    <li><p>[[scope]] 可以理解为所有父级变量对象的层级链</p></li></ul></li>
+    <li rel="27"><p>instanceof 原理是啥？</p>
+    
+    <p>instanceof其实就是利用原型链去查找，找到了就返回true <br>
+    自己写一个就是</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs swift"><div class="hljs-line"><span class="hljs-keyword">while</span>(<span class="hljs-keyword">left</span>.__proto__) {
+    </div><div class="hljs-line">    <span class="hljs-keyword">if</span>(<span class="hljs-keyword">left</span>.__proto__ === <span class="hljs-keyword">right</span>.prototype) {
+    </div><div class="hljs-line">        <span class="hljs-keyword">return</span> <span class="hljs-literal">true</span>;
+    </div><div class="hljs-line">    }
+    </div><div class="hljs-line">    <span class="hljs-keyword">left</span> = <span class="hljs-keyword">left</span>.__proto__   
+    </div><div class="hljs-line">}
+    </div><div class="hljs-line"><span class="hljs-keyword">return</span> <span class="hljs-literal">false</span>;
+    </div></code></pre></li>
+    <li rel="17"><p>null,undefined,未声明的变量的区别</p>
+    
+    <ul>
+    <li><p>未声明的变量就是不用let ,var, const关键字的比如直接写 a = 2;这样的，如果是在严格模式下，会报错</p></li>
+    <li><p>undefined就是这个变量已经声明，但是没有赋值，所以会是undefined.</p></li>
+    <li><p>函数作用域下undefined可以被重写，这也是为什么最好用void 0替代的原因。</p></li>
+    <li><p>null的话只能显式的被赋值，标识空值。</p></li>
+    <li><p>null == undefined；没有隐式转换。</p></li></ul></li>
+    <li rel="18"><p>foreach和map的区别</p>
+    
+    <p>foreach是遍历数组中的元素，没有返回值，通常需要修改原始数组的时候可以用foreach</p>
+    
+    <p>map的话就是生成一个新的数组。如果不想修改原数组可以用map</p>
+    
+    <p>上述两个方法都会跳过稀松数组。</p></li>
+    <li rel="19"><p>宿主对象和原生对象的区别</p>
+    
+    <ul>
+    <li><p>原生对象是由 ECMAScript 规范定义的 JavaScript 内置对象，比如String、Math、RegExp、Object、Function等等。</p></li>
+    <li><p>宿主对象是由运行时环境（浏览器或 Node）提供，比如window、XMLHTTPRequest等等。比如Node的process,setImmediate。</p></li></ul></li>
+    <li rel="20"><p>call,apply,bind区别</p>
+    
+    <ul>
+    <li><p>call第二个参数是一个一个的</p></li>
+    <li><p>apply第二个参数是数组</p></li>
+    <li><p>bind是和call一样，但是生成了一个新的函数。</p></li>
+    <li><p>实现bind就更简单了，context不用动，传递下this函数，然后return个function，参数和之前的组合一下，调用apply就可以了。</p></li></ul></li>
+    <li rel="21"><p>事件循环event loop</p>
+    
+    <p>我们知道JavaScript的一大特点就是单线程，而这个线程中拥有唯一的一个事件循环。</p>
+    
+    <p>在promise之前，js其实是没有异步的，settimeout是宿主环境的。</p>
+    
+    <p>JavaScript代码的执行过程中，除了依靠函数调用栈来搞定函数的执行顺序外，还依靠任务队列(task queue)来搞定另外一些代码的执行。</p>
+    
+    <p>事件循环分为宏任务和微任务，其中宏任务就是如同settimeout,setInterval，requestAnimationFrame</p>
+    
+    <p>而微任务就是promise.then,MutationObserver</p>
+    
+    <p>在Node中，又有些不一样，就单从API层面上来理解，Node新增了两个方法可以用来使用：微任务的process.nextTick以及宏任务的setImmediate。 <br>
+    setTimeout和setImmediate的区别的话就是settimeout是时间延迟，setImmediate是循环延迟。假如循环很快，那后者先执行，反之前者先执行</p>
+    
+    <p>两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的，而nodejs中的微任务是在不同阶段之间执行的。</p>
+    
+    <p>关于process.nextTick的一点说明 <br>
+    process.nextTick 是一个独立于 eventLoop 的任务队列。 <br>
+    在每一个 eventLoop 阶段完成后会去检查这个队列，如果里面有任务，会让这部分任务优先于微任务执行。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs javascript"><div class="hljs-line"><span class="hljs-keyword">await</span> 要分开看
+    </div><div class="hljs-line"><span class="hljs-comment">// await 前面的代码</span>
+    </div><div class="hljs-line"><span class="hljs-keyword">await</span> bar();
+    </div><div class="hljs-line"><span class="hljs-comment">// await 后面的代码</span>
+    </div><div class="hljs-line">其中 <span class="hljs-keyword">await</span> 前面的代码 是同步的，调用此函数时会直接执行；而 <span class="hljs-keyword">await</span> bar(); 这句可以被转换成 <span class="hljs-built_in">Promise</span>.resolve(bar())；<span class="hljs-keyword">await</span> 后面的代码 则会被放到 <span class="hljs-built_in">Promise</span> 的 then() 方法里。
+    </div></code></pre>
+    
+    <p>还有，比如微任务相当于是添加到宏任务里来的。如果一个promise里不写宏任务的话，那外面的settimeout可以等死。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs javascript"><div class="hljs-line">setTimeout(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{
+    </div><div class="hljs-line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'1'</span>);
+    </div><div class="hljs-line">},<span class="hljs-number">0</span>);
+    </div><div class="hljs-line">setTimeout(<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{
+    </div><div class="hljs-line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'2'</span>);
+    </div><div class="hljs-line">},<span class="hljs-number">2500</span>);
+    </div><div class="hljs-line"><span class="hljs-keyword">var</span> now = <span class="hljs-built_in">Date</span>.now();
+    </div><div class="hljs-line"><span class="hljs-keyword">var</span> d = <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    </div><div class="hljs-line">    <span class="hljs-keyword">while</span>(<span class="hljs-built_in">Date</span>.now() - now &lt; <span class="hljs-number">2000</span>) {
+    </div><div class="hljs-line">    }
+    </div><div class="hljs-line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'3'</span>);
+    </div><div class="hljs-line">    resolve(<span class="hljs-string">'4'</span>);
+    </div><div class="hljs-line">});
+    </div><div class="hljs-line">d.then(<span class="hljs-function">(<span class="hljs-params">res</span>)=&gt;</span>{
+    </div><div class="hljs-line">    <span class="hljs-built_in">console</span>.log(res);
+    </div><div class="hljs-line">    <span class="hljs-keyword">var</span> now = <span class="hljs-built_in">Date</span>.now();
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>(<span class="hljs-function">(<span class="hljs-params">resolve, reject</span>) =&gt;</span> {
+    </div><div class="hljs-line">        <span class="hljs-keyword">while</span>(<span class="hljs-built_in">Date</span>.now() - now &lt; <span class="hljs-number">2000</span>) {
+    </div><div class="hljs-line">        }
+    </div><div class="hljs-line">        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'5'</span>);
+    </div><div class="hljs-line">        resolve(<span class="hljs-string">'6'</span>);
+    </div><div class="hljs-line">    })
+    </div><div class="hljs-line">}).then(<span class="hljs-function">(<span class="hljs-params">res</span>)=&gt;</span> <span class="hljs-built_in">console</span>.log(res))
+    </div></code></pre>
+    
+    <p>这段的话，settimeout要在4s后才能执行，加多少个then都得等then，因为他们属于同一个宏任务下没执行完的微任务。</p></li>
+    <li rel="23"><p>如何实现一个深拷贝（[Object xxxx]）（<a href="https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087" target="_blank">https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087</a>）</p>
+    
+    <p>基本完整版本参见deepCopy.js</p></li>
+    <li rel="26"><p>typeof null为啥是object？</p>
+    
+    <p>原理是这样的，不同的对象在底层都表示为二进制，在Javascript中二进制前三位用来表示TYPE_TAG <br>
+    而正巧Object类型的前三位就是0 <br>
+    null在设计的时候是一个空指针，它的二进制表示全为0，自然前三位也是0，所以执行typeof时会返回”object”。</p></li>
+    <li rel="28"><p>什么是闭包，闭包经典问题解法有哪几种？</p>
+    
+    <p>闭包就是函数内可以访问函数外的变量，就属于闭包。但是我们常说的，是属于调用栈出栈了，依然能够中找到那个变量。</p>
+    
+    <p>闭包本质上就是作用域链的问题，闭包就是当函数可以记住并访问所在的词法作用域时，就产生了闭包，即使函数是在当前词法作用域之外执行。</p>
+    
+    <ul>
+    <li><p>比如通常就会利用闭包做一个封闭作用域，创建内部变量，使得这些变量不能被外部随意修改，同时又可以通过指定的函数接口来操作。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs javascript"><div class="hljs-line"><span class="hljs-keyword">const</span> Counter = <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>)</span>{
+    </div><div class="hljs-line">    <span class="hljs-keyword">let</span> count = <span class="hljs-number">0</span>;
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> {
+    </div><div class="hljs-line">        <span class="hljs-attr">increment</span>: <span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{
+    </div><div class="hljs-line">            <span class="hljs-keyword">return</span> count ++;
+    </div><div class="hljs-line">        }
+    </div><div class="hljs-line">    }
+    </div><div class="hljs-line">}()
+    </div><div class="hljs-line">Counter.increment();
+    </div></code></pre></li>
+    <li><p>用let 封闭作用域</p></li>
+    <li><p>用settimeout第三个参数就是传给settimeout里面的函数的入参。</p></li></ul></li>
+    <li rel="29"><p>实现继承的几种方式</p>
+    
+    <ul>
+    <li><p>原型链继承 <br>
+    <code>sub.prototype = new Parent();</code> <br>
+    缺点1就是Parent的原型大家共享了，一荣俱荣。2在创建 Child 的实例时，不能向Parent传参</p></li>
+    <li><p>寄生组合继承</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs typescript"><div class="hljs-line">Sub.prototype = <span class="hljs-built_in">Object</span>.create(Super.prototype, {
+    </div><div class="hljs-line">    <span class="hljs-keyword">constructor</span>: {
+    </div><div class="hljs-line">        value: Sub,
+    </div><div class="hljs-line">        enumerable: <span class="hljs-literal">false</span>,
+    </div><div class="hljs-line">        writable: <span class="hljs-literal">true</span>,
+    </div><div class="hljs-line">        configurable: <span class="hljs-literal">true</span>
+    </div><div class="hljs-line">    }
+    </div><div class="hljs-line">})
+    </div></code></pre></li>
+    <li><p>类继承 <br>
+    <code>xx extends</code></p></li></ul>
+    
+    <p>普通继承和类继承是有区别的，es5是借助构造函数实现，实质上是先创造子类的实例对象this，然后再讲父类的方法添加到这个this上去。</p>
+    
+    <p>而es6的继承机制完全不同，实质上是先创造父类的实例对象this（所以必须先调用super方法，）然后再用子类的构造函数修改this。</p>
+    
+    <p>es6在继承的语法上不仅继承了类的原型对象，还继承了类的静态属性和静态方法。</p></li>
+    <li rel="30"><p>手写call, apply, bind出来</p>
+    
+    <p>call和apply，就是传一个上下文进去，没有就赋值window</p>
+    
+    <p>然后call和apply的执行函数，赋值给context，相当于传递上下文</p>
+    
+    <p>找一个中间值,Symbol(‘fn’)就可以了。</p></li>
+    <li rel="31"><p>常见的正则标识符</p>
+    
+    <p>\s空格，\w 包括下划线在内的单个字符，[A-Za-z0-9_]， \b单次边界, \i忽略大小写</p></li>
+    <li rel="33"><p>千位分割符正则</p>
+    
+    <p>var reg = /\d(?=(\d{3})+$)/g</p>
+    
+    <p>str.replace(reg, ‘$&amp;,’)</p>
+    
+    <p>?=就是向前查找，后面满足的就是<span class="mathjax-replacement" rel="b7d6afe777eb529fc2e294b66afb1c66"><span class="MathJax_Preview"></span><span class="MathJax_SVG" id="MathJax-Element-1-Frame" role="textbox" aria-readonly="true" style="font-size: 100%; display: inline-block;"><span class="noError" style="display: inline-block;">&amp;子表达式们，</span></span></span>1是第一个，<span class="" rel="920d9e88779d66c73d50ba8ddebf4f89"><span class="MathJax_SVG" id="MathJax-Element-2-Frame" role="textbox" aria-readonly="true" style="font-size: 100%; display: inline-block;"><span><img type="image/png" width="90.0469" height="25" longdesc="__SVG__undefined" src="data:image/png;base64,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" style="margin-top:0;margin-bottom:0;"></span></span></span>&amp;是子们</p></li>
+    <li rel="32"><p>observer的几个API</p>
+    
+    <ul>
+    <li><p>Intersection Observer，可以用它来做懒加载，比使用getBoundingClientRect()的好处是它的性能会更好。</p></li></ul>
+    
+    <p>两个参数，一个callback,一个options，opts里可以设置根元素和边界大小。</p>
+    
+    <p>callback里用来检测变化进行对应的改变</p>
+    
+    <ul>
+    <li><p>MutationObserver利用它可以检测DOM节点元素，比如禁止删除水印功能。</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs actionscript"><div class="hljs-line">mutationObserver.observe(content, {
+    </div><div class="hljs-line">    attributes: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Boolean - 观察目标属性的改变</span>
+    </div><div class="hljs-line">    characterData: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Boolean - 目标节点或子节点树中节点所包含的字符数据的变化</span>
+    </div><div class="hljs-line">    childList: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Boolean - 目标节点（如果subtree为true，则包含子孙节点）添加或删除新的子节点。默认值为false。</span>
+    </div><div class="hljs-line">    subtree: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Boolean - 目标以及目标的后代改变都会观察，就是如果这个值为true,其他属性为true后就会都包含子节点。</span>
+    </div><div class="hljs-line">    attributeOldValue: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Boolean - 表示需要记录改变前的目标属性值</span>
+    </div><div class="hljs-line">    characterDataOldValue: <span class="hljs-literal">true</span>, <span class="hljs-comment">// Boolean - 设置了characterDataOldValue可以省略characterData设置</span>
+    </div><div class="hljs-line">    <span class="hljs-comment">// attributeFilter: ['src', 'class'] // Array - 观察指定属性</span>
+    </div><div class="hljs-line">});
+    </div></code></pre></li>
+    <li><p>PerformanceObserver，监控浏览器性能的，我也没用的上。</p></li></ul></li>
+    <li rel="33"><p>requestIdleCallback和requestAnimationFrame的区别</p>
+    
+    <p>浏览器一帧里16ms要完成的任务</p>
+    
+    <ol>
+    <li rel="1"><p>处理用户的交互</p></li>
+    <li rel="2"><p>JS 解析执行</p></li>
+    <li rel="3"><p>帧开始。窗口尺寸变更，页面滚去等的处理</p></li>
+    <li rel="4"><p>rAF(requestAnimationFrame)</p></li>
+    <li rel="5"><p>布局</p></li>
+    <li rel="6"><p>绘制</p></li></ol>
+    
+    <p>requestAnimationFrame的回调会在每一帧确定执行，属于高优先级任务，而requestIdleCallback的回调则不一定，属于低优先级任务。 </p>
+    
+    <p>假如在一帧1000/60~= 16ms，这一帧没用完，还有空闲的话，就可以requestIdleCallback来执行想要执行的任务。</p>
+    
+    <p>推荐放在requestIdleCallback里面的应该是微任务（microTask）并且可预测时间的任务。它的第二个参数就是执行的最晚时机。</p>
+    
+    <p>缺点的话是 requestIdleCallback 的 FPS 只有 20, 一秒只有20次调用。</p></li>
+    <li rel="34"><p>为什么js是单线程的？</p>
+    
+    <p>因为JS是用来处理页面中的用户交互以及操作DOM，css的。 <br>
+    如果它是多线程的话，可能会造成UI冲突。 <br>
+    上操作锁的话，会增大复杂性，所以设计之初就是选择了单线程。</p></li>
+    <li rel="35"><p>为什么js会阻塞页面加载</p>
+    
+    <p>因为JS可以操作页面，如果不阻塞的话，可能会导致数据不一致。</p></li>
+    <li rel="36"><p>for in, Object.keys,Object.getOwnPropertyNames,Reflect.ownKeys区别</p>
+    
+    <ul>
+    <li><p>for in遍历会把原型上的属性遍历出来。</p></li>
+    <li><p>Object.keys不会把原型上的属性遍历出来。</p></li>
+    <li><p>Object.getOwnProPropertyNames 不会把原型上的属性遍历出来，但是即使自己下的不可枚举属性，也是可以遍历出来的。</p></li>
+    <li><p>Reflect.ownKeys 不会把原型上的属性遍历出来，不可枚举属性，但是Symbol是可以遍历出来，</p></li>
+    <li><p>相当于 Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))</p></li></ul></li>
+    <li rel="37"><p>为何try里面放return，finally还会执行，理解其内部机制</p>
+    
+    <p>try catch finally是一个特殊的语法块。</p>
+    
+    <p>finally里面的东西会在try 的return 里具体的return之前运行，什么叫具体的return呢？</p>
+    
+    <p>就是如果try 里return的是一个函数执行，那就会先执行这个函数，直到真正看到return 一个值的时候，执行finally并先return</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs javascript"><div class="hljs-line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">justLog</span>(<span class="hljs-params"></span>)</span>{
+    </div><div class="hljs-line">    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'来自justLog的打印'</span>);
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> <span class="hljs-string">'来自justLog的return'</span>
+    </div><div class="hljs-line">}
+    </div><div class="hljs-line"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">fn</span>(<span class="hljs-params"></span>) </span>{
+    </div><div class="hljs-line">    <span class="hljs-keyword">try</span> {
+    </div><div class="hljs-line">        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'try块内log'</span>);
+    </div><div class="hljs-line">        <span class="hljs-keyword">return</span> justLog();
+    </div><div class="hljs-line">    } <span class="hljs-keyword">catch</span> (error) {
+    </div><div class="hljs-line">        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'catch块内log'</span>);
+    </div><div class="hljs-line">        <span class="hljs-keyword">return</span> <span class="hljs-string">'catch中的return语句'</span>;
+    </div><div class="hljs-line">    } <span class="hljs-keyword">finally</span> {
+    </div><div class="hljs-line">        <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'finally块内log===='</span>);
+    </div><div class="hljs-line">        <span class="hljs-keyword">return</span> <span class="hljs-string">'finaly中的return'</span>;
+    </div><div class="hljs-line">    }
+    </div><div class="hljs-line">    <span class="hljs-keyword">return</span> <span class="hljs-string">'一般情况下的return'</span>;
+    </div><div class="hljs-line">}
+    </div><div class="hljs-line"><span class="hljs-built_in">console</span>.log(fn()); 结果就是trylog,justlog,finallylog,<span class="hljs-keyword">finally</span> <span class="hljs-keyword">return</span>。
+    </div></code></pre>
+    
+    <p>利用这个，可以在一个函数中间插入点东西执行。比如上面的justLog中间想在return前处理个数据，就可以利用try catch finally来搞。</p></li>
+    <li rel="38"><p>base64的编码原理</p>
+    
+    <ul>
+    <li><p>btoa(‘str’) base64编码 byte to ascii</p></li>
+    <li><p>atob(‘saasdas’) base64解码 ascii to byte</p></li>
+    <li><p>如果需要支持中文的话，需要先encodeURLComponent一下。</p></li></ul>
+    
+    <p>Base64的编码方法要求把每三个8bit的字节转换成四个6bit的字节，然后把6Bit再添两位高位0,组成四个8Bit的字节。所以会变长很多。</p>
+    
+    <p>base64由字母a-z、A-Z、0-9以及+和/, 再加上作为垫字的=, 一共65字符组成一个基本字符集, 其他所有字符都可以根据一定规则, 转换成该字符集中的字符。</p>
+    
+    <p>如果要编码的二进制数据不是3的倍数，最后剩下一个或者两个字节Base64会在末尾补零，再在编码的末尾加上一个或者两个‘=’。</p></li>
+    <li rel="39"><p>几种进制的相互转换计算方法，在JavaScript中如何表示和转换</p>
+    
+    <ul>
+    <li><p>十进制转其他进制 <br>
+    xx.toString(radix); radix 2 ~ 36的整数，默认是10</p></li>
+    <li><p>其他进制的整数转10进制。 <br>
+    parseInt(‘8进制的数’, 8); <br>
+    如果有小数的话，不处理。 <br>
+    所以如果小数也要的话，自己写一个函数，把小数的部分拆出来</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs coffeescript"><div class="hljs-line">arr.map(<span class="hljs-function"><span class="hljs-params">(item, idx)</span>=&gt;</span> Number(item) * Math.pow(<span class="hljs-number">2</span>, <span class="hljs-function"><span class="hljs-params">(-(idx + <span class="hljs-number">1</span>))</span>)).reduce(<span class="hljs-params">(a,b)</span>=&gt;</span> a+b);
+    </div></code></pre></li></ul>
+    
+    <p>这样小数就会转换回10进制。</p></li>
+    <li rel="40"><p>0.1+0.2为什么不等于0.3</p>
+    
+    <p>因为JavaScript使用的是64位双精度浮点数编码，所以它的符号位占1位，指数位占11位，尾数位占52位。 <br>
+    然后0.1+0.2在转换成二进制的时候，会发生精度丢失，因为只取64位固定长度。</p></li>
+    <li rel="41"><p>12.toString()为什么会报错</p>
+    
+    <p>因为js在编译的时候，12.会解析成一个数字，它会认为toString就是后面的小数，解决办法就是12..toString()就可以了。</p></li>
+    <li rel="42"><p>写代码要不要加分号，不加分号有哪些情况会出问题？（IIFE为啥前面加分号）</p>
+    
+    <p>有些语句会自动加分号，有些不会。 <br>
+    主要是在词法分析阶段会出毛病。 <br>
+    真正会导致上下文解析出问题的token有5个。</p>
+    
+    <ul>
+    <li><p>括号（认为是参数要执行）</p></li>
+    <li><p>方括号（认为是数组或者是对象属性）</p></li>
+    <li><p>正则开头的斜杠（和前面的字符串组起来了）</p></li>
+    <li><p>加号，减号（这更不用说了）</p></li></ul></li>
+    <li rel="43"><p>while和do while的区别是什么？</p>
+    
+    <p>使用while的话必须满足条件才能进行，而do while的话是不管条件满足与否，都会先执行一次do</p></li>
+    <li rel="44"><p>位运算有哪些呢？</p>
+    
+    <ul>
+    <li><p>这里插一个<strong>， 就是乘方，不过它是右结合的， 4</strong>3<strong>2 会先求3</strong>2</p></li>
+    <li><p>9，二进制是1001。 8，二进制是1000</p></li>
+    <li><p>&amp; 按位与  9&amp;8 = 8</p></li>
+    <li><p>| 按位或  9|8 = 9</p></li>
+    <li><p>^ 异或，异或的意思就是位上是一样的就是0，不一样的就是1。 9 ^ 8 = 0001 = 1 <br>
+    可以利用异或来交换两个数。a = a ^ b; b = a ^ b; a = a ^ b;</p></li>
+    <li><p>~ 按位非， 0变1，1变0。 这个因为符号位的问题，所以不好写，~9 = -10</p></li>
+    <li><p>&lt;&lt; 左移一位  将 a 的二进制形式向左移 b (&lt; 32) 比特位，右边用 0 填充。 9&lt;&lt;1 = 10010 = 18</p></li>
+    <li><p>(&gt;&gt;&gt;) 无符号右移一位 将 a 的二进制表示向右移 b (&lt; 32) 位，丢弃被移出的位，并使用 0 在左侧填充。</p></li>
+    <li><p>(&gt;&gt;) 有符号右移一位  将 a 的二进制表示向右移 b (&lt; 32) 位，丢弃被移出的位。 <br>
+    这两个不太好用。对于正数而言一样。对于负数而言不好算。</p></li></ul></li>
+    <li rel="24"><p>利用按位&amp;来检查一个数字是否是奇偶数</p>
+    
+    <p>n&amp;1 其实就是二进制，1的二进制最后一位是1，那么偶数的最后一位是0，所以4&amp;1一定是0，5&amp;1是1</p></li>
+    <li rel="45"><p>零宽空格</p>
+    
+    <p>零宽空格就是看不到任何迹象，实际上却占用一个位子</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs axapta"><div class="hljs-line">var <span class="hljs-keyword">str</span> = <span class="hljs-string">'\uFEFFabc'</span>;
+    </div><div class="hljs-line"><span class="hljs-keyword">str</span> = abc;
+    </div><div class="hljs-line"><span class="hljs-keyword">str</span>.length = <span class="hljs-number">4</span>;
+    </div><div class="hljs-line">\uFEFF。可以给代码加个料，别人复制了后肯定用不了。
+    </div></code></pre></li>
+    <li rel="46"><p>JavaScript可以存储的最大数字、最大安全数字，JavaScript处理大数字的方法、避免精度丢失的方法</p>
+    
+    <ul>
+    <li><p>Number.MAX_VALUE可存储的最大数字 == (Math.pow(2,53) - 1) * Math.pow(2, 971) 。 971 = 1023 - 52；</p></li>
+    <li><p>Number.MAX_SAFE_INTEGER 最大安全值 == Math.pow(2,53) - 1;</p></li>
+    <li><p>超过安全最大值精度就开始不准了。</p></li>
+    <li><p>解决办法就是用bigint或者是变成字符串，小数字的话可以转换成整数。通常和钱相关，可以先乘100</p></li></ul></li>
+    <li rel="49"><p>什么是bigInt?</p>
+    
+    <p>BigInt是一种新的数据类型，用于当整数值大于Number数据类型支持的范围时。这种数据类型允许我们安全地对大整数执行算术操作。</p>
+    
+    <p>在JS中，所有的数字都以双精度64位浮点格式表示，那这会带来什么问题呢？</p>
+    
+    <p>这导致JS中的Number无法精确表示非常大的整数，会出现丢失精度的问题。</p>
+    
+    <p>给大数字后面加个n就可以了，兼容性还不好。</p></li>
+    <li rel="47"><p>理解词法作用域和动态作用域</p>
+    
+    <p>作用域是指程序源代码中定义变量的区域。</p>
+    
+    <p>作用域规定了如何查找变量，也就是确定当前执行代码对变量的访问权限。</p>
+    
+    <p>JavaScript 采用词法作用域(lexical scoping)，也就是静态作用域。</p>
+    
+    <p>函数的作用域在函数定义的时候就决定了。JavaScript 采用的是词法作用域。</p>
+    
+    <p>动态作用域就是函数的作用域是在函数调用的时候才决定的。</p></li>
+    <li rel="48"><p>this的原理以及几种不同使用场景的取值</p>
+    
+    <ul>
+    <li><p>显示绑定 <br>
+    call、apply、bind 可以显示的修改函数的 this 指向</p></li>
+    <li><p>隐士绑定</p></li>
+    <li><p>全局上下文 <br>
+    this 指向 window,严格模式下为 undefined</p></li>
+    <li><p>直接调用函数 <br>
+    this 指向 window,严格模式下为 undefined</p></li>
+    <li><p>作为对象的方法调用 <br>
+    obj.foo()。 this 指向对象 obj</p></li>
+    <li><p>DOM 事件的绑定 <br>
+    onclick和addEventerListener中 this 默认指向绑定事件的元素。</p></li>
+    <li><p>new 构造函数绑定</p></li>
+    <li><p>构造函数中的 this 指向实例对象</p></li>
+    <li><p>箭头函数 <br>
+    箭头函数没有 this, 因此也不能绑定。 <br>
+    在箭头函数里的 this 会指向 外层的非箭头函数的 this。</p></li></ul></li>
+    <li rel="50"><p>Object.is和===的区别</p>
+    
+    <p>Object在严格等于的基础上修复了一些特殊情况下的失误，具体来说就是+0和-0它修正为false，NaN和NaN修正为true</p></li>
+    <li rel="51"><p>addEventListener 第三个参数是啥?</p>
+    
+    <p>false是冒泡，true是捕获 <br>
+    如果是个对象的话</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs css"><div class="hljs-line">{
+    </div><div class="hljs-line">    <span class="hljs-attribute">capture</span>: 是否是捕获,
+    </div><div class="hljs-line">    once: 是否只监听一次,
+    </div><div class="hljs-line">    passive: 如果为tru， preventDefault会失效。
+    </div><div class="hljs-line">}
+    </div></code></pre></li>
+    <li rel="52"><p>如何写一个自定义事件</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs coffeescript"><div class="hljs-line">var ev = <span class="hljs-keyword">new</span> Event(<span class="hljs-string">"look"</span>, {<span class="hljs-string">"bubbles"</span>:<span class="hljs-literal">true</span>, <span class="hljs-string">"cancelable"</span>:<span class="hljs-literal">false</span>});
+    </div><div class="hljs-line"><span class="hljs-built_in">document</span>.addEventListener(<span class="hljs-string">'look'</span>,<span class="hljs-function"><span class="hljs-params">()</span>=&gt;</span>{
+    </div><div class="hljs-line">    ...    
+    </div><div class="hljs-line">})
+    </div><div class="hljs-line"><span class="hljs-built_in">document</span>.dispatchEvent(ev);
+    </div><div class="hljs-line"><wbr>
+    </div><div class="hljs-line"><wbr>
+    </div><div class="hljs-line">var event = <span class="hljs-keyword">new</span> CustomEvent(<span class="hljs-string">'name'</span>, {
+    </div><div class="hljs-line">    detail: {
+    </div><div class="hljs-line">    },
+    </div><div class="hljs-line">    bubbles: ,
+    </div><div class="hljs-line">    cancelable: 
+    </div><div class="hljs-line">});
+    </div><div class="hljs-line">xx.addEventListener(<span class="hljs-string">'name'</span>, <span class="hljs-function"><span class="hljs-params">()</span> =&gt;</span> {
+    </div><div class="hljs-line">    lsdasdf;
+    </div><div class="hljs-line">})
+    </div><div class="hljs-line">xx.dispatchEvent(event);
+    </div><div class="hljs-line"><wbr>
+    </div><div class="hljs-line">CustomEvent比event多了个detail属性
+    </div></code></pre></li>
+    <li rel="53"><p>V8内存回收机制</p>
+    
+    <p>V8给JS分配的内存实际上不多。在64位系统下也就一点几G</p>
+    
+    <p>原因是因为JS是单线程运行的，这意味着一旦进入到垃圾回收，那么其它的各种运行逻辑都要暂停; 而且垃圾回收本身还是比较耗时的。</p>
+    
+    <p>V8给堆内存分为新生代内存和老生代内存</p>
+    
+    <p>新生代内存，存活时间短，临时分配，在 64 位和 32 位系统下默认内存分别为 32MB 和 16MB。</p>
+    
+    <p>把新生代内存分成两块，一块为from，一块为to</p>
+    
+    <p>其中From部分表示正在使用的内存，To 是目前闲置的内存。</p>
+    
+    <p>当进行垃圾回收时，V8 将From部分的对象检查一遍，如果是存活对象那么复制到To内存中(在To内存中按照顺序从头放置的)，如果是非存活对象直接回收即可。</p>
+    
+    <p>当所有的From中的存活对象按照顺序进入到To内存之后，From 和 To 两者的角色对调，From现在被闲置，To为正在使用，如此循环。</p>
+    
+    <p>调换的原因是因为From那时候剩下的是内存碎片，分布在堆的各个位置，回收起来难度大，而To的话已经是复制过来剩余存活对象了，是整齐的。这时候就可以把新的To直接舍弃，清空。</p>
+    
+    <p>这样的好处是方便了第二轮后续内存分配。</p>
+    
+    <p>劣势是新生代内存被一分为二，空间利用率不高。</p>
+    
+    <p>老生代内存，存活时间长，新生代中的变量如果经过多次回收后依然存在，那么就会被放入到老生代内存中，这种现象就叫晋升。或者是To区空间的内存占用超过25%，也会发生晋升。</p>
+    
+    <p>老生代的内存回收方式就是我们熟知的标记清除。先标记完了后，把这一轮剩余内存进行移动，往一端靠拢。然后再内存回收的过程中，时间会比较长，V8也利用了类似React fiber一样，进行分片处理。</p></li>
+    <li rel="54"><p>自己实现一个eventEmmiter(也就是发布订阅)</p>
+    
+    <p>export default event = new EventEmmiter(); <br>
+    event.addListener(‘eventName’,callback) <br>
+    event.once(); <br>
+    event.removeListener(”); <br>
+    event.removeAllListener(”); <br>
+    event.emmit(‘eventName’, args); <br>
+    function callback(args) { <br>
+    }</p>
+    
+    <p>// 其实就是pushHandler就可以了</p>
+    
+    <p>// eventEmmiter.js</p>
+    
+    <p>// once其实就是加一个wrapperHandler,然后先remove再调用一次。</p>
+    
+    <p>// 主要就是利用个对象完成。</p></li>
+    <li rel="55"><p>隐式转换</p>
+    
+    <ul>
+    <li><p>主要需要知道几点，转String的时候</p>
+    
+    <ul>
+    <li><p>String([]) = ”;</p></li>
+    <li><p>String([1,2]) = ‘1,2’;</p></li>
+    <li><p>String([null]) = ”;</p></li>
+    <li><p>String([undefined]) = ”;</p></li></ul></li>
+    <li><p>转boolean的时候 <br>
+    假值只有false、null、undefined、空字符、0和NaN，其它值转为布尔型都为true。</p></li>
+    <li><p>转number的时候 <br>
+    Number(只有在字符串里由非数字的时候)NaN <br>
+    其他的非数字不是0就是1。</p></li></ul>
+    
+    <p><code>{} + {} = '[object Object][object Object]';</code> <br>
+    <code>2 * {}  = NaN</code></p>
+    
+    <ul>
+    <li><p>遇到 == 的时候 <br>
+    1.null == undefined特例 <br>
+    2.如果左右是同类型的，除非都是NaN，其他都返回true。 <br>
+    3.Number和String比较的话，String转number; <br>
+    4.如果有Boolean类型的话，优先转Boolean为Number; <br>
+    5.如果有任何一方是对象的话，转成原始类型 <br>
+    <code>[] == !{}  true</code></p></li>
+    <li><p>左边是对象，右边是false <br>
+    false转数字是0，[] tostring = ”; <br>
+    ”转数字是0。</p></li></ul></li>
+    <li rel="56"><p>array.slice(), arr.splice, str.substr, str.substring</p>
+    
+    <p>下述的起始位置从0开始。</p>
+    
+    <ul>
+    <li><p>slice 第一个参数是起始位置，包含关系，第二个参数是结束为止，不包含。</p></li>
+    <li><p>splice 第一个参数是起始位置，包含关系，第二个参数是个数，第三个是插入的</p>
+    
+    <pre class="prettyprint hljs-dark"><code class="hljs lsl"><div class="hljs-line">var str = 'helloworld';
+    </div><div class="hljs-line">str.substr(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>) <span class="hljs-comment">// llo</span>
+    </div><div class="hljs-line">str.substring(<span class="hljs-number">2</span>,<span class="hljs-number">3</span>) <span class="hljs-comment">//l</span>
+    </div><div class="hljs-line">str.substring(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>) <span class="hljs-comment">//''</span>
+    </div></code></pre></li>
+    <li><p>substr 第一个参数是起始位置，包含，第二个是length</p></li>
+    <li><p>substring 第一个参数是起始位置，包含，第二个是end，不包含</p></li></ul></li>
+    <li rel="57"><p>像掘金，复制的时候会有掘金版权声明，如何做到的</p>
+    
+    <p>先监听用户复制，然后在回调函数里拿到复制的文本，当文本大于一定Length的时候，添加版权声明，然后把新的值set到剪切板里去。</p></li>
+    <li rel="58"><p>vue双向绑定的原理 2.0</p>
+    
+    <p>利用Object.defineProperty， 在get的时候判断当前值有没有被添加过，没有添加过的话就添加订阅，在初始化的时候watch，回调里就是update dom的方法。然后在set的时候，就会通知各订阅更新。然后各订阅收到消息后，调用自己的update方法，就是watch的回调。完成update。然后dom元素比如input发生改变的话，给input上一个监听，改变的时候同时改变你defineproperty的值就完成双向绑定了。</p></li>
+    <li rel="59"><p>vue双向绑定原理 3.0</p>
+    
+    <p>其实就是把上面的方法换成proxy</p></li>
+    <li rel="60"><p>数组和链表的对比</p>
+    
+    <p>1.数组静态分配内存，链表动态分配内存 <br>
+    2.数组在内存中是连续的，而链表不一定是连续的 <br>
+    3.数组利用下标定位，时间复杂度是O(1)，链表只能一个一个查，时间复杂度是O(n). <br>
+    4.数组插入或者删除动作的的时间复杂度是O(n),链表的话是O(1)。因为数组删除或者是插入后要移位。而链表直接解除或者添加即可。不过唯一缺点是它有一个额外的域，存放内存中下一节点的地址。</p></li>
+    <li rel="61"><p>微信小程序只展示最近的20个，最近命中的在上面，多的移除。</p>
+    
+    <p>利用一个双向循环链表，每次新插数据的时候，先查询，如果查到了，把数据移到链表头部，当数据满了，就讲链表尾部的丢弃。这个算法叫LRU。 <br>
+    比数组好的是，查询阶段，都是O(n)，但是在移位阶段的时候，链表是O(1)，数组是O(1),删除尾部都是O(1)</p></li>
+    </ol></div></body></html>
