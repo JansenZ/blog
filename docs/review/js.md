@@ -11,7 +11,7 @@
    如果对应变量没有相关性的话，会直接给变成`var`，但是如果有类似于多个相同的，不同地方引用的话，就是改变量名，使内外层的变量名称不一样。
 
 3. 什么是标签模板？模板字符串函数的参数你知道是啥吗？
-s
+
    标签模板就是在模板字符串前面加个函数，然后通过函数处理这个模板字符串。
 
    函数里的参数第一个就是非变量的数组合集，后面的参数是...，代表各个参数。
@@ -208,6 +208,17 @@ s
    - 箭头函数不能用 arguments，只能用...args
    - 箭头函数没有原型属性
    - 箭头函数不能通过 apply.call.bind 改变 this。
+
+10. 为啥let用window访问不到
+
+    let 在全局中创建的变量存在于一个块级作用域（Script）中,它与 window(Global)平级,
+    var 在全局中创建的变量存在于window(Global)中;
+
+11. 为什么 for > forEach > map
+    其实这三个循环方法并不完全等价：
+    1. for 循环当然是最简单的，因为它没有任何额外的函数调用栈和上下文；
+    2. forEach 其次，因为它其实比我们想象得要复杂一些，它的函数签名实际上是 `array.forEach(function(currentValue, index, arr), thisValue)`它不是普通的 for 循环的语法糖，还有诸多参数和上下文需要在执行的时候考虑进来，这里可能拖慢性能；
+    3. map 最慢，因为它的返回值是一个等长的全新的数组，数组创建和赋值产生的性能开销很大。
 
 ### JS
 
@@ -597,6 +608,7 @@ s
     - apply 第二个参数是数组
     - bind 是和 call 一样，但是生成了一个新的函数。
     - 实现 bind 就更简单了，context 不用动，传递下 this 函数，然后 return 个 function，参数和之前的组合一下，调用 apply 就可以了。
+    - call 比 apply快，因为apply内部还要判断参数是不是数组，还需要获取数组length等等，而call就没这些事
 
 23. 事件循环 event loop
 
@@ -714,11 +726,43 @@ s
     - 类继承
       `xx extends`
 
-    普通继承和类继承是有区别的，es5 是借助构造函数实现，实质上是先创造子类的实例对象 this，然后再讲父类的方法添加到这个 this 上去。
+    普通继承和类继承是有区别的，es5 是借助构造函数实现，实质上是先创造子类的实例对象 this，然后再将父类的方法添加到这个 this 上去。
 
     而 es6 的继承机制完全不同，实质上是先创造父类的实例对象 this（所以必须先调用 super 方法，）然后再用子类的构造函数修改 this。
 
     es6 在继承的语法上不仅继承了类的原型对象，还继承了类的静态属性和静态方法。
+
+    通过代码来解释
+    ```js
+    function MyArray() {
+        Array.call(this);
+    }
+
+    MyArray.prototype = Object.create(Array.prototype, {
+    constructor: {
+        value: MyArray,
+        writable: true,
+        configurable: true
+    }
+    });
+
+    var colors = new MyArray();
+    colors[0] = "red";
+    colors.length; // 0
+
+    class MyArray extends Array {
+        constructor() {
+            super();
+        }
+    }
+
+    var arr = new MyArray();
+    arr[0] = 12;
+    arr.length; // 1
+    ```
+    在不是继承原生构造函数的情况下，A.call(this) 与 super() 在功能上是没有区别的
+
+    但是如果是原生对象，就不行了，是拿不到内部属性的
 
 28. 手写 call, apply, bind 出来
 

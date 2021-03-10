@@ -60,6 +60,7 @@
 3. 为什么用 React + mobx？
 
    React 和 Vue 有许多相似之处，它们都有：
+
    - 使用 Virtual DOM
    - 提供了响应式 (Reactive) 和组件化 (Composable) 的视图组件。
    - 将注意力集中保持在核心库，而将其他功能如路由和全局状态管理交给相关的库。
@@ -67,301 +68,7 @@
 
    确实，mobx 的实现原理类似于 vue 的数据双向绑定，用了这个，可以让 react 的数据管理如 vue 一般容易，而且又能享受到 jsx 的快感，包括不限于 hooks
 
-4. babel
-
-   babel 的处理流程是
-
-   1. 先用词法分析，把源代码转换成 token
-   2. 再用语法分析，把 token 词转换成 ast（抽象语法树）有一个[在线 bst](https://astexplorer.net/)可以在线看生成的 ast。在线写 babel 插件（@babel/parser）
-   3. （@babel/traverse）接着就是**转换(Transform)**了，转换阶段会对 AST 进行遍历，在这个过程中对节点进行增删查改。Babel 所有插件都是在这个阶段工作, 比如语法转换、代码压缩。
-   4. 代码生成，把 ast 转换成新的可运行的代码（@babel/generator）
-
-   babel 执行的需要 babel/cli，cli 依赖 babel/core。
-
-   插件在预设前运行。
-
-   插件的执行顺序是从左到右
-
-   ```js
-   {
-         "plugins": ["transform-decorators-legacy", "transform-class-properties"]
-   }
-   {
-       "plugins": [
-           ['xxxname',{"loose": true}]
-       ]
-   }
-   ```
-
-   如果加参数的话，就插件内数组加数组。
-
-   自定义插件的话，就是处理自己想处理的那部分语言。
-
-5. 如何用 babel 写一个自定义插件。
-
-   进入 vistor 节点,比如我要替换 let 为 var，那就找到 VariableDeclaration 定义节点，然后进去后判断下 path.node.kind 是不是 let，如果是，改成 var 就可以了。具体的可以到 astexplorer 上学习一下。
-
-   ```js
-   visitor: {
-   Identifier(path) {
-       path.node.name = "_" + path.node.name;
-   },
-   VariableDeclaration(path) {
-       if (path.node.kind == "let") {
-       path.node.kind = "var";
-       }
-   },
-   ```
-
-   预设就是一堆插件的集合，预设的执行顺序是从右到左。最新的预设已经不需要什么 stage 了，就用的 env
-
-   ```js
-   //.babelrc
-   {
-       "presets": [
-           [
-               "@babel/preset-env",
-               {
-                   "useBuiltIns": "usage", // 用了这个可以按需引用用到的polyfill
-                   "corejs": 3 //搭配使用的
-               }
-           ]
-       ],
-       "plugins": [
-           "@babel/plugin-transform-runtime" // 用了这个可以节省很多重复的代码
-       ]
-   }
-   ```
-
-6. webpack
-
-   webpack 主要分
-
-   - entry: 入口，定义入口文件位置
-   - output: 输出，定义输出文件
-   - loader: 模块转换器，（和 babel 的交互就是通过 babel-loader）
-   - 插件(plugins)
-
-   ```js
-   //webpack.config.js
-   module.exports = {
-       module: {
-           rules: [
-               {
-                   test: /\.jsx?$/,
-                   use: ['babel-loader'],
-                   exclude: /node_modules/ //排除 node_modules 目录，也可以用include,就是包含哪些文件夹。
-               }
-           ]
-       }
-   }
-   ```
-
-   npm init -y，可以快速的创建一个 packge.json 文件
-
-7. csr ssr spa
-
-   - ssr:
-
-     - 优点：这种页面（html）直出的方式可以让页面首屏较快的展现给用户，对搜索引擎比较友好，有利于 SEO。
-     - 缺点：所有页面的加载都需要向服务器请求完整的页面内容和资源，访问量较大的时候会对服务器造成一定的压力，传统的 ssr 页面之间频繁刷新跳转的体验并不是很友好。
-
-   - csr
-     优点：
-
-     - 页面之间的跳转不会刷新整个页面，而是局部刷新，体验上有了很大的提升。
-     - 单页应用中，只有首次进入或者刷新的时候才会请求服务器，只需加载一次 js css 资源，页面的路由维护在客户端，页面间的跳转就是切换相关的组件所以切换速度很快，另外数据渲染都在客户端完成，服务器只需要提供一个返回数据的接口,大大降低了服务器的压力。
-       缺点：
-
-     - SEO 不行
-     - 如果 bundlejs 很大的情况下，首屏加载时间过长。
-
-   所以可以每张页面在刷新的时候走 ssr，然后后续操作走 csr，这样既可以解决 seo 的问题，也可以解决首屏慢的问题。
-
-   那么，能够实现 React ssr 的先决条件就是虚拟 dom，有了虚拟 dom 后，加上 node 本身也是 js，react 可以实现服务端和客户端的同构，同构的最大优点是双端可以公用一套代码。
-
-   - prerender
-     - 优点，本质上还是 csr,首页 seo 就够了，它在构建阶段就将 html 页面渲染完毕，很快。
-     - 缺点，同时，由于是缓存，不会进行二次渲染，也就是说，当初打包时页面是怎么样，那么预渲染就是什么样，如果页面上有数据实时更新，那么浏览器第一次加载的时候只会渲染当时的数据，等到 JS 下载完毕再次渲染的时候才会更新数据更新，会造成数据延迟的错觉。
-     - Prerender 就是利用 Chrome 官方出品的 Puppeteer 工具，对页面进行爬取。它提供了一系列的 API, 可以在无 UI 的情况下调用 Chrome 的功能, 适用于爬虫、自动化处理等各种场景。它很强大，所以很简单就能将运行时的 HTML 打包到文件中。原理是在 Webpack 构建阶段的最后，在本地启动一个 Puppeteer 的服务，访问配置了预渲染的路由，然后将 Puppeteer 中渲染的页面输出到 HTML 文件中，并建立路由对应的目录。
-
-   为了实现 ssr，react 内部有
-
-   import ReactDOMServer from 'react-dom/server'
-
-   ReactDOMServer.renderToString(element)
-
-   可以把 react 组件转换成 html。
-
-   在 react 16 前该方法生成的 html 内容的每一个 DOM 节点都有一个 data-react-id 属性，根节点会有一个 data-react-checksum 属性。
-
-   组件在服务端渲染后，在浏览器端还会渲染一次，来完成组件的交互等逻辑。渲染时，react 在浏览器端会计算出组件的 data-react-checksum 属性值，如果发现和服务端计算的值一致，则不会进行客户端渲染。所以 data-react-checksum 属性的作用是为了完成组件的双端对比。
-
-   react 16 以后，不会生成节点，靠 ReactDOM.hydrate()。
-
-   路由的话，客户端用 BrowserRouter，服务端用 StaticRouter。
-
-   服务端是不会执行 didmount，但是会执行 willmount，这也是为啥数据请求别写 willmount 的原因。
-
-   fetch 是不可以在 node 使用，但是 axios 可以。
-
-   然后如果想做数据同构的话，其实也可以自己写一个静态方法
-
-   ```js
-   class Foo {
-       run(){
-           .....
-           console.log('hello');
-       }
-   }
-
-   Foo.method=function(){
-       console.log('hello method');
-   }
-   ```
-
-   这也就可以使用了。
-
-   服务端获取取数据
-
-   先拿到 url 地址。
-   `const path = ctx.request.path;`
-
-   查找到的目标路由对象
-   `let targetRoute = matchRoute(path,routeList);`
-
-   数据预取 -> fetchResult
-
-   ```js
-   let fetchDataFn = targetRoute.component.getInitialProps;
-   let fetchResult = {};
-   if(fetchDataFn){
-       fetchResult = await fetchDataFn();
-   }
-   ```
-
-   将预取数据在这里传递过去 组内通过 props.staticContext 获取
-
-   ```js
-   const context = {
-       initialData: fetchResult
-   };
-   ```
-
-   // 这在服务端渲染的时候，组件里通过`props.staticContext.initialData`就可以获取的到了
-
-   数据脱水
-
-   上述搞定后,ssr 没问题，但是客户端渲染没数据。
-
-   由于客户端存在双端对比机制，导致到了客户端就没了，所以还需要做一层数据脱水，可以把数据藏在某个 displaynone 的元素下，客户端在渲染前获取这个数据，然后存到一个全局变量下。
-
-   所有组件都需要三个判断，第一个判断，是否是 ssr 直出，这个是可以用 webpack 的 DefinePlugin 做全局变量。
-
-   - 如果是的话，直接走服务端数据，通过`props.staticContext.initialData`获取
-   - 如果不是服务端的话，还要判断，是不是客户端首次渲染，默认就是，请求完数据后就变成 false
-   - 如果不是客户端首次渲染的话，`this.props.history && this.props.history.action === 'PUSH'`;
-     路由跳转的时候可以异步请求数据，然后渲染自己请求的数据。
-
-   SEO 动态添加，可以利用`react-helmet`插件，使用起来更方便，自己写的话就是利用做的 initalData 都可以的。
-
-   如果需要分离文件的话，可以利用 import。then，做按需加载。webpack 会给你搞定。
-
-   ```js
-   路由：  AsyncLoader(() => import('../pages/index')),
-   HOC：  function asyncFn(props) {
-           return <AsyncBundle load={loader}>
-                   {(Comp) => <Comp {...props}/>}
-               </AsyncBundle>
-           }
-       }
-   AsyncBundle:
-   componentDidMount() {
-       if (!this.state.mod) {
-           this.load(this.props);
-       }
-   }
-
-   load(props) {
-       this.setState({
-           mod: null
-       });
-       //注意这里，使用Promise对象; mod.default导出默认
-       props.load().then((mod) => {
-           this.setState({
-               mod: mod.default ? mod.default : mod
-           });
-       });
-   }
-
-   render() {
-       return this.state.mod ? this.props.children(this.state.mod) : <LoadingCompoent/>;
-   }
-   ```
-
-   客户端是这样的路由，但是服务端需要把动态的再转成静态的，防止比对失败。
-
-   ```js
-   if (checkIsAsyncRoute(item.component)) {
-       staticRoutes.push({
-           ...item,
-           component: (await item.component().props.load()).default
-
-       });
-   }
-   ```
-
-   但是这样会导致服务端渲染完了，到了客户端后，由于是按需加载，还要请求一次 js，会导致页面刷一下变成 loader，然后再渲染。
-
-   所以解决方案就是在客户端渲染入口，找到对应的 url 组件，如果是按需加载的，让它组件加载完再渲染页面。
-
-   ```js
-   //****等待异步脚本加载完成****
-   if (targetRoute.component[proConfig.asyncComponentKey]) {
-       targetRoute.component().props.load().then(res => {
-       //异步组件加载完成后再渲染页面
-       console.log('异步组件加完成');
-
-       //加载完成再执行 dom 挂载
-       renderDom(routeList);
-       });
-   }
-   ```
-
-   在客户端组件，如果页面回退的时候，或者自己 push 的时候 还需要 update 的。
-
-   ```js
-   _this = this; // 保证_this指向当前渲染的页面组件
-   //注册事件，用于在页面回退
-   window.addEventListener('popstate', popStateCallback);
-
-   const canClientFetch = this.props.history && this.props.history.action === 'PUSH';//路由跳转的时候可以异步请求数据
-   if (canClientFetch) {
-       await this.getInitialProps();
-   }
-   ```
-
-   最后，完整的描述下 react ssr 全过程。
-
-   1. 客户端访问 url
-   2. url 打到 node 服务器，node 拿到 url 后，路由解析 path，找到对应的路由组件。
-   3. 然后调用组件下的 getdata 方法，服务器接收到请求后返回数据
-   4. node 把这个数据放到 StaticRouter 的 context 属性下，这样组件里就可以通过 props.staticContext 获取对应数据。
-
-   ```js
-   html = renderToString(<StaticRouter location={path} context={context}>
-       <App routeList={staticRoutesList}></App>
-       </StaticRouter>);
-   }
-   ```
-
-   5. 然后还顺便放一份这个数据给一个 display none 的标签下，用于后续同构的时候双端对比使用（数据脱水）
-   6. 渲染组件并返回 HTML 的结果，服务端渲染完成
-   7. 客户端显示 HTML 内容后，加载 Bundle.js，然后进行客户端渲染（接管整个页面，并绑定交互时间）
-   8. 客户端渲染找到对应标签里的数据，存到全局下，然后在渲染的组件的时候做对应的判断，完成 csr 部分
-   9. 切换标签页，成为一个 spa。该咋走咋走。
-
-8. 返回拦截
+4. 返回拦截
 
    返回劫持弹窗，我们的项目的路由不是 react-router，是我们老大自己实现的一个，所以更没有`prompt`，但是好在他在`navigation`返回的时候，判断`isback`的时候，添加了一个事件
 
@@ -407,7 +114,7 @@
 
    如果支付失败的话，直接 history.back 回首页的那个位置。
 
-9. rn 热更新原理
+5. rn 热更新原理
 
    react-native 的程序实际上是原生的模块+JS 和图片资源模块，热更新，就是更新其中的 js 和图片资源。
    安卓程序把它名字命名为 zip 解压后可以清楚的看到其中的 bundle 文件和资源文件
@@ -418,51 +125,51 @@
    启动程序的时候，会发一个请求给服务器，带上自己当前`app`的`key`值。服务端会判读两次上传的包的异同来决定是否需要全量热更新还是增量热更新，如果是全量热更新会返回一个`downloadurl`，这个`url`就是自己在 react-native-update 后台配置的那个下载的 url。手机会下载整个 bundlejs 下来完成全量热更新。
    如果是增量热更新的话，会返回一个 pdiffUrl，拿到这个 url 下载下来的就是增量数据，然后客户端进行数据合并完成增量热更新。
 
-10. rn im 的问题
-    [im 问题链接](https://segmentfault.com/n/1330000011795138)
-    发送图片的宽高比问题
+6. rn im 的问题
+   [im 问题链接](https://segmentfault.com/n/1330000011795138)
+   发送图片的宽高比问题
 
-    ```js
-    // radio进来的就是 宽 / 高
-    const measure = (radio) => {
-        const baseW = winWidth / 2;
-        // 这里的比例也有限制，不可能无限按原图比例，所以就要有边界值。
-        const mradio = radio < 0.5 ? 0.5 : radio > 2 ? 2: radio;
-        // 如果图片很高，宽一点点，比如长图。那不可能给他展示那么高，就要有一个限制。
-        // 高就是这个限制，然后根据比例算它的宽
-        if(mradio < 1) {
-            width = baseW * mradio;
-            height = baseW;
-        }
-        // 如果图片很扁，那宽按基本来，高按照比率来。
-        else {
-            width = baseW;
-            height = baseW / mradio;
-        }
+   ```js
+   // radio进来的就是 宽 / 高
+   const measure = radio => {
+     const baseW = winWidth / 2;
+     // 这里的比例也有限制，不可能无限按原图比例，所以就要有边界值。
+     const mradio = radio < 0.5 ? 0.5 : radio > 2 ? 2 : radio;
+     // 如果图片很高，宽一点点，比如长图。那不可能给他展示那么高，就要有一个限制。
+     // 高就是这个限制，然后根据比例算它的宽
+     if (mradio < 1) {
+       width = baseW * mradio;
+       height = baseW;
+     }
+     // 如果图片很扁，那宽按基本来，高按照比率来。
+     else {
+       width = baseW;
+       height = baseW / mradio;
+     }
 
-        // 图片符合规范，按原有比例来即可。
-        return {
-            width: Math.ceil(width),
-            height: Math.ceil(height)
-        }
-    }
-    ```
+     // 图片符合规范，按原有比例来即可。
+     return {
+       width: Math.ceil(width),
+       height: Math.ceil(height)
+     };
+   };
+   ```
 
-11. rn flatlist 将屏幕外的视图组件回收，达到高性能的目的。
+7. rn flatlist 将屏幕外的视图组件回收，达到高性能的目的。
 
-12. 调试技巧...
+8. 调试技巧...
 
-    1. element 是可以 copy 的
-    2. console.log('%c this is a message','color:#f20;') 可以输入带颜色的 log,自己在 vscode 里自定义个预设片段就可以了。
-    3. 点到 element，直接点 h 就可以隐藏，不需要直接 delete 掉了
-    4. command + 上下可以直接移动 element
-    5. 阴影这样的可以直接在页面上调，直接点击样式，就唤起弹窗，快速调试
+   1. element 是可以 copy 的
+   2. console.log('%c this is a message','color:#f20;') 可以输入带颜色的 log,自己在 vscode 里自定义个预设片段就可以了。
+   3. 点到 element，直接点 h 就可以隐藏，不需要直接 delete 掉了
+   4. command + 上下可以直接移动 element
+   5. 阴影这样的可以直接在页面上调，直接点击样式，就唤起弹窗，快速调试
 
-13. 调试文字样式 debug， document.designModel = 'on'
+9. 调试文字样式 debug， document.designModel = 'on'
 
-    把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
+   把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
 
-14. 监控错误，打点上报，捕获异常。
+10. 监控错误，打点上报，捕获异常。
 
     <b>监控性能</b>
 
@@ -471,7 +178,7 @@
 
     ```js
     const observer = new PerformanceObserver(performanceCallBack);
-    observer.observe({entryTypes: ['paint', 'resource']});
+    observer.observe({ entryTypes: ["paint", "resource"] });
     observer.disconnect();
     ```
 
@@ -488,9 +195,23 @@
     <b>捕获异常</b>
 
     - 在一些可能会出错的地方使用 try catch
-    - 在全局就可以使用 window.onerror 来监听
+    - 在全局就可以使用 window.onerror 来监听，通过window.onerror事件，可以得到具体的异常信息、异常文件的URL、异常的行号与列号及异常的堆栈信息，再捕获异常后，统一上报至我们的日志服务器。
+        ```
+        window.onerror = function(errorMessage, scriptURI, lineNo, columnNo, error) {
+            console.log('errorMessage: ' + errorMessage); // 异常信息
+            console.log('scriptURI: ' + scriptURI); // 异常文件路径
+            console.log('lineNo: ' + lineNo); // 异常行号
+            console.log('columnNo: ' + columnNo); // 异常列号
+            console.log('error: ' + error); // 异常堆栈信息
+            // ...
+            // 异常上报
+        };
+        throw new Error('这是一个错误');
+        ```
+        ![tu](https://user-gold-cdn.xitu.io/2018/7/29/164e673466b32bf3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
     - 但是，事件触发默认是冒泡阶段，所以如果想知道是哪个 js 或者 css 报错的话，可以把阶段换成捕获阶段
     - 而且跨域的情况下，window.onerror 是无法捕获的，不过用 SPA 就一个 js 正常不用考虑。不过遇到这样的情况，可以在那些三方 js 里 script 标签上加入 crossorigin="anonymous"这个标签，代表支持跨域。同时，服务端也要设置 Access-control-allow-orgin 的
+    - try…catch单点捕获
     - react16 的 Error Boundary，可以处理子组件的渲染错误，避免渲染错误导致的 crash，react 生命周期里的 componentDidCatch，getDerivedStateFromError，后者可以在错误发生时降级处理。前者可以日志记录。
 
     ```js
@@ -508,10 +229,10 @@
 
     ```js
     var data = JSON.stringify({
-        name: 'Berwin'
+      name: "Berwin"
     });
 
-    navigator.sendBeacon('/haopv', data)
+    navigator.sendBeacon("/haopv", data);
     ```
 
     使用 beacon 上报的话，默认是 post，不能修改，这个是利用原生的方法
@@ -532,7 +253,7 @@
     });
     };
 
-15. 前端模块化
+11. 前端模块化
 
     [这个链接将的浅显易懂](https://juejin.cn/post/6844903712553435149)
 
@@ -541,9 +262,8 @@
     AMD 规范的话 require.js 推行的比较好。
 
     ```js
-    <script data-main="vender/main" src="vender/require.js"></script>
-    main.js里通过require(['mo1','mo2'],function(mod1, mod2) {
-    });
+    <script data-main="vender/main" src="vender/require.js"></script>;
+    main.js里通过require(["mo1", "mo2"], function(mod1, mod2) {});
     ```
 
     小模块通过 define,return 的方式完成定义导出。主要就是定义 define 应该怎么写。
@@ -573,7 +293,7 @@
     - 而 ES6 的话模块加载是在编译时做的，也就是在编译阶段确定好模块的依赖关系，而不是在运行阶段。
     - 这样的结果就是 CommonJS 规范可能因为循环引用而找不到对应函数发生报错，而 es6 不会。
 
-16. 听过 Style-components 吗？
+12. 听过 Style-components 吗？
 
     我们目前使用的是 css namespace，公共的写在 common 里
 
@@ -583,19 +303,19 @@
 
     ```js
     export const HeaderWrapper = styled.div`
-    z-index: 1;
-    position: relative;
-    height: 56px;
-    border-bottom: 1px solid #f0f0f0;
+      z-index: 1;
+      position: relative;
+      height: 56px;
+      border-bottom: 1px solid #f0f0f0;
     `;
     <HeaderWrapper>
-        <div>header</div>
-    </HeaderWrapper>
+      <div>header</div>
+    </HeaderWrapper>;
     ```
 
     - css modules，把对应的 css 文件引入成为对象，然后在 div 上的时候，写成 styles.xxx，webpack 配置一下 css-loader 的 options，会去自动添加一串 hash。
 
-17. 路由守卫怎么做的
+13. 路由守卫怎么做的
 
     包装一个方法，跳转的时候先进这个方法。
 
@@ -607,7 +327,7 @@
 
     假如是通过 url 直接输入的，可以给每一个页面外面包装一个路由授权组件，在组件里调用上述的方法，好像也可以哦。
 
-18. 二维码扫码登陆原理
+14. 二维码扫码登陆原理
 
     首先，二维码本身就是一个 url，并且包含这个页面当前的唯一 token,用于标识是哪张页面点进了二维码登陆的页面。
     在手机端，比如微信，那么我扫码后，会跳转到这个登录确认的页面，并且把我的个人信息及唯一 token 发送给服务端，然后服务端会标记已扫码。
@@ -615,7 +335,7 @@
 
     在 PC 端，轮训去找服务端问，用户是否扫码，如果已经扫码了，这时候接口应该返回待确认的字段，如果点击确认后，再请求这个接口，服务端会吐出已确认，并且应该会种 cookie，然后重定向到首页，完成登陆。
 
-19. 懒加载怎么实现
+15. 懒加载怎么实现
 
     - 第一个方案：
       使用 IntersectionObserver 可以做一个。它的回调接受两个参数，一个是 IntersectionObserverEntry 数组，一个是 obsever 自己
@@ -643,25 +363,43 @@
     - 第三个方案：
       不需要 scrollTop，直接把上面的 offsetTop 改成 img.getBoundingClientRect().top 对比 screenH 即可
 
-20. preact 源码阅读
+16. preact
 
     preact 实现 hook 是数组的方式
     preact 没有事件系统，直接用的浏览器的
 
-21. 你知道单点登录吗？如何实现呢？
+17. 你知道单点登录吗？如何实现呢？
 
-    如果是同域名下的，直接用 cookie 就可以了，如果是在一个大域名下的不同子域名，可以到大域名下去登录，把 cookie 存在父域名下，这样所有子域名就可以获得到这个 cookie。
+    1. 如果是同域名下的，直接用 cookie 就可以了。
 
-    如果是不同域名的，可以走一个中间 server，访问 A 页面，判断 A 页面是否有 cookie，如果有的话，直接请求获取用户信息。如果没有的话，判断是否需要强制登录，如果需要的话，跳转到 Server 下，并带上这个回调页面。然后在那个 server 下登录。登录好了后，那个页面会下发一个 token,并且重定向到 A 页面，然后 A 页面会获取这个 token，浏览器的服务器会验证这个 token 是否正确，如果正确的话，你就登录成功并存下服务端给你的新 cookie。这个时候你再访问 B 页面，B 页面会跳转到 Servcer 下，server 发现你已经有自己的 cookie 了，直接给你下发一个 token 并重定向回 B 页面。但是你要说 B 页面刷新了没有跳转直接就变成登录的话，他怎么知道我已经在别处登录过了呢？难道根据同 ip 同物理地址生成一个物理 id 吗？
+    2. 如果是在一个大域名下的不同子域名，可以到大域名下去登录，把 cookie 存在父域名下，这样所有子域名就可以获得到这个 cookie。
 
-22. RN 原理是什么
+    3. 如果是不同域名的，可以走一个中间 server，访问 A 页面，判断 A 页面是否有 cookie1
+
+       如果有的话，直接请求获取用户信息。
+
+       如果没有的话，说明没有登录，重定向到 Server 下，并带上这个回调页面。
+
+       然后sever中间页判断用户是否有 cookie2
+
+       如果中间页没有cookie2，说明没有登录，它会重定向到登录页，然后登录后，就会拥有 Cookie2。也就是TGC，然后重定向回A并且带上 ST，
+       回到A页面后，拿上这个ST会去请求服务端，服务端拿到这个ST后，会去找这个 server 验证， 是不是你签发的，如果是的话，setCookie,A 页面登录成功。
+
+       A页面下次进来，由于拥有cookie1，直接登录成功。
+
+       如果中间页有cookie2的话，说明已经在中间 server 上登录过了，至于你是A过来的还是B过来的，无所谓，假设是B吧，直接重定向回 B 页面， 然后url上带一个 ST，
+       回到B页面后，拿上这个ST会去请求服务端，服务端拿到这个ST后，会去找这个 server 验证， 是不是你签发的，如果是的话，setCookie,B 页面登录成功。至此，单点登录就完成了。
+
+       ![tu](https://user-gold-cdn.xitu.io/2020/1/5/16f74f3f11a6fbad?imageslim)
+
+18. RN 原理是什么
 
     JS 的话内置一个 javascript core，安卓的话使用 webkit.org.jsc.cso
     rn 会把 js 编译成一个 bundle 文件，和 webpack 一样，如果是原生的会通过 bridge 调用方法。
     ios 和安卓对于 rn 来说，是提供一个壳，并且提供了一些原生方法。
     rn 项目下会有一个 native_modules，通过这个模块可以调用原生方法。
 
-23. MVC， MVP, MVVM
+19. MVC， MVP, MVVM
 
     MVC
     model, view, controller。
@@ -674,12 +412,12 @@
     viewmodel。controller。model。
     model 改了动 view，view 改了动 model。就是 vue 那种。我们现在分的层也类似这样。
 
-24. 手写一个双向绑定
+20. 手写一个双向绑定
     vue.js
-25. nginx 知识点
-26. 骨架屏实现方案
-27. 代码生成技术文档
-28. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
+21. nginx 知识点
+22. 骨架屏实现方案
+23. 代码生成技术文档
+24. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
 
     1. 初始的时候，发现，点击直接跳转过去的时候，会出现里面的图文加载，导致的内容撑开
        然后我在电脑上试的时候，发现，如果把 timeout 设置为 0 的话，安卓一些比较不错的手机，并不会锚点错位。
@@ -690,41 +428,49 @@
     5. 还有一个方案，就是等图片加载完后，再跳过去。
 
     ```js
-    await Promise.all([].map.call(imgs, (img) => {
-            return img.src && img.complete
-                ? true
-                : (img.__load_promise__ || (img.__load_promise__ = new Promise((resolve) => {
-                    var isOk = false;
-                    var ok = () => {
-                        if (!isOk) {
-                            isOk = true;
-                            resolve();
-                            img.onerror = img.onload = img.__load_promise__ = null;
-                        }
-                    };
-                    img.onerror = img.onload = ok;
-                    if (autoLoadLazyImage) {
-                        var dataSrc = img.getAttribute('data-src');
-                        if (dataSrc) {
-                            img.src = dataSrc;
-                            img.style.opacity = 1;
-                            img.removeAttribute('data-src');
-                        }
-                    }
-                    if (img.complete) {
-                        ok();
-                    } else {
-                        setTimeout(ok, 3000);
-                    }
-                })));
-        }));
+    await Promise.all(
+      [].map.call(imgs, img => {
+        return img.src && img.complete
+          ? true
+          : img.__load_promise__ ||
+              (img.__load_promise__ = new Promise(resolve => {
+                var isOk = false;
+                var ok = () => {
+                  if (!isOk) {
+                    isOk = true;
+                    resolve();
+                    img.onerror = img.onload = img.__load_promise__ = null;
+                  }
+                };
+                img.onerror = img.onload = ok;
+                if (autoLoadLazyImage) {
+                  var dataSrc = img.getAttribute("data-src");
+                  if (dataSrc) {
+                    img.src = dataSrc;
+                    img.style.opacity = 1;
+                    img.removeAttribute("data-src");
+                  }
+                }
+                if (img.complete) {
+                  ok();
+                } else {
+                  setTimeout(ok, 3000);
+                }
+              }));
+      })
+    );
     ```
-29. SWR
+
+25. SWR
     [原理分析](https://zhuanlan.zhihu.com/p/93824106)
     [中文文档](https://swr.vercel.app/zh-CN)
     特点
-    - 相当于封装了fetch，可以自动不断的获取最新的数据流
+
+    - 相当于封装了 fetch，可以自动不断的获取最新的数据流
     - 帮助你更好的完成了请求缓存，内置缓存和重复请求去除
     - 分页和滚动位置恢复
-    - 聚焦是重新验证，网络恢复时重新验证，支持Suspense
+    - 聚焦是重新验证，网络恢复时重新验证，支持 Suspense
     - 获取数据的时候，非常简单，简易
+
+26. Taro 是什么?
+    Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发 微信 / 京东 / 百度 / 支付宝 / 字节跳动 / QQ 小程序 / H5 等应用。现如今市面上端的形态多种多样，Web、React Native、微信小程序等各种端大行其道，当业务要求同时在不同的端都要求有所表现的时候，针对不同的端去编写多套代码的成本显然非常高，这时候只编写一套代码就能够适配到多端的能力就显得极为需要。

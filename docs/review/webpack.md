@@ -114,3 +114,44 @@ module.exports = {
 }
 
 ```
+
+32. webpack热更新原理
+
+  `Hot Module Replacement`，简称HMR，无需完全刷新整个页面的同时，更新模块。HMR的好处，在日常开发工作中体会颇深：节省宝贵的开发时间、提升开发体验。
+
+  首先，我们知道Hash值代表每一次编译的标识。
+  
+  其次，根据新生成文件名可以发现，上次输出的Hash值会作为本次编译新生成的文件标识。依次类推，本次输出的Hash值会被作为下次热更新的标识。
+
+  它会埋两个js作为入口的平级
+    1.  `webpack-dev-server/client/index.js` 用于webSocket通信，因为我启动的是本地服务，然后客户端要和我通信，就要有代码，所以偷偷埋一个，用来通信
+    2. 一个是 `webpack/hot/dev-server.js` 用于检查更新逻辑。
+
+  `webpack-dev-server` 跑起来后，会生成一个`compiler`实例，启动server，并且启动websocket服务
+
+  利用 `compiler.watch` 方法，写在 `webpack-dev-middleware` 里
+
+  首先对本地文件代码进行编译打包，也就是webpack的一系列编译流程。
+
+  其次编译结束后，开启对本地文件的监听，当文件发生变化，重新编译，编译完成之后继续监听。
+  
+  内部可能会是用 `fs.watch | fs.watchFile` 来监听的。
+
+  至于开发环境没有dist，实际上是存在内存里了，用的 `memory-fs`
+
+  当我监听到文件的变化后，会重新编译，当编译结束后，通过HMR插件来检查是否需要热更新
+
+  利用上一次保存的 hash 值，调用 hotDownloadManifest 发送xxx/hash.hot-update.json的ajax请求
+
+  ![tu](https://user-gold-cdn.xitu.io/2019/12/1/16ec04289af752da?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+  返回的结果中，h代表本次新生成的Hash值，用于下次文件热更新请求的前缀。c表示当前要热更新的文件对应的是index模块。
+
+  然后通过 动态创建srcipt src的形式，请求 `xxx/hash.hot-update.js` 文件
+
+  ![tu2](https://user-gold-cdn.xitu.io/2019/12/1/16ec04316d6ac5e3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+  而这个js里的代码，会立即执行一个 `webpackHotUpdate` 方法，方法里面就是这次改动的文件代码，然后通过`hotApply`进行代码替换
+
+  完整的大概流程这样的
+  ![tu3](https://user-gold-cdn.xitu.io/2019/9/2/16cf203824359397?imageslim)
