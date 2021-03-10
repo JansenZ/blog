@@ -7,9 +7,32 @@
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+  <style>
+
+    .markdown-section code:not([class*="lang-"]):not([class*="language-"]) {
+      white-space: pre;
+    }
+    #switch_btn {
+      width: 40px;
+      height: 30px;
+      position: fixed;
+      z-index: 999;
+      bottom: 0;
+      left: 0;
+      cursor: pointer;
+      border-radius: 10px;
+      background: #e3e3;
+      text-align: center;
+      line-height: 30px;
+      font-size: 12px;
+    }
+    
+  </style>
 </head>
 <body>
+  
   <div id="app"></div>
+  <div id="switch_btn">黑</div>
   <script>
     window.$docsify = {
       name: '',
@@ -22,6 +45,20 @@
       search: 'auto',
       auto2top: true,
     }
+    var light = "https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css";
+    var dark = 'https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css';
+    document.getElementById('switch_btn').addEventListener('click', function() {
+        let link = document.getElementsByTagName('link')[0];
+        let _src = link.getAttribute('href');
+        if(_src == dark) {
+            document.getElementsByTagName('link')[0].setAttribute('href', light);
+            this.innerHTML = '白';
+        }
+        else {
+            this.innerHTML = '黑';
+            document.getElementsByTagName('link')[0].setAttribute('href', dark);
+        }
+    })
   </script>
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
