@@ -28,9 +28,9 @@
 
    1. 使用数组，简单方便，而且只有几十个数据，性能差距不大。
 
-   进一个新数据，去数组里找它，找到了先 splice 出来，然后 unshift。
+      进一个新数据，去数组里找它，找到了先 splice 出来，然后 unshift。
 
-   如果没有找到，看数组长度，如果不够，就直接 unshift。如果已经够了，就 pop(),然后 unshift。
+      如果没有找到，看数组长度，如果不够，就直接 unshift。如果已经够了，就 pop(),然后 unshift。
 
    2. 使用双向循环链表+散列表。
 
@@ -167,15 +167,15 @@
 
 16. 求两数之和，不准用加减乘除
 
-只能背下来这个公式了把。。。
+    只能背下来这个公式了把。。。
 
-```js
-var add = function(a, b) {
-    if(a == 0) return b;
-    if(b == 0) return a;
-    return add(( a ^ b ),((a & b) << 1));
-};
-```
+    ```js
+    var add = function(a, b) {
+        if(a == 0) return b;
+        if(b == 0) return a;
+        return add(( a ^ b ),((a & b) << 1));
+    };
+    ```
 
 17. 数组降维，写两个
 
@@ -224,47 +224,48 @@ var add = function(a, b) {
 
 20. 判断一个数是不是 4 的指数幂
 
-```js
-    function is4mi(number) {
-        const reg = /^10+$/;
-        // 转换为4进制，如果只有10000+,那就是的，否则就不是的
-        return reg.test(number.toString(4));
-    }
-```
+    ```js
+        function is4mi(number) {
+            const reg = /^10+$/;
+            // 转换为4进制，如果只有10000+,那就是的，否则就不是的
+            return reg.test(number.toString(4));
+        }
+    ```
 
 21. 反转单链表问题
 
     遇到这样的问题，先不要慌，本质上很简单，有两种方法，一种是两两交换，一种是头插法
+
     1. 每次交换一个方向
 
-    首先要声明一个newHead节点，默认是null
+        首先要声明一个newHead节点，默认是null
 
-    然后呢，while当前的node存在
+        然后呢，while当前的node存在
 
-    因为等下node.next要改变方向，所以先存下来一个next作为临时变量
+        因为等下node.next要改变方向，所以先存下来一个next作为临时变量
 
-    存下来后，让node.next指向前面的newHead，也就是null
+        存下来后，让node.next指向前面的newHead，也就是null
 
-    然后让newhead和node都往后移一位即可。
+        然后让newhead和node都往后移一位即可。
 
-    这样每次交换一个方向，最后的newHead就是尾巴节点。也就是新的头节点了。
+        这样每次交换一个方向，最后的newHead就是尾巴节点。也就是新的头节点了。
 
-    ```js
-    let reverse = (node) => {
-        let newHead = null;
-        while(node) {
-            // 临时取到next
-            let next = node.next;
-            // 指向改变
-            node.next = newHead;
-            // 统统往后移一位。
-            newHead = node;
-            node = next;
+        ```js
+        let reverse = (node) => {
+            let newHead = null;
+            while(node) {
+                // 临时取到next
+                let next = node.next;
+                // 指向改变
+                node.next = newHead;
+                // 统统往后移一位。
+                newHead = node;
+                node = next;
+            }
+            // 返回newHead
+            return newHead;
         }
-        // 返回newHead
-        return newHead;
-    }
-    ```
+        ```
 
     2. 头插法
 

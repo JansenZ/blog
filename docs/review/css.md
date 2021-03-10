@@ -182,13 +182,15 @@
 
 16. 检测横屏
 
+    ```css
     window.orientation === 90 || window.orientation === -90 就代表是横屏
 
     @media screen and (orientation: portrait // 竖屏， // landscape 横屏)
+    ```
 
 17. iphoneX 适配
 
-    <meta name="viewport" content="viewport-fit=cover">
+    `<meta name="viewport" content="viewport-fit=cover">`
 
     meta 标签里的 viewport-fit cover, contain
 
