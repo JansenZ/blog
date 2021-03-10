@@ -521,6 +521,7 @@
 
 33. cookie session token
 
+    - cookie呢它的缺点，首先，数据比较大，每次请求都带，浪费，其次呢，一旦被劫持，数据别人都知道了，就说显式的不太合适。
     - session,前端登录完了后，后端会生成一个 sessionid 并 set 到 cookie 里，session 是存储在 tomcat 容器中，所以如果后端及其有多台的话，多机器之间是无法共享 session 的，可以用 spring 提供的分布式 session 解决方案，把 session 存到 redis 中去。
     - sessionid 的使用就是前端会自动带 session 在 cookie 上，服务端会匹配 id，实现一一对应。
     - token，token 是服务端将用户信息经过 base64url 编码后，返回给客户端，前端会存下这个 token，每次用户发生需要登录太的请求的时候，前端会带上 token 参数，服务端在拿到这个 token 信息后解密就知道用户是谁了，这个方法叫做 JWT（json web token），token 由于是前端带的，所以适用于分布式微服务。
