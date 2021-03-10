@@ -6,7 +6,7 @@
 
    如果只要单边的边框的话，对应的那边的 after 标签 border-XX-width: 0 即可。
 
-   ```
+   ```css
    position: absolute;
    content: "";
    display: block;
@@ -36,7 +36,7 @@
 
 2. 环绕文字的 css 属性 shape-outside
 
-   ```
+   ```css
    shape-outside: circle();
    shape-outside: ellipse();
    shape-outside: inset(10px 10px 10px 10px);
@@ -67,7 +67,7 @@
 
    使用 vw 单位的话，屏幕的宽度就是 100vw，那么 24px/750px \* 100 = 对应的 vw。这样写 font-size 的时候直接写 vw(24)就可以了；
 
-   ```
+   ```css
    $vm_base: 750;
    @function vw($px) {
        @return ($px / $vm_base) * 100vw;
@@ -102,7 +102,7 @@
 
 8. 如何实现一个滚动视差
 
-   ```
+   ```css
    <section class="g-word">Header</section>
    <section class="g-img">IMG1</section>
    <section class="g-word">Content1</section>
@@ -133,7 +133,7 @@
 
     如果后台支持的话，可以用 srcset 来做到。只需要提供图片资源、以及断点，其他都交给浏览器智能解决，浏览器会自动根据场景匹配最佳显示图片
 
-    ```
+    ```css
     <img src="128px.jpg"
         srcset="128px.jpg 128w, 256px.jpg 256w, 512px.jpg 512w"
         sizes="(max-width: 360px) calc(100vw - 20px), 128px">
@@ -192,7 +192,7 @@
 
     meta 标签里的 viewport-fit cover, contain
 
-    ```
+    ```css
     safe-area-inset-left：安全区域距离左边边界距离
     safe-area-inset-right：安全区域距离右边边界距离
     safe-area-inset-top：安全区域距离顶部边界距离
@@ -201,7 +201,7 @@
 
     constant 在 iOS < 11.2 的版本中生效，env 在 iOS >= 11.2 的版本中生效，这意味着我们往往要同时设置他们，将页面限制在安全区域内：
 
-    ```
+    ```css
     {
         padding-bottom: constant(safe-area-inset-bottom);
         padding-bottom: env(safe-area-inset-bottom);

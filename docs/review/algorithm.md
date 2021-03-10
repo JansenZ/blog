@@ -124,7 +124,7 @@
 
     硬币问题可以假设只有一个硬币，假设是 3
 
-    ```
+    ```js
     那么dp8 = {
         选它, 就是dp[8-3=5] + currentCount
         不选它就是currentCount
@@ -155,7 +155,7 @@
 
     干脆就记下来好了
 
-    ```
+    ```js
         var lastRemaining = function(n, m) {
             let result = 0;
             for(let i = 2; i <= n; i++) {
@@ -169,7 +169,7 @@
 
 只能背下来这个公式了把。。。
 
-```
+```js
 var add = function(a, b) {
     if(a == 0) return b;
     if(b == 0) return a;
@@ -179,7 +179,7 @@ var add = function(a, b) {
 
 17. 数组降维，写两个
 
-    ```
+    ```js
     while(arr.some(Array.isArray)) {
         arr = [].concat(...arr)
     }
@@ -211,7 +211,7 @@ var add = function(a, b) {
 
     f(n) = f(n-1) + f(n-1) = 2 \* f(n - 1);
 
-    ```
+    ```js
     function jumpFloorII(number)
     {
         if(number < 1)
@@ -224,7 +224,7 @@ var add = function(a, b) {
 
 20. 判断一个数是不是 4 的指数幂
 
-```
+```js
     function is4mi(number) {
         const reg = /^10+$/;
         // 转换为4进制，如果只有10000+,那就是的，否则就不是的
@@ -249,7 +249,7 @@ var add = function(a, b) {
 
     这样每次交换一个方向，最后的newHead就是尾巴节点。也就是新的头节点了。
 
-    ```
+    ```js
     let reverse = (node) => {
         let newHead = null;
         while(node) {
@@ -280,7 +280,7 @@ var add = function(a, b) {
 
     这样下次再进来，就是node2,把它往前插。类似上面的换方向，但是思路不一样。
 
-    ```
+    ```js
     // 采用头插法
     let reverse = (node) => {
         let newHead = new NodeList();
