@@ -49,23 +49,25 @@
 7. 什么是虚拟 dom
 
    虚拟 DOM 就是一个 JS 对象模拟 DOM 树。
+   ```js
    {
-   tag: 'div',
-   props: {
-   id: 'app'
-   },
-   chidren: [
-   {
-   tag: 'p',
-   props: {
-   className: 'text'
-   },
-   chidren: [
-   'hello world!!!'
-   ]
+        tag: 'div',
+        props: {
+            id: 'app'
+        },
+        chidren: [
+        {
+            tag: 'p',
+            props: {
+            className: 'text'
+        },
+            chidren: [
+                'hello world!!!'
+            ]
+        }
+        ]
    }
-   ]
-   }
+   ```
    因为原生操作 dom 的方式可维护性不高
 
    如果大批量的 innerHTML 会增大绘制时间。同时，触发回流的频率更高。

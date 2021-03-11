@@ -57,7 +57,49 @@
      继承的最大问题在于：无法决定继承哪些属性，所有属性都得继承。这样对于如何定义父类边界是非常值得考究的
      用组合的话，可以拼装，就可以避免这个问题。
 
-3. 为什么用 React + mobx？
+3. 什么是双向绑定，什么是单向绑定，区别是什么？
+
+   双向绑定，就是数据驱动 UI，UI 的改变，比如用户输入，也直接改变数据，写的不得当的话，很难管理这些数据。你也不知道从哪里被改变了。
+
+   数据(model)变化主动触发 ui（view）变化，同时 view 变化主动触发数据变化
+
+   而单向数据流，就是通过 setstate 这样的数据驱动，改变数据后，驱动 UI 改变，而 UI 点击，比如通过回调 onChange。这样的好处是数据易于管控。
+
+4. redux 对比 mobx
+
+   两者对比:
+
+   - redux 将数据保存在单一的 store 中，mobx 将数据保存在分散的多个 store 中
+   - redux 使用 plain object 保存数据，需要手动处理变化后的操作；mobx 适用 observable 保存数据，数据变化后自动处理响应的操作
+   - redux 使用不可变状态，这意味着状态是只读的，不能直接去修改它，而是应该返回一个新的状态，同时使用纯函数；mobx 中的状态是可变的，可以直接对其进行修改
+   - mobx 相对来说比较简单，在其中有很多的抽象，mobx 更多的使用面向对象的编程思维；redux 会比较复杂，因为其中的函数式编程思想掌握起来不是那么容易，同时需要借助一系列的中间件来处理异步和副作用
+   - mobx 中有更多的抽象和封装，调试会比较困难，同时结果也难以预测；而 redux 提供能够进行时间回溯的开发工具，同时其纯函数以及更少的抽象，让调试变得更加的容易
+
+5. immutable 的特点是什么，它的优势是什么，对比 immer 呢？
+
+   当我想在对 react 组件进行性能优化时，需要监测 state 或 props 的变化来判断是否 render，而怎么监测变化=>用浅比较，但浅比较存在更新对象属性时引用没变的问题，然而深拷贝的话浪费性能不说，万一只改了一个属性，亏，所以只要能解决这个问题，浅比较依然是好方案，因此 immutable 的出现解决的就是有变化就返回新引用，故而浅比较+immutable 就是性能优化的利器，然后后面出现的 Immer 是比 immutable 更好的方案
+
+   特点：
+   为了避免像 deepCopy 一样 把所有节点都复制一遍带来的性能损耗，Immutable 使用了 Structural Sharing（结构共享），即如果对象树中一个节点发生变化，只修改这个节点和受它影响的父节点，其它节点则进行共享。请看下面动画
+   ![immutable](https://user-gold-cdn.xitu.io/2019/6/4/16b1e68c06d12407?imageslim)
+
+   其内部使用了 Trie(字典树) 数据结构, Immutable.js 会把对象所有的 key 进行 hash 映射，将得到的 hash 值转化为二进制，从后向前每 5 位进行分割后再转化为 Trie 树。
+
+   缺点
+
+   1. 容易被滥用 通过 toJS 转化为正常的 js 数据结构,这个时候新旧 props 就永远不会相等了,就导致了大量重复渲染,严重降低性能。
+   2. API 不友好，使用不方便
+   3. 文件比较大。
+
+   而 Immer 呢,是通过 proxy 来做的，性能很好
+
+   - 在调用原对象的某 key 的 getter 的时候
+   - 如果这个 key 已经被改过了则返回 copy 中的对应 key 的值，如果没有改过就为这个子节点创建一个代理再直接返回原值。
+   - 调用某 key 的 setter 的时候，就直接改 copy 里的值。
+   - 如果是第一次修改，还需要先把 base 的属性和 proxies 的上的属性都浅拷贝给 copy。
+   - 同时还根据 parent 属性递归父节点，不断浅拷贝，直到根节点为止。比如你修改的是一个属性下很远的属性，那么这条链条下的都需要浅拷贝。
+
+6. 为什么用 React + mobx？
 
    React 和 Vue 有许多相似之处，它们都有：
 
@@ -66,9 +108,11 @@
    - 将注意力集中保持在核心库，而将其他功能如路由和全局状态管理交给相关的库。
    - React 比 Vue 有更丰富的生态系统。
 
-   确实，mobx 的实现原理类似于 vue 的数据双向绑定，用了这个，可以让 react 的数据管理如 vue 一般容易，而且又能享受到 jsx 的快感，包括不限于 hooks
+   确实，mobx 的实现原理类似于 vue 的数据双向绑定，用了这个，可以让 react 的数据管理一样舒服，而且又能享受到 jsx 的快感，包括不限于 hooks
 
-4. 返回拦截
+   虽然用了 Mobx,但是比如修改数据的时候，还是通过一个文件下的回调，然后完成数据变更。
+
+7. 返回拦截
 
    返回劫持弹窗，我们的项目的路由不是 react-router，是我们老大自己实现的一个，所以更没有`prompt`，但是好在他在`navigation`返回的时候，判断`isback`的时候，添加了一个事件
 
@@ -114,7 +158,7 @@
 
    如果支付失败的话，直接 history.back 回首页的那个位置。
 
-5. rn 热更新原理
+8. rn 热更新原理
 
    react-native 的程序实际上是原生的模块+JS 和图片资源模块，热更新，就是更新其中的 js 和图片资源。
    安卓程序把它名字命名为 zip 解压后可以清楚的看到其中的 bundle 文件和资源文件
@@ -125,7 +169,7 @@
    启动程序的时候，会发一个请求给服务器，带上自己当前`app`的`key`值。服务端会判读两次上传的包的异同来决定是否需要全量热更新还是增量热更新，如果是全量热更新会返回一个`downloadurl`，这个`url`就是自己在 react-native-update 后台配置的那个下载的 url。手机会下载整个 bundlejs 下来完成全量热更新。
    如果是增量热更新的话，会返回一个 pdiffUrl，拿到这个 url 下载下来的就是增量数据，然后客户端进行数据合并完成增量热更新。
 
-6. rn im 的问题
+9. rn im 的问题
    [im 问题链接](https://segmentfault.com/n/1330000011795138)
    发送图片的宽高比问题
 
@@ -155,21 +199,21 @@
    };
    ```
 
-7. rn flatlist 将屏幕外的视图组件回收，达到高性能的目的。
+10. rn flatlist 将屏幕外的视图组件回收，达到高性能的目的。
 
-8. 调试技巧...
+11. 调试技巧...
 
-   1. element 是可以 copy 的
-   2. console.log('%c this is a message','color:#f20;') 可以输入带颜色的 log,自己在 vscode 里自定义个预设片段就可以了。
-   3. 点到 element，直接点 h 就可以隐藏，不需要直接 delete 掉了
-   4. command + 上下可以直接移动 element
-   5. 阴影这样的可以直接在页面上调，直接点击样式，就唤起弹窗，快速调试
+    1. element 是可以 copy 的
+    2. console.log('%c this is a message','color:#f20;') 可以输入带颜色的 log,自己在 vscode 里自定义个预设片段就可以了。
+    3. 点到 element，直接点 h 就可以隐藏，不需要直接 delete 掉了
+    4. command + 上下可以直接移动 element
+    5. 阴影这样的可以直接在页面上调，直接点击样式，就唤起弹窗，快速调试
 
-9. 调试文字样式 debug， document.designModel = 'on'
+12. 调试文字样式 debug， document.designModel = 'on'
 
-   把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
+    把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
 
-10. 监控错误，打点上报，捕获异常。
+13. 监控错误，打点上报，捕获异常。
 
     <b>监控性能</b>
 
@@ -195,23 +239,23 @@
     <b>捕获异常</b>
 
     - 在一些可能会出错的地方使用 try catch
-    - 在全局就可以使用 window.onerror 来监听，通过window.onerror事件，可以得到具体的异常信息、异常文件的URL、异常的行号与列号及异常的堆栈信息，再捕获异常后，统一上报至我们的日志服务器。
-        ```
-        window.onerror = function(errorMessage, scriptURI, lineNo, columnNo, error) {
-            console.log('errorMessage: ' + errorMessage); // 异常信息
-            console.log('scriptURI: ' + scriptURI); // 异常文件路径
-            console.log('lineNo: ' + lineNo); // 异常行号
-            console.log('columnNo: ' + columnNo); // 异常列号
-            console.log('error: ' + error); // 异常堆栈信息
-            // ...
-            // 异常上报
-        };
-        throw new Error('这是一个错误');
-        ```
-        ![tu](https://user-gold-cdn.xitu.io/2018/7/29/164e673466b32bf3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+    - 在全局就可以使用 window.onerror 来监听，通过 window.onerror 事件，可以得到具体的异常信息、异常文件的 URL、异常的行号与列号及异常的堆栈信息，再捕获异常后，统一上报至我们的日志服务器。
+      ```
+      window.onerror = function(errorMessage, scriptURI, lineNo, columnNo, error) {
+          console.log('errorMessage: ' + errorMessage); // 异常信息
+          console.log('scriptURI: ' + scriptURI); // 异常文件路径
+          console.log('lineNo: ' + lineNo); // 异常行号
+          console.log('columnNo: ' + columnNo); // 异常列号
+          console.log('error: ' + error); // 异常堆栈信息
+          // ...
+          // 异常上报
+      };
+      throw new Error('这是一个错误');
+      ```
+      ![tu](https://user-gold-cdn.xitu.io/2018/7/29/164e673466b32bf3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
     - 但是，事件触发默认是冒泡阶段，所以如果想知道是哪个 js 或者 css 报错的话，可以把阶段换成捕获阶段
     - 而且跨域的情况下，window.onerror 是无法捕获的，不过用 SPA 就一个 js 正常不用考虑。不过遇到这样的情况，可以在那些三方 js 里 script 标签上加入 crossorigin="anonymous"这个标签，代表支持跨域。同时，服务端也要设置 Access-control-allow-orgin 的
-    - try…catch单点捕获
+    - try…catch 单点捕获
     - react16 的 Error Boundary，可以处理子组件的渲染错误，避免渲染错误导致的 crash，react 生命周期里的 componentDidCatch，getDerivedStateFromError，后者可以在错误发生时降级处理。前者可以日志记录。
 
     ```js
@@ -253,7 +297,7 @@
     });
     };
 
-11. 前端模块化
+14. 前端模块化
 
     [这个链接将的浅显易懂](https://juejin.cn/post/6844903712553435149)
 
@@ -293,7 +337,7 @@
     - 而 ES6 的话模块加载是在编译时做的，也就是在编译阶段确定好模块的依赖关系，而不是在运行阶段。
     - 这样的结果就是 CommonJS 规范可能因为循环引用而找不到对应函数发生报错，而 es6 不会。
 
-12. 听过 Style-components 吗？
+15. 听过 Style-components 吗？
 
     我们目前使用的是 css namespace，公共的写在 common 里
 
@@ -315,7 +359,7 @@
 
     - css modules，把对应的 css 文件引入成为对象，然后在 div 上的时候，写成 styles.xxx，webpack 配置一下 css-loader 的 options，会去自动添加一串 hash。
 
-13. 路由守卫怎么做的
+16. 路由守卫怎么做的
 
     包装一个方法，跳转的时候先进这个方法。
 
@@ -327,7 +371,7 @@
 
     假如是通过 url 直接输入的，可以给每一个页面外面包装一个路由授权组件，在组件里调用上述的方法，好像也可以哦。
 
-14. 二维码扫码登陆原理
+17. 二维码扫码登陆原理
 
     首先，二维码本身就是一个 url，并且包含这个页面当前的唯一 token,用于标识是哪张页面点进了二维码登陆的页面。
     在手机端，比如微信，那么我扫码后，会跳转到这个登录确认的页面，并且把我的个人信息及唯一 token 发送给服务端，然后服务端会标记已扫码。
@@ -335,7 +379,7 @@
 
     在 PC 端，轮训去找服务端问，用户是否扫码，如果已经扫码了，这时候接口应该返回待确认的字段，如果点击确认后，再请求这个接口，服务端会吐出已确认，并且应该会种 cookie，然后重定向到首页，完成登陆。
 
-15. 懒加载怎么实现
+18. 懒加载怎么实现
 
     - 第一个方案：
       使用 IntersectionObserver 可以做一个。它的回调接受两个参数，一个是 IntersectionObserverEntry 数组，一个是 obsever 自己
@@ -363,12 +407,12 @@
     - 第三个方案：
       不需要 scrollTop，直接把上面的 offsetTop 改成 img.getBoundingClientRect().top 对比 screenH 即可
 
-16. preact
+19. preact
 
     preact 实现 hook 是数组的方式
     preact 没有事件系统，直接用的浏览器的
 
-17. 你知道单点登录吗？如何实现呢？
+20. 你知道单点登录吗？如何实现呢？
 
     1. 如果是同域名下的，直接用 cookie 就可以了。
 
@@ -380,26 +424,26 @@
 
        如果没有的话，说明没有登录，重定向到 Server 下，并带上这个回调页面。
 
-       然后sever中间页判断用户是否有 cookie2
+       然后 sever 中间页判断用户是否有 cookie2
 
-       如果中间页没有cookie2，说明没有登录，它会重定向到登录页，然后登录后，就会拥有 Cookie2。也就是TGC，然后重定向回A并且带上 ST，
-       回到A页面后，拿上这个ST会去请求服务端，服务端拿到这个ST后，会去找这个 server 验证， 是不是你签发的，如果是的话，setCookie,A 页面登录成功。
+       如果中间页没有 cookie2，说明没有登录，它会重定向到登录页，然后登录后，就会拥有 Cookie2。也就是 TGC，然后重定向回 A 并且带上 ST，
+       回到 A 页面后，拿上这个 ST 会去请求服务端，服务端拿到这个 ST 后，会去找这个 server 验证， 是不是你签发的，如果是的话，setCookie,A 页面登录成功。
 
-       A页面下次进来，由于拥有cookie1，直接登录成功。
+       A 页面下次进来，由于拥有 cookie1，直接登录成功。
 
-       如果中间页有cookie2的话，说明已经在中间 server 上登录过了，至于你是A过来的还是B过来的，无所谓，假设是B吧，直接重定向回 B 页面， 然后url上带一个 ST，
-       回到B页面后，拿上这个ST会去请求服务端，服务端拿到这个ST后，会去找这个 server 验证， 是不是你签发的，如果是的话，setCookie,B 页面登录成功。至此，单点登录就完成了。
+       如果中间页有 cookie2 的话，说明已经在中间 server 上登录过了，至于你是 A 过来的还是 B 过来的，无所谓，假设是 B 吧，直接重定向回 B 页面， 然后 url 上带一个 ST，
+       回到 B 页面后，拿上这个 ST 会去请求服务端，服务端拿到这个 ST 后，会去找这个 server 验证， 是不是你签发的，如果是的话，setCookie,B 页面登录成功。至此，单点登录就完成了。
 
        ![tu](https://user-gold-cdn.xitu.io/2020/1/5/16f74f3f11a6fbad?imageslim)
 
-18. RN 原理是什么
+21. RN 原理是什么
 
     JS 的话内置一个 javascript core，安卓的话使用 webkit.org.jsc.cso
     rn 会把 js 编译成一个 bundle 文件，和 webpack 一样，如果是原生的会通过 bridge 调用方法。
     ios 和安卓对于 rn 来说，是提供一个壳，并且提供了一些原生方法。
     rn 项目下会有一个 native_modules，通过这个模块可以调用原生方法。
 
-19. MVC， MVP, MVVM
+22. MVC， MVP, MVVM
 
     MVC
     model, view, controller。
@@ -412,12 +456,12 @@
     viewmodel。controller。model。
     model 改了动 view，view 改了动 model。就是 vue 那种。我们现在分的层也类似这样。
 
-20. 手写一个双向绑定
+23. 手写一个双向绑定
     vue.js
-21. nginx 知识点
-22. 骨架屏实现方案
-23. 代码生成技术文档
-24. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
+24. nginx 知识点
+25. 骨架屏实现方案
+26. 代码生成技术文档
+27. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
 
     1. 初始的时候，发现，点击直接跳转过去的时候，会出现里面的图文加载，导致的内容撑开
        然后我在电脑上试的时候，发现，如果把 timeout 设置为 0 的话，安卓一些比较不错的手机，并不会锚点错位。
@@ -461,7 +505,7 @@
     );
     ```
 
-25. SWR
+28. SWR
     [原理分析](https://zhuanlan.zhihu.com/p/93824106)
     [中文文档](https://swr.vercel.app/zh-CN)
     特点
@@ -472,5 +516,5 @@
     - 聚焦是重新验证，网络恢复时重新验证，支持 Suspense
     - 获取数据的时候，非常简单，简易
 
-26. Taro 是什么?
+29. Taro 是什么?
     Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发 微信 / 京东 / 百度 / 支付宝 / 字节跳动 / QQ 小程序 / H5 等应用。现如今市面上端的形态多种多样，Web、React Native、微信小程序等各种端大行其道，当业务要求同时在不同的端都要求有所表现的时候，针对不同的端去编写多套代码的成本显然非常高，这时候只编写一套代码就能够适配到多端的能力就显得极为需要。

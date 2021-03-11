@@ -404,21 +404,71 @@
 
    defineProperty 不能监控数组的变化，而且只能监听对象的属性。如果一个对象很多属性，需要遍历。
 
-   proxy 相当于一个中间层，proxy 是直接监听对象的，而且可以操作的 handler 很多，比如 set,has,get,apply,call 等等。
-   比 defineProperty 强大很多。至于属性也是对象的情况下，两者都还是需要递归监听的。
+   像Vue里，他监控数组的方式是复写数组的方法， `push() pop() shift() unshift() splice() sort() reverse()`
+
+   ```js
+    const aryMethods = ['push', 'pop', 'shift', 'unshift', 'splice', 'sort', 'reverse'];
+    const arrayAugmentations = [];
+    aryMethods.forEach((method)=> {
+        // 这里是原生Array的原型方法
+        let original = Array.prototype[method];
+        // 将push, pop等封装好的方法定义在对象arrayAugmentations的属性上
+        // 注意：是属性而非原型属性
+        arrayAugmentations[method] = function () {
+            console.log('我被改变啦!');
+            // 调用对应的原生方法并返回结果
+            return original.apply(this, arguments);
+        };
+    });
+   ```
+
+   proxy 相当于一个中间层，proxy 是直接监听对象的，而且可以操作的 handler 很多，比如 set,has,get,apply,call 等等。它比 defineProperty 强大很多。<b>至于属性也是对象的情况下，两者都还是需要递归监听的。</b>
+
+   举个例子
 
    ```js
 
-   var newO = new Proxy(obj, {
-   set(target,key,val, receiver),
-   get(target,key,receiver)
-   });
+   var obj = {name: 1, sex: 'male', in: {k: 1, d : 2}}
 
+   var cc = new Proxy(obj, {
+    set(target,key,val, receiver) {
+        const pre = '强制改成';
+        retuyrn Reflect.set(target, key, pre + val, receiver);
+    },
+    get(target,key,receiver) {
+        console.log('我听到我被动了');
+        // 可以在这里判断get出来的是不是对象，然后递归proxy？
+        return Reflect.get(target, key, receiver)
+    }
+   });
    ```
+
+   在上面这个代码里，访问cc.name，会触发log， 访问cc.in.k，也会触发
+
+   修改cc.name会被加上一个 ‘强制改成’，但是修改cc.in.k，不会，因为修改cc.in.k，cc.in是一个对象引用类型，所以不会变。而get之所以会触发，是因为访问 `cc.in.k`，也就等于访问到了`cc.in`了啊，所以才会触发的。
 
    里面好多方法第三个参数其实就是一个新的 OBJ 指向。
 
    如果一个属性不可配置（configurable）且不可写（writable），则 Proxy 不能修改该属性，否则通过 Proxy 对象访问该属性会报错。
+
+   可以利用它，写一个年龄自增
+
+   ```js
+    var obj = {
+        name: 'aaa',
+        age: 1
+    };
+    var ss = new Proxy(obj, {
+        get(target, key, recevier) {
+            if (key === 'age') {
+                let vv = target[key];
+                Reflect.set(target, key, vv + 1, recevier);
+                return vv + 1;
+            }
+            return Reflect.get(target, key, recevier);
+        }
+    });
+   ```
 
    Reflect 和 Proxy 是一对。正常取值，甚至可以替代关键字符，比如 in 或者 delete 这样的。
 
@@ -437,15 +487,15 @@
    // new 的写法 const instance = new Greeting('张三');
    // Reflect.construct 的写法 const instance = Reflect.construct(Greeting, ['张三']);
    var myObject = {
-   foo: 1,
-   bar: 2,
-   get baz() {
-   return this.foo + this.bar;
-   },
+        foo: 1,
+        bar: 2,
+        get baz() {
+            return this.foo + this.bar;
+        },
    };
    var myReceiverObject = {
-   foo: 4,
-   bar: 4,
+        foo: 4,
+        bar: 4,
    };
    Reflect.get(myObject, 'baz', myReceiverObject) // 8
 
@@ -1288,3 +1338,11 @@
     第二版的实现为 `setImmediate, Messagechannel, setTimeout`
 
     最后一版本是`Promise.then,MutationObserver, setImmediate,setTimeout`
+
+63. 为什么用settimeout模拟setinterval呢？
+
+    setInterval 有两个缺点：
+    1. 使用 setInterval 时，某些间隔会被跳过；比如这个执行任务很慢，结果等到T3要加入队列的时候，T2还没执行，所以会被跳过。这就是丢帧
+    2. 可能多个定时器会连续执行；比如T1执行完，没有空的时间，所以T1执行完立即执行T2
+    ![settimeout](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/730a96f90311403980e1e42c2d5d21c6~tplv-k3u1fbpfcp-zoom-1.image)
+    每个 setTimeout 产生的任务会直接 push 到任务队列中；而 setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。
