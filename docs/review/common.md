@@ -518,3 +518,37 @@
 
 29. Taro 是什么?
     Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发 微信 / 京东 / 百度 / 支付宝 / 字节跳动 / QQ 小程序 / H5 等应用。现如今市面上端的形态多种多样，Web、React Native、微信小程序等各种端大行其道，当业务要求同时在不同的端都要求有所表现的时候，针对不同的端去编写多套代码的成本显然非常高，这时候只编写一套代码就能够适配到多端的能力就显得极为需要。
+
+30. Recoil
+    这个是一个新出的状态管理库，facebook出的
+    ```js
+    function App() {
+      return (
+        <RecoilRoot>
+          <CharacterCounter />
+        </RecoilRoot>
+      );
+    }
+    const textState = atom({
+      key: 'textState', // unique ID (with respect to other atoms/selectors)
+      default: '', // default value (aka initial value)
+    });
+
+    function TextInput() {
+      const [text, setText] = useRecoilState(textState);
+
+      const onChange = (event) => {
+        setText(event.target.value);
+      };
+
+      return (
+        <div>
+          <input type="text" value={text} onChange={onChange} />
+          <br />
+          Echo: {text}
+        </div>
+      );
+    }
+    ```
+
+    这样不同的组件都可以共享数据。通过这个 useRecoilState
