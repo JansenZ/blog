@@ -1229,7 +1229,8 @@
       假值只有 false、null、undefined、空字符、0 和 NaN，其它值转为布尔型都为 true。
     - 转 number 的时候
       Number(只有在字符串里由非数字的时候)NaN
-      其他的非数字不是 0 就是 1。
+
+      数组空转0，数组有一个数字就转它，数组有多个就是NaN
 
     `{} + {} = '[object Object][object Object]';`
     `2 * {} = NaN`
@@ -1237,11 +1238,14 @@
     - 遇到 == 的时候
 
     1. null == undefined 特例
-    2. 如果左右是同类型的，除非都是 NaN，其他都返回 true。
+    2. 如果左右是同类型的，除非都是 NaN，返回false，其他就比大小了。
     3. Number 和 String 比较的话，String 转 number;
-    4. 如果有 Boolean 类型的话，优先转 Boolean 为 Number; 5.如果有任何一方是对象的话，转成原始类型
+    4. 如果有 Boolean 类型的话，优先转 Boolean 为 Number;
+    5. 如果有任何一方是对象的话，转成原始类型
+    ![tu](../img/type.jpg)
 
     `[] == !{} true`
+
     左边是对象，右边是 false，false 转数字是 0，[] tostring = '';''转数字是 0。
 
 56. array.slice(), arr.splice, str.substr, str.substring
