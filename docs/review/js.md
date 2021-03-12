@@ -785,6 +785,9 @@
     - 寄生组合继承
 
     ```js
+    function Sub() {
+      Super.apply(this, arguments);
+    }
     Sub.prototype = Object.create(Super.prototype, {
         constructor: {
             value: Sub,
