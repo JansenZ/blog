@@ -956,13 +956,23 @@
 32. requestIdleCallback 和 requestAnimationFrame 的区别
 
     浏览器一帧里 16ms 要完成的任务
-
+    老：
     1. 处理用户的交互
     2. JS 解析执行
     3. 帧开始。窗口尺寸变更，页面滚去等的处理
     4. rAF(requestAnimationFrame)
     5. 布局
     6. 绘制
+    新：
+    1. 当 Eventloop 执行完 Microtasks 后，会判断 document 是否需要更新，因为浏览器是 60Hz 的刷新率，每 16.6ms 才会更新一次。
+    2. 然后判断是否有 resize 或者 scroll 事件，有的话会去触发事件，所以 resize 和 scroll 事件也是至少 16ms 才会触发一次，并且自带节流功能。
+    3. 判断是否触发了 media query
+    4. 更新动画并且发送事件
+    5. 判断是否有全屏操作事件
+    6. 执行 requestAnimationFrame 回调
+    7. 执行 IntersectionObserver 回调，该方法用于判断元素是否可见，可以用于懒加载上，但是兼容性不好
+    8. 更新界面
+    以上就是一帧中可能会做的事情。如果在一帧中有空闲时间，就会去执行 requestIdleCallback 回调。
 
     `requestAnimationFrame`的回调会在每一帧确定执行，属于高优先级任务，而`requestIdleCallback`的回调则不一定，属于低优先级任务。
 
