@@ -208,6 +208,7 @@
     3. 点到 element，直接点 h 就可以隐藏，不需要直接 delete 掉了
     4. command + 上下可以直接移动 element
     5. 阴影这样的可以直接在页面上调，直接点击样式，就唤起弹窗，快速调试
+    6. 断点可以加条件，这样不必一直进这个断点，比如for，判断i==5才进。
 
 12. 调试文字样式 debug， document.designModel = 'on'
 
@@ -552,3 +553,6 @@
     ```
 
     这样不同的组件都可以共享数据。通过这个 useRecoilState
+  
+31. vite
+    vite是vue出的一个构建工具，开发时候用的esm原生模块，非常的快，生产用的rollup，具体的不了解了，因为暂时不可能替代webpack

@@ -627,6 +627,16 @@
     return false;
     ```
 
+    但是instanceof 并不是安全的，因为可以复写
+    ```js
+    class PrimitiveString {
+        static [Symbol.hasInstance](x) {
+            return typeof x === 'string'
+        }
+    }
+    console.log('hello world' instanceof PrimitiveString) // true
+    ```
+
 19. null,undefined,未声明的变量的区别
 
     - 未声明的变量就是不用 let ,var, const 关键字的比如直接写 a = 2;这样的，如果是在严格模式下，会报错
@@ -722,6 +732,18 @@
 24. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
 
     基本完整版本参见 deepCopy.js
+
+    如果不需要function的话，可以异步使用一个MessageChannel
+
+    ```js
+        function structuralClone(obj) {
+            return new Promise(resolve => {
+                const {port1, port2} = new MessageChannel();
+                port2.onmessage = ev => resolve(ev.data);
+                port1.postMessage(obj);
+            });
+        }
+    ```
 
 25. typeof null 为啥是 object？
 
