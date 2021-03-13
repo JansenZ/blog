@@ -52,6 +52,7 @@
    - GET 参数通过 URL 传递，POST 放在 Request body 中。
    - 关于两个数据包的事情，100continue，这个不要说了，是错的，并不一定会发送两个数据包，不一样的。
    - get 是幂等的，post 是非幂等的。
+   - get可以做http缓存，post不可以
 
 4. HTTP 请求头和响应头都有哪些内容
 
