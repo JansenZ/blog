@@ -540,12 +540,13 @@
 
     SOCKET 可以由服务端通知，是长链接。
 
-    （1）建立在 TCP 协议之上，服务器端的实现比较容易。
-    （2）与 HTTP 协议有着良好的兼容性。默认端口也是 80 和 443，并且握手阶段采用 HTTP 协议，因此不容易屏蔽，能通过各种 HTTP 代理服务器。
-    （3）数据格式比较轻量，性能开销小，通信高效。
-    （4）可以发送文本，也可以发送二进制数据。
-    （5）没有同源限制，客户端可以与任意服务器通信。
-    （6）协议标识符是 ws（如果加密，则为 wss），服务器网址就是 URL。
+    1. 建立在 TCP 协议之上，服务器端的实现比较容易。
+    2. 与 HTTP 协议有着良好的兼容性。默认端口也是 80 和 443，并且握手阶段采用 HTTP 协议，因此不容易屏蔽，能通过各种 HTTP 代理服务器。
+    3. 数据格式比较轻量，性能开销小，通信高效。
+    4. 可以发送文本，也可以发送二进制数据。
+    5. 没有同源限制，客户端可以与任意服务器通信。
+    6. 协议标识符是 ws（如果加密，则为 wss），服务器网址就是 URL。
+    7. 通常情况下，为了避免超时断连，我们会采用一个心跳包的形式，来告知我们还在，别断线。
 
 32. DOM,BOM 区别
 
@@ -630,3 +631,69 @@
     _sig: 1dab8eea2f3097841128c913b54d4de9
     ```
     通常会有这些公共参数
+    
+37. SSE协议
+   SSE协议就是Websocket的单向版本
+   [阮一峰的这个链接讲的很清楚](https://www.ruanyifeng.com/blog/2017/05/server-sent_events.html)
+   
+   主要就是由服务端，来进行推送数据给客户端，这样你就不用轮训了。比如有个业务场景，知道数据会变，又不用socket的情况下，就需要服务端推送给你
+   
+   比如数据大屏？推送通知？用法的话非常简单
+   
+   缺点，SSE 要求服务器与浏览器保持连接。对于不同的服务器软件来说，所消耗的资源是不一样的。
+   
+   Apache 服务器，每个连接就是一个线程，如果要维持大量连接，势必要消耗大量资源。
+   
+   Node 则是所有连接都使用同一个线程，因此消耗的资源会小得多，
+   
+   客户端
+   ```js
+   // 一个EventSource实例会对HTTP服务开启一个持久化的连接，以text/event-stream 格式发送事件, 会一直保持开启直到被要求关闭。
+   var source = new EventSource(url, { withCredentials: true }); // 里面的这个设置只有这个属性，带cookie，没别的配置了
+   source.addEventListener('open', function (event) {
+     // ...
+   }, false);
+   // 客户端收到服务器发来的数据，就会触发message事件，可以在onmessage属性的回调函数。
+   source.addEventListener('message', function (event) {
+     var data = event.data;
+     // handle message
+   }, false);
+   
+   source.close() 可以关闭连接
+   ```
+   服务端
+   ```js
+   var http = require("http");
+   http.createServer(function (req, res) {
+     var fileName = "." + req.url;
+
+     if (fileName === "./stream") {
+       res.writeHead(200, {
+         "Content-Type":"text/event-stream",
+         "Cache-Control":"no-cache",
+         "Connection":"keep-alive",
+         "Access-Control-Allow-Origin": '*',
+       });
+       res.write("retry: 10000\n");
+       res.write("event: connecttime\n");
+       res.write("data: " + (new Date()) + "\n\n");
+       res.write("data: " + (new Date()) + "\n\n");
+
+       interval = setInterval(function () {
+         res.write("data: " + (new Date()) + "\n\n");
+       }, 1000);
+
+       req.connection.addListener("close", function () {
+         clearInterval(interval);
+       }, false);
+     }
+   }).listen(8844, "127.0.0.1");
+   ```
+   
+   看到这里，我想到了一个好用处，就是二维码登陆，可以换轮训为这个
+   
+   new的时候，把URL上带一个我的这个PC打开的专属TOKEN，这样服务器收到后就可以通过token知道我是谁
+   
+   然后根据token自己定时去取我这个token对应的映射下的数据，谁已经扫码了，还是已经confirm了
+   
+   这样前台就不需要轮训了。只需要接受即可。
