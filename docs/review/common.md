@@ -28,26 +28,69 @@
    我认为很多设计模式我们在不知道它的名字的时候，我们就已经在用它了，
 
    - 工厂模式
+
      批量创建对象
      当同一个构造函数，需要多次 new 的时候，就需要考虑是不是可以用 工厂模式 来批量的创建实例对象了
 
    - 单例模式
+
      全局共享对象
      通常它会有一个 getInstance 方法，里面利用闭包来让大家共享一个对象
 
-   ```js
-   getInstance() {
-       let instance;
-       return function() {
-           if(!instance) {
-               instance = new XXXX();
-           }
-           return instance;
-       }
-   }
-   ```
+      ```js
+      getInstance() {
+          let instance;
+          return function() {
+              if(!instance) {
+                  instance = new XXXX();
+              }
+              return instance;
+          }
+      }
+      ```
 
-   当遇到多个地方需要公用一个东西，比如全局地址，登陆框的时候，就需要考虑是否要用 单例模式 了。
+      当遇到多个地方需要公用一个东西，比如全局地址，登陆框的时候，就需要考虑是否要用 单例模式 了。
+      
+   - 适配器模式
+
+     就是通过包装，来解决兼容问题
+     ```js
+     class Plug {
+        getName() {
+          return '港版插头'
+        }
+      }
+
+      class Target {
+        constructor() {
+          this.plug = new Plug()
+        }
+        getName() {
+          return this.plug.getName() + ' 适配器转二脚插头'
+        }
+      }
+
+      let target = new Target()
+      target.getName() // 港版插头 适配器转二脚插头
+     ```
+   - 代理模式 proxy呗
+   
+   - 装饰模式
+   
+     比如我们的商品详情页的spucontroller
+     ```js
+     // 这个base就是装饰里的target
+     const testMixin = (Base) => class extends Base {
+       // ...
+     }
+     
+     @testMixin
+     class spuController {
+       // ...
+     }
+     
+     ```
+     这样的话，所有的组件逻辑写在自己的组件下，然后主spu下引用的所有方法都可以互相使用。对于一个页面逻辑非常复杂的情况下，非常方便
 
    - 职责链模式
      把一个复杂的链路 function 拆成若干个小的，然后连成一条链，知道有一个对象处理它为止。
