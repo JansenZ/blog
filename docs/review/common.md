@@ -135,12 +135,86 @@
    3. 文件比较大。
 
    而 Immer 呢,是通过 proxy 来做的，性能很好
+   
+   用一张图来通俗的解释一下就是
+   ![image](https://user-images.githubusercontent.com/17866433/111062431-a411ba80-84e3-11eb-8a26-666522c61559.png)
+   
+   在写数据的时候，也就是 setter 
+   - 如果这个 state 没有 copy对象，说明它还没有被改过，先判断是否值一样，如果一样，说明前后一致，直接return true
+   - 如果值不一样，说明修改新值了，把要修改的值，更改到copy对象上。并且需要看这个值上级有没有被拷贝，如果没有，一路浅拷贝上去。
+   - 如果有copy对象，直接把值赋给 copy 对象
 
-   - 在调用原对象的某 key 的 getter 的时候
-   - 如果这个 key 已经被改过了则返回 copy 中的对应 key 的值，如果没有改过就为这个子节点创建一个代理再直接返回原值。
-   - 调用某 key 的 setter 的时候，就直接改 copy 里的值。
-   - 如果是第一次修改，还需要先把 base 的属性和 proxies 的上的属性都浅拷贝给 copy。
-   - 同时还根据 parent 属性递归父节点，不断浅拷贝，直到根节点为止。比如你修改的是一个属性下很远的属性，那么这条链条下的都需要浅拷贝。
+   在取数据的时候，也就是 getter
+   - 如果这个target 有copy ，那么取 copy下的值
+   - 如果没有，就说明没有用到，取原值 
+
+   以上解释仅限于解释这张图。因为具体写的时候，还要多级代理，所以另外说，可以参考 easyimmer.js
+   分为3步，一步是处理set,一步是处理get,一步是处理这个proxy数据，因为我们代理的并不是原值，而是一个套值
+   
+   这个套值有3个属性 copy, base, parent
+   
+   写数据的时候
+   ```js
+    set(state, prop, value) {
+      if (!state.copy) {
+        // 如果没有拷贝，并且和原来的一样，不用管
+        if (value === state.base[prop]) return true
+        // 如果没有拷贝，但是是新的值，需要去标记了
+        markChanged(state) // 标记就是浅拷贝，并且往上递进
+      }
+      // 有拷贝的情况下，改拷贝的值
+      state.copy[prop] = value
+      return true
+    }
+    function markChanged(state) {
+      if (!state.copy) {
+        state.copy = shallowCopy(state.base)
+        if (state.parent) markChanged(state.parent)
+      }
+    }
+   ```
+   取数据的时候
+   ```js
+    get(state, prop) {
+      // 这个用来取自己，不然没法取。
+      if (prop === DRAFT_STATE) return state
+      // 如果有拷贝
+      if (state.copy) {
+        const value = state.copy[prop]
+        // 第一次进来，并且value还是个对象， 要遍历代理
+        if (value === state.base[prop] && isObject(value)) {
+          return (state.copy[prop] = createDraft(state, value))
+        }
+        return value
+      }
+      // 说明没有靠背，取原值
+      const value = state.base[prop]
+      return value
+    }
+   ```
+   生成最后的数据的时候
+   ```js
+   function finalize(draft) {
+      // 是否是多重对象，只有多重对象才能访问到 Symbol ，因为藏在get里，是代理到了的。
+      if (isDraft(draft)) {
+        const state = draft[DRAFT_STATE]
+        // 获取copy和原值
+        const {copy, base} = state
+        if (copy) {
+          // 如果是copy说明它下面还有可能有多重对象，要都去解开。
+          Object.entries(copy).forEach(([prop, value]) => {
+            // 如果相等，就是原始对象
+            if (value !== base[prop]) copy[prop] = finalize(value)
+          })
+          return copy
+        }
+        return base
+      }
+      // 不是多重对象或者是原值
+      return draft
+    }
+   ```
+
 
 6. 为什么用 React + mobx？
 
