@@ -1,3 +1,7 @@
+### webpack
+[优质链接](https://juejin.cn/post/6844904094281236487);
+[mini-babel](https://github.com/jamiebuilds/the-super-tiny-compiler)
+
 1. 首先，npm init -y 创建一个 package.json 文件
 2. npm install webpack webpack-cli -D（大写是当道 devDepends 里的，小写就直接放依赖里了）
 3. 创建 src/index.js
