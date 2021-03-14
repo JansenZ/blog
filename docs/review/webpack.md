@@ -87,7 +87,13 @@
     - Loader 在 module.rules 中配置，作为模块的解析规则，类型为数组。每一项都是一个 Object，内部包含了 test(类型文件)、loader、options (参数)等属性。
     - Plugin 在 plugins 中单独配置，类型为数组，每一项是一个 Plugin 的实例，参数都通过构造函数传入。  
 
-5. manifest 是给映射资源用的，比如 ssr 的时候，都会写好 js,css 的路径，但是打包的时候，会给它添加一个 hash 值
+5. manifest
+
+    一旦你的应用在浏览器中以 index.html 文件的形式被打开，一些 bundle 和应用需要的各种资源都需要用某种方式被加载与链接起来。在经过打包、压缩、为延迟加载而拆分为细小的 chunk 这些 webpack 优化 之后，你精心安排的 /src 目录的文件结构都已经不再存在。所以 webpack 需要它
+
+    它是给映射资源用的，比如 ssr 的时候，都会写好 js,css 的路径，但是打包的时候，会给它添加一个 hash 值
+
+    使用 DllPlugin 进行分包，使用 DllReferencePlugin(索引链接) 对 manifest.json 引用，让一些基本不会改动的代码先打包成静态资源，避免反复编译浪费时间。HashedModuleIdsPlugin 可以解决模块数字id问题
 
     ``` js
     {
