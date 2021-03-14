@@ -23,8 +23,7 @@
     01. npm install webpack webpack-cli -D（大写是当道 devDepends 里的，小写就直接放依赖里了）
     02. npx webpack --mode=development，这里看下，为啥用 npx，因为以前 npm 装 webpack 等命令行工具都要-g 的，污染全局
 
-
-    用了 npx 后，它会去自动找到本地项目下的命令。webpack 默认打包的话，是不会打包没有引用的 js 文件的。import 后是可以的
+        用了 npx 后，它会去自动找到本地项目下的命令。webpack 默认打包的话，是不会打包没有引用的 js 文件的。import 后是可以的
 
     03. 安装 `babel-loader` 并配置。装了 babel 后还要配置 babel，就是要装 `babel/preset-env（转译代码）`,  `plugin-transform-runtime`（ 用了这个可以节省很多重复的代码，）`runtime-corejs`（配置 useBuiltIns 的时候必须要有 corejs3（不然会默认使用 2, 会有些实例还是需要额外的 polyfill），可以用来按需引用转译模块）useBuiltIns 是用于 polyfill 的，这个是 env 里带的
     04. 插件的执行顺序是从前往后，preset预设的执行顺讯是从后往前，插件在预设前运行, 预设其实就是插件的组合包。
@@ -32,11 +31,8 @@
     06. webpack.config.js 里使用 mode: 'development' ，可以在代码中通过 process.env.NODE_ENV 获取，就是我们常见的配置开发或者是生产环境。实际上，webpack 打包后的文件里,process.env.NODE_ENV 会被打包成'development'字符串。
     07. 使用 html-webpack-plugin 插件可以让 html 自动引入 js 文件，并且利用它的配置的话也是可以定制化呈现 html，方便不同渠道的业务。
     08. 想让它跑起来后，这个时候 console 的话，会映射到打包后的代码，如果想让他映射到原来的代码的话，因此，综合构建速度
-
-    开发环境推荐： `cheap-module-eval-source-map`
-
-    生产环境推荐： `cheap-module-source-map`
-
+        - 开发环境推荐： `cheap-module-eval-source-map`
+        - 生产环境推荐： `cheap-module-source-map`
     但是我通常排查错误的方式是直接代理一下，除了编译错误，其它的一下就能找到错误的位置明细了。
 
     9. 想让 css 跑起来的话，要装不少插件 style-loader （动态创建 style 标签，将 css 插入到 head 中.）less-loader css-loader（负责处理 @import 等语句） postcss-loader(兼容) autoprefixer。loader 执行顺序是从右往左的。
@@ -49,12 +45,12 @@
     16. 像浏览器的配置，可以放.browserslistrc 文件里，更清晰，而且可以多个 loader 共享使用
     17. 我要是想用 react，需要安装 react 的 babel 预设，webpack 配置里要加一个
 
-    ```js
-    resolve: {
-        extensions: ['.js', '.jsx', '.json']
-    }
-    ```
-    这样我的 jsx 文件就不需要写全称了。
+        ```js
+        resolve: {
+            extensions: ['.js', '.jsx', '.json']
+        }
+        ```
+        这样我的 jsx 文件就不需要写全称了。
 
     18. 安装`@babel/plugin-proposal-class-properties` 才可以在类里用箭头函数。
     19. 在 output 设置里，chunkFilename:'[name].js'可以把文件实际化，不然就是 id.js 了
