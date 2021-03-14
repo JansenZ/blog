@@ -683,21 +683,79 @@
     而微任务就是 promise.then,MutationObserver
 
     在 Node 中，又有些不一样，就单从 API 层面上来理解，Node 新增了两个方法可以用来使用：微任务的 process.nextTick 以及宏任务的 setImmediate。
-    setTimeout 和 setImmediate 的区别的话就是 settimeout 是时间延迟，setImmediate 是循环延迟。假如循环很快，那后者先执行，反之前者先执行
+    
+    setTimeout 和 setImmediate 的区别的话就是 settimeout 是时间延迟，setImmediate 是循环延迟。
+    
+    timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。同样，在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行。
+    ```
+    setTimeout(() => {
+       console.log('setTimeout')
+    }, 0)
+    setImmediate(() => {
+       console.log('setImmediate')
+    })
+    ```
+    这段代码的执行顺序是不一定的
+    - 首先 setTimeout(fn, 0) === setTimeout(fn, 1)，这是由源码决定的
+    - 进入事件循环也是需要成本的，如果在准备时候花费了大于 1ms 的时间，那么在 timer 阶段就会直接执行 setTimeout 回调
+    - 那么如果准备时间花费小于 1ms，那么就是 setImmediate 回调先执行了
 
-    两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的，而 nodejs 中的微任务是在不同阶段之间执行的。
+    但是如果写在IO里面的话，就是 setImmediate 先执行了，因为这个就等于在 poll 阶段，队列为空，立马去执行后者
+
+    两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的
+    
+    而 nodejs 中的微任务是在不同阶段之间执行的。如果是老的Node版本，就是先执行完宏任务，在一次性清空微任务，新版本就是在每个阶段里，清空微任务
 
     关于 process.nextTick 的一点说明
     process.nextTick 是一个独立于 eventLoop 的任务队列。
-    在每一个 eventLoop 阶段完成后会去检查这个队列，如果里面有任务，会让这部分任务优先于微任务执行。
-
+    在每一个 eventLoop 阶段完成后会去检查这个队列，如果里面有nextTick，会让这部分任务优先于其他微任务执行。
+    
+    用两个例子论证上面的说法
+    ```js
+    setTimeout(()={
+        console.log("time1");
+        process.nextTick(()=>{
+            console.log("nextTick2");
+        });
+    });
+    console.log("start")
+    process.nextTick(()=>{
+        console.log("nextTick1");
+        setTimeout(()={
+            console.log("time2");
+        });
+    });
+    // node10以上 start nexttick1 time1 ntick2 time2
+    // node10以下 start nexttick1 time1 time2 tick2
+    
+    setTimeout(()={
+        console.log("time1");
+        Promise.resolve.then(()=>{
+            console.log("pthen1");
+        });
+    });
+    
+    setTimeout(()={
+        console.log("time2");
+        Promise.resolve.then(()=>{
+            console.log("pthen2");
+        });
+    });
+    // node9 time1 time2 pthen1 pthen2
+    // node10 time1 pthen1 time2 pthen2
+    ```
+    以前就是宏任务执行完，清空微任务，现在就是每个小宏任务里，执行完对应的微任务。
+    
+    关于await
     ```js
     await 要分开看
     // await 前面的代码
     await bar();
     // await 后面的代码
-    其中 await 前面的代码 是同步的，调用此函数时会直接执行；而 await bar(); 这句可以被转换成 Promise.resolve(bar())；await 后面的代码 则会被放到 Promise 的 then() 方法里。
+    // 其中 await 前面的代码 是同步的，调用此函数时会直接执行；
+    // 而 await bar(); 这句可以被转换成 Promise.resolve(bar())；
     ```
+    await 后面的代码 则会被放到 Promise 的 then() 方法里。
 
     还有，比如微任务相当于是添加到宏任务里来的。如果一个 promise 里不写宏任务的话，那外面的 settimeout 可以等死。
 
