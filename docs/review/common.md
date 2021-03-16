@@ -50,7 +50,17 @@
       ```
 
       当遇到多个地方需要公用一个东西，比如全局地址，登陆框的时候，就需要考虑是否要用 单例模式 了。
-      
+
+      这个单例模式还可以改成惰性函数来修改。比如在类中使用的时候
+      ```js
+        var instance;
+        class A {}
+        A.getInstance = () => {
+            instance = new A();
+            A.getInstance = () => instance;
+        }
+      ```
+
    - 适配器模式
 
      就是通过包装，来解决兼容问题
@@ -74,21 +84,21 @@
       target.getName() // 港版插头 适配器转二脚插头
      ```
    - 代理模式 proxy呗
-   
+
    - 装饰模式
-   
+
      比如我们的商品详情页的spucontroller
      ```js
      // 这个base就是装饰里的target
      const testMixin = (Base) => class extends Base {
        // ...
      }
-     
+
      @testMixin
      class spuController {
        // ...
      }
-     
+
      ```
      这样的话，所有的组件逻辑写在自己的组件下，然后主spu下引用的所有方法都可以互相使用。对于一个页面逻辑非常复杂的情况下，非常方便
 

@@ -47,10 +47,46 @@
 
    然后写个 get 方法，那么这些 props 只能通过 get 获取了。
 
-5. class 中把方法写 constructor 里和写外面区别是什么？
+5. class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
+
+    [好链接](https://juejin.cn/post/6844903704873664520)
 
    写在外面就是它的原型函数
+
    写在里面就是它的内置函数
+
+   class写静态方法或属性，可以利用static或者是 A.xxx
+   ```js
+    class Person {
+        static sayHello() {
+            return 'hello';
+        }
+        static name = 'kk';
+    }
+    // 或者是
+    Person.sayHello = function() { return 'HELLO'}
+    Person.name = 'kk';
+
+    Person.sayHello() // 'hello'
+
+    var kevin = new Person();
+    kevin.sayHello(); // TypeError: kevin.sayHello is not a function
+
+    // ES5
+
+    function Person() {}
+
+    Person.sayHello = function() {
+        return 'hello';
+    };
+    Person.name = 'kk';
+
+    Person.sayHello(); // 'hello'
+
+   ```
+
+   类不能直接执行，Person()会报错
+
 
 6. 私有变量的实现方式
 
