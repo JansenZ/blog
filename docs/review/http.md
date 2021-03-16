@@ -697,3 +697,24 @@
     然后根据token自己定时去取我这个token对应的映射下的数据，谁已经扫码了，还是已经confirm了
 
     这样前台就不需要轮训了。只需要接受即可。
+
+38. V8的排序算法了解吗？
+
+    数组小于10的时候，插入排序，因为插入排序是稳定的算法，而且小于10的时候，综合速度也不错
+
+    数组大于10的时候，快速排序
+
+    ![tu](https://user-gold-cdn.xitu.io/2017/10/19/cd5fca3bfd1de93d7f723587541f3b30?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+    因为这个，所以，数组打乱的时候，用sort会有问题。
+
+    真正的乱序代码
+    ```js
+    function shuffle(a) {
+        for (let i = a.length; i; i--) {
+            let j = Math.floor(Math.random() * i);
+            [a[i - 1], a[j]] = [a[j], a[i - 1]];
+        }
+        return a;
+    }
+    ```
