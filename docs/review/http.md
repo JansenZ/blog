@@ -164,6 +164,10 @@
    
    使用类似 TCP 快速打开的技术，缓存当前会话的上下文，在下次恢复会话的时候，只需要将之前的缓存传递给服务端验证通过就可以进行传输了
 
+   TCP 丢包了会重传，而 QUIC 则采用一种更主动的方案，每 n 个包额外发一个 校验和包 。 如果这 n 个包中丢了一个包，可以通过其他包和校验和恢复出来，完全不需要重传。
+
+   [HTTP3介绍](https://zhuanlan.zhihu.com/p/114384277)
+
 9. 跨域的解决方案
 
    跨域是由于浏览器的同源策略造成的，同源就是指域名、协议、端口均相同。主要是为了安全。
@@ -174,26 +178,36 @@
 
    1. jsonp，hack 行为，利用 script src 完成跨域，这样的话就只有 get 请求了
    2. postMessage，解决客户端两个窗口之间的通信，不能和服务端数据交互  
+
       A 窗口使用 window.postMessage(data,B)；
+
       B 窗口里 addeventlistenter('message', function(event) {
-      event.data 就是那个数据。
+            event.data 就是那个数据。
       });
    3. cors,Cross-origin resource sharing，跨域资源共享，分为简单请求和非简单请求
+
       简单请求的话
-      （1) 请求方法是以下三种方法之一：
-      HEAD,
-      GET,
-      POST,
-      （2）HTTP 的头信息不超出以下几种字段：
-      Accept,
-      Accept-Language,
-      Content-Language,
-      Last-Event-ID,
-      Content-Type：
-      application/x-www-form-urlencoded、 multipart/form-data、text/plain,
-      浏览器自动添加 orgin，然后服务器返回的响应里会多出几个 access-control-allow-xx 的东西，代表在白名单里，允许 cors
+
+      - 请求方法是以下三种方法之一：
+        - HEAD,
+        - GET,
+        - POST,
+
+      - HTTP 的头信息不超出以下几种字段：
+        - Accept,
+        - Accept-Language,
+        - Content-Language,
+        - Last-Event-ID,
+        - Content-Type: application/x-www-form-urlencoded、 multipart/form-data、text/plain
+
+      浏览器请求头里自动添加 `orgin`，然后服务器返回的响应里会多出几个 access-control-allow-xx 的东西，代表在白名单里，允许 cors
+
+      其中代表性的就是 `Access-Control-Allow-Origin` ，代表可访问的域， * 就是接受任意域名
+
       非简单请求
+
       不满足上面的特征，就是非简单请求，比如 truck 后台的 contenttype 是 application/json
+
       浏览器会自动发一个 options 的请求，确定 OK 后，才会继续发请求
 
       如果想要解决这个问题的话，可以让服务端给返回头部 设置一个缓存 Access-Control-Max-Age: 120, 就是两分钟发一次。
