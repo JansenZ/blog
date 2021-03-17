@@ -1,6 +1,6 @@
 ### Babel
 
-[min-babel中文版](https://github.com/YongzeYao/the-super-tiny-compiler-CN/blob/master/the-super-tiny-compiler.js)
+[min-babel中文版, 熟读后知原理即可](https://github.com/YongzeYao/the-super-tiny-compiler-CN/blob/master/the-super-tiny-compiler.js)
 
 1. babel
 
