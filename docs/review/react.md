@@ -961,8 +961,16 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
 ### 其他
 
-1. react 代码分割优化 react.lazy 和 react.suspense。可以懒加载。
-   TODO
+1. react concurrent 模式的思想是什么
+
+    1. useTransition
+    2. useDeferredValue
+    3. Suspense
+
+    我们从研究得知悬停和文本输入之类的交互需要在很短的时间内处理，而点击和页面转换可以等待稍长时间而不会感到迟缓。Concurrent 模式在内部使用不同的“优先级”，大致对应于人类感知研究中的交互类别。
+
+    总结就是 A 点跳 B 的时候，先停留在 A 页面一会，先预加载 B，然后多少 ms 后跳转到 B 去，如果速度快这个时候 B 就已经出来了，如果速度慢，这个时候再出加载也没啥问题。
+
 2. React.createElement
 
     正常写 jsx 的代码会被 babel 转译成该方法，方法接收三+个参数，一个是 type,一个是 prop obj,一个是 children
