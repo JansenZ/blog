@@ -60,7 +60,212 @@
 
 ### 二叉树
 
+```js
+function TreeNode(val, left, right) {
+    this.val = (val===undefined ? 0 : val)
+    this.left = (left===undefined ? null : left)
+    this.right = (right===undefined ? null : right)
+}
+```
+1. 前序遍历
+
+    先中间节点，再左节点，如果有左节点继续，如果没有了跳出，访问右边节点
+    ```js
+    // 递归写法
+    var arr = [];
+    function traversePre(node) {
+        if(!node) return;
+        // 先值
+        arr.push(node.val);
+        // 后访问左节点
+        traversePre(node.left);
+        // 再右
+        traversePre(node.right)
+    }
+    // 非递归
+    // 通用版本，可以适配中序和后序
+    function traversePre(root) {
+        let arr = [];
+        let r = root ? [root] : [];
+        while(r.length) {
+            let node = r.pop();
+            while(node) {
+                arr.push(node.val);
+                // 有右节点，把它推到队列尾部
+                node.right && r.push(node.right)
+                // 继续往下找左
+                node = node.left;
+            }
+        }
+        return arr;
+    }
+    // 非递归优化版
+    // 只用一个while，把左右都推进去。后进先出
+    // 只适配先序遍历
+    var preorderTraversal = function(root) {
+        var arr = [];
+        var s = root ? [root] : [];
+        while(s.length) {
+            let x = s.pop();
+            arr.push(x.val);
+            // 先push右
+            x.right && s.push(x.right);
+            // 再push左，然后pop
+            x.left && s.push(x.left);
+        }
+        return arr;
+    };
+
+    ```
+
+2. 中序遍历
+
+    先左节点，然后中节点，然后右边节点。
+    ```js
+    // 递归写法
+    var arr = [];
+    function traverseMid(node) {
+        if(!node) return;
+        // 先左节点
+        traverseMid(node.left);
+        // 中值
+        arr.push(node.val);
+        // 再右
+        traverseMid(node.right)
+    }
+
+    // 迭代写法
+    function traverseMid(root) {
+        let arr = [];
+        let r = [];
+        let node = root
+        while(true) {
+            // 先一路访问到最左边的节点
+            // 一路上的点存起来
+            while(node) {
+                r.push(node);
+                node = node.left;
+            }
+            // 没有了就推出
+            if(!r.length) break;
+            // 取出末尾的节点打印，然后转到它的右节点去。
+            let x = r.pop();
+            // 这样所谓的左节点，也是父节点。
+            arr.push(x.val);
+            node = x.right;
+        }
+        return arr;
+    }
+    ```
+3. 后序号遍历
+
+    先左，后右，然后中
+    
+    后序的思路就是把左右中 反转成 中右左， 最后反转数组。
+    ```js
+    // 递归写法
+    var arr = [];
+    function traverseLast(node) {
+        if(!node) return;
+        // 先左节点
+        traverseLast(node.left);
+        // 再右
+        traverseLast(node.right)
+        // 后值
+        arr.push(node.val);
+    }
+    // 非递归
+    // 后序的思路不一样
+    function traverseLast(root) {
+        let arr = [];
+        let r = [root];
+        while(r.length) {
+            let x = r.pop();
+            while(x) {
+                arr.push(x.val);
+                x.left && r.push(x.left);
+                x = x.right;
+            }
+        }
+        return arr.reverse();
+    }
+
+    ```
+4. 层次遍历
+5. 深度遍历DFS
+6. 广度遍历BFS
+7. 二叉搜索树
+
+   根节点下标为1，左孩子节点的下标，就是i * 2， 右孩子节点的下标，就是 i * 2 + 1， 父亲节点都是 Math.floor(i / 2)。
+
 ### 链表
+
+1. 反转单链表问题
+
+    遇到这样的问题，先不要慌，本质上很简单，有两种方法，一种是两两交换，一种是头插法
+
+    1. 每次交换一个方向
+
+        首先要声明一个newHead节点，默认是null
+
+        然后呢，while当前的node存在
+
+        因为等下node.next要改变方向，所以先存下来一个next作为临时变量
+
+        存下来后，让node.next指向前面的newHead，也就是null
+
+        然后让newhead和node都往后移一位即可。
+
+        这样每次交换一个方向，最后的newHead就是尾巴节点。也就是新的头节点了。
+
+        ```js
+        let reverse = (node) => {
+            let newHead = null;
+            while(node) {
+                // 临时取到next
+                let next = node.next;
+                // 指向改变
+                node.next = newHead;
+                // 统统往后移一位。
+                newHead = node;
+                node = next;
+            }
+            // 返回newHead
+            return newHead;
+        }
+        ```
+
+    2. 头插法
+
+    采用头插法的话，需要先声明一个新的头结点。以及一个前置节点默认是Null
+
+    然后while循环 node
+
+    同样要存下来next，然后让node.next指向pre。
+
+    然后新的头节点的.next就是node。
+
+    然后让前置节点和node都后移一位
+
+    这样下次再进来，就是node2,把它往前插。类似上面的换方向，但是思路不一样。
+
+    ```js
+    // 采用头插法
+    let reverse = (node) => {
+        let newHead = new NodeList();
+        let pre = null;
+        while(node) {
+            let next = node.next;
+            node.next = pre;
+            newHead.next = node;
+
+            pre = node;
+            node = next;
+        }
+        // 返回newHead
+        return newHead.next;
+    }
+    ```
 
 ### 排序
 
@@ -242,72 +447,7 @@
         }
     ```
 
-21. 反转单链表问题
 
-    遇到这样的问题，先不要慌，本质上很简单，有两种方法，一种是两两交换，一种是头插法
-
-    1. 每次交换一个方向
-
-        首先要声明一个newHead节点，默认是null
-
-        然后呢，while当前的node存在
-
-        因为等下node.next要改变方向，所以先存下来一个next作为临时变量
-
-        存下来后，让node.next指向前面的newHead，也就是null
-
-        然后让newhead和node都往后移一位即可。
-
-        这样每次交换一个方向，最后的newHead就是尾巴节点。也就是新的头节点了。
-
-        ```js
-        let reverse = (node) => {
-            let newHead = null;
-            while(node) {
-                // 临时取到next
-                let next = node.next;
-                // 指向改变
-                node.next = newHead;
-                // 统统往后移一位。
-                newHead = node;
-                node = next;
-            }
-            // 返回newHead
-            return newHead;
-        }
-        ```
-
-    2. 头插法
-
-    采用头插法的话，需要先声明一个新的头结点。以及一个前置节点默认是Null
-
-    然后while循环 node
-
-    同样要存下来next，然后让node.next指向pre。
-
-    然后新的头节点的.next就是node。
-
-    然后让前置节点和node都后移一位
-
-    这样下次再进来，就是node2,把它往前插。类似上面的换方向，但是思路不一样。
-
-    ```js
-    // 采用头插法
-    let reverse = (node) => {
-        let newHead = new NodeList();
-        let pre = null;
-        while(node) {
-            let next = node.next;
-            node.next = pre;
-            newHead.next = node;
-
-            pre = node;
-            node = next;
-        }
-        // 返回newHead
-        return newHead.next;
-    }
-    ```
 22. 鸡生蛋蛋生鸡
 
     简化版
