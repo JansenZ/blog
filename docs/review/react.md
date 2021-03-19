@@ -568,6 +568,7 @@
                 renderLanes
             );
         } else {
+            // 跑完这个diff后，workInProgress的child就有啦，因为它的结构没有children,是child.sibling的形式，所以孩子等等一轮就得搞出来。
             workInProgress.child = reconcileChildFibers(
                 workInProgress,
                 current.child,
@@ -697,21 +698,272 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
 ### React Diff
 
+1. 新的 diff 的预设限制是啥，为什么？
+
+    由于 Diff 操作本身也会带来性能损耗，React 文档中提到，即使在最前沿的算法中，将前后两棵树完全比对的算法的复杂程度为 O(n 3 )，其中 n 是树中元素的数量。
+
+    如果在 React 中使用了该算法，那么展示 1000 个元素所需要执行的计算量将在十亿的量级范围。这个开销实在是太过高昂。
+
+    为了降低算法复杂度，React 的 diff 会预设三个限制：
+
+    1. 只对同级元素进行 Diff。如果一个 DOM 节点在前后两次更新中跨越了层级，那么 React 不会尝试复用他。
+    2. 两个不同类型的元素会产生出不同的树。如果元素由 div 变为 p，React 会销毁 div 及其子孙节点，并新建 p 及其子孙节点。
+    3. 开发者可以通过 key prop 来暗示哪些子元素在不同的渲染下能保持稳定。考虑如下例子：
+
+    ```js
+    // 更新前
+    <div>
+        <p key="J">J</p>
+        <h3 key="K">K</h3>
+    </div>
+
+    // 更新后
+    <div>
+        <h3 key="K">K</h3>
+        <p key="J">J</p>
+    </div>
+    ```
+
+    如果没有 key，React 会认为 div 的第一个子节点由 p 变为 h3，第二个子节点由 h3 变为 p。这符合限制 2 的设定，会销毁并新建。
+
+    但是当我们用 key 指明了节点前后对应关系后，React 知道 key === "J"的 p 在更新后还存在，所以 DOM 节点可以复用，只是需要交换下顺序。
+
+    这就是 React 为了应对算法性能瓶颈做出的三条限制。
+
+2. Diff 入口函数
+
+    `function reconcileChildFibers(returnFiber, currentFirstChild, newChild, lanes)`
+
+    1. 第一个参数就是 workinprogress
+    2. 第二个参数就是 current.child
+    3. 第三个参数就是 workinprogress 的 reactelement children
+
+    ```js
+    // 根据newChild类型选择不同diff函数处理
+    function reconcileChildFibers(
+        returnFiber: Fiber,
+        currentFirstChild: Fiber | null,
+        newChild: any
+    ): Fiber | null {
+        const isObject = typeof newChild === "object" && newChild !== null;
+        // 如果是数组，比如是div下的多个p节点，isObject一样是true，但是，newChild.$$typeof就没有值了，因为它是数组
+        if (isObject) {
+            // object类型，可能是 REACT_ELEMENT_TYPE 或 REACT_PORTAL_TYPE
+            switch (newChild.$$typeof) {
+                case REACT_ELEMENT_TYPE:
+                // 调用 reconcileSingleElement 处理
+                // // ...省略其他case
+            }
+        }
+
+        if (typeof newChild === "string" || typeof newChild === "number") {
+            // 调用 reconcileSingleTextNode 处理
+            // ...省略
+        }
+
+        if (isArray(newChild)) {
+            // 调用 reconcileChildrenArray 处理
+            // ...省略
+        }
+
+        // 一些其他情况调用处理函数
+        // ...省略
+
+        // 以上都没有命中，删除节点
+        return deleteRemainingChildren(returnFiber, currentFirstChild);
+    }
+    ```
+
+    ![newchildArray](../img/newchild1.jpg)
+
+    当 newChild 类型为 object、number、string，代表同级只有一个节点
+
+    当 newChild 类型为 Array，同级有多个节点
+
+3. Diff 删除
+
+    因为只要进了 diff，肯定是递归调用的，todo 猜测
+
+    举个例子，如果某个节点，本来有 child 的，比如 p=>span 或者本来没有 child，比如直接就是个文本节点， 然后它 setstate 的时候删除了对应的子节点，或者是没变化。
+
+    那么它的 newChild 是 null，也就是`reconcileChildFibers`方法只会执行到`deleteRemainingChildren`，那么这样就相当于直接清理 child。当前节点的 fiber，workInProgress 节点生成
+
+4. 单 Child 节点 Diff
+
+    ```js
+    function reconcileSingleElement(
+        returnFiber: Fiber,
+        currentFirstChild: Fiber | null,
+        element: ReactElement
+    ) {}
+    ```
+
+    我们再重复一下它的参数，
+
+    1. 第一个 returnFiber 就是当前正在构建的 workinProgress 节点
+    2. 第二个就是当前页面上的 returnFiber 的子节点，也就是 current.child
+    3. 第三个就是要和 currentFirstChild 对比的那个新的 ReactElement
+
+    ```js
+    while (child !== null) {
+        // ...
+    }
+    var _created4 = createFiberFromElement(element, returnFiber.mode, lanes);
+    _created4.return = returnFiber;
+    return _created4;
+    ```
+
+    我们省略了一些步骤，可以看到，假如 child 上来就是 null，说明啥，说明当前页面上没有这个节点，reactelement 是新的，所以直接创建新的 fiber，把它的 return 指向 workinProgress 节点
+
+    那么假如 child 不是 null 的情况下，我们去判断 child 节点是否可以复用
+
+    ```js
+    // 首先判断是否存在对应DOM节点
+    while (child !== null) {
+        // 上一次更新存在DOM节点，接下来判断是否可复用
+
+        // 首先比较key是否相同
+        if (child.key === key) {
+            // key相同，接下来比较type是否相同
+
+            switch (child.tag) {
+                // ...省略case
+
+                default: {
+                    if (child.elementType === element.type) {
+                        // type相同则表示可以复用
+                        // 返回复用的fiber
+                        var existing = useFiber(child, element.props);
+                        return existing;
+                    }
+
+                    // type不同则跳出switch
+                    break;
+                }
+            }
+            // 代码执行到这里代表：key相同但是type不同
+            // 将该fiber及其兄弟fiber标记为删除
+            deleteRemainingChildren(returnFiber, child);
+            break;
+        } else {
+            // key不同，将该fiber标记为删除
+            deleteChild(returnFiber, child);
+        }
+        // 继续查看child的兄弟元素们
+        child = child.sibling;
+    }
+    ```
+
+    1. 单节点会比较 key 是否相等(`null === null`，就是没有 key 的情况下)，然后如果 type 一样，直接复用。
+
+    2. key 一样，type 不一样，说明复用不了了，还要把兄弟节点一起标记删除，代表都不能复用。这种情况没有去找复用的原因是，他们的`key`相同，如果节点类型不同的话，`React`会认为你已经把这个节点重新覆盖了，所以就不会再去找剩余的节点是否可以复用。
+
+    最终都没有找到可复用的节点的话，就会创建新节点。
+
+    3. key 不一样，type 一样的话，只标记当前 child 节点，然后继续往下判断
+
+    那么可能会有疑问了，如果我改了标签上的类名，onclick 等等呢？ 并不影响 Fiber 大节点的复用，只需要把对应 Fiber 的 pendingprops 指向新的 element 的 props 即可
+
+    `var existing = useFiber(child, element.props);`
+
+    相当于 Obj 复用，只是 obj.props = newElement.pops， 这样理解
+
+5. 多节点 Diff
+
+    如果现在进入了数组逻辑，也就是`function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren, lanes)`
+
+    我们再来说说这参数，无限加深记忆
+
+    1. 当前的 workInProgress 节点
+    2. current.child，当前页面上渲染的节点的第一个孩子，也就是 1 的的 alternate 的第一个孩子
+    3. 新的 reactElements 数组
+
+    那么，我们准备进入比对了
+
+    首先，如果是开发环境的话，我们会去进入一层遍历，用来判断是否有无效的 key，就是两个 key 相等啊这样的东西
+
+    它的内部是使用 Set 集合来维护，Set.has 了直接 break，然后报错。
+
+    ```js
+    {
+        // DEV
+        // First, validate keys.
+        var knownKeys = null;
+
+        for (var i = 0; i < newChildren.length; i++) {
+            var child = newChildren[i];
+            knownKeys = warnOnInvalidKey(child, knownKeys, returnFiber);
+        }
+    }
+    ```
+
+    现在，我们进入比对了，需要两轮遍历
+
+    第一轮遍历，属于处理更新节点，第二轮，处理不属于更新的节点
+
+    第一轮做的事情有[这里是源码](https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L818)
+
+    1. let i = 0，遍历 newChildren，将 newChildren[i]与 oldFiber 比较，判断 DOM 节点是否可复用。是否可以复用和单节点一致，只要 key 和 type 一样，直接复用
+    2. 如果可复用，i++，继续比较 newChildren[i]与 oldFiber.sibling，可以复用则继续遍历。
+    3. 如果不可复用，分两种情况：
+        1. key 不同导致不可复用，立即跳出整个遍历，第一轮遍历结束。
+        2. key 相同 type 不同导致不可复用，会将 oldFiber 标记为 DELETION，并继续遍历
+    4. 如果 newChildren 遍历完（即 i === newChildren.length - 1）或者 oldFiber 遍历完（即 oldFiber.sibling === null），跳出遍历，第一轮遍历结束。
+
+    第一轮结束后，会出现 3 种情况
+
+    1. 第一个情况，新节点遍历完毕，说明它是做了`pop`这样的操作。那么直接把旧节点的剩余节点给删除就可以了。
+    2. 第二个情况，老节点遍历完了，说明它是做了`push`这样的操作。那么直接循环创建剩下的新节点就可以了。
+    3. 第三个情况，新老节点都没遍历完，意思它要么做了替换操作，要么就是移动了顺序，要么就是`unshift`或者`shift`之类的操作。
+        - 遇到这样的情况，它会通过`mapRemainingChildren`方法，把剩下没跑完的`oldFiber`变成一个`Map`对象。key 值是`key`，没有 key 的话用`index`。
+        ```js
+        function mapRemainingChildren(
+            returnFiber: Fiber,
+            currentFirstChild: Fiber
+        ): Map<string | number, Fiber> {
+            const existingChildren: Map<string | number, Fiber> = new Map();
+            let existingChild = currentFirstChild;
+            while (existingChild !== null) {
+                if (existingChild.key !== null) {
+                    existingChildren.set(existingChild.key, existingChild);
+                } else {
+                    existingChildren.set(existingChild.index, existingChild);
+                }
+                existingChild = existingChild.sibling;
+            }
+            return existingChildren;
+        }
+        ```
+        - 然后遍历新数组，在遍历的过程中会寻找新的节点的 `key`是否存在于这个 `Map`中，存在即可复用，不存在就创建一个新的。就相当于又回到了第一部分。
+        - 然后还会去判断是否需要移动节点，如果 oldFiber 的 index > lastPlacedIndex,不动,并且把 lastPlacedIndex = oldFiber.index
+        - 如果 oldFiber 的 index < lastPlacedIndex 就要右移了
+
+    完成后这一层的`diff`就完成，继续下一个工作单元 `performUnitOfWork`。直到全部结束。
+
+    那么，它是如何去跑下一个工作单元的呢？函数`performUnitOfWork`内有一项重要的代码
+
+    ```js
+    // 这个next就是上面diff后返回的WorkinProgress.child
+    if (next === null) {
+        // If this doesn't spawn new work, complete the current work.
+        completeUnitOfWork(unitOfWork);
+    } else {
+        // 递归吧
+        workInProgress = next;
+    }
+    ```
+
 ### Hooks 原理
 
 ### SetState
 
-事件=>setstate=>调度=>调和 begin=>diff=>调和 complete=>commit
+事件 => setstate => 调度 => 调和 begin => diff => 调和 complete => commit
 
-1. react fiber
+### 其他
 
-    在`react16`之前，更新组件是需要递归遍历的。在协调阶段阶段，由于是采用的递归的遍历方式，这种也被成为 `Stack Reconciler`，主要是为了区别 `Fiber Reconciler` 取的一个名字。
-
-    这种方式有一个特点：一旦任务开始进行，就无法中断，那么 `js`将一直占用主线程， 一直要等到整棵 `Virtual DOM` 树计算完成之后，才能把执行权交给渲染引擎，那么这就会导致一些用户交互、动画等任务无法立即得到处理，就会有卡顿，非常的影响用户体验。用了`Fiber`后，`Fiber`是一个链表结构，一个`FiberRoot`上可以有多个`fiber`对象，可以数据分片，配合新的`Fiber Reconciler`调度器，把整个更新任务拆解开来，把一条链表拆分为一个个工作单元，每次执行一个单元，然后通过`next`指向下一个工作单元，尽可能地将更新任务放到浏览器空闲的时候去执行，那么就能解决以上的问题。
-
-2. react 代码分割优化 react.lazy 和 react.suspense。可以懒加载。
+1. react 代码分割优化 react.lazy 和 react.suspense。可以懒加载。
    TODO
-3. React.createElement
+2. React.createElement
 
     正常写 jsx 的代码会被 babel 转译成该方法，方法接收三+个参数，一个是 type,一个是 prop obj,一个是 children
     第一个参数如果是 html 标签，那就是个普通的 type，如果是一个 React 组件的话，会去判断这个 type 下有没有 defaultProps 属性，如果有的话，会给对应的 props 上默认值。
@@ -720,11 +972,11 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     最后生成一个 ReactElement 出来。
     这个对象会有一个属性\$\$typeof 标记它是一个 React 对象，type,key,ref,prop 都有
 
-4. React 有 Component 和 pureComponent，我们写的类都是继承它的，这样我们就拥有了 setState,和 forceUpdate 方法。
+3. React 有 Component 和 pureComponent，我们写的类都是继承它的，这样我们就拥有了 setState,和 forceUpdate 方法。
 
     在`PureCompent`和`Component`的区别就是，`PureComponent`就是继承自`Component`,然后添加了一个原型属性`isPureComponent`代表它是`pure`，具体的判断应该就是在 react-dom 里面了。
 
-5. setState 原理是啥？
+4. setState 原理是啥？
 
     `setState`在调用的时候，会先判断它的第一个参数是不是一个`Obj`,或者一个`function`，如果都不是会报错，抛出一个第一个参数不能瞎传的错。
 
@@ -738,11 +990,11 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     根据标识`shouldUpdate`来决定是否对组件实例进行重新渲染，而标识`shouldUpdate`的值则取决于`PureComponent`组件浅比较结果或者生命周期函数`shouldComponentUpdate`执行结果；
 
-6. ref 是怎么把 dom 塞进 current 属性里的？
+5. ref 是怎么把 dom 塞进 current 属性里的？
 
     React.createRef 生成一个只含有 current 的对象。
 
-    然后在组件挂载的时候，给这个 current 属性存入 DOM 元素，并在卸载的时候传入 null。ref 会在 didmount 和 didupdate 触发前更新。在渲染出来后，会执行 commitAttachRef 方法，卸载的时候执行 detach 方法解除 ref。
+    然后在组件挂载的时候，给这个 current 属性存入 DOM 元素，并在卸载的时候传入 null。ref 会在 didmount 和 didupdate 触发前更新。在渲染出来后，会执行 `commitAttachRef` 方法，卸载的时候执行 detach 方法解除 ref。
 
     这个方法目前就两种方式，里面有这个 Fiber 对象节点和 ref 的对象，它会把 `Fiber.stateNode` 赋值给 `ref.current`，如果 ref 是函数的话，直接把 `Fiber.stateNode` 作为参数调用那个方法
 
@@ -753,7 +1005,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
         : (ref.current = instanceToUse);
     ```
 
-7. React.render()方法全过程
+6. React.render()方法全过程
 
     它会先判断第一个参数是不是一个 dom 元素，不合适直接报错。
 
@@ -780,7 +1032,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     接下来带上这个过期时间，和其他参数，给`FiberRoot`对象加个`context`，然后把`Fiber`对象作为参数调用`scheduleRootUpdate`。
     `scheduleRootUpdate`方法里会创建一个`update`对象，把要渲染的`ele`放到`payload`里，通过`enqueueUpdate`把`update`插入队列中，等待执行。最后调用`scheduleWork`方法，传入`Fiber`对象和过期时间。等待调度。
 
-8. scheduleWork()调度的原理。
+7. scheduleWork()调度的原理。
    JS 和渲染引擎是一个互斥关系。（不然就乱了）。如果 JS 在执行代码，那么渲染引擎工作就会被停止。假如我们有一个很复杂的复合组件需要重新渲染，那么调用栈可能会很长
 
     scheduleWork 里会获取 fiberd 对象的 root，以及标记优先级，然后进入 requestWork
@@ -818,83 +1070,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     后面的操作就是`commitRoot`后续, 把`Diff`的结果反映到真实 `DOM`的过程。
 
-9. commit 阶段
-
-    在 commit 阶段，在 commitRoot 里会根据 effect 的 effectTag，具体 effectTag 见源码 ，进行对应的插入、更新、删除操作，根据 tag 不同，调用不同的更新方法。
-
-
-    commit 阶段会执行如下的声明周期方法：
-
-    - getSnapshotBeforeUpdate
-    - componentDidMount
-    - componentDidUpdate
-    - componentWillUnmount
-
-10. diff
-
-    做 `Diff`的目的就是为了复用节点。
-
-    `React16`的 `diff`策略采用从链表头部开始比较的算法，是层次遍历，算法是建立在一个节点的插入、删除、移动等操作都是在节点树的同一层级中进行的。这也是为什么顶层节点发生变化后，后代所有都直接重新渲染的原因。
-
-    利用`WorkInProgress`作为新的那颗树。
-
-    创建 `WorkInProgress Tree` 的过程也是一个 `Diff`的过程，`Diff`完成之后会生成一个 `Effect List`，直接拿`FiberRoot.current`指向这个 `Effect List`就可以了。
-
-    核心代码都在`ReactChildFiber.js`里
-
-    进入`beginWork`后，会判断`tag`类型，然后执行对应的操作，对应的操作根据需要渲染与否，开始调用`reconcileChildren`方法
-
-    `reconcileChildren`只是一个入口函数，如果首次渲染，`current`空 `null`，就通过 `mountChildFibers`创建子节点的 `Fiber`实例。如果不是首次渲染，就调用 `reconcileChildFibers`去做 `diff`，然后得出 `effect list`。
-
-    而`mountChildFibers`和`reconcileChildFibers`就是一个参数区别，判断是否要增加一些`effectTag`，主要是用来优化初次渲染的，因为初次渲染没有更新操作。
-
-    `reconcileChildFibers`接受四个参数
-
-    -   `returnFiber`是即将 `Diff`的这层的父节点。也就是新的节点。
-    -   `currentFirstChild`是当前层的第一个 `Fiber`节点。
-    -   `newChild`是即将更新的 `vdom`节点(可能是 `TextNode`、可能是 `ReactElement`，可能是数组)，不是 `Fiber`节点
-    -   `expirationTime`是过期时间，这个参数是跟调度有关系的，本系列还没讲解，当然跟 `Diff`也没有关系。
-
-    `reconcileChildFibers`会判断传进来的第三个参数，就是即将更新的 `vdom`节点(可能是 `TextNode`、可能是 `ReactElement`，可能是数组)，不是 `Fiber`节点。
-
-    然后调用不同的处理函数，比如当前`newChild`是一个“文本”节点，那它的类型就是一个`string`或者是`number`,调用`reconcileSingleTextNode`方法。
-
-    判断当前层的第一个子节点是不是也是文本
-
-    -   如果是的话，给`currentFirstChild`的所有`siblings`全打上删除的标记，然后复用当前节点，把`newChild`的内容填充到当前节点上。然后把这个节点的`return`指向`returnFiber`完成挂钩。
-    -   如果不是的话，说明需要直接替换掉节点，直接从当前子节点开始，打删除标记，然后创建一个新的文本节点，并把这个节点的`return`指向`returnFiber`。
-
-    如果是一个“元素”，也就是非文本节点的话，那它就是一个`Object`，通过它身上的\$\$`typeof`来判断它确实是一个`react`元素。调用`reconcileSingleElement`方法。
-
-    判断当前层的第一个子节点的`key`是否和新的一样，如果一样，删除剩余节点，并复用当前节点，和`text`一样。只是多了一个`ref`的赋值过程。
-
-    如果不一样的话，它只删除当前节点，然后标记 child = child.siblings，继续递归去判断，这样的话，如果遇到兄弟节点移位的情况，就不会浪费而是复用。
-
-    第一种情况没有去找复用的原因是，他们的`key`相同，如果节点类型不同的话，`React`会认为你已经把这个节点重新覆盖了，所以就不会再去找剩余的节点是否可以复用。
-
-    最终都没有找到可复用的节点的话，就会创建新节点。
-
-    如果是一个“数组”的话，这也是最难的一块。
-
-    那这个`fiber`对象的`index`是怎么来的，是它上一次没有比较直接替换的时候，创建`WorkInProgress`的时候，给`index`赋值的。
-
-    这是第一次遍历新数组，通过调用 `updateSlot`来对比新老元素
-
-    其中文本的话，如果 `key`不为 `null`，那么就代表老节点不是 `TextNode`，而新节点又是 `TextNode`，所以返回 `null`，不能复用，反之则可以复用，调用 `updateTextNode`方法。
-
-    如果是`react`对象的话，`key`不一样就返回`null`。直接`break`出循环。
-    也就是说，第一轮循环会出现三种情况。
-
-    -   第一个情况，新节点遍历完毕，说明它是做了`pop`这样的操作。那么直接把旧节点的剩余节点给删除就可以了。
-    -   第二个情况，老节点遍历完了，说明它是做了`push`这样的操作。那么直接循环创建剩下的新节点就可以了。
-    -   第三个情况，新老节点都没遍历完，意思它要么做了替换操作，要么就是移动了顺序，要么就是`unshift`或者`shift`之类的操作。
-
-    遇到这样的情况，它会通过`mapRemainingChildren`方法，把老的数组节点变成一个`map`对象。下标是`key`或者`index`。
-    然后遍历新数组，在遍历的过程中会寻找新的节点的 `key`是否存在于这个 `map`中，存在即可复用，不存在就创建一个新的。就相当于又回到了第一部分。
-
-    完成后这一层的`diff`就完成，继续下一个工作单元。直到全部结束。
-
-11. react hook 原理
+8. react hook 原理
 
     React 下的 hook 就是封装了所有的方法，利用 dispatcher.useState 之类的直接调用。
 
