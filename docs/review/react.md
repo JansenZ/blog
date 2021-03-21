@@ -224,7 +224,18 @@
 
         // 作为动态的工作单元的属性
         this.pendingProps = pendingProps;
+        // 记忆属性
         this.memoizedProps = null;
+        // 更新队列,正常结构如下
+        /*
+        updateQueue {
+            baseState
+            effects: null
+            firstBaseUpdate: null
+            lastBaseUpdate: null
+        }
+        */
+        
         this.updateQueue = null;
         this.memoizedState = null;
         this.dependencies = null;
@@ -956,8 +967,167 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 ### Hooks 原理
 
 ### SetState
+    事件 => setstate => 调度 => 调和 begin => diff => 调和 complete => commit
+1. setState 的流程是啥？
 
-事件 => setstate => 调度 => 调和 begin => diff => 调和 complete => commit
+    this.setState 内会调用 this.updater.enqueueSetState 方法。
+
+    ```js
+    enqueueSetState(inst, payload, callback) {
+        // 通过组件实例获取对应fiber
+        const fiber = getInstance(inst);
+
+        const eventTime = requestEventTime();
+        const suspenseConfig = requestCurrentSuspenseConfig();
+
+        // 获取优先级
+        const lane = requestUpdateLane(fiber, suspenseConfig);
+
+        // 创建update
+        const update = createUpdate(eventTime, lane, suspenseConfig);
+
+        // 这个payload就是我们的state里面的第一个参数，也就是{a: 1} 这样的
+        update.payload = payload;
+
+        // 赋值回调函数
+        if (callback !== undefined && callback !== null) {
+            update.callback = callback;
+        }
+
+        // 将update插入updateQueue
+        enqueueUpdate(fiber, update);
+        // 调度update
+        scheduleUpdateOnFiber(fiber, lane, eventTime);
+    }
+    ```
+    然后enqueueUpdate 这个方法，会把 update 对象通过next做一个循环单链表，然后挂在fiber的 updateQueue 的shared.pending 下
+
+    最后开始调用 scheduleUpdateOnFiber，然后把state更新到updateQueue上后，移交到调度那边去
+
+2. update对象内容
+
+    [update对象详解](https://react.iamkasong.com/state/update.html);
+
+    他这个update 有一段就是循环链表
+    ```js
+    if (pending === null) {
+        // This is the first update. Create a circular list.
+        update.next = update;
+    } else {
+        update.next = pending.next;
+        pending.next = update;
+    }
+    ```   
+3. setState啥时候是异步的，啥时候是同步的？
+    
+    实际上，setState为了保证性能，它是使用了批处理，和异步其实没啥关系，因为他是 调用setState函数后读取 this.state 从来就没有说是 this.state = xx， 然后读取 this.state 对吧。
+
+    它的内部主要利用了一个 `executionContext` 的概念，`executionContext` 代表了目前 react 所处的阶段，而 `NoContext` 你可以理解为是 react 已经没活干了的状态。而 `flushSyncCallbackQueue` 就是开始干活的意思。
+
+    当 react 进入它自己的调度步骤时，会给这个 `executionContext` 赋予不同的值，表示不同的操作以及当前所处的状态，而 `executionContext` 的初始值就是 `NoContext` ，所以只要你不进入 react 的调度流程，这个值就是 NoContext ，那你的 setState 就是同步的。
+
+    ```js
+    var NoContext = 0;
+    var BatchedContext = 1;
+    var EventContext = 2;
+    var DiscreteEventContext = 4;
+    var LegacyUnbatchedContext = 8;
+    var RenderContext = 16;
+    var CommitContext = 32;
+    var RetryAfterError = 64;
+    var executionContext = NoContext;
+    ```
+
+    而当你用了settimeout后，直接就会去执行final， 也就是还没开始呢，就结束了，导致executionContext就是NoContext。
+
+    用了 合成事件、 生命周期 就会赋值 executionContext， 而进入 原生事件的话，因为react没有拦截，所以直接就是用的默认的，所以也就是同步执行，但是settimeout的话，虽然进入合成事件，但是因为延迟了，导致final直接执行，所以和原生事件一样表现。
+    ```js
+    componentDidMount() {
+        document.body.addEventListener('click', this.changeCount, false)
+    }
+    changeCount = () => {
+        this.setState({ count: this.state.count + 1 });
+        console.log(this.state.count); // 输出的是更新后的count --> 1
+    }
+    ```
+    但是如果是在concurrent模式下，就不行了，因为有个条件就是`if (lane === SyncLane) { `
+
+    以上，解释最简单的就是3个调用栈的图
+    1. 默认的两次setState
+        [tu](../img/default.png)
+        可以看到，默认的调用栈不管到哪，他的executionContext都不是0，isBatchingEventUpdates 也是true
+    2. setTimeout的两次setState
+        [tu1](../img/settimeout1.png)
+        能看到isBatching 赋值为false的地方
+        [tu2](../img/settimeout2.png)
+        能看到executionContext赋值为0的地方，这里初始写错了，是4.
+    3. 直接用原生事件里调用setState
+        [natve](../img/native1.png)
+        可以看到，调用栈特别干净，上来就是 `changeNum` 函数，根本没进任何react能控制的地方，所以两个值都是默认的，一个0，一个false
+    
+    我用一段代码来大概的解释setState的工作原理，一看就明白。
+    
+    当然，一定要对try catch final 有深刻的理解
+    ```js
+    var NoContext = 0;
+    var DiscreteEventContext = 4;
+    var executionContext = NoContext;
+
+    var a = 0;
+    var updateQueue = [];
+
+    function setState(payload) {
+      updateQueue.push(payload);
+      if (executionContext === NoContext) {
+        flushSyncCallbackQueue();
+      }
+    }
+
+    function scheduleUpdateOnFiber(fn) {
+      var prevExecutionContext = executionContext;
+      executionContext = DiscreteEventContext;
+      updateQueue = [];
+      try {
+        return fn();
+      } finally {
+        executionContext = prevExecutionContext;
+        if (executionContext === NoContext) {
+          flushSyncCallbackQueue();
+        }
+      }
+    }
+
+    const onChangeBatchA = () => {
+      setState({ a: 1 });
+      console.log(a);
+      setState({ a: 3 });
+      console.log(a);
+    }
+    const onChangeUnBatchA = () => {
+      setTimeout(() => {
+        setState({ a: 5 });
+        console.log(a);
+        setState({ a: 6 });
+        console.log(a);
+      }, 0);
+    }
+
+    var flushSyncCallbackQueue = function () {
+      a = updateQueue.reduce((accumulator, currentValue) => {
+        return currentValue.a || accumulator;
+      }, a)
+    }
+
+    // 走你
+    scheduleUpdateOnFiber(onChangeBatchA);
+    console.log(a);
+    scheduleUpdateOnFiber(onChangeUnBatchA);
+    console.log(a);
+
+    // 0， 0 ，3
+    // 3， 5， 6
+
+    ```
 
 ### 其他
 
@@ -976,7 +1146,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     在`PureCompent`和`Component`的区别就是，`PureComponent`就是继承自`Component`,然后添加了一个原型属性`isPureComponent`代表它是`pure`，具体的判断应该就是在 react-dom 里面了。
 
-4. setState 原理是啥？
+4. setState 工作流（旧）
 
     `setState`在调用的时候，会先判断它的第一个参数是不是一个`Obj`,或者一个`function`，如果都不是会报错，抛出一个第一个参数不能瞎传的错。
 
@@ -1031,6 +1201,13 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     接下来带上这个过期时间，和其他参数，给`FiberRoot`对象加个`context`，然后把`Fiber`对象作为参数调用`scheduleRootUpdate`。
     `scheduleRootUpdate`方法里会创建一个`update`对象，把要渲染的`ele`放到`payload`里，通过`enqueueUpdate`把`update`插入队列中，等待执行。最后调用`scheduleWork`方法，传入`Fiber`对象和过期时间。等待调度。
+
+    1. 创建fiberRootNode、rootFiber、updateQueue（`legacyCreateRootFromDOMContainer`）
+    2. 创建Update对象（`updateContainer`）
+    3. 从fiber到root（`markUpdateLaneFromFiberToRoot`）
+    4. 调度更新（`ensureRootIsScheduled`）
+    5. render阶段（`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
+    6. commit阶段（`commitRoot`）
 
 7. scheduleWork()调度的原理。
    JS 和渲染引擎是一个互斥关系。（不然就乱了）。如果 JS 在执行代码，那么渲染引擎工作就会被停止。假如我们有一个很复杂的复合组件需要重新渲染，那么调用栈可能会很长
