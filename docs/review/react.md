@@ -1020,7 +1020,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     ```   
 3. setState啥时候是异步的，啥时候是同步的？
 
-    [链接参考](https://zhuanlan.zhihu.com/p/350332132)
+    [讲清楚的很少，这个还不错](https://zhuanlan.zhihu.com/p/350332132)
     
     实际上，setState为了保证性能，它是使用了批处理，和异步其实没啥关系，因为他是 调用setState函数后读取 this.state 从来就没有说是 this.state = xx， 然后读取 this.state 对吧。
 
