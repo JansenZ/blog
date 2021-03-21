@@ -1079,45 +1079,45 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     var updateQueue = [];
 
     function setState(payload) {
-      updateQueue.push(payload);
-      if (executionContext === NoContext) {
-        flushSyncCallbackQueue();
-      }
+        updateQueue.push(payload);
+        if (executionContext === NoContext) {
+            flushSyncCallbackQueue();
+        }
     }
 
     function scheduleUpdateOnFiber(fn) {
-      var prevExecutionContext = executionContext;
-      executionContext = DiscreteEventContext;
-      updateQueue = [];
-      try {
-        return fn();
-      } finally {
-        executionContext = prevExecutionContext;
-        if (executionContext === NoContext) {
-          flushSyncCallbackQueue();
+        var prevExecutionContext = executionContext;
+        executionContext = DiscreteEventContext;
+        updateQueue = [];
+        try {
+            return fn();
+        } finally {
+            executionContext = prevExecutionContext;
+            if (executionContext === NoContext) {
+            flushSyncCallbackQueue();
+            }
         }
-      }
     }
 
     const onChangeBatchA = () => {
-      setState({ a: 1 });
-      console.log(a);
-      setState({ a: 3 });
-      console.log(a);
+        setState({ a: 1 });
+        console.log(a);
+        setState({ a: 3 });
+        console.log(a);
     }
     const onChangeUnBatchA = () => {
-      setTimeout(() => {
-        setState({ a: 5 });
-        console.log(a);
-        setState({ a: 6 });
-        console.log(a);
-      }, 0);
+        setTimeout(() => {
+            setState({ a: 5 });
+            console.log(a);
+            setState({ a: 6 });
+            console.log(a);
+        }, 0);
     }
 
     var flushSyncCallbackQueue = function () {
-      a = updateQueue.reduce((accumulator, currentValue) => {
-        return currentValue.a || accumulator;
-      }, a)
+        a = updateQueue.reduce((accumulator, currentValue) => {
+            return currentValue.a || accumulator;
+        }, a)
     }
 
     // 走你
