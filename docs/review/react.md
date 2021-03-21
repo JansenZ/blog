@@ -527,15 +527,15 @@
     }
     ```
 
-    - 第一个参数，就是当前页面上渲染的对应的这个 Fiber 节点，也就是 workInProgress.alternate
+    - 第一个参数，就是当前页面上渲染的对应的这个 Fiber 节点，也就是 `workInProgress.alternate`
     - 第二个参数，就是当前组件对应的 Fiber 节点
     - 第三个参数，优先级相关
 
     那么 mount 的时候，current 肯定是 null,如果不为 null,就说明是更新阶段
 
-    update 时：如果 current 存在，在满足一定条件时可以复用 current 节点，这样就能克隆 current.child 作为 workInProgress.child，而不需要新建 workInProgress.child。
+    update 时：如果 `current` 存在，在满足一定条件时可以复用 `current` 节点，这样就能克隆 `current.child` 作为 `workInProgress.child`，而不需要新建 `workInProgress.child`。
 
-    mount 时：除 fiberRootNode 以外，current === null。会根据 fiber.tag 不同，创建不同类型的子 Fiber 节点, 和子节点联通的代码片段为
+    mount 时：除 fiberRootNode 以外，current === null。会根据 `fiber.tag` 不同，创建不同类型的子 Fiber 节点, 和子节点联通的代码片段为
 
     ```js
     var type = workInProgress.type;
@@ -594,9 +594,9 @@
 
     对于 update 的组件，他会将当前组件与该组件在上次更新时对应的 Fiber 节点比较（也就是俗称的 Diff 算法），将比较的结果生成新 Fiber 节点
 
-    mountChildFibers 与 reconcileChildFibers 这两个方法的逻辑基本一致。唯一的区别是：reconcileChildFibers 会为生成的 Fiber 节点带上 effectTag 属性，而 mountChildFibers 不会。
+    mountChildFibers 与 reconcileChildFibers 这两个方法的逻辑基本一致。唯一的区别是：reconcileChildFibers 会为生成的 Fiber 节点带上 `effectTag` 属性，而 mountChildFibers 不会。
 
-    render 阶段的工作是在内存中进行，当工作结束后会通知 Renderer 需要执行的 DOM 操作。要执行 DOM 操作的具体类型就保存在 fiber.effectTag 中。
+    render 阶段的工作是在内存中进行，当工作结束后会通知 Renderer 需要执行的 DOM 操作。要执行 DOM 操作的具体类型就保存在 `fiber.effectTag` 中。
     比如
 
     ```js
