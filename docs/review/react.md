@@ -1056,15 +1056,15 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     以上，解释最简单的就是3个调用栈的图
     1. 默认的两次setState
-        [tu](../img/default.png)
+        ![tu](../img/default.png)
         可以看到，默认的调用栈不管到哪，他的executionContext都不是0，isBatchingEventUpdates 也是true
     2. setTimeout的两次setState
-        [tu1](../img/settimeout1.png)
+        ![tu1](../img/settimeout1.png)
         能看到isBatching 赋值为false的地方
-        [tu2](../img/settimeout2.png)
+        ![tu2](../img/settimeout2.png)
         能看到executionContext赋值为0的地方，这里初始写错了，是4.
     3. 直接用原生事件里调用setState
-        [natve](../img/native1.png)
+        ![natve](../img/native1.png)
         可以看到，调用栈特别干净，上来就是 `changeNum` 函数，根本没进任何react能控制的地方，所以两个值都是默认的，一个0，一个false
     
     我用一段代码来大概的解释setState的工作原理，一看就明白。
