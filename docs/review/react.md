@@ -546,15 +546,17 @@
 
     pendingProps 里保存的就是对应的 reactElement
 
-2. 更新的时候，如何判断可以服用 current 节点呢？
+2. 更新的时候，如何判断可以复用 current 节点呢？
 
     - oldProps === newProps && workInProgress.type === current.type，即 props 与 fiber.type 不变
     - !includesSomeLane(renderLanes, updateLanes)，即当前 Fiber 节点优先级不够
 
     那么，props 前后是啥呢？举个例子就是它们的 children 是否一样，如果你是个文本标签，那你前后就是对应的文本
     ![old](../img/old1.jpg)
-    如果你是个 div 标签，那前后就是这个
+    如果你是个 div 标签，里面又有子标签，那前后就是这个来对比
     ![div](../img/divold.jpg)
+
+    经过观察，发现，除了根节点外的一些东西，里面的只要大的改动了，即使props前后字面一样，也不会相等，所以基本没啥用，后面还是会去 reconcileChildren 来diff。
 
 3. mount 的时候组件类型有哪些
 
