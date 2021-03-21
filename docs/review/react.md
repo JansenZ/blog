@@ -1019,6 +1019,8 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     }
     ```   
 3. setState啥时候是异步的，啥时候是同步的？
+
+    [链接参考](https://zhuanlan.zhihu.com/p/350332132)
     
     实际上，setState为了保证性能，它是使用了批处理，和异步其实没啥关系，因为他是 调用setState函数后读取 this.state 从来就没有说是 this.state = xx， 然后读取 this.state 对吧。
 
@@ -1066,7 +1068,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
         可以看到，调用栈特别干净，上来就是 `changeNum` 函数，根本没进任何react能控制的地方，所以两个值都是默认的，一个0，一个false
     
     我用一段代码来大概的解释setState的工作原理，一看就明白。
-    
+
     当然，一定要对try catch final 有深刻的理解
     ```js
     var NoContext = 0;
