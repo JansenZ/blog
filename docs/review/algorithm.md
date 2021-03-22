@@ -72,93 +72,13 @@ function TreeNode(val, left, right) {
 
     先中间节点，再左节点，如果有左节点继续，如果没有了跳出，访问右边节点
 
-    ```js
-    // 递归写法
-    var arr = [];
-    function traversePre(node) {
-        if (!node) return;
-        // 先值
-        arr.push(node.val);
-        // 后访问左节点
-        traversePre(node.left);
-        // 再右
-        traversePre(node.right);
-    }
-    // 非递归
-    // 通用版本，可以适配中序和后序
-    function traversePre(root) {
-        let arr = [];
-        let r = root ? [root] : [];
-        while (r.length) {
-            let node = r.pop();
-            while (node) {
-                arr.push(node.val);
-                // 有右节点，把它推到队列尾部
-                node.right && r.push(node.right);
-                // 继续往下找左
-                node = node.left;
-            }
-        }
-        return arr;
-    }
-    // 非递归优化版
-    // 只用一个while，把左右都推进去。后进先出
-    // 只适配先序遍历
-    var preorderTraversal = function(root) {
-        var arr = [];
-        var s = root ? [root] : [];
-        while (s.length) {
-            let x = s.pop();
-            arr.push(x.val);
-            // 先push右
-            x.right && s.push(x.right);
-            // 再push左，然后pop
-            x.left && s.push(x.left);
-        }
-        return arr;
-    };
-    ```
+    [filename](../algorithm/preorder.js ':include :type=code')
 
 2. 中序遍历
 
     先左节点，然后中节点，然后右边节点。
 
-    ```js
-    // 递归写法
-    var arr = [];
-    function traverseMid(node) {
-        if (!node) return;
-        // 先左节点
-        traverseMid(node.left);
-        // 中值
-        arr.push(node.val);
-        // 再右
-        traverseMid(node.right);
-    }
-
-    // 迭代写法
-    function traverseMid(root) {
-        let arr = [];
-        let r = [];
-        let node = root;
-        while (true) {
-            // 先一路访问到最左边的节点
-            // 一路上的点存起来
-            while (node) {
-                r.push(node);
-                node = node.left;
-            }
-            // 没有了就推出
-            if (!r.length) break;
-            // 取出末尾的节点打印，然后转到它的右节点去。
-            let x = r.pop();
-            // 这样所谓的左节点，也是父节点。
-            arr.push(x.val);
-            node = x.right;
-        }
-        return arr;
-    }
-    ```
+    [filename](../algorithm/inorder.js ':include :type=code')
 
 3. 后序号遍历
 
@@ -166,34 +86,7 @@ function TreeNode(val, left, right) {
 
     后序的思路就是把左右中 反转成 中右左， 最后反转数组。
 
-    ```js
-    // 递归写法
-    var arr = [];
-    function traverseLast(node) {
-        if (!node) return;
-        // 先左节点
-        traverseLast(node.left);
-        // 再右
-        traverseLast(node.right);
-        // 后值
-        arr.push(node.val);
-    }
-    // 非递归
-    // 后序的思路不一样
-    function traverseLast(root) {
-        let arr = [];
-        let r = [root];
-        while (r.length) {
-            let x = r.pop();
-            while (x) {
-                arr.push(x.val);
-                x.left && r.push(x.left);
-                x = x.right;
-            }
-        }
-        return arr.reverse();
-    }
-    ```
+    [filename](../algorithm/backorder.js ':include :type=code')
 
 4. 层次遍历 BFS
 
