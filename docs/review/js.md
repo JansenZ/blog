@@ -477,7 +477,7 @@
    var cc = new Proxy(obj, {
     set(target,key,val, receiver) {
         const pre = '强制改成';
-        retuyrn Reflect.set(target, key, pre + val, receiver);
+        return Reflect.set(target, key, pre + val, receiver);
     },
     get(target,key,receiver) {
         console.log('我听到我被动了');

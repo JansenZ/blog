@@ -6,15 +6,15 @@
 
 2. HOOK 的实践(非常重要！！！)
 
-    那有了 HOOK 之后，其实很多上述的一些方法可以用 HOOK 来改写，更加的直观。
+    那有了 HOOK 之后，其实很多上述的一些方法可以用 `HOOK` 来改写，更加的直观。
 
-    使用 hook 的话，配合`react context`，可以更加快速方便的管理状态。比之前也更加容易一点。
+    使用 `hook` 的话，配合`react context`，可以更加快速方便的管理状态。比之前也更加容易一点。
 
     - useCallback: 返回一个记忆持久化的函数
     - useContext: 获取上下文,
     - useEffect: 每次进来后都会执行，如果有第二个参数根据第二个参数是否发生变化决定执行与否,
     - useImperativeHandle: 配合 forwardRef 使用，具体没用过
-    - useLayoutEffect: useLayoutEffect 与 useEffect 的不同在于，useLayoutEffect 会在 DOM 渲染之前执行，而 useEffect 会在 DOM 渲染之后执行，所以我们可以利用这个特性，避免一些由于 DOM 渲染之后进行操作导致的白屏问题。 useLayoutEffect 会阻塞渲染，请谨慎使用。
+    - useLayoutEffect: `useLayoutEffect` 与 `useEffect` 的不同在于，`useLayoutEffect` 会在 `DOM` 渲染之前执行，而 `useEffect` 会在 `DOM` 渲染之后执行，所以我们可以利用这个特性，避免一些由于 `DOM` 渲染之后进行操作导致的白屏问题。 `useLayoutEffect` 会阻塞渲染，请谨慎使用。
     - useMemo: 返回一个记忆持久化的值
     - useReducer: useState 的加强版,
     - useRef: ref 传递,
@@ -23,18 +23,18 @@
 
 3. hooks 缺陷
 
-    1. 使用 Hooks 编写代码时候，你必须清楚代码中 useEffect 和 useCallback 的“依赖项数组”的改变时机。有时候，你的 useEffect 依赖某个函数的不可变性，这个函数的不可变性又依赖于另一个函数的不可变性，这样便形成了一条依赖链。一旦这条依赖链的某个节点意外地被改变了，你的 useEffect 就被意外地触发了。
-    2. 一旦用了 hooks，代码量稍微多一点的情况下，大家要介入修改的话必须要整体的看完这些代码，因为 useEffect 相当于断挡了，看代码会费劲，不像 this 的时候，this.xxx，可以很容易的找到调用链。
-    3. 为什么说是缓存雪崩呢？ 造成这个问题主要是因为 Hooks 函数运行是独立的，每个函数都有一份独立的作用域。函数的变量是保存在运行时的作用域里面，这里也可以理解成闭包。每次都会创建闭包数据，从性能角度来讲，此时缓存就是必要的了。而缓存就会牵扯出一堆问题。另外当我们有异步操作的时候，经常会碰到异步回调的变量引用是之前的，也就是旧的，于是就导致无法批量更新。
-    4. 然后遇到实在需要存储的变量的时候，类似于挂在 this 上的时候，就需要使用 useRef + ref.current，不是很优雅
+    1. 使用 `Hooks` 编写代码时候，你必须清楚代码中 `useEffect` 和 `useCallback` 的“依赖项数组”的改变时机。有时候，你的 `useEffect` 依赖某个函数的不可变性，这个函数的不可变性又依赖于另一个函数的不可变性，这样便形成了一条依赖链。一旦这条依赖链的某个节点意外地被改变了，你的 `useEffect` 就被意外地触发了。
+    2. 一旦用了 `hooks`，代码量稍微多一点的情况下，大家要介入修改的话必须要整体的看完这些代码，因为 `useEffect` 相当于断挡了，看代码会费劲，不像 `this` 的时候，`this.xxx`，可以很容易的找到调用链。
+    3. 为什么说是缓存雪崩呢？ 造成这个问题主要是因为 `Hooks` 函数运行是独立的，每个函数都有一份独立的作用域。函数的变量是保存在运行时的作用域里面，这里也可以理解成闭包。每次都会创建闭包数据，从性能角度来讲，此时缓存就是必要的了。而缓存就会牵扯出一堆问题。另外当我们有异步操作的时候，经常会碰到异步回调的变量引用是之前的，也就是旧的，于是就导致无法批量更新。
+    4. 然后遇到实在需要存储的变量的时候，类似于挂在 `this` 上的时候，就需要使用 `useRef + ref.current`，不是很优雅
 
 4. 为什么写 JSX 的时候，即使没用 React 也必须 import react 呢？
 
-    因为即使写的是函数式代码，实际上 Babel 都会转译成 React.createElement,不引入的话就不能使用了。
+    因为即使写的是函数式代码，实际上 Babel 都会转译成 `React.createElement`,不引入的话就不能使用了。
 
 5. this.setState 里参数是函数的时候和 Object 区别是什么
 
-    不管是函数还是对象，最后都是合成了一个新的状态对象。return Object.assign({}, prevState, partialState);
+    不管是函数还是对象，最后都是合成了一个新的状态对象。`return Object.assign({}, prevState, partialState)`;
 
     只是在求这个 partialSate 的时候，Object 是直接赋值，function 的话`partialState = payload.call(instance, prevState, nextProps);`
 
@@ -77,29 +77,29 @@
     }
     ```
 
-    因为原生操作 dom 的方式可维护性不高
+    因为原生操作 `dom` 的方式可维护性不高
 
-    如果大批量的 innerHTML 会增大绘制时间。同时，触发回流的频率更高。
+    如果大批量的 `innerHTML` 会增大绘制时间。同时，触发回流的频率更高。
 
-    使用虚拟 dom 相当于可以用 js 完成 UI 的驱动。可以跨平台。
+    使用虚拟 `dom` 相当于可以用 `js` 完成 `UI` 的驱动。可以跨平台。
 
-    Virtual DOM 在牺牲(牺牲很关键)部分性能的前提下，增加了可维护性，这也是很多框架的通性。
+    `Virtual DOM` 在牺牲(牺牲很关键)部分性能的前提下，增加了可维护性，这也是很多框架的通性。
 
-    DOM 属性特别多，大部分属性对于做 Diff 是没有任何用处的，所以如果用更轻量级的 JS 对象来代替复杂的 DOM 节点，然后把对 DOM 的 diff 操作转移到 JS 对象，就可以避免大量对 DOM 的查询操作。
+    `DOM` 属性特别多，大部分属性对于做 `Diff` 是没有任何用处的，所以如果用更轻量级的 `JS` 对象来代替复杂的 `DOM` 节点，然后把对 `DOM` 的 `diff` 操作转移到 `JS` 对象，就可以避免大量对 `DOM` 的查询操作。
 
-    这个更轻量级的 JS 对象就称为 Virtual DOM 。
+    这个更轻量级的 `JS` 对象就称为 `Virtual DOM` 。
 
     它的优势有
 
-    1. 将 Virtual DOM 作为一个兼容层，让我们还能对接非 Web 端的系统，实现跨端开发。
-    2. 同样的，通过 Virtual DOM 我们可以渲染到其他的平台，比如实现 SSR、同构渲染等等。
+    1. 将 `Virtual DOM` 作为一个兼容层，让我们还能对接非 `Web` 端的系统，实现跨端开发。
+    2. 同样的，通过 `Virtual DOM` 我们可以渲染到其他的平台，比如实现 `SSR`、同构渲染等等。
     3. 实现组件的高度抽象化
 
 9. React.Children.map 这个方法是干嘛用的
 
-    React.Children 提供了用于处理 this.props.children 不透明数据结构的方法，并且利用 traverseAllChildrenImplf 方法打平数组，返回的一定是一个一纬数组。
+    `React.Children` 提供了用于处理 `this.props.children` 不透明数据结构的方法，并且利用 `traverseAllChildrenImplf` 方法打平数组，返回的一定是一个一纬数组。
 
-    比如 props.children 是[a,a]，可以返回[a,a,a,a];
+    比如 `props.children` 是[a,a]，可以返回[a,a,a,a];
 
 10. react context
 
@@ -224,7 +224,18 @@
 
         // 作为动态的工作单元的属性
         this.pendingProps = pendingProps;
+        // 记忆属性
         this.memoizedProps = null;
+        // 更新队列,正常结构如下
+        /*
+        updateQueue {
+            baseState
+            effects: null
+            firstBaseUpdate: null
+            lastBaseUpdate: null
+        }
+        */
+        
         this.updateQueue = null;
         this.memoizedState = null;
         this.dependencies = null;
@@ -281,13 +292,13 @@
 
     这个问题分几个步骤来看
 
-    1. 如果是不支持 MessageChannel 或者是无 Window,也就是没有 UI 的浏览器，退化到同步模式，是否需要打断永远返回 false
-    2. 如果支持 MessageChannel
+    1. 如果是不支持 `MessageChannel` 或者是无 `Window`,也就是没有 UI 的浏览器，退化到同步模式，是否需要打断永远返回 `false`
+    2. 如果支持 `MessageChannel`
        首先，默认的可执行时间是 **5ms**
-        1. 支持 isInputPending，那么会在过期后去判断是否有**需要绘制的任务**，以及**是否有用户输入挂起**
-            - 如果有，立马返回 true,也就是要打断
+        1. 支持 `isInputPending`，那么会在过期后去判断是否有**需要绘制的任务**，以及**是否有用户输入挂起**
+            - 如果有，立马返回 `true`,也就是要打断
             - 如果没有，那么，再判断当前时间和最大打断时间 300ms 比较，最大程度的跑代码
-        2. 如果不支持 isInputPending,那就当没有优化 300ms 这回事，依然每跑 5ms 就交还控制权。
+        2. 如果不支持 `isInputPending`,那就当没有优化 300ms 这回事，依然每跑 5ms 就交还控制权。
 
 3. React 同一时间任务很多，它是怎么做的？
 
@@ -296,11 +307,11 @@
     - timerQueue：保存未就绪任务
     - taskQueue：保存已就绪任务
 
-    每当有新的未就绪的任务被注册，我们将其插入 timerQueue 并根据开始时间重新排列 timerQueue 中任务的顺序。
+    每当有新的未就绪的任务被注册，我们将其插入 `timerQueue` 并根据开始时间重新排列 `timerQueue` 中任务的顺序。
 
-    当 timerQueue 中有任务就绪，即 startTime <= currentTime，我们将其取出并加入 taskQueue。
+    当 `timerQueue` 中有任务就绪，即 `startTime <= currentTime`，我们将其取出并加入 `taskQueue`。
 
-    取出 taskQueue 中最早过期的任务并执行他。
+    取出 `taskQueue` 中最早过期的任务并执行他。
 
     那么这两个队列，采用的是小顶堆的模式，这样方便排序，以及每次取顶部的那个，获取最早过期的复杂度 O(1)
 
@@ -355,15 +366,15 @@
     };
     ```
 
-    performWorkUntilDeadline 内部调用的是 scheduledHostCallback，它早在开始调度的时候就被 requestHostCallback 赋值为了 flushWork，具体可以翻到上面回顾一下 requestHostCallback 的实现。
+    performWorkUntil`Deadline` 内部调用的是 `scheduledHostCallback`，它早在开始调度的时候就被 `requestHostCallback` 赋值为了 `flushWork`，具体可以翻到上面回顾一下 `requestHostCallback` 的实现。
 
-    flushWork 作为真正去执行任务的函数，它会循环 taskQueue，逐一调用里面的任务函数
+    `flushWork` 作为真正去执行任务的函数，它会循环 `taskQueue`，逐一调用里面的任务函数
 
-    它调用了 workLoop，并将其调用的结果 return 了出去。那么现在任务执行的核心内容看来就在 workLoop 中了。workLoop 的调用使得任务最终被执行。
+    它调用了 `workLoop`，并将其调用的结果 `return` 了出去。那么现在任务执行的核心内容看来就在 `workLoop` 中了。`workLoop` 的调用使得任务最终被执行。
 
-    workLoop 中可以分为两大部分：循环 taskQueue 执行任务 和 任务状态的判断。
+    `workLoop` 中可以分为两大部分：循环 `taskQueue` 执行任务 和 任务状态的判断。
 
-    取出 taskQueue 中最早过期的任务并执行他。若任务函数返回值为函数，那么就说明当前任务尚未完成，需要继续调用任务函数，否则任务完成。workLoop 就是通过这样的办法判断单个任务的完成状态。
+    取出 `taskQueue` 中最早过期的任务并执行他。若任务函数返回值为函数，那么就说明当前任务尚未完成，需要继续调用任务函数，否则任务完成。`workLoop` 就是通过这样的办法判断单个任务的完成状态。
 
 5. React 中有哪些优先级
 
@@ -415,12 +426,12 @@
 
 1. 调和的主要工作有
 
-    每当有更新发生时，Reconciler 会做如下工作：
+    每当有更新发生时，`Reconciler` 会做如下工作：
 
-    - 调用函数组件、或 class 组件的 render 方法，将返回的 JSX 转化为虚拟 DOM
-    - 将虚拟 DOM 和上次更新时的虚拟 DOM 对比
-    - 通过对比找出本次更新中变化的虚拟 DOM
-    - 通知 Renderer 将变化的虚拟 DOM 渲染到页面上
+    - 调用函数组件、或 `class` 组件的 `render` 方法，将返回的 `JSX` 转化为虚拟 `DOM`
+    - 将虚拟 `DOM` 和上次更新时的虚拟 `DOM` 对比
+    - 通过对比找出本次更新中变化的虚拟 `DOM`
+    - 通知 `Renderer` 将变化的虚拟 `DOM` 渲染到页面上
 
 2. stack Reconciler 特点
 
@@ -429,9 +440,9 @@
     Reconciler 与 Renderer 是交替工作
 
 3. Fiber Reconciler 特点
-   可打断，根据 `shouldYield` 判断， 因为可打断，所以不能交替渲染工作，需要整个 Scheduler 与 Reconciler 的工作都在内存中进行。只有当所有组件都完成 Reconciler 的工作，才会统一交给 Renderer。
+   可打断，根据 `shouldYield` 判断， 因为可打断，所以不能交替渲染工作，需要整个 `Scheduler` 与 `Reconciler` 的工作都在内存中进行。只有当所有组件都完成 `Reconciler` 的工作，才会统一交给 `Renderer`。
 
-    在 React16 中，Reconciler 与 Renderer 不再是交替工作。当 Scheduler 将任务交给 Reconciler 后，Reconciler 会为变化的虚拟 DOM 打上代表增/删/更新的标记
+    在 React16 中，`Reconciler` 与 `Renderer` 不再是交替工作。当 `Scheduler` 将任务交给 `Reconciler` 后，`Reconciler` 会为变化的虚拟 `DOM` 打上代表增/删/更新的标记
 
 4. React 16 渲染器
 
@@ -465,9 +476,9 @@
     }
     ```
 
-    简单来说，通过 performUnitOfWork，performUnitOfWork 方法会创建下一个 Fiber 节点并赋值给 workInProgress，并将 workInProgress 与已创建的 Fiber 节点连接起来构成 Fiber 树。
+    简单来说，通过 `performUnitOfWork`，`performUnitOfWork` 方法会创建下一个 `Fiber` 节点并赋值给 `workInProgress`，并将 `workInProgress` 与已创建的 `Fiber` 节点连接起来构成 `Fiber` 树。
 
-    通过 beginwork 和 completeWork 这一递一归，来完成整个 fiber 树的构建，DFS，深度遍历
+    通过 `beginwork` 和 `completeWork` 这一递一归，来完成整个 `fiber` 树的构建，`DFS`，深度遍历
 
     ```
     A {
@@ -504,7 +515,7 @@
 
 1. beginWork 干哪些事
 
-    beginWork 的工作是传入当前 Fiber 节点，创建子 Fiber 节点，我们从传参来看看具体是如何做的
+    `beginWork` 的工作是传入当前 `Fiber` 节点，创建子 `Fiber` 节点，我们从传参来看看具体是如何做的
 
     ```js
     function beginWork(
@@ -516,15 +527,15 @@
     }
     ```
 
-    - 第一个参数，就是当前页面上渲染的对应的这个 Fiber 节点，也就是 workInProgress.alternate
+    - 第一个参数，就是当前页面上渲染的对应的这个 Fiber 节点，也就是 `workInProgress.alternate`
     - 第二个参数，就是当前组件对应的 Fiber 节点
     - 第三个参数，优先级相关
 
     那么 mount 的时候，current 肯定是 null,如果不为 null,就说明是更新阶段
 
-    update 时：如果 current 存在，在满足一定条件时可以复用 current 节点，这样就能克隆 current.child 作为 workInProgress.child，而不需要新建 workInProgress.child。
+    update 时：如果 `current` 存在，在满足一定条件时可以复用 `current` 节点，这样就能克隆 `current.child` 作为 `workInProgress.child`，而不需要新建 `workInProgress.child`。
 
-    mount 时：除 fiberRootNode 以外，current === null。会根据 fiber.tag 不同，创建不同类型的子 Fiber 节点, 和子节点联通的代码片段为
+    mount 时：除 fiberRootNode 以外，current === null。会根据 `fiber.tag` 不同，创建不同类型的子 Fiber 节点, 和子节点联通的代码片段为
 
     ```js
     var type = workInProgress.type;
@@ -535,15 +546,17 @@
 
     pendingProps 里保存的就是对应的 reactElement
 
-2. 更新的时候，如何判断可以服用 current 节点呢？
+2. 更新的时候，如何判断可以复用 current 节点呢？
 
     - oldProps === newProps && workInProgress.type === current.type，即 props 与 fiber.type 不变
     - !includesSomeLane(renderLanes, updateLanes)，即当前 Fiber 节点优先级不够
 
     那么，props 前后是啥呢？举个例子就是它们的 children 是否一样，如果你是个文本标签，那你前后就是对应的文本
     ![old](../img/old1.jpg)
-    如果你是个 div 标签，那前后就是这个
+    如果你是个 div 标签，里面又有子标签，那前后就是这个来对比
     ![div](../img/divold.jpg)
+
+    经过观察，发现，除了根节点外的一些东西，里面的只要大的改动了，即使props前后字面一样，也不会相等，所以基本没啥用，后面还是会去 reconcileChildren 来diff。
 
 3. mount 的时候组件类型有哪些
 
@@ -583,9 +596,9 @@
 
     对于 update 的组件，他会将当前组件与该组件在上次更新时对应的 Fiber 节点比较（也就是俗称的 Diff 算法），将比较的结果生成新 Fiber 节点
 
-    mountChildFibers 与 reconcileChildFibers 这两个方法的逻辑基本一致。唯一的区别是：reconcileChildFibers 会为生成的 Fiber 节点带上 effectTag 属性，而 mountChildFibers 不会。
+    mountChildFibers 与 reconcileChildFibers 这两个方法的逻辑基本一致。唯一的区别是：reconcileChildFibers 会为生成的 Fiber 节点带上 `effectTag` 属性，而 mountChildFibers 不会。
 
-    render 阶段的工作是在内存中进行，当工作结束后会通知 Renderer 需要执行的 DOM 操作。要执行 DOM 操作的具体类型就保存在 fiber.effectTag 中。
+    render 阶段的工作是在内存中进行，当工作结束后会通知 Renderer 需要执行的 DOM 操作。要执行 DOM 操作的具体类型就保存在 `fiber.effectTag` 中。
     比如
 
     ```js
@@ -599,11 +612,11 @@
     export const Deletion = /*                 */ 0b00000000001000;
     ```
 
-    那么，如果要通知 Renderer 将 Fiber 节点对应的 DOM 节点插入页面中，需要满足两个条件：
+    那么，如果要通知 `Renderer` 将 `Fiber` 节点对应的 `DOM` 节点插入页面中，需要满足两个条件：
 
-    1. fiber.stateNode 存在，即 Fiber 节点中保存了对应的 DOM 节点
+    1. `fiber.stateNode` 存在，即 `Fiber` 节点中保存了对应的 `DOM` 节点
 
-    2. (fiber.effectTag & Placement) !== 0，即 Fiber 节点存在 Placement effectTag
+    2. `(fiber.effectTag & Placement) !== 0`，即 `Fiber` 节点存在 `Placement effectTag`
 
     整体的流程为
     ![beginwork](../img/beginWork.png)
@@ -612,26 +625,26 @@
 
 1. completeWork 干哪些活
 
-    进入 completeWork 后，目前只有 fiber 形态变了，对于原生 DOM 组件（HostComponent）和文本节点（HostText）的 fiber 来说，对应的 DOM 节点（fiber.stateNode）并未变化。
+    进入 `completeWork` 后，目前只有 `fiber` 形态变了，对于原生 `DOM` 组件（HostComponent）和文本节点（HostText）的 fiber 来说，对应的 DOM 节点（fiber.stateNode）并未变化。
 
-    经过 Diff 生成的新的 workInProgress 节点持有了 flag(即 effectTag)
+    经过 `Diff` 生成的新的 `workInProgress` 节点持有了 `flag`(即 effectTag)
 
-    基于这两个特点，completeWork 的工作主要有：
+    基于这两个特点，`completeWork` 的工作主要有：
 
-    1. 构建或更新 DOM 节点，
+    1. 构建或更新 `DOM` 节点，
     2. 构建过程中，会自下而上将子节点的第一层第一层插入到当前节点。
-    3. 更新过程中，会计算 DOM 节点的属性，一旦属性需要更新，会为 DOM 节点对应的 workInProgress 节点标记 Update 的 effectTag。
-    4. 自下而上收集 effectList，最终收集到 root 上
+    3. 更新过程中，会计算 `DOM` 节点的属性，一旦属性需要更新，会为 `DOM` 节点对应的 `workInProgress` 节点标记 `Update` 的 `effectTag`。
+    4. 自下而上收集 `effectList`，最终收集到 `root` 上
 
 2. 它是怎么收集 effectList，这样的好处是什么？
 
-    作为 DOM 操作的依据，commit 阶段需要找到所有有 effectTag 的 Fiber 节点并依次执行 effectTag 对应操作。难道需要在 commit 阶段再遍历一次 Fiber 树寻找 effectTag !== null 的 Fiber 节点么？
+    作为 `DOM` 操作的依据，`commit` 阶段需要找到所有有 `effectTag` 的 `Fiber` 节点并依次执行 `effectTag` 对应操作。难道需要在 `commit` 阶段再遍历一次 `Fiber` 树寻找 `effectTag !== null` 的 Fiber 节点么？
 
-    为了不再次 DFS，就需要在 complete 的时候，创建 effectList，最后挂到 root 上, 这样，在 commit 阶段只需要遍历 effectList 就能执行所有 effect 了。
+    为了不再次 `DFS`，就需要在 `complete` 的时候，创建 `effectList`，最后挂到 `root` 上, 这样，在 `commit` 阶段只需要遍历 `effectList` 就能执行所有 `effect` 了。
 
-    每个 workInProgress 节点都有一个 firstEffect 和 lastEffect，是一个单向链表，来表示它自身以及它的子节点上所有持有 effectTag 的 workInProgress 节点。completeWork 阶段在向上遍历的过程中也会逐层收集 effect 链，最终收集到 root 上，供接下来的 commit 阶段使用。
+    每个 `workInProgress` 节点都有一个 `firstEffect` 和 `lastEffect`，是一个单向链表，来表示它自身以及它的子节点上所有持有 `effectTag` 的 `workInProgress` 节点。`completeWork` 阶段在向上遍历的过程中也会逐层收集 `effect` 链，最终收集到 `root` 上，供接下来的 `commit` 阶段使用。
 
-    实现上相对简单，对于某个 workInProgress 节点来说，**先将它已有的 effectList 并入到父级节点，再判断它自己有没有 effectTag，有的话也并入到父级节点。**
+    实现上相对简单，对于某个 `workInProgress` 节点来说，**先将它已有的 effectList 并入到父级节点，再判断它自己有没有 effectTag，有的话也并入到父级节点。**
 
     ```js
     /*
@@ -667,13 +680,13 @@
 
 ### Commit 阶段
 
-在 rootFiber.firstEffect 上保存了一条需要执行副作用的 Fiber 节点的单向链表 effectList，这些 Fiber 节点的 updateQueue 中保存了变化的 props。
+在 `rootFiber.firstEffect` 上保存了一条需要执行副作用的 `Fiber` 节点的单向链表 `effectList`，这些 `Fiber` 节点的 `updateQueue` 中保存了变化的 `props`。
 
-这些副作用对应的 DOM 操作在 commit 阶段执行。
+这些副作用对应的 `DOM` 操作在 `commit` 阶段执行。
 
-除此之外，一些生命周期钩子（比如 componentDidXXX）、hook（比如 useEffect）需要在 commit 阶段执行。
+除此之外，一些生命周期钩子（比如 `componentDidXXX`）、`hook`（比如 `useEffect`）需要在 `commit` 阶段执行。
 
-commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
+`commit` 阶段的主要工作（即 `Renderer` 的工作流程）分为三部分：
 
 1. before mutation 阶段（执行 DOM 操作前）
 
@@ -706,9 +719,9 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     为了降低算法复杂度，React 的 diff 会预设三个限制：
 
-    1. 只对同级元素进行 Diff。如果一个 DOM 节点在前后两次更新中跨越了层级，那么 React 不会尝试复用他。
-    2. 两个不同类型的元素会产生出不同的树。如果元素由 div 变为 p，React 会销毁 div 及其子孙节点，并新建 p 及其子孙节点。
-    3. 开发者可以通过 key prop 来暗示哪些子元素在不同的渲染下能保持稳定。考虑如下例子：
+    1. 只对同级元素进行 `Diff`。如果一个 `DOM` 节点在前后两次更新中跨越了层级，那么 `React` 不会尝试复用他。
+    2. 两个不同类型的元素会产生出不同的树。如果元素由 `div` 变为 p，`React` 会销毁 `div` 及其子孙节点，并新建 p 及其子孙节点。
+    3. 开发者可以通过 `key prop` 来暗示哪些子元素在不同的渲染下能保持稳定。考虑如下例子：
 
     ```js
     // 更新前
@@ -724,11 +737,11 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     </div>
     ```
 
-    如果没有 key，React 会认为 div 的第一个子节点由 p 变为 h3，第二个子节点由 h3 变为 p。这符合限制 2 的设定，会销毁并新建。
+    如果没有 `key`，`React` 会认为 `div` 的第一个子节点由 p 变为 h3，第二个子节点由 h3 变为 p。这符合限制 2 的设定，会销毁并新建。
 
-    但是当我们用 key 指明了节点前后对应关系后，React 知道 key === "J"的 p 在更新后还存在，所以 DOM 节点可以复用，只是需要交换下顺序。
+    但是当我们用 `key` 指明了节点前后对应关系后，`React` 知道 `key` === "J"的 p 在更新后还存在，所以 `DOM` 节点可以复用，只是需要交换下顺序。
 
-    这就是 React 为了应对算法性能瓶颈做出的三条限制。
+    这就是 `React` 为了应对算法性能瓶颈做出的三条限制。
 
 2. Diff 入口函数
 
@@ -782,9 +795,9 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
 3. Diff 删除
 
-    因为只要进了 diff，肯定是递归调用的，todo 猜测
+    因为只要进了 `diff`，肯定是递归调用的，`todo` 猜测
 
-    举个例子，如果某个节点，本来有 child 的，比如 p=>span 或者本来没有 child，比如直接就是个文本节点， 然后它 setstate 的时候删除了对应的子节点，或者是没变化。
+    举个例子，如果某个节点，本来有 `child` 的，比如 p=>span 或者本来没有 child，比如直接就是个文本节点， 然后它 setstate 的时候删除了对应的子节点，或者是没变化。
 
     那么它的 newChild 是 null，也就是`reconcileChildFibers`方法只会执行到`deleteRemainingChildren`，那么这样就相当于直接清理 child。当前节点的 fiber，workInProgress 节点生成
 
@@ -813,9 +826,9 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     return _created4;
     ```
 
-    我们省略了一些步骤，可以看到，假如 child 上来就是 null，说明啥，说明当前页面上没有这个节点，reactelement 是新的，所以直接创建新的 fiber，把它的 return 指向 workinProgress 节点
+    我们省略了一些步骤，可以看到，假如 `child` 上来就是 `null`，说明啥，说明当前页面上没有这个节点，`reactelement` 是新的，所以直接创建新的 `fiber`，把它的 `return` 指向 `workinProgress` 节点
 
-    那么假如 child 不是 null 的情况下，我们去判断 child 节点是否可以复用
+    那么假如 `child` 不是 `null` 的情况下，我们去判断 `child` 节点是否可以复用
 
     ```js
     // 首先判断是否存在对应DOM节点
@@ -854,7 +867,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     }
     ```
 
-    1. 单节点会比较 key 是否相等(`null === null`，就是没有 key 的情况下)，然后如果 type 一样，直接复用。
+    1. 单节点会比较 `key` 是否相等(`null === null`，就是没有 key 的情况下)，然后如果 type 一样，直接复用。
 
     2. key 一样，type 不一样，说明复用不了了，还要把兄弟节点一起标记删除，代表都不能复用。这种情况没有去找复用的原因是，他们的`key`相同，如果节点类型不同的话，`React`会认为你已经把这个节点重新覆盖了，所以就不会再去找剩余的节点是否可以复用。
 
@@ -862,7 +875,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     3. key 不一样，type 一样的话，只标记当前 child 节点，然后继续往下判断
 
-    那么可能会有疑问了，如果我改了标签上的类名，onclick 等等呢？ 并不影响 Fiber 大节点的复用，只需要把对应 Fiber 的 pendingprops 指向新的 element 的 props 即可
+    那么可能会有疑问了，如果我改了标签上的类名，`onclick` 等等呢？ 并不影响 `Fiber` 大节点的复用，只需要把对应 `Fiber` 的 `pendingprops` 指向新的 `element` 的 `props` 即可
 
     `var existing = useFiber(child, element.props);`
 
@@ -880,9 +893,9 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     那么，我们准备进入比对了
 
-    首先，如果是开发环境的话，我们会去进入一层遍历，用来判断是否有无效的 key，就是两个 key 相等啊这样的东西
+    首先，如果是开发环境的话，我们会去进入一层遍历，用来判断是否有无效的 `key`，就是两个 `key` 相等啊这样的东西
 
-    它的内部是使用 Set 集合来维护，Set.has 了直接 break，然后报错。
+    它的内部是使用 `Set` 集合来维护，`Set.has` 了直接 `break`，然后报错。
 
     ```js
     {
@@ -903,12 +916,12 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     第一轮做的事情有[这里是源码](https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L818)
 
-    1. let i = 0，遍历 newChildren，将 newChildren[i]与 oldFiber 比较，判断 DOM 节点是否可复用。是否可以复用和单节点一致，只要 key 和 type 一样，直接复用
-    2. 如果可复用，i++，继续比较 newChildren[i]与 oldFiber.sibling，可以复用则继续遍历。
+    1. let i = 0，遍历 `newChildren`，将 `newChildren[i]`与 `oldFiber` 比较，判断 `DOM` 节点是否可复用。是否可以复用和单节点一致，只要 `key` 和 `type` 一样，直接复用
+    2. 如果可复用，i++，继续比较 `newChildren[i]`与 `oldFiber.sibling`，可以复用则继续遍历。
     3. 如果不可复用，分两种情况：
-        1. key 不同导致不可复用，立即跳出整个遍历，第一轮遍历结束。
-        2. key 相同 type 不同导致不可复用，会将 oldFiber 标记为 DELETION，并继续遍历
-    4. 如果 newChildren 遍历完（即 i === newChildren.length - 1）或者 oldFiber 遍历完（即 oldFiber.sibling === null），跳出遍历，第一轮遍历结束。
+        1. `key` 不同导致不可复用，立即跳出整个遍历，第一轮遍历结束。
+        2. `key` 相同 `type` 不同导致不可复用，会将 `oldFiber` 标记为 `DELETION`，并继续遍历
+    4. 如果 `newChildren` 遍历完（即 `i === newChildren.length - 1`）或者 `oldFiber` 遍历完（即 `oldFiber.sibling === null`），跳出遍历，第一轮遍历结束。
 
     第一轮结束后，会出现 3 种情况
 
@@ -935,8 +948,8 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
         }
         ```
         - 然后遍历新数组，在遍历的过程中会寻找新的节点的 `key`是否存在于这个 `Map`中，存在即可复用，不存在就创建一个新的。就相当于又回到了第一部分。
-        - 然后还会去判断是否需要移动节点，如果 oldFiber 的 index > lastPlacedIndex,不动,并且把 lastPlacedIndex = oldFiber.index
-        - 如果 oldFiber 的 index < lastPlacedIndex 就要右移了
+        - 然后还会去判断是否需要移动节点，如果 `oldFiber` 的 `index > lastPlacedIndex`,不动,并且把 `lastPlacedIndex = oldFiber.index`
+        - 如果 `oldFiber` 的 `index < lastPlacedIndex` 就要右移了
 
     完成后这一层的`diff`就完成，继续下一个工作单元 `performUnitOfWork`。直到全部结束。
 
@@ -953,11 +966,323 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
     }
     ```
 
-### Hooks 原理
+### Hooks
+1. useCallback， useMemo是怎么记忆化的？
+
+    首先，这两位几乎没区别，唯一的区别就是一个是记忆化值，一个是记忆化函数
+
+    以useCallback为例子
+    ```js
+    // mount 阶段
+    function mountCallback<T>(callback: T, deps: Array<mixed> | void | null): T {
+        // 创建并返回当前hook
+        const hook = mountWorkInProgressHook();
+        // 约等于下面这个
+        var hook = {
+            memoizedState: null,
+            baseState: null,
+            baseQueue: null,
+            queue: null,
+            next: null
+        };
+        // 可以发现的就是，不管是useState，还是其它，都使用的一个hook对象，而这些hook对象，会连起来。
+        const nextDeps = deps === undefined ? null : deps;
+        // 将value与deps保存在hook.memoizedState
+        hook.memoizedState = [callback, nextDeps];
+        return callback;
+    }
+    // update 阶段特别简单
+    // 判断update前后value是否变化
+    if (areHookInputsEqual(nextDeps, prevDeps)) {
+        // 未变化
+        // 这个prevState剧是hook.memoizedState
+        return prevState[0];
+    }
+    hook.memoizedState = [callback, nextDeps];
+    return callback
+    ```
+
+2. useState 
+
+    useState 也和上述的mount差不多，只是多了update
+    ```js
+    // mount
+    function mountState(initialState) {
+        // 创建并返回当前的hook
+        var hook = mountWorkInProgressHook();
+        // ...赋值初始state,省略函数情况
+        hook.memoizedState = hook.baseState = initialState;
+        // 创建queue
+        var queue = hook.queue = {
+            pending: null,
+            dispatch: null,
+            lastRenderedReducer: basicStateReducer,
+            lastRenderedState: initialState
+        };
+        // ...创建dispatch
+        var dispatch = queue.dispatch = dispatchAction.bind(null, currentlyRenderingFiber$1, queue);
+        return [hook.memoizedState, dispatch];
+    }
+    // 更新
+    function dispatchAction(fiber, queue, action) {
+        // ...创建update
+        var update = {
+            lane: lane,
+            action: action,
+            eagerReducer: null,
+            eagerState: null,
+            next: null
+        }; 
+        // 这个和class那个一样，就是搞一个 update 链表出来。
+        var pending = queue.pending;
+        if (pending === null) {
+            // This is the first update. Create a circular list.
+            update.next = update;
+        } else {
+            update.next = pending.next;
+            pending.next = update;
+        }
+        // 将update加入queue.pending
+        queue.pending = update;
+
+        var alternate = fiber.alternate;
+
+        if (fiber === currentlyRenderingFiber$1 || alternate !== null && alternate === currentlyRenderingFiber$1) {
+            // render阶段触发的更新
+            didScheduleRenderPhaseUpdateDuringThisPass = didScheduleRenderPhaseUpdate = true;
+        } else {
+            if (fiber.lanes === NoLanes && (alternate === null || alternate.lanes === NoLanes)) {
+            // ...fiber的updateQueue为空，优化路径
+            }
+
+            // 这里就和class的setState一样了后面
+            scheduleUpdateOnFiber(fiber, lane, eventTime);
+        }
+    }
+    ```
+
+3. 为啥不能条件句里写 hook？
+
+    看下 `mountWorkInProgressHook` 方法, 每个`hook`的`mount`的时候，进来都会调用这个创建一个`hook`
+    ```js
+    function mountWorkInProgressHook() {
+        var hook = {
+            memoizedState: null,
+            baseState: null,
+            baseQueue: null,
+            queue: null,
+            next: null
+        };
+
+        if (workInProgressHook === null) {
+            // This is the first hook in the list
+            currentlyRenderingFiber$1.memoizedState = workInProgressHook = hook;
+        } else {
+            // 这个，就是链表，每个hook之间，就这么用next连起来的
+            // 所以使用的时候，也是按顺序使用的，一旦用了条件语句，除非永远一致，否则就会出错。
+            // Append to the end of the list
+            workInProgressHook = workInProgressHook.next = hook;
+        }
+
+        return workInProgressHook;
+    }
+    ```
+    每次执行到一个`hook update`的时候，它都会去执行`updateWorkInProgressHook`方法
+    
+    这个方法会让 `currentlyRenderingFiber$1.memoizedState` 往后移动一位，一旦用了条件语句，它的指向就会出错。
+    ```js
+    function updateWorkInProgressHook() {
+        // This function is used both for updates and for re-renders triggered by a
+        // render phase update.
+        var nextCurrentHook;
+
+        if (currentHook === null) {
+            var current = currentlyRenderingFiber$1.alternate;
+            if (current !== null) {
+                nextCurrentHook = current.memoizedState;
+            } else {
+                nextCurrentHook = null;
+            }
+        } else {
+            nextCurrentHook = currentHook.next;
+        }
+        //..后面省略
+    }
+    ```
+
+4. hooks 是怎么区分是 update 还是 mount 的呢？
+
+    在`FunctionComponent render`时，会从`ReactCurrentDispatcher.current`（即当前`dispatcher`）中寻找需要的`hook`。
+    ```js
+    ReactCurrentDispatcher.current =
+        current === null || current.memoizedState === null
+            ? HooksDispatcherOnMount
+            : HooksDispatcherOnUpdate;  
+    ```
 
 ### SetState
+    事件 => setstate => 调度 => 调和 begin => diff => 调和 complete => commit
+1. setState 的流程是啥？
 
-事件 => setstate => 调度 => 调和 begin => diff => 调和 complete => commit
+    this.setState 内会调用 `this.updater.enqueueSetState` 方法。
+
+    ```js
+    enqueueSetState(inst, payload, callback) {
+        // 通过组件实例获取对应fiber
+        const fiber = getInstance(inst);
+
+        const eventTime = requestEventTime();
+        const suspenseConfig = requestCurrentSuspenseConfig();
+
+        // 获取优先级
+        const lane = requestUpdateLane(fiber, suspenseConfig);
+
+        // 创建update
+        const update = createUpdate(eventTime, lane, suspenseConfig);
+
+        // 这个payload就是我们的state里面的第一个参数，也就是{a: 1} 这样的
+        update.payload = payload;
+
+        // 赋值回调函数
+        if (callback !== undefined && callback !== null) {
+            update.callback = callback;
+        }
+
+        // 将update插入updateQueue
+        enqueueUpdate(fiber, update);
+        // 调度update
+        scheduleUpdateOnFiber(fiber, lane, eventTime);
+    }
+    ```
+    然后`enqueueUpdate` 这个方法，会把 `update` 对象通过`next`做一个循环单链表，然后挂在`fiber`的 `updateQueue` 的`shared.pending` 下
+
+    最后开始调用 `scheduleUpdateOnFiber`，然后把`state`更新到`updateQueue`上后，移交到调度那边去
+
+2. update对象内容
+
+    [update对象详解](https://react.iamkasong.com/state/update.html);
+
+    他这个update 有一段就是循环链表
+    ```js
+    if (pending === null) {
+        // This is the first update. Create a circular list.
+        update.next = update;
+    } else {
+        update.next = pending.next;
+        pending.next = update;
+    }
+    ```   
+3. setState啥时候是异步的，啥时候是同步的？
+
+    [讲清楚的很少，这个还不错](https://zhuanlan.zhihu.com/p/350332132)
+    
+    实际上，`setState`为了保证性能，它是使用了批处理，和异步其实没啥关系，因为他是 调用`setState`函数后读取 `this.state` 从来就没有说是 `this.state = xx`， 然后读取 `this.state` 对吧。
+
+    它的内部主要利用了一个 `executionContext` 的概念，`executionContext` 代表了目前 react 所处的阶段，而 `NoContext` 你可以理解为是 react 已经没活干了的状态。而 `flushSyncCallbackQueue` 就是开始干活的意思。
+
+    当 react 进入它自己的调度步骤时，会给这个 `executionContext` 赋予不同的值，表示不同的操作以及当前所处的状态，而 `executionContext` 的初始值就是 `NoContext` ，所以只要你不进入 react 的调度流程，这个值就是 NoContext ，那你的 setState 就是同步的。
+
+    ```js
+    var NoContext = 0;
+    var BatchedContext = 1;
+    var EventContext = 2;
+    var DiscreteEventContext = 4;
+    var LegacyUnbatchedContext = 8;
+    var RenderContext = 16;
+    var CommitContext = 32;
+    var RetryAfterError = 64;
+    var executionContext = NoContext;
+    ```
+
+    而当你用了`settimeout`后，直接就会去执行`final`， 也就是还没开始呢，就结束了，导致`executionContext`就是`NoContext`。
+
+    用了 合成事件、 生命周期 就会赋值 `executionContext`， 而进入 原生事件的话，因为`react`没有拦截，所以直接就是用的默认的，所以也就是同步执行，但是`settimeout`的话，虽然进入合成事件，但是因为延迟了，导致`final`直接执行，所以和原生事件一样表现。
+    ```js
+    componentDidMount() {
+        document.body.addEventListener('click', this.changeCount, false)
+    }
+    changeCount = () => {
+        this.setState({ count: this.state.count + 1 });
+        console.log(this.state.count); // 输出的是更新后的count --> 1
+    }
+    ```
+    但是如果是在`concurrent`模式下，就不行了，因为有个条件就是`if (lane === SyncLane) { `
+
+    以上，解释最简单的就是3个调用栈的图
+    1. 默认的两次setState
+        ![tu](../img/default.png)
+        可以看到，默认的调用栈不管到哪，他的`executionContext`都不是0，`isBatchingEventUpdates` 也是true
+    2. setTimeout的两次setState
+        ![tu1](../img/settimeout1.png)
+        能看到isBatching 赋值为false的地方
+        ![tu2](../img/settimeout2.png)
+        能看到executionContext赋值为0的地方，这里初始写错了，是4.
+    3. 直接用原生事件里调用setState
+        ![natve](../img/native1.png)
+        可以看到，调用栈特别干净，上来就是 `changeNum` 函数，根本没进任何react能控制的地方，所以两个值都是默认的，一个0，一个false
+    
+    我用一段代码来大概的解释setState的工作原理，一看就明白。
+
+    当然，一定要对`try catch final` 有深刻的理解
+    ```js
+    var NoContext = 0;
+    var DiscreteEventContext = 4;
+    var executionContext = NoContext;
+
+    var a = 0;
+    var updateQueue = [];
+
+    function setState(payload) {
+        updateQueue.push(payload);
+        if (executionContext === NoContext) {
+            flushSyncCallbackQueue();
+        }
+    }
+
+    function scheduleUpdateOnFiber(fn) {
+        var prevExecutionContext = executionContext;
+        executionContext = DiscreteEventContext;
+        updateQueue = [];
+        try {
+            return fn();
+        } finally {
+            executionContext = prevExecutionContext;
+            if (executionContext === NoContext) {
+                flushSyncCallbackQueue();
+            }
+        }
+    }
+
+    const onChangeBatchA = () => {
+        setState({ a: 1 });
+        console.log(a);
+        setState({ a: 3 });
+        console.log(a);
+    }
+    const onChangeUnBatchA = () => {
+        setTimeout(() => {
+            setState({ a: 5 });
+            console.log(a);
+            setState({ a: 6 });
+            console.log(a);
+        }, 0);
+    }
+
+    var flushSyncCallbackQueue = function () {
+        a = updateQueue.reduce((accumulator, currentValue) => {
+            return currentValue.a || accumulator;
+        }, a)
+    }
+
+    // 走你
+    scheduleUpdateOnFiber(onChangeBatchA);
+    console.log(a);
+    scheduleUpdateOnFiber(onChangeUnBatchA);
+    console.log(a);
+    // 0， 0 ，3
+    // 3， 5， 6
+
+    ```
 
 ### 其他
 
@@ -984,7 +1309,7 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     在`PureCompent`和`Component`的区别就是，`PureComponent`就是继承自`Component`,然后添加了一个原型属性`isPureComponent`代表它是`pure`，具体的判断应该就是在 react-dom 里面了。
 
-4. setState 原理是啥？
+4. setState 工作流（旧）
 
     `setState`在调用的时候，会先判断它的第一个参数是不是一个`Obj`,或者一个`function`，如果都不是会报错，抛出一个第一个参数不能瞎传的错。
 
@@ -1039,6 +1364,13 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
     接下来带上这个过期时间，和其他参数，给`FiberRoot`对象加个`context`，然后把`Fiber`对象作为参数调用`scheduleRootUpdate`。
     `scheduleRootUpdate`方法里会创建一个`update`对象，把要渲染的`ele`放到`payload`里，通过`enqueueUpdate`把`update`插入队列中，等待执行。最后调用`scheduleWork`方法，传入`Fiber`对象和过期时间。等待调度。
+
+    1. 创建fiberRootNode、rootFiber、updateQueue（`legacyCreateRootFromDOMContainer`）
+    2. 创建Update对象（`updateContainer`）
+    3. 从fiber到root（`markUpdateLaneFromFiberToRoot`）
+    4. 调度更新（`ensureRootIsScheduled`）
+    5. render阶段（`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
+    6. commit阶段（`commitRoot`）
 
 7. scheduleWork()调度的原理。
    JS 和渲染引擎是一个互斥关系。（不然就乱了）。如果 JS 在执行代码，那么渲染引擎工作就会被停止。假如我们有一个很复杂的复合组件需要重新渲染，那么调用栈可能会很长
@@ -1100,3 +1432,4 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
         写多个`useState`也好，多个`useReducer`也好，会根据里面的核心`mountWorkInProgressHook`来通过链表`next`的形式，创建各个位置的`hook`的引用。
 
     3. 当点击了`setState`触发事件后，会执行添加进队列的那个`dispatchAction`方法，然后根据新值，赋值给`update`对象，然后触发`schedulework`，接下来，重新进入`renderHooks`函数，然后这个时候，`current`其实就已经有值了，`current`就会指向`update`的那个对象。然后`useState`也好，其它的也好，都会调用`update`对应的方法，而且会把指针指向最新的那个变更过的状态值。
+    
