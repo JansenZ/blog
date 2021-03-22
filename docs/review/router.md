@@ -45,6 +45,14 @@
     isnone = true;
     ```
 
+    对于不是React-router而言，如果需要缓存的话，需要自己做activity，一个activity就是一个页面，然后跳转事件统一用自己封装的，然后跳转的时候呢，用链表把前后串起来，触发hashchange，然后在生成新的activity，然后再replace掉，就是隐藏前面的，后面的用新的，而旧的activity会缓存起来，数据什么的都在里面。
+
+    刷新： 调用startApplication => 生成新的application实例(包含路由匹配表，路由跳转方法实例，页面管理器) => 调用application.start => 开始监听页面hashchange => 调用 this.navigate => 在路由匹配管理器里，去匹配路由，如果找到了直接返回，找不到还要去loadProject => 发送对应链接的请求 => 如果是manifest，直接获取，如果是html， 正则获取 => 获取到css和js的路径 => loadJS => 把js 插入页面中 => 自动加载js => 进入子应用的entry.js => 注册子应用的路由 => 这样主应用的`await routeManager.match(url)` 就获取到了值 => 然后`this.currentActivity 是null`，就相当于直接mount
+
+    跳转： 点击按钮 => transitionTo 方法 => 处理url，判断是否是原生跳转还是webview跳转还是正常跳转， 正常跳转调用 => navigation.forward 方法 => 调用Navigation文件下自己的 transitionTo 方法 => 调用 application.navigate 方法 => location.hash = url => 创建或获取新的activity(返回就是获取，在缓存里取) => `activity => preActivity.next = newActivity, new Activity.prev = preActivity` => 调用 activityManager.replaceActivity。
+
+    如果是返回的话，一样的路径，只是会把cache末位的那个删了而已。
+
 4. 原生 hash 实现路由
 
     ```js
