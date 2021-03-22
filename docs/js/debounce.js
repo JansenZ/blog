@@ -1,4 +1,5 @@
-// debounce 防抖就是进入函数后，延迟一定时间执行，如果期间再次进这个函数，取消上次执行，再次延迟一段时间执行。
+// debounce 防抖就是进入函数后，延迟一定时间执行，
+// 如果期间再次进这个函数，取消上次执行，再次延迟一段时间执行。
 // 支持立即执行和取消。
 function debounce(callback, timeout, immediate = false) {
     let timer;

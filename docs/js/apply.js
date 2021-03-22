@@ -1,6 +1,6 @@
 // apply 返回函数结果
 Function.prototype.apply2 = function(context, args) {
-    let fn = Symbol('fn');
+    let fn = Symbol("fn");
     context = context || window;
     context[fn] = this;
 
@@ -9,4 +9,4 @@ Function.prototype.apply2 = function(context, args) {
     delete context[fn];
 
     return res;
-}
+};

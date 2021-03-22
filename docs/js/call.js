@@ -1,6 +1,6 @@
 // call 返回函数执行结果
 Function.prototype.call2 = function(context, ...args) {
-    let fn = Symbol('fn');
+    let fn = Symbol("fn");
     context = context || window;
     context[fn] = this;
 
@@ -9,4 +9,4 @@ Function.prototype.call2 = function(context, ...args) {
     delete context[fn];
 
     return res;
-}
+};

@@ -881,90 +881,94 @@
 
     相当于 Obj 复用，只是 obj.props = newElement.pops， 这样理解
 
-5. 多节点 Diff
+### 多节点 Diff
 
-    如果现在进入了数组逻辑，也就是`function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren, lanes)`
+如果现在进入了数组逻辑，也就是`function reconcileChildrenArray(returnFiber, currentFirstChild, newChildren, lanes)`
 
-    我们再来说说这参数，无限加深记忆
+我们再来说说这参数，无限加深记忆
 
-    1. 当前的 workInProgress 节点
-    2. current.child，当前页面上渲染的节点的第一个孩子，也就是 1 的的 alternate 的第一个孩子
-    3. 新的 reactElements 数组
+1. 当前的 workInProgress 节点
+2. current.child，当前页面上渲染的节点的第一个孩子，也就是 1 的的 alternate 的第一个孩子
+3. 新的 reactElements 数组
 
-    那么，我们准备进入比对了
+那么，我们准备进入比对了
 
-    首先，如果是开发环境的话，我们会去进入一层遍历，用来判断是否有无效的 `key`，就是两个 `key` 相等啊这样的东西
+首先，如果是开发环境的话，我们会去进入一层遍历，用来判断是否有无效的 `key`，就是两个 `key` 相等啊这样的东西
 
-    它的内部是使用 `Set` 集合来维护，`Set.has` 了直接 `break`，然后报错。
+它的内部是使用 `Set` 集合来维护，`Set.has` 了直接 `break`，然后报错。
 
-    ```js
-    {
-        // DEV
-        // First, validate keys.
-        var knownKeys = null;
+```js
+{
+    // DEV
+    // First, validate keys.
+    var knownKeys = null;
 
-        for (var i = 0; i < newChildren.length; i++) {
-            var child = newChildren[i];
-            knownKeys = warnOnInvalidKey(child, knownKeys, returnFiber);
-        }
+    for (var i = 0; i < newChildren.length; i++) {
+        var child = newChildren[i];
+        knownKeys = warnOnInvalidKey(child, knownKeys, returnFiber);
     }
-    ```
+}
+```
 
-    现在，我们进入比对了，需要两轮遍历
+现在，我们进入比对了，需要两轮遍历
 
-    第一轮遍历，属于处理更新节点，第二轮，处理不属于更新的节点
+第一轮遍历，属于处理更新节点，第二轮，处理不属于更新的节点
 
-    第一轮做的事情有[这里是源码](https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L818)
+第一轮做的事情有[这里是源码](https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactChildFiber.new.js#L818)
 
-    1. let i = 0，遍历 `newChildren`，将 `newChildren[i]`与 `oldFiber` 比较，判断 `DOM` 节点是否可复用。是否可以复用和单节点一致，只要 `key` 和 `type` 一样，直接复用
-    2. 如果可复用，i++，继续比较 `newChildren[i]`与 `oldFiber.sibling`，可以复用则继续遍历。
-    3. 如果不可复用，分两种情况：
-        1. `key` 不同导致不可复用，立即跳出整个遍历，第一轮遍历结束。
-        2. `key` 相同 `type` 不同导致不可复用，会将 `oldFiber` 标记为 `DELETION`，并继续遍历
-    4. 如果 `newChildren` 遍历完（即 `i === newChildren.length - 1`）或者 `oldFiber` 遍历完（即 `oldFiber.sibling === null`），跳出遍历，第一轮遍历结束。
+1. let i = 0，遍历 `newChildren`，将 `newChildren[i]`与 `oldFiber` 比较，判断 `DOM` 节点是否可复用。是否可以复用和单节点一致，只要 `key` 和 `type` 一样，直接复用
+2. 如果可复用，i++，继续比较 `newChildren[i]`与 `oldFiber.sibling`，可以复用则继续遍历。
+3. 如果不可复用，分两种情况：
+    1. `key` 不同导致不可复用，立即跳出整个遍历，第一轮遍历结束。
+    2. `key` 相同 `type` 不同导致不可复用，会将 `oldFiber` 标记为 `DELETION`，并继续遍历
+4. 如果 `newChildren` 遍历完（即 `i === newChildren.length - 1`）或者 `oldFiber` 遍历完（即 `oldFiber.sibling === null`），跳出遍历，第一轮遍历结束。
 
-    第一轮结束后，会出现 3 种情况
+第一轮结束后，会出现 3 种情况
 
-    1. 第一个情况，新节点遍历完毕，说明它是做了`pop`这样的操作。那么直接把旧节点的剩余节点给删除就可以了。
-    2. 第二个情况，老节点遍历完了，说明它是做了`push`这样的操作。那么直接循环创建剩下的新节点就可以了。
-    3. 第三个情况，新老节点都没遍历完，意思它要么做了替换操作，要么就是移动了顺序，要么就是`unshift`或者`shift`之类的操作。
-        - 遇到这样的情况，它会通过`mapRemainingChildren`方法，把剩下没跑完的`oldFiber`变成一个`Map`对象。key 值是`key`，没有 key 的话用`index`。
-        ```js
-        function mapRemainingChildren(
-            returnFiber: Fiber,
-            currentFirstChild: Fiber
-        ): Map<string | number, Fiber> {
-            const existingChildren: Map<string | number, Fiber> = new Map();
-            let existingChild = currentFirstChild;
-            while (existingChild !== null) {
-                if (existingChild.key !== null) {
-                    existingChildren.set(existingChild.key, existingChild);
-                } else {
-                    existingChildren.set(existingChild.index, existingChild);
-                }
-                existingChild = existingChild.sibling;
+1. 第一个情况，新节点遍历完毕，说明它是做了`pop`这样的操作。那么直接把旧节点的剩余节点给删除就可以了。
+2. 第二个情况，老节点遍历完了，说明它是做了`push`这样的操作。那么直接循环创建剩下的新节点就可以了。
+3. 第三个情况，新老节点都没遍历完，意思它要么做了替换操作，要么就是移动了顺序，要么就是`unshift`或者`shift`之类的操作。
+    - 遇到这样的情况，它会通过`mapRemainingChildren`方法，把剩下没跑完的`oldFiber`变成一个`Map`对象。key 值是`key`，没有 key 的话用`index`。
+    ```js
+    function mapRemainingChildren(
+        returnFiber: Fiber,
+        currentFirstChild: Fiber
+    ): Map<string | number, Fiber> {
+        const existingChildren: Map<string | number, Fiber> = new Map();
+        let existingChild = currentFirstChild;
+        while (existingChild !== null) {
+            if (existingChild.key !== null) {
+                existingChildren.set(existingChild.key, existingChild);
+            } else {
+                existingChildren.set(existingChild.index, existingChild);
             }
-            return existingChildren;
+            existingChild = existingChild.sibling;
         }
-        ```
-        - 然后遍历新数组，在遍历的过程中会寻找新的节点的 `key`是否存在于这个 `Map`中，存在即可复用，不存在就创建一个新的。就相当于又回到了第一部分。
-        - 然后还会去判断是否需要移动节点，如果 `oldFiber` 的 `index > lastPlacedIndex`,不动,并且把 `lastPlacedIndex = oldFiber.index`
-        - 如果 `oldFiber` 的 `index < lastPlacedIndex` 就要右移了
-
-    完成后这一层的`diff`就完成，继续下一个工作单元 `performUnitOfWork`。直到全部结束。
-
-    那么，它是如何去跑下一个工作单元的呢？函数`performUnitOfWork`内有一项重要的代码
-
-    ```js
-    // 这个next就是上面diff后返回的WorkinProgress.child
-    if (next === null) {
-        // If this doesn't spawn new work, complete the current work.
-        completeUnitOfWork(unitOfWork);
-    } else {
-        // 递归吧
-        workInProgress = next;
+        return existingChildren;
     }
     ```
+    - 然后遍历新数组，在遍历的过程中会寻找新的节点的 `key`是否存在于这个 `Map`中，存在即可复用，不存在就创建一个新的。就相当于又回到了第一部分。
+    - 然后还会去判断是否需要移动节点，如果 `oldFiber` 的 `index > lastPlacedIndex`,不动,并且把 `lastPlacedIndex = oldFiber.index`
+    - 如果 `oldFiber` 的 `index < lastPlacedIndex` 就要右移了
+
+完成后这一层的`diff`就完成，继续下一个工作单元 `performUnitOfWork`。直到全部结束。
+
+那么，它是如何去跑下一个工作单元的呢？函数`performUnitOfWork`内有一项重要的代码
+
+```js
+// 这个next就是上面diff后返回的WorkinProgress.child
+if (next === null) {
+    // If this doesn't spawn new work, complete the current work.
+    completeUnitOfWork(unitOfWork);
+} else {
+    // 递归吧
+    workInProgress = next;
+}
+```
+
+以下是比较完整的多节点diff代码
+
+[filename](../js/diff.js ':include :type=code')
 
 ### Hooks
 
