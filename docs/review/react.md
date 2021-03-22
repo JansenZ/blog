@@ -235,7 +235,7 @@
             lastBaseUpdate: null
         }
         */
-        
+
         this.updateQueue = null;
         this.memoizedState = null;
         this.dependencies = null;
@@ -556,7 +556,7 @@
     如果你是个 div 标签，里面又有子标签，那前后就是这个来对比
     ![div](../img/divold.jpg)
 
-    经过观察，发现，除了根节点外的一些东西，里面的只要大的改动了，即使props前后字面一样，也不会相等，所以基本没啥用，后面还是会去 reconcileChildren 来diff。
+    经过观察，发现，除了根节点外的一些东西，里面的只要大的改动了，即使 props 前后字面一样，也不会相等，所以基本没啥用，后面还是会去 reconcileChildren 来 diff。
 
 3. mount 的时候组件类型有哪些
 
@@ -967,14 +967,19 @@
     ```
 
 ### Hooks
-1. useCallback， useMemo是怎么记忆化的？
+
+1. useCallback， useMemo 是怎么记忆化的？
 
     首先，这两位几乎没区别，唯一的区别就是一个是记忆化值，一个是记忆化函数
 
-    以useCallback为例子
+    以 useCallback 为例子
+
     ```js
     // mount 阶段
-    function mountCallback<T>(callback: T, deps: Array<mixed> | void | null): T {
+    function mountCallback<T>(
+        callback: T,
+        deps: Array<mixed> | void | null
+    ): T {
         // 创建并返回当前hook
         const hook = mountWorkInProgressHook();
         // 约等于下面这个
@@ -999,12 +1004,13 @@
         return prevState[0];
     }
     hook.memoizedState = [callback, nextDeps];
-    return callback
+    return callback;
     ```
 
-2. useState 
+2. useState
 
-    useState 也和上述的mount差不多，只是多了update
+    useState 也和上述的 mount 差不多，只是多了 update
+
     ```js
     // mount
     function mountState(initialState) {
@@ -1013,14 +1019,18 @@
         // ...赋值初始state,省略函数情况
         hook.memoizedState = hook.baseState = initialState;
         // 创建queue
-        var queue = hook.queue = {
+        var queue = (hook.queue = {
             pending: null,
             dispatch: null,
             lastRenderedReducer: basicStateReducer,
             lastRenderedState: initialState
-        };
+        });
         // ...创建dispatch
-        var dispatch = queue.dispatch = dispatchAction.bind(null, currentlyRenderingFiber$1, queue);
+        var dispatch = (queue.dispatch = dispatchAction.bind(
+            null,
+            currentlyRenderingFiber$1,
+            queue
+        ));
         return [hook.memoizedState, dispatch];
     }
     // 更新
@@ -1032,7 +1042,7 @@
             eagerReducer: null,
             eagerState: null,
             next: null
-        }; 
+        };
         // 这个和class那个一样，就是搞一个 update 链表出来。
         var pending = queue.pending;
         if (pending === null) {
@@ -1047,12 +1057,18 @@
 
         var alternate = fiber.alternate;
 
-        if (fiber === currentlyRenderingFiber$1 || alternate !== null && alternate === currentlyRenderingFiber$1) {
+        if (
+            fiber === currentlyRenderingFiber$1 ||
+            (alternate !== null && alternate === currentlyRenderingFiber$1)
+        ) {
             // render阶段触发的更新
             didScheduleRenderPhaseUpdateDuringThisPass = didScheduleRenderPhaseUpdate = true;
         } else {
-            if (fiber.lanes === NoLanes && (alternate === null || alternate.lanes === NoLanes)) {
-            // ...fiber的updateQueue为空，优化路径
+            if (
+                fiber.lanes === NoLanes &&
+                (alternate === null || alternate.lanes === NoLanes)
+            ) {
+                // ...fiber的updateQueue为空，优化路径
             }
 
             // 这里就和class的setState一样了后面
@@ -1064,6 +1080,7 @@
 3. 为啥不能条件句里写 hook？
 
     看下 `mountWorkInProgressHook` 方法, 每个`hook`的`mount`的时候，进来都会调用这个创建一个`hook`
+
     ```js
     function mountWorkInProgressHook() {
         var hook = {
@@ -1087,9 +1104,11 @@
         return workInProgressHook;
     }
     ```
+
     每次执行到一个`hook update`的时候，它都会去执行`updateWorkInProgressHook`方法
-    
+
     这个方法会让 `currentlyRenderingFiber$1.memoizedState` 往后移动一位，一旦用了条件语句，它的指向就会出错。
+
     ```js
     function updateWorkInProgressHook() {
         // This function is used both for updates and for re-renders triggered by a
@@ -1113,15 +1132,18 @@
 4. hooks 是怎么区分是 update 还是 mount 的呢？
 
     在`FunctionComponent render`时，会从`ReactCurrentDispatcher.current`（即当前`dispatcher`）中寻找需要的`hook`。
+
     ```js
     ReactCurrentDispatcher.current =
         current === null || current.memoizedState === null
             ? HooksDispatcherOnMount
-            : HooksDispatcherOnUpdate;  
+            : HooksDispatcherOnUpdate;
     ```
 
 ### SetState
-    事件 => setstate => 调度 => 调和 begin => diff => 调和 complete => commit
+
+事件 => setstate => 调度 => 调和 begin => diff => 调和 complete => commit
+
 1. setState 的流程是啥？
 
     this.setState 内会调用 `this.updater.enqueueSetState` 方法。
@@ -1154,15 +1176,17 @@
         scheduleUpdateOnFiber(fiber, lane, eventTime);
     }
     ```
+
     然后`enqueueUpdate` 这个方法，会把 `update` 对象通过`next`做一个循环单链表，然后挂在`fiber`的 `updateQueue` 的`shared.pending` 下
 
     最后开始调用 `scheduleUpdateOnFiber`，然后把`state`更新到`updateQueue`上后，移交到调度那边去
 
-2. update对象内容
+2. update 对象内容
 
-    [update对象详解](https://react.iamkasong.com/state/update.html);
+    [update 对象详解](https://react.iamkasong.com/state/update.html);
 
-    他这个update 有一段就是循环链表
+    他这个 update 有一段就是循环链表
+
     ```js
     if (pending === null) {
         // This is the first update. Create a circular list.
@@ -1171,11 +1195,12 @@
         update.next = pending.next;
         pending.next = update;
     }
-    ```   
-3. setState啥时候是异步的，啥时候是同步的？
+    ```
+
+3. setState 啥时候是异步的，啥时候是同步的？
 
     [讲清楚的很少，这个还不错](https://zhuanlan.zhihu.com/p/350332132)
-    
+
     实际上，`setState`为了保证性能，它是使用了批处理，和异步其实没啥关系，因为他是 调用`setState`函数后读取 `this.state` 从来就没有说是 `this.state = xx`， 然后读取 `this.state` 对吧。
 
     它的内部主要利用了一个 `executionContext` 的概念，`executionContext` 代表了目前 react 所处的阶段，而 `NoContext` 你可以理解为是 react 已经没活干了的状态。而 `flushSyncCallbackQueue` 就是开始干活的意思。
@@ -1197,6 +1222,7 @@
     而当你用了`settimeout`后，直接就会去执行`final`， 也就是还没开始呢，就结束了，导致`executionContext`就是`NoContext`。
 
     用了 合成事件、 生命周期 就会赋值 `executionContext`， 而进入 原生事件的话，因为`react`没有拦截，所以直接就是用的默认的，所以也就是同步执行，但是`settimeout`的话，虽然进入合成事件，但是因为延迟了，导致`final`直接执行，所以和原生事件一样表现。
+
     ```js
     componentDidMount() {
         document.body.addEventListener('click', this.changeCount, false)
@@ -1206,24 +1232,27 @@
         console.log(this.state.count); // 输出的是更新后的count --> 1
     }
     ```
-    但是如果是在`concurrent`模式下，就不行了，因为有个条件就是`if (lane === SyncLane) { `
 
-    以上，解释最简单的就是3个调用栈的图
-    1. 默认的两次setState
-        ![tu](../img/default.png)
-        可以看到，默认的调用栈不管到哪，他的`executionContext`都不是0，`isBatchingEventUpdates` 也是true
-    2. setTimeout的两次setState
-        ![tu1](../img/settimeout1.png)
-        能看到isBatching 赋值为false的地方
-        ![tu2](../img/settimeout2.png)
-        能看到executionContext赋值为0的地方，这里初始写错了，是4.
-    3. 直接用原生事件里调用setState
-        ![natve](../img/native1.png)
-        可以看到，调用栈特别干净，上来就是 `changeNum` 函数，根本没进任何react能控制的地方，所以两个值都是默认的，一个0，一个false
-    
-    我用一段代码来大概的解释setState的工作原理，一看就明白。
+    但是如果是在`concurrent`模式下，就不行了，因为有个条件就是`if (lane === SyncLane) {`
+
+    以上，解释最简单的就是 3 个调用栈的图
+
+    1. 默认的两次 setState
+       ![tu](../img/default.png)
+       可以看到，默认的调用栈不管到哪，他的`executionContext`都不是 0，`isBatchingEventUpdates` 也是 true
+    2. setTimeout 的两次 setState
+       ![tu1](../img/settimeout1.png)
+       能看到 isBatching 赋值为 false 的地方
+       ![tu2](../img/settimeout2.png)
+       能看到 executionContext 赋值为 0 的地方，这里初始写错了，是 4.
+    3. 直接用原生事件里调用 setState
+       ![natve](../img/native1.png)
+       可以看到，调用栈特别干净，上来就是 `changeNum` 函数，根本没进任何 react 能控制的地方，所以两个值都是默认的，一个 0，一个 false
+
+    我用一段代码来大概的解释 setState 的工作原理，一看就明白。
 
     当然，一定要对`try catch final` 有深刻的理解
+
     ```js
     var NoContext = 0;
     var DiscreteEventContext = 4;
@@ -1258,7 +1287,7 @@
         console.log(a);
         setState({ a: 3 });
         console.log(a);
-    }
+    };
     const onChangeUnBatchA = () => {
         setTimeout(() => {
             setState({ a: 5 });
@@ -1266,13 +1295,13 @@
             setState({ a: 6 });
             console.log(a);
         }, 0);
-    }
+    };
 
-    var flushSyncCallbackQueue = function () {
+    var flushSyncCallbackQueue = function() {
         a = updateQueue.reduce((accumulator, currentValue) => {
             return currentValue.a || accumulator;
-        }, a)
-    }
+        }, a);
+    };
 
     // 走你
     scheduleUpdateOnFiber(onChangeBatchA);
@@ -1281,7 +1310,6 @@
     console.log(a);
     // 0， 0 ，3
     // 3， 5， 6
-
     ```
 
 ### 其他
@@ -1365,12 +1393,12 @@
     接下来带上这个过期时间，和其他参数，给`FiberRoot`对象加个`context`，然后把`Fiber`对象作为参数调用`scheduleRootUpdate`。
     `scheduleRootUpdate`方法里会创建一个`update`对象，把要渲染的`ele`放到`payload`里，通过`enqueueUpdate`把`update`插入队列中，等待执行。最后调用`scheduleWork`方法，传入`Fiber`对象和过期时间。等待调度。
 
-    1. 创建fiberRootNode、rootFiber、updateQueue（`legacyCreateRootFromDOMContainer`）
-    2. 创建Update对象（`updateContainer`）
-    3. 从fiber到root（`markUpdateLaneFromFiberToRoot`）
+    1. 创建 fiberRootNode、rootFiber、updateQueue（`legacyCreateRootFromDOMContainer`）
+    2. 创建 Update 对象（`updateContainer`）
+    3. 从 fiber 到 root（`markUpdateLaneFromFiberToRoot`）
     4. 调度更新（`ensureRootIsScheduled`）
-    5. render阶段（`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
-    6. commit阶段（`commitRoot`）
+    5. render 阶段（`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
+    6. commit 阶段（`commitRoot`）
 
 7. scheduleWork()调度的原理。
    JS 和渲染引擎是一个互斥关系。（不然就乱了）。如果 JS 在执行代码，那么渲染引擎工作就会被停止。假如我们有一个很复杂的复合组件需要重新渲染，那么调用栈可能会很长
@@ -1432,4 +1460,3 @@
         写多个`useState`也好，多个`useReducer`也好，会根据里面的核心`mountWorkInProgressHook`来通过链表`next`的形式，创建各个位置的`hook`的引用。
 
     3. 当点击了`setState`触发事件后，会执行添加进队列的那个`dispatchAction`方法，然后根据新值，赋值给`update`对象，然后触发`schedulework`，接下来，重新进入`renderHooks`函数，然后这个时候，`current`其实就已经有值了，`current`就会指向`update`的那个对象。然后`useState`也好，其它的也好，都会调用`update`对应的方法，而且会把指针指向最新的那个变更过的状态值。
-    
