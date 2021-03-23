@@ -833,7 +833,7 @@
 
 24. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
 
-    基本完整版本参见 deepCopy.js
+    基本完整版本参见 [deepCopy.js](https://zhenglin.vip/js/deepcopy.js)
 
     如果不需要function的话，可以异步使用一个MessageChannel
 
@@ -1347,13 +1347,11 @@
 
     ```
 
-    // 其实就是 pushHandler 就可以了
+    其实就是 pushHandler 就可以了, 完成版[eventEmmiter.js](https://zhenglin.vip/js/eventEmmiter.js)
 
-    // eventEmmiter.js
+    once 其实就是加一个 wrapperHandler,然后先 remove 再调用一次。
 
-    // once 其实就是加一个 wrapperHandler,然后先 remove 再调用一次。
-
-    // 主要就是利用个对象完成。
+    主要就是利用个对象完成。
 
 55. 隐式转换
 

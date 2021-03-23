@@ -166,7 +166,7 @@
     - 如果这个 target 有 copy ，那么取 copy 下的值
     - 如果没有，就说明没有用到，取原值
 
-    以上解释仅限于解释这张图。因为具体写的时候，还要多级代理，所以另外说，可以参考 easyimmer.js
+    以上解释仅限于解释这张图。因为具体写的时候，还要多级代理，所以另外说，可以参考 [easyimmer.js](https://zhenglin.vip/js/EasyImmer.js)
     分为 3 步，一步是处理 set,一步是处理 get,一步是处理这个 proxy 数据，因为我们代理的并不是原值，而是一个套值
 
     这个套值有 3 个属性 copy, base, parent
@@ -594,7 +594,8 @@
       model 改了动 view，view 改了动 model。就是 vue 那种。我们现在分的层也类似这样。
 
 24. 手写一个双向绑定
-    vue.js
+
+    [vue.js](https://zhenglin.vip/js/vue.js)
 25. nginx 知识点
 26. 骨架屏实现方案
 27. 代码生成技术文档

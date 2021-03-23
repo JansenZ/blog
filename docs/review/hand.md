@@ -18,6 +18,14 @@
 
 [filename](../js/debounce.js ':include :type=code')
 
+### Throttle
+
+[filename](../js/throttle.js ':include :type=code')
+
 ### Compose
 
 [filename](../js/compose.js ':include :type=code')
+
+### 红绿灯
+
+[filename](../js/red-green-yellow.js ':include :type=code')

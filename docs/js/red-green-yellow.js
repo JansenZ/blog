@@ -1,7 +1,6 @@
 // 等红灯3秒
 // 绿灯两秒
 // 黄灯1秒
-
 function red() {
     console.log('red');
 }
@@ -36,8 +35,6 @@ var step = function() {
 }
 red();
 step();
-
-
 // 先亮红灯
 // 3秒后绿灯点亮
 // 2秒后黄灯闪烁
