@@ -26,6 +26,22 @@
 
 [filename](../js/compose.js ':include :type=code')
 
-### 红绿灯
+### 红绿灯Promise
 
 [filename](../js/red-green-yellow.js ':include :type=code')
+
+### 柯里化
+
+[filename](../js/currying.js ':include :type=code')
+
+### Filter
+
+[filename](../js/filter.js ':include :type=code')
+
+### Map
+
+[filename](../js/map.js ':include :type=code')
+
+### Reduce
+
+[filename](../js/reduce.js ':include :type=code')

@@ -727,9 +727,9 @@
     而微任务就是 promise.then,MutationObserver
 
     在 Node 中，又有些不一样，就单从 API 层面上来理解，Node 新增了两个方法可以用来使用：微任务的 process.nextTick 以及宏任务的 setImmediate。
-    
+
     setTimeout 和 setImmediate 的区别的话就是 settimeout 是时间延迟，setImmediate 是循环延迟。
-    
+
     timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。同样，在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行。
     ```
     setTimeout(() => {
@@ -1485,3 +1485,21 @@
     2. 可能多个定时器会连续执行；比如T1执行完，没有空的时间，所以T1执行完立即执行T2
     ![settimeout](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/730a96f90311403980e1e42c2d5d21c6~tplv-k3u1fbpfcp-zoom-1.image)
     每个 setTimeout 产生的任务会直接 push 到任务队列中；而 setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。
+
+64. 实现 get(obj, 'a.b.c', 0), 类可选链
+
+    ```js
+    // get(obj, 'a.b.c', 0);
+    function get(data, path, defaultVal) {
+        path = path.split('.');
+        // for 版本
+        for (var i = 0, len = path.length; i < len; i++) {
+            if (data == null)
+                return defaultVal;
+            data = data[path[i]];
+        }
+        return data;
+        // reduce版本
+        return path.reduce((obj, q) => obj && obj[q] ? obj[q] : undefined, obj) || defaultVal
+    }
+    ```

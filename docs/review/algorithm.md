@@ -378,7 +378,7 @@ function TreeNode(val, left, right) {
 
 1. 大数相加
 
-[filename](../js/bigSum.js ':include :type=code')
+[filename](../algorithm/bigSum.js ':include :type=code')
 
 2. 什么是摩尔投票算法？
 
@@ -459,11 +459,7 @@ function TreeNode(val, left, right) {
     }
     ```
 
-9. 柯里化
-
-[filename](../js/currying.js ':include :type=code')
-
-10. 判断一个数是不是 4 的指数幂
+9. 判断一个数是不是 4 的指数幂
 
     ```js
     function is4mi(number) {
