@@ -50,6 +50,15 @@
    ```
 
    然后写个 get 方法，那么这些 props 只能通过 get 获取了。
+5. Set WeakSet Map WeakMap
+
+    首先，Set 和 Map 都很相似，只是API略有不同，Set 是通过add加值，Map是通过set加值
+
+    然后就是 Set 的entries的话，是[key, key] 这样的结构，而Map 是[key, val]的形式
+
+    Set更多会操作数组，Map更多的操作对象, Weak这些结构的话，一是弱引用，二正因为弱引用，所以不可迭代。
+
+    ![weak](../img/weak.jpg)
 
 5. class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
 
