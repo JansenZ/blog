@@ -1440,10 +1440,10 @@
     ```js
 
     myNextTick(fn){
-    const ch = new MessageChannel();
-    // 只有两个端口，一个 port1,一个 port2。正好叫这样。
-    const port1 = ch.port1;
-    const port2 = ch.port2;
+        const ch = new MessageChannel();
+        // 只有两个端口，一个 port1,一个 port2。正好叫这样。
+        const port1 = ch.port1;
+        const port2 = ch.port2;
 
         // 接受来自port1的postMessage
         port2.onmessage = (() => {
@@ -1461,18 +1461,14 @@
     ```js
 
     mynextTick(func){
-    var textNode = document.createTextNode(0)//新建文本节点
-    var that = this
-    var callback = function(mutationsList, observer) {
-    func.call(that);
-    // 或
-    // fanc();
-    }
-    var observer = new MutationObserver(callback);
-
+        var textNode = document.createTextNode(0)//新建文本节点
+        var that = this
+        var callback = function(mutationsList, observer) {
+            func.call(that);
+        }
+        var observer = new MutationObserver(callback);
         observer.observe(textNode,{characterData:true })
         textNode.data = 1//修改文本信息，触发dom更新
-
     }
 
     ```
