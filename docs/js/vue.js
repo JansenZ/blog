@@ -280,3 +280,48 @@ const Vue = (function() {
   
   demo.$watch('text', str => p.innerHTML = str);
   
+
+
+// 以下是思想草稿
+// MMVM， 双向绑定
+// 就是修改input， 改数据
+// 数据的变更，驱使html变更
+// 也就是说set的时候触发事件分发器。
+// 简单的说就是 发布订阅+数据劫持
+  // event.add = function(callback) {
+  //   this.observers.push(callback);
+  // }
+  // event.noticy = function(key) {
+  //     this.observers.forEach((kk)=> {
+  //           kk(key);
+  //     })
+  // }
+
+
+  // var data = { 
+  //     name: 'k'
+  // };
+
+  // function observer(data, event) {
+  //   return new proxy(data, {
+  //       set() {
+  //           event.notify(key);
+  //       }
+  //   })
+  // }
+
+  // function watch(data, callback) {
+  //       var event = new event();
+  //       event.add(callback);
+  //       observer(data, event);
+  // }
+
+  // html.addEventListener(()=> {
+  //     data.name = e.target;
+  // })
+
+  // watch(data, (key) => {
+  //   if(key == name) {
+  //       // html p 标签 变化。
+  //   }
+  // })
