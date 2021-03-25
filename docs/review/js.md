@@ -1460,15 +1460,15 @@
 
     ```js
 
-    mynextTick(func){
-        var textNode = document.createTextNode(0)//新建文本节点
+    function mynextTick(func) {
+        var textNode = document.createTextNode('0')//新建文本节点
         var that = this
         var callback = function(mutationsList, observer) {
             func.call(that);
         }
         var observer = new MutationObserver(callback);
         observer.observe(textNode,{characterData:true })
-        textNode.data = 1//修改文本信息，触发dom更新
+        textNode.data = '1' //修改文本信息，触发dom更新
     }
 
     ```
