@@ -397,22 +397,83 @@ function TreeNode(val, left, right) {
     如果不可以用内置的话，就采用快排的方式，快排就是比 target 小的放左边，比它大的放右边。时间复杂度是 O(nlogn);
 
     还可以用堆排序
+    ```js
+    var getLeastNumbers = function(arr, k) {
+        var heap = new Heap(arr);
+        var arr = [];
+        for(var i = 0; i < k; i ++) {
+            arr.push(heap.top());
+            heap.deleteMax();
+        }
+        return arr;
+    };
+    ```
 
 7. 怎么建堆？
 
-    一个数组，建立堆的时候，自下至上，这样可以用 O(nlogn)的方式完成建堆
+    一个数组，建立堆的时候，自下至上，这样可以用 O(n)的方式完成建堆
 
-    比如有 9 个数组，最小带叶根节点为 `Math.floor(9 / 2) - 1`;
+    比如有个数组，长度为 9 ，最大带叶根节点下标为 `Math.floor(9 / 2) - 1` = 3;
 
-    从它开始，判断它和孩子们大小，然后 swap。
+    从它开始，判断它和自己的左右孩子们的大小，然后和大的那个 swap。
 
-    i -- 直到第一个元素建堆完成。
+    i-- 直到第一个元素建堆完成。
 
     本质上理解的方式，就是合并两个堆。
 
     删除的话，就是把第一个和最后一个交换，然后删除掉最后一个，对第一个进行 build
 
-    插入的话，就把要插入的数据放在最前面，然后重建堆。？todo
+    插入的话，就把要插入的数据放在最后面，然后上溢操作，如果插入到最前面，可能会破坏堆堆结构性。主要是左右孩子不保证谁大的
+    
+    ```js
+    // 小顶堆，top返回最小值
+    class Heap {
+        constructor(arr) {
+            this.arr = arr;
+            this.len = arr.length;
+            this.min = Math.floor(this.len / 2) - 1;
+            this.init();
+        }
+
+        init() {
+            let i = this.min;
+            while (i >= 0) {
+                this.rebuild(i);
+                i --;
+            }
+        }
+        rebuild(i) {
+            // 说明已经交换到叶子节点了，不用往下了
+            if(i > this.min) return;
+            let lc = i * 2 + 1;
+            let rc = (i + 1) * 2;
+            if(rc && this.arr[lc] > this.arr[rc]) {
+                this.swap(i, (i + 1) * 2);
+            } else {
+                this.swap(i, i * 2 + 1);
+            }
+         }
+
+        swap(parent, child) {
+            if(this.arr[parent] > this.arr[child]) {
+                [this.arr[parent], this.arr[child]] = [this.arr[child], this.arr[parent]];
+                this.rebuild(child);
+            }
+        }
+
+        top() {
+            return this.arr[0];
+        }
+
+        deleteRoot() {
+            // 交换
+            [this.arr[0], this.arr[this.len - 1]] = [this.arr[this.len - 1], this.arr[0]];
+            this.arr.pop();
+            this.rebuild(0);
+            this.len --;
+        }
+    }
+    ```
 
 ### 字符串匹配
 
