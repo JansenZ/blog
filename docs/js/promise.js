@@ -145,3 +145,92 @@ class Promise2 {
     })
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+function nextTick(callback) {
+    var mycallback = function() {
+        callback();
+    }
+    var textNode = document.createTextNode('0');
+    var observer = new MutationObserver(mycallback)
+    observer.observe(textNode,{characterData: true})
+    textNode.data = '1';
+}
+
+
+
+class Promise2 {
+    constructor(executor) {
+        this.status = 'PENDING';
+        this.value;
+        this.reason;
+
+        this.onSuccessCallbacks = [];
+        this.onFailCallbacks = [];
+
+        let resolve = (value) => {
+            if (this.status === 'PENDING') {
+                // 只能从 pending -> fulfilled
+                this.status = 'SUCCESS';
+                this.value = value;
+                // 异步时，状态变更了，可以发布要执行的成功态回调了
+                this.onSuccessCallbacks.forEach(fn => fn());
+            }
+        };
+
+        let reject = (reason) => {
+            if (this.status === 'PENDING') {
+                // 只能从 pending -> rejected
+                this.status = 'FAIL';
+                this.reason = reason;
+                // 异步时，状态变更了，可以发布要执行的失败态回调了
+                this.onFailCallbacks.forEach(fn => fn());
+            }
+        };
+
+        try {
+            // 同步执行，需要捕获错误
+            executor(resolve, reject);
+        } catch (e) {
+            reject(e);
+        }
+    }
+    then(onFulfilled, onRejected) {
+        // 处理 值穿透
+        onFulfilled = typeof onFulfilled === 'function' ? onFulfilled : val => val;
+        onRejected = typeof onRejected === 'function' ? onRejected : err => { throw err };
+
+        // 同步时，状态变更，执行成功态回调
+        if (this.status === 'SUCCESS') {
+            onFulfilled(this.value);
+        }
+        // 同步时，状态变更，执行失败态回调
+        if (this.status === 'FAIL') {
+            onRejected(this.value);
+        }
+
+        // 异步时，先把回调订阅起来，等到状态变更的时候，再进行发布
+        if (this.status === 'PENDING') {
+            this.onSuccessCallbacks.push(() => {
+                nextTick(() => {
+                    onFulfilled(this.value);
+                });
+            });
+            this.onFailCallbacks.push(() => {
+                nextTick(() => {
+                    onRejected(this.reason);
+                })
+            });
+        }
+    }
+}
+
