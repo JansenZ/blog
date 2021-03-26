@@ -19,34 +19,3 @@ function getBreadTree(node) {
     }
     return res;
 }
-
-// 先序
-function preorder(root) {
-    if (root == null) {
-        return;
-    }
-    console.log(root.val);
-    preorder(root.left);
-    preorder(root.right);
-}
-
-// 中序
-function inOrder(root) {
-    if(root == null) {
-        return;
-    }
-    inOrder(root.left);
-    console.log(root.val);
-    inOrder(root.right);
-    
-}
-
-// 后序
-function postOrder(root) {
-    if(root == null) {
-        return;
-    } 
-    postOrder(root.left);
-    postOrder(root.right);
-    console.log(root.val);
-}
