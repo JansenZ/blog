@@ -405,6 +405,10 @@
     <b>打点上报</b>
 
     用 new Image().src = '服务器地址，带参数'，这样方便，而且也不存在跨域的问题，不需要响应。可以给它包一个 requestIdlecallback。这个 imgae 标签最好挂在 window 对象上，防止还没打出去就被回收了。
+    
+    **为什么用1x1的gif图呢？**
+    1. 加载图片不需要操作DOM，性能更好，不会阻塞页面，只需要new Image， script需要插入
+    2. GIF的最低合法体积最小（最小的BMP文件需要74个字节，PNG需要67个字节，而合法的GIF，只需要43个字节）
 
     ```js
     var data = JSON.stringify({
