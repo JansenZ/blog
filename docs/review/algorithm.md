@@ -562,6 +562,8 @@ function TreeNode(val, left, right) {
             []
         );
     }
+    
+    arr = arr.flat(Infinity); // flat里的参数是深度，无限就是无限深
     ```
 
 9. 判断一个数是不是 4 的指数幂
