@@ -552,10 +552,12 @@ function TreeNode(val, left, right) {
 8. 数组降维，写两个
 
     ```js
+    // 迭代
     while (arr.some(Array.isArray)) {
         arr = [].concat(...arr);
     }
 
+    // 递归
     function flatMap(arr) {
         return arr.reduce(
             (pre, cur) => pre.concat(Array.isArray(cur) ? flatMap(cur) : cur),
@@ -563,6 +565,7 @@ function TreeNode(val, left, right) {
         );
     }
     
+    // 外挂
     arr = arr.flat(Infinity); // flat里的参数是深度，无限就是无限深
     ```
 
