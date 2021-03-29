@@ -479,6 +479,8 @@ function TreeNode(val, left, right) {
 
 1. KMP
 
+[filename](../algorithm/kmp.js ':include :type=code')
+
 ### 通用
 
 1. 大数相加
