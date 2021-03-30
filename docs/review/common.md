@@ -862,3 +862,47 @@
 37. NPM install 运行机制
 
     [运行机制](https://www.zhihu.com/question/66629910/answer/273992383)
+
+38. 装修拖拽的技术方案
+
+    drag组件是包裹整个装修页面布局的，就是侧边栏和主区域都坐落在内部
+
+    请求接口，从侧边栏展示出已经注册好的模块
+
+    包含模块的名称和模块的id，图片
+
+    当mousedown的时候，通过 `ReactDOM.findDOMNode(this)` 获取当前的鼠标摸下去的模块。
+    `var clone = node.cloneNode(true);`
+    `var rect = node.getBoundingClientRect();`
+
+    复制当前鼠标摸的模块，并计算当前的偏移位置。`this.start = true`
+
+    监听 mousemove ,当然，得摸到任意一个模块，否则直接return
+
+    然后改变当前的模块的 x,y 值，让它跟着鼠标一起走 `this.moved = true`
+
+    当触发 mouseUp 的时候，先判断当前 this.move 是不是true，不是 true 说明不是移动目标进来的
+
+    判断 this.start 是不是true，不是true说明不是拖拽开始。
+
+    把当前添加的那个组件，remove掉。
+
+    最后执行 onDragEnd;
+
+    同时监听主要展示区域的mousedown，如果是有组件落在自己的页面下，`this.dragStatus === 'putdown'`。
+
+    在 onDragEnd 的时候呢，判断当前的 dragStatus ，如果不是putdown，不做任何执行，说明没有把组件拖进来
+
+    如果是 putdown ，说明有组件拖进来了，直接添加组件即可
+
+    当你选中了对应要编辑的模块后，右侧会出现一个设置界面，用工厂模式根据配置表，渲染出对应的配置，
+
+    读取之前的配置并填入，最后保存。
+
+    对应模块的html和css是通过文本存在服务端的。
+
+    然后在前台的时候回读取这部分数据，然后前台是有一个包裹组件，读取到后台吐的模块后，直接根据对应的模块id，渲染对应的模块数据
+
+    其中所有的模块数据都会去继承一个基础模块，只需要复写里面的打点数据和请求数据，和自己的事件绑定即可。
+
+    而基础模块就是用来渲染对应模块的html，css和一些公共可抽出的数据信息。
