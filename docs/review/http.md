@@ -422,8 +422,8 @@
     - css 加载会阻塞 DOM 树的渲染，因为最终两者要合成一个渲染树
     - css 加载会阻塞后面 js 语句的执行、为了防止渲染出现不可预期的结果,浏览器设置 GUI 渲染线程与 JavaScript 引擎为互斥的关系。由于 js 可能会操作之前的 Dom 节点和 css 样式，因此浏览器会维持 html 中 css 和 js 的顺序。因此，样式表会在后面的 js 执行前先加载执行完毕。所以 css 会阻塞后面 js 的执行。否则要是先走了 js，js 操作了样式了，然后 css 再加载的话，那样式就会出现问题了。
 
-    - \*\*\* 如果页面中同时存在 css 和 js，并且存在 js 在 css 后面，则 DOMContentLoaded 事件会在 css 加载完后才执行。
-      因为啥，因为 css 会阻塞 js，js 会阻塞 dom 解析，所以，DOMContentLoaded 才会等待 css。如果想解，改 defer。
+    - **如果页面中同时存在 css 和 js，并且存在 js 在 css 后面，则 DOMContentLoaded 事件会在 css 加载完后才执行。
+      因为啥，因为 css 会阻塞 js，js 会阻塞 dom 解析，所以，DOMContentLoaded 才会等待 css。如果想解，改 defer。**
     - 其他情况下，DOMContentLoaded 都不会等待 css 加载，并且 DOMContentLoaded 事件也不会等待图片、视频等其他资源加载。
     - 而 load 的话就是所有资源都加载完才算完
       [这个链接说的非常好](https://www.cnblogs.com/Bonnie3449/p/8419609.html)
