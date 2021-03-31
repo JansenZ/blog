@@ -98,9 +98,7 @@
         ></script>
         ```
 
-6) 微前端
-
-    1. 微前端
+6. 微前端
 
     1. iframe
 
@@ -114,17 +112,23 @@
 
         但他的最大问题也在于他的隔离性无法被突破，导致应用间上下文无法被共享，随之带来的开发体验、产品体验的问题。
 
-    1. qiankun
+    2. qiankun
 
         帮助你隔离 js,隔离应用，隔离 css。
 
         这样切换的时候不会刷新
 
-    1. 自己的微前端
+    3. 自己的微前端
 
         没有隔离，因为是在前台的，所以我们不需要隔离。
 
-7) 原生 hash 实现路由
+    4. webpack 5 模块联邦
+
+        只需要在webpack里插件配置，就可以引用远程应用的模块，并且只是加载一个js，由webpack来解决
+
+        比如trade,多个页面，可以插进去。当然还是用现在的微前端模式
+
+7. 原生 hash 实现路由
 
     ```js
     class Router {
@@ -257,7 +261,7 @@
     button.addEventListener("click", router.backOff, false);
     ```
 
-8) react hash 实现参考
+8. react hash 实现参考
 
     不管是 hash 还是 history， 只要是 react 组件下的，无非就是三个组件
 
@@ -309,7 +313,7 @@
     export default ({ to, ...props }) => <a {...props} href={"#" + to} />;
     ```
 
-9) 原生 js history 参考
+9. 原生 js history 参考
 
     ```js
     class Routers {
@@ -347,7 +351,7 @@
     }
     ```
 
-10) history react 参考
+10. history react 参考
 
     ```js
     export default class HistoryRouter extends React.Component {
@@ -404,7 +408,7 @@
     );
     ```
 
-11) 动态路由，怎么识别
+11. 动态路由，怎么识别
 
     首先，我们的路由是 `"/item/:id": Spu` 这样的结构，后面就是真正的 container。
 
