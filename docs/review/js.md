@@ -105,7 +105,7 @@
 
    - 最新的提案可以直接前面写#，这样就成为了私有变量
    - 或者使用`weakmap`，把 this set 进去。
-   - 或者使用`Symbol`,这样外面根本无法使用。
+   - 或者使用`Symbol`,这样外面根本无法使用。但是可以通过 `Object.getOwnPropertySymbols`来获取symbol
 
    ```js
    var dd = Symbol('aaa');

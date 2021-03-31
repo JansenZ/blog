@@ -45,15 +45,39 @@
     isnone = true;
     ```
 
-    对于不是React-router而言，如果需要缓存的话，需要自己做activity，一个activity就是一个页面，然后跳转事件统一用自己封装的，然后跳转的时候呢，用链表把前后串起来，触发hashchange，然后在生成新的activity，然后再replace掉，就是隐藏前面的，后面的用新的，而旧的activity会缓存起来，数据什么的都在里面。
+    对于不是 React-router 而言，如果需要缓存的话，需要自己做 activity，一个 activity 就是一个页面，然后跳转事件统一用自己封装的，然后跳转的时候呢，用链表把前后串起来，触发 hashchange，然后在生成新的 activity，然后再 replace 掉，就是隐藏前面的，后面的用新的，而旧的 activity 会缓存起来，数据什么的都在里面。
 
-    刷新： startApp => 注册子应用 => 调用startApplication => 生成新的application实例(包含路由匹配表(子项目注册)，路由跳转方法实例，页面管理器) => 调用application.start => 开始监听页面hashchange => 调用 this.navigate => 在路由匹配管理器里，去匹配路由，如果找到了直接返回，找不到还要去loadProject（尝试加载子应用） => 发送对应链接的请求 => 如果是manifest，直接获取，如果是html， 正则获取 => 获取到css和js的路径 => loadJS => 把js 插入页面中 => 自动加载js => 进入子应用的entry.js => 注册子应用的路由 => 这样主应用的`await routeManager.match(url)` 就获取到了值 => 然后`this.currentActivity 是null`，就相当于直接mount
+    刷新： startApp => 注册子应用 => 调用 startApplication => 生成新的 application 实例(包含路由匹配表(子项目注册)，路由跳转方法实例，页面管理器) => 调用 application.start => 开始监听页面 hashchange => 调用 this.navigate => 在路由匹配管理器里，去匹配路由，如果找到了直接返回，找不到还要去 loadProject（尝试加载子应用） => 发送对应链接的请求 => 如果是 manifest，直接获取，如果是 html， 正则获取 => 获取到 css 和 js 的路径 => loadJS => 把 js 插入页面中 => 自动加载 js => 进入子应用的 entry.js => 注册子应用的路由 => 这样主应用的`await routeManager.match(url)` 就获取到了值 => 然后`this.currentActivity 是null`，就相当于直接 mount
 
-    跳转： 点击按钮 => transitionTo 方法 => 处理url，判断是否是原生跳转还是webview跳转还是正常跳转， 正常跳转调用 => navigation.forward 方法 => 调用Navigation文件下自己的 transitionTo 方法 => 调用 application.navigate 方法 => location.hash = url => 创建或获取新的activity(返回就是获取，在缓存里取) => `activity => preActivity.next = newActivity, new Activity.prev = preActivity` => 调用 activityManager.replaceActivity。
+    跳转： 点击按钮 => transitionTo 方法 => 处理 url，判断是否是原生跳转还是 webview 跳转还是正常跳转， 正常跳转调用 => navigation.forward 方法 => 调用 Navigation 文件下自己的 transitionTo 方法 => 调用 application.navigate 方法 => location.hash = url => 创建或获取新的 activity(返回就是获取，在缓存里取) => `activity => preActivity.next = newActivity, new Activity.prev = preActivity` => 调用 activityManager.replaceActivity。
 
-    如果是返回的话，一样的路径，只是会把cache末位的那个删了而已。
+    如果是返回的话，一样的路径，只是会把 cache 末位的那个删了而已。
 
-4. 原生 hash 实现路由
+4. 如何给页面加 resume, pause 事件。
+
+    首先，只有缓存的情况下，才有必要。
+
+    当跳转到下一张页面的时候，前一张页面 display none。然后就可以触发 pause 事件。
+
+    当页面 active 的时候，判断这个是返回还是前进，返回的话，触发 resume
+
+    那么，接受他们的话，可以用装饰器，封装到类上，这样只要加上这个装饰器，就有生命周期了
+
+5. 子应用如何使用公共类库又不打包呢？
+
+    1. 比如 trade 用 core
+
+        core 在 主基座的 entry.js 里 `window.Core = core;
+
+        然后再子应用里，在使用一个自定义 loader 来把代码里的 `import xx from 'core'` 替换为 `var a = core || var {a,b} = core` 这样子。
+
+        [core-loader](../js/core-loader.js)
+
+    2. 使用 webpack 的 externals
+
+        如果我们想引用一个库，但是又不想让 webpack 打包，并且又不影响我们在程序中以 CMD、AMD 或者 window/global 全局等方式进行使用，那就可以通过配置 externals
+
+6. 原生 hash 实现路由
 
     ```js
     class Router {
@@ -186,7 +210,7 @@
     button.addEventListener("click", router.backOff, false);
     ```
 
-5. react hash 实现参考
+7. react hash 实现参考
 
     不管是 hash 还是 history， 只要是 react 组件下的，无非就是三个组件
 
@@ -238,7 +262,7 @@
     export default ({ to, ...props }) => <a {...props} href={"#" + to} />;
     ```
 
-6. 原生 js history 参考
+8. 原生 js history 参考
 
     ```js
     class Routers {
@@ -276,7 +300,7 @@
     }
     ```
 
-7. history react 参考
+9. history react 参考
 
     ```js
     export default class HistoryRouter extends React.Component {
@@ -333,7 +357,7 @@
     );
     ```
 
-8. 动态路由，怎么识别
+10. 动态路由，怎么识别
 
     首先，我们的路由是 `"/item/:id": Spu` 这样的结构，后面就是真正的 container。
 
@@ -378,13 +402,3 @@
     OK， 我们现在得到的 paths 是 `["", "item", "([^\/]+)"]`;
 
     最后通过`new RegExp`，完成正则表达式，最后只要当前的地址，`'/item/30681122'.match(regex)` 肯定是有返回值的，就代表通过匹配，可以转发对应的`container`
-
-9. 如何给页面加resume, pause事件。
-
-   首先，只有缓存的情况下，才有必要。
-
-   当跳转到下一张页面的时候，前一张页面display none。然后就可以触发 pause 事件。
-   
-   当页面 active 的时候，判断这个是返回还是前进，返回的话，触发resume
-
-   那么，接受他们的话，可以用装饰器，封装到类上，这样只要加上这个装饰器，就有生命周期了
