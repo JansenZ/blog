@@ -406,10 +406,12 @@
 
     - XMLHttpRequest 对象上有一个 `abort()` 方法，调用这个方法即可中断一个请求。此外 XHR 还有 `onabort` 事件，可以监听请求的中断并做出响应。
     - fetch 想要中断的话
+      ```js
       const controller = new AbortController()
       const signal = controller.signal
-      然后请求的时候，fetch 第二个参数里要带上 signal，然后 controller.abort 即可，会比 Xhr 麻烦，但可以封装一下。
-    - 可以利用 abortcontroller 和 signal 打断一个 promise 哦，吊炸天吧[链接如下](https://codesandbox.io/embed/zq1929r1x?module=%2Fsrc%2FCheckout.js)
+      ```
+      然后请求的时候，fetch 第二个参数里要带上 `signal`，然后 `controller.abort` 即可，会比 Xhr 麻烦，但可以封装一下。
+    - 可以利用 `abortcontroller` 和 `signal` 打断一个 promise 哦。[链接如下](https://codesandbox.io/embed/zq1929r1x?module=%2Fsrc%2FCheckout.js)
     - 对于超时请求，xhr 有现成的 timeout,设置好后，在 ontimeout 可以处理，而 fetch 的话，其实有了 abort，可以 settimeout，或者 promise.race。
     - xhr 有现成的 onprogress 获取进度，fetch 没有，想要实现我不会。
 
