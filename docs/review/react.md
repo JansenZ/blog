@@ -1144,6 +1144,39 @@ if (next === null) {
             : HooksDispatcherOnUpdate;
     ```
 
+5. useEffect, useCallback 等第二个参数可以传引用类型吗？
+
+    可以传引用类型，但是不合适，因为调用的方式会使它不可控
+
+    首先，要说明的是，依赖数组它是直接for 循环，然后判断 `nextDeps[i] === prevDeps[i]`
+
+    举个例子
+    ```js
+    const [obj, setobj] = useState({});
+    useEffect(()=>{
+        // dosth
+    }, [obj]);
+
+    xxfun() {
+        // 这种情况下，也是用的最多的一种，那obj肯定是不等于的。
+        setobj({
+            ...obj
+        })
+    }
+
+    bbfun() {
+        // 这种情况下，和obj多深无关，就改表层的，一样不会触发
+        obj.name = 'sadasd';
+        setobj(obj);
+    }
+    ```
+
+6. useReducer为啥是作弊的useState？
+
+    [useEffect指南](https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/)
+
+    [demo](https://codesandbox.io/s/xzr480k0np?file=/src/index.js)
+
 ### SetState
 
 事件 => setstate => 调度 => 调和 begin => diff => 调和 complete => commit
