@@ -77,7 +77,28 @@
 
         如果我们想引用一个库，但是又不想让 webpack 打包，并且又不影响我们在程序中以 CMD、AMD 或者 window/global 全局等方式进行使用，那就可以通过配置 externals
 
-6. 微前端
+        webpack.config.js
+
+        ```js
+        module.exports = {
+            //...
+            externals: {
+                jquery: "jQuery"
+            }
+        };
+        ```
+
+        然后再 index.html 引入这个 js
+
+        ```js
+        <script
+            src="https://code.jquery.com/jquery-3.1.0.js"
+            integrity="sha256-slogkvB1K3VOkzAI8QITxV3VzpOnkeNVsKvtkYLMjfk="
+            crossorigin="anonymous"
+        ></script>
+        ```
+
+6) 微前端
 
     1. 微前端
 
@@ -103,7 +124,7 @@
 
         没有隔离，因为是在前台的，所以我们不需要隔离。
 
-7. 原生 hash 实现路由
+7) 原生 hash 实现路由
 
     ```js
     class Router {
@@ -236,7 +257,7 @@
     button.addEventListener("click", router.backOff, false);
     ```
 
-8. react hash 实现参考
+8) react hash 实现参考
 
     不管是 hash 还是 history， 只要是 react 组件下的，无非就是三个组件
 
@@ -288,7 +309,7 @@
     export default ({ to, ...props }) => <a {...props} href={"#" + to} />;
     ```
 
-9. 原生 js history 参考
+9) 原生 js history 参考
 
     ```js
     class Routers {
@@ -326,7 +347,7 @@
     }
     ```
 
-10. history react 参考
+10) history react 参考
 
     ```js
     export default class HistoryRouter extends React.Component {
@@ -383,7 +404,7 @@
     );
     ```
 
-11. 动态路由，怎么识别
+11) 动态路由，怎么识别
 
     首先，我们的路由是 `"/item/:id": Spu` 这样的结构，后面就是真正的 container。
 
