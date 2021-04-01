@@ -426,6 +426,7 @@
       因为啥，因为 css 会阻塞 js，js 会阻塞 dom 解析，所以，DOMContentLoaded 才会等待 css。如果想解，改 defer。**
     - 其他情况下，DOMContentLoaded 都不会等待 css 加载，并且 DOMContentLoaded 事件也不会等待图片、视频等其他资源加载。
     - 而 load 的话就是所有资源都加载完才算完
+
       [这个链接说的非常好](https://www.cnblogs.com/Bonnie3449/p/8419609.html)
 
 23. 浏览器的 GC 机制,内存泄漏的几种方式
@@ -536,10 +537,10 @@
 26. location 下有哪些常用属性
     以这个链接为例子
     `https://www.ly.cn/product/?app=SUIBIAN#/cart?page_source=sxgouwuche`
-    - hash 返回哈希部分 #/cart?page_source=sxgouwuche
-    - host 返回主机名和端口 www.ly.cn
+    - hash 返回哈希部分 `#/cart?page_source=sxgouwuche`
+    - host 返回主机名和端口 `www.ly.cn`
     - href 返回完整的 url
-    - pathname 返回 url 路径名 /product/
+    - pathname 返回 url 路径名 `/product/`
     - port 返回端口
     - protocol 返回协议
     - search 返回？后面的 ?app=SUIBIAN
@@ -595,7 +596,7 @@
     1. ECMAScript(核心) 　　描述了 JS 的语法和基本对象
     2. DOM 是文档对象模型，处理网页内容的方法和接口。是 W3C 的标准； [所有浏览器公共遵守的标准]
     3. BOM 是浏览器对象模型，提供与浏览器交互的方法和接口。各个浏览器厂商根据 DOM 在各自浏览器上的实现;[表现为不同浏览器定义有差别,实现方式不同]，window 就是 BOM 的，不同的宿主环境可能会有不同的 BOM API
-       window.history/window.navigator/window.screen/window.location 都是 BOM
+       `window.history / window.navigator / window.screen / window.location` 都是 BOM
 
 33. cookie session token
 
@@ -631,6 +632,7 @@
     302 重定向时，会保留旧页面的网页排名，页面权限，网页流量价值等，而指向的页面，不会累积任何的页面权重。
 
 35. Restful 接口和 graphql 对比
+
     什么是restful，就是一眼就知道它是干嘛的
     举个例子`https://api.example.com/users`，这样的一个借口，我通过get获取，post创建,put更新,delete删除。就是用HTTP方法来替代名称。
     而graphql呢，是
@@ -673,7 +675,9 @@
     通常会有这些公共参数
     
 37. SSE协议
+
     SSE协议就是Websocket的单向版本
+
     [阮一峰的这个链接讲的很清楚](https://www.ruanyifeng.com/blog/2017/05/server-sent_events.html)
     
     主要就是由服务端，来进行推送数据给客户端，这样你就不用轮训了。比如有个业务场景，知道数据会变，又不用socket的情况下，就需要服务端推送给你

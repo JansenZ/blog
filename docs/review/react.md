@@ -49,8 +49,11 @@
 7. 为什么函数式组件不能使用`ref`，想用怎么办？
 
     因为`ref`是放在`class`实例下的，函数式组件没有实例，所以就不能使用`ref`。
+
     老版本里，可以再把`ref`改个名字，作为`props`传递过去。
+
     新版本的话,可以利用`React.forwardRef`包裹原有函数，创建一个`React`组件，加一个`ref`参数，实际上就是在`render`的时候，把这个`ref`转发下去。
+
     在渲染`beginwork`开始的时候，对于最外面的这个是`class`还是`function`是不知道的，当然，通过`forwardRef`的会把里面标记为`forwardRef`组件。然后在`update`的时候，`forwardRef`会把`ref`提出来，而其他`renderWithHooks`的对应位置参数是`context`，后面的和无状态组件就一样了
 
 8. 什么是虚拟 dom
@@ -99,7 +102,17 @@
 
     `React.Children` 提供了用于处理 `this.props.children` 不透明数据结构的方法，并且利用 `traverseAllChildrenImplf` 方法打平数组，返回的一定是一个一纬数组。
 
-    比如 `props.children` 是[a,a]，可以返回[a,a,a,a];
+    ```js
+    React.Children.map(this.props.children, (child) => {
+        return React.cloneElement(child, {
+            key: child.id,
+            currentIdx: this.state.currentIdx,
+            onTabClick: this.onTabClick,
+        });
+    });
+    ```
+
+    比如我这个架子里，`this.props.children`是不透明的，又需要注入一些props，就只能通过这个方法。
 
 10. react context
 

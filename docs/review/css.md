@@ -137,7 +137,7 @@
         srcset="128px.jpg 128w, 256px.jpg 256w, 512px.jpg 512w"
         sizes="(max-width: 360px) calc(100vw - 20px), 128px">
         上面的128w，指宽度，sizes就是配合w使用，根据size找最贴合条件的srcset图片
-        可以直接用1x,2x，这样就不需要用srcset了
+        可以直接用1x,2x，这样就不需要用size了
         srcset="128px.jpg 1x, 256px.jpg 2x"
         移动端完美支持，就算安卓4.3、4.4不支持也可以用默认的src
         如果是背景的话，还有一个熟悉image-set可以用，就是不支持安卓4.3
@@ -172,7 +172,7 @@
 
 15. 移动端适配（dp,ppi,dpr,dip)
 
-    - dp,设备物理像素。比如 iphone6 屏幕分辨率是 750*1334. iphoneX 是 1125*xxxx
+    - dp,设备物理像素。比如 iphone6 屏幕分辨率是 750\*1334. iphoneX 是 1125\*xxxx
     - ppi,像素密度，就是每英寸的物理像素点数有多少。
     - dip，设备独立像素，可以称为逻辑像素，就是我们正常使用的 375,414,使用 window.screen.width 可以获取。
     - dpr，设备像素比，可以通过 window.devicePixelRatio 获取,并不是绝对的使用 dp/dip 获得的
@@ -200,7 +200,7 @@
     safe-area-inset-bottom：安全区域距离底部边界距离
     ```
 
-    constant 在 iOS < 11.2 的版本中生效，env 在 iOS >= 11.2 的版本中生效，这意味着我们往往要同时设置他们，将页面限制在安全区域内：
+    constant 在 `iOS < 11.2` 的版本中生效，env 在 `iOS >= 11.2` 的版本中生效，这意味着我们往往要同时设置他们，将页面限制在安全区域内：
 
     ```css
     {
@@ -208,6 +208,8 @@
         padding-bottom: env(safe-area-inset-bottom);
     }
     ```
+
+    这里的`safe-area-inset-xx`就是一个常量，直接用就可以了
 
 18. css 里常用的@
 
@@ -230,7 +232,9 @@
 21. 实现永久动画
 
     animation-iteration-count: infinite
+
 22. 如何让网站全站变灰色
+
     给HTML元素，上一段CSS
     ```css
      html {

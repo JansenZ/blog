@@ -100,7 +100,6 @@
 
    类不能直接执行，Person()会报错
 
-
 6. 私有变量的实现方式
 
    - 最新的提案可以直接前面写#，这样就成为了私有变量
@@ -134,8 +133,11 @@
    ```
 
    这样的形式，`weapon`这个函数里的第一个参数，就是这个类，也就是这个函数
+
    而只要在类里面，所有的`target`，也就是装饰器的第一个参数，都是这个类的原型。
+
    可以发现，这些装饰器函数，都在实例化前就全部打印了
+
    说明啥，说明是在编译阶段就给弄进去了，所以更不可能指向实例了，因为那时候还没有，所以指向的是原型
 
    第二个参数，目前看来都是`name`，也就是对应的方法名
@@ -232,7 +234,8 @@
      缺点是
    - 当有多个`HOC`一同使用时，无法直接判断子组件的`props`是哪个`HOC`负责传递的。在里面的组件只接受`props`。也不知道这是几级传下来的。
    - 嵌套比较深，阅读起来会有一点障碍
-     render Props
+
+   render Props
 
    就是把组件当成 props，直接传给子组件，这样就有点像依赖反转，逻辑抽象在外面，然后根据不同的情况，传不同的组件下去。
 
@@ -249,7 +252,9 @@
    )} />
    ```
 
-   然后再 ProductData 组件的 render 方法里，render() { this.props.render(this.state.data) }
+   然后再 ProductData 组件的 render 方法里，`render() { this.props.render(this.state.data) }`
+
+   [hoc vs renderprops vs hook](https://jishuin.proginn.com/p/763bfbd36ecc)
 
 9. 箭头函数和普通函数的区别
    - 箭头函数的 this 是透传的
@@ -642,7 +647,7 @@
     Object.call(obj);
     ```
 
-    其实从这段代码就可以看出，虽然最后创建出来的对象是一致的，但是多赋值了一次，obj.**proto** = Object.prototype,因为字面量创建的本来就是个对象了。所以，还是字面量方式更好
+    其实从这段代码就可以看出，虽然最后创建出来的对象是一致的，但是多赋值了一次，obj.\__proto\__ = Object.prototype,因为字面量创建的本来就是个对象了。所以，还是字面量方式更好
 
 15. 手写一个 promise
 
@@ -654,6 +659,8 @@
     - 第六步，原型上加一个 Resolve 和 Reject 方法，就是调用自己，new Promise()执行对应的方法
     - 第七步，all 方法，all 方法返回的所有 promise 结果的合集，然后做一个下标，挨个执行 promise，然后 index++,最后 index = promise.length 的时候，resolve(result);
     - 第八步，race 方法，这个直接挨个执行 then，resolve 即可。这也说明 race 其他的还是会跑完的。只不过不管结果而已。
+
+    [promise](https://zhenglin.vip/js/promise.js)
 
 16. 事件委托的原理
 
@@ -702,7 +709,7 @@
 
 20. foreach 和 map 的区别
 
-    foreach 是遍历数组中的元素，没有返回值，通常需要修改原始数组的时候可以用 foreach, 如果直接item = 2， 这样foreach也不会改变原数组的，是没有意义的，只有item.a = 2,这样才是有意义的，虽然map也会改变，但是约定
+    foreach 是遍历数组中的元素，没有返回值，通常需要修改原始数组的时候可以用 foreach, 如果直接`item = 2`， 这样foreach也不会改变原数组的，是没有意义的，只有`item.a = 2`,这样才是有意义的，虽然map也会改变，但是约定
 
     map 的话就是生成一个新的数组。如果不想修改原数组可以用 map
 
@@ -733,16 +740,16 @@
 
     `JavaScript`代码的执行过程中，除了依靠函数调用栈来搞定函数的执行顺序外，还依靠任务队列(task queue)来搞定另外一些代码的执行。
 
-    事件循环分为宏任务和微任务，其中宏任务就是如同 settimeout,setInterval，requestAnimationFrame, MessageChannel
+    事件循环分为宏任务和微任务，其中宏任务就是如同 `settimeout,setInterval，requestAnimationFrame, MessageChannel`
 
-    而微任务就是 promise.then,MutationObserver
+    而微任务就是 `promise.then,MutationObserver`
 
     在 Node 中，又有些不一样，就单从 API 层面上来理解，Node 新增了两个方法可以用来使用：微任务的 process.nextTick 以及宏任务的 setImmediate。
 
     setTimeout 和 setImmediate 的区别的话就是 settimeout 是时间延迟，setImmediate 是循环延迟。
 
     timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。同样，在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行。
-    ```
+    ```js
     setTimeout(() => {
        console.log('setTimeout')
     }, 0)
@@ -758,13 +765,13 @@
     但是如果写在IO里面的话，就是 setImmediate 先执行了，因为这个就等于在 poll 阶段，队列为空，立马去执行后者
 
     两者最主要的区别在于浏览器中的微任务是在每个相应的宏任务中执行的
-    
+
     而 nodejs 中的微任务是在不同阶段之间执行的。如果是老的Node版本，就是先执行完宏任务，在一次性清空微任务，新版本就是在每个阶段里，清空微任务
 
     关于 process.nextTick 的一点说明
     process.nextTick 是一个独立于 eventLoop 的任务队列。
     在每一个 eventLoop 阶段完成后会去检查这个队列，如果里面有nextTick，会让这部分任务优先于其他微任务执行。
-    
+
     用两个例子论证上面的说法
     ```js
     setTimeout(()={
@@ -782,14 +789,14 @@
     });
     // node10以上 start nexttick1 time1 ntick2 time2
     // node10以下 start nexttick1 time1 time2 tick2
-    
+
     setTimeout(()={
         console.log("time1");
         Promise.resolve.then(()=>{
             console.log("pthen1");
         });
     });
-    
+
     setTimeout(()={
         console.log("time2");
         Promise.resolve.then(()=>{
@@ -800,7 +807,7 @@
     // node10 time1 pthen1 time2 pthen2
     ```
     以前就是宏任务执行完，清空微任务，现在就是每个小宏任务里，执行完对应的微任务。
-    
+
     关于await
     ```js
     await 要分开看
@@ -846,7 +853,7 @@
 
     基本完整版本参见 [deepCopy.js](https://zhenglin.vip/js/deepcopy.js)
 
-    如果不需要function的话，可以异步使用一个MessageChannel
+    如果不需要function的话，可以异步使用一个 MessageChannel
 
     ```js
         function structuralClone(obj) {
@@ -972,7 +979,7 @@
 
     拆解来说，第一个，必须要有一个\d，用来占一个数字，防止出现 ,233,333 这样的情况
 
-    关于 ?= 的意思，就是用了这个，就是正向预查， \d(?=) 就是指前面有一个数字，后面满足啥啥条件的
+    关于 `?=` 的意思，就是用了这个，就是正向预查， `\d(?=)` 就是指前面有一个数字，后面满足啥啥条件的
 
     这样的情况下，字符串会从前往后匹配，并不是从后往前匹配，不过关系其实不大。
 
@@ -1069,14 +1076,18 @@
 32. requestIdleCallback 和 requestAnimationFrame 的区别
 
     浏览器一帧里 16ms 要完成的任务
+
     老：
+
     1. 处理用户的交互
     2. JS 解析执行
     3. 帧开始。窗口尺寸变更，页面滚去等的处理
     4. rAF(requestAnimationFrame)
     5. 布局
     6. 绘制
+
     新：
+
     1. 当 Eventloop 执行完 Microtasks 后，会判断 document 是否需要更新，因为浏览器是 60Hz 的刷新率，每 16.6ms 才会更新一次。
     2. 然后判断是否有 resize 或者 scroll 事件，有的话会去触发事件，所以 resize 和 scroll 事件也是至少 16ms 才会触发一次，并且自带节流功能。
     3. 判断是否触发了 media query
@@ -1085,6 +1096,7 @@
     6. 执行 requestAnimationFrame 回调
     7. 执行 IntersectionObserver 回调，该方法用于判断元素是否可见，可以用于懒加载上，但是兼容性不好
     8. 更新界面
+
     以上就是一帧中可能会做的事情。如果在一帧中有空闲时间，就会去执行 requestIdleCallback 回调。
 
     `requestAnimationFrame`的回调会在每一帧确定执行，属于高优先级任务，而`requestIdleCallback`的回调则不一定，属于低优先级任务。
@@ -1146,8 +1158,8 @@
 
 37. base64 的编码原理
 
-    - btoa('abc') = 'YWJj' base64 编码 byte to ascii
-    - atob('YWJj') = 'abc' base64 解码 ascii to byte
+    - `btoa('abc') = 'YWJj'` base64 编码 byte to ascii
+    - `atob('YWJj') = 'abc'` base64 解码 ascii to byte
     - 如果需要支持中文的话，需要先 encodeURLComponent 一下。
 
     Base64 的编码方法要求把每三个 8bit 的字节转换成四个 6bit 的字节，然后把 6Bit 再添两位高位 0,组成四个 8Bit 的字节。所以会变长很多。
@@ -1175,7 +1187,7 @@
 
 39. 0.1+0.2 为什么不等于 0.3
 
-    因为 JavaScript 使用的是 64 位双精度浮点数编码，所以它的符号位占 1 位(0 代表正，1 代表负),指数位占 11 位，尾数位占 52 位。
+    因为 JavaScript 使用的是 64 位双精度浮点数编码，所以它的符号位占 **1**位(0 代表正，1 代表负),指数位占 **11** 位，尾数位占 **52** 位。
     然后 0.1+0.2 在转换成二进制的时候，会发生精度丢失，因为只取 64 位固定长度。
 
 40. 12.toString()为什么会报错
@@ -1199,7 +1211,7 @@
 
 43. 位运算有哪些呢？
 
-    - 这里插一个**， 就是乘方，不过它是右结合的， 4**3**2 会先求 3**2
+    - 这里插一个\*\*， 就是乘方，不过它是右结合的， 4\*\*3\*\*2 会先求 3\*\*2
     - 9，二进制是 1001。 8，二进制是 1000
     - & 按位与 9&8 = 8
     - | 按位或 9|8 = 9
@@ -1301,17 +1313,17 @@
     document.dispatchEvent(ev);
 
     var event = new CustomEvent('name', {
-    detail: {
-    },
-    bubbles: ,
-    cancelable:
+        detail: {
+        },
+        bubbles: ,
+        cancelable:
     });
     xx.addEventListener('name', () => {
-    lsdasdf;
+        // do
     })
     xx.dispatchEvent(event);
 
-    CustomEvent 比 event 多了个 detail 属性
+    // CustomEvent 比 event 多了个 detail 属性
 
     ```
 
@@ -1425,6 +1437,8 @@
 
     其实就是把上面的方法换成 proxy
 
+    [vue](https://zhenglin.vip/js/vue.js)
+
 60. 数组和链表的对比
 
     - 数组静态分配内存，链表动态分配内存
@@ -1490,7 +1504,9 @@
     setInterval 有两个缺点：
     1. 使用 setInterval 时，某些间隔会被跳过；比如这个执行任务很慢，结果等到T3要加入队列的时候，T2还没执行，所以会被跳过。这就是丢帧
     2. 可能多个定时器会连续执行；比如T1执行完，没有空的时间，所以T1执行完立即执行T2
+
     ![settimeout](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/730a96f90311403980e1e42c2d5d21c6~tplv-k3u1fbpfcp-zoom-1.image)
+
     每个 setTimeout 产生的任务会直接 push 到任务队列中；而 setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。
 
 64. 实现 get(obj, 'a.b.c', 0), 类可选链
@@ -1536,4 +1552,4 @@
 
     需要注意的是，只有发生需要转换的时候，才会执行，比如 ==, + - 之类的，如果是=== 根本不会进这里
 
-    所以如果需要达到 `a===1&&a===2&&a===3` 这样的条件，是只能通过数据劫持的get才能做到
+    所以如果需要达到 `a===1 && a===2 && a===3` 这样的条件，是只能通过数据劫持的get才能做到
