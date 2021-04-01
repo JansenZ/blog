@@ -103,16 +103,16 @@
     `React.Children` 提供了用于处理 `this.props.children` 不透明数据结构的方法，并且利用 `traverseAllChildrenImplf` 方法打平数组，返回的一定是一个一纬数组。
 
     ```js
-    React.Children.map(this.props.children, (child) => {
+    React.Children.map(this.props.children, child => {
         return React.cloneElement(child, {
             key: child.id,
             currentIdx: this.state.currentIdx,
-            onTabClick: this.onTabClick,
+            onTabClick: this.onTabClick
         });
     });
     ```
 
-    比如我这个架子里，`this.props.children`是不透明的，又需要注入一些props，就只能通过这个方法。
+    比如我这个架子里，`this.props.children`是不透明的，又需要注入一些 props，就只能通过这个方法。
 
 10. react context
 
@@ -122,7 +122,7 @@
 
     可以利用 context 来做状态管理。封装 createPage 和 inject。
 
-    有了hooks后，就不需要 consumer 了
+    有了 hooks 后，就不需要 consumer 了
 
     参考[react-context](https://github.com/JansenZ/react-context/blob/main/state/connect.js)
 
@@ -160,20 +160,22 @@
     1. 抹平浏览器之间的兼容性差异
     2. 对某些原生事件`（change，select，beforeInput等）`的升级和改造，这类事件注册时会附带注册一些依赖项
 
-        例如，给input注册了onchange事件，那么`"blur", "change", "click", "focus", "input", "keydown", "keyup", "selectionchange"`这些事件全都会被注册
+        例如，给 input 注册了 onchange 事件，那么`"blur", "change", "click", "focus", "input", "keydown", "keyup", "selectionchange"`这些事件全都会被注册
 
-        原生只注册一个onchange的话，需要在失去焦点的时候才能触发这个事件，所以这个原生事件的缺陷react也帮我们弥补了。
+        原生只注册一个 onchange 的话，需要在失去焦点的时候才能触发这个事件，所以这个原生事件的缺陷 react 也帮我们弥补了。
+
     3. 可以跨平台了
     4. 使用事件委托，简化了 DOM 事件的处理逻辑，减少了内存开销
     5. 对事件进行归类，可以优先级分级干预
 
     合成过程
-    1. 根据fiber节点找到对应事件的回调函数
+
+    1. 根据 fiber 节点找到对应事件的回调函数
     2. 根据捕获或冒泡阶段给事件队列 listeners 添加回调函数
         - 先将捕获事件的回调放入 listeners 里
         - 如果是冒泡和捕获阶段都需要触发的事件，则放到 listener 的头部（unshift）
         - 如果不是，捕获阶段的事件放到 listener 的尾部（pop）
-    3. 节点一直向上遍历，对于每个节点重复执行1和2
+    3. 节点一直向上遍历，对于每个节点重复执行 1 和 2
 
     详细流程： [参考](https://juejin.cn/post/6922444987091124232)
 
@@ -181,19 +183,24 @@
 
     `<div onClick={() => {/*do something*/}}>React</div>`
 
-    这个div节点最终要对应一个fiber节点，onClick则作为它的prop。
+    这个 div 节点最终要对应一个 fiber 节点，onClick 则作为它的 prop。
 
-    当这个fiber节点进入render阶段的complete阶段时，也就是`diff`完毕后，名称为 onClick 的 prop 会被识别为事件进行处理。
+    当这个 fiber 节点进入 render 阶段的 complete 阶段时，也就是`diff`完毕后，名称为 onClick 的 prop 会被识别为事件进行处理。
 
     进入设置属性的函数`setInitialDOMProperties`，这个函数的作用是判断你的`propKey`类型并决定是设置属性。还是绑定事件。
 
-    不管是标签页好，nativeEvent也好，最终都是会进入 `addTrappedEventListener` 方法，会有参数是否是捕获还是冒泡进来
-    
+    不管是标签页好，nativeEvent 也好，最终都是会进入 `addTrappedEventListener` 方法，会有参数是否是捕获还是冒泡进来
+
     这个方法会根据你的 keyname 来分配不同的 `listener`
 
-    这个 listener 就是比如点击执行的回调函数，既然是回调函数，也就是说最终 事件 触发会进入这个listener，所以它会根据事件类型的优先级，创建出不同的分发事件执行机
+    这个 listener 就是比如点击执行的回调函数，既然是回调函数，也就是说最终 事件 触发会进入这个 listener，所以它会根据事件类型的优先级，创建出不同的分发事件执行机
+
     ```js
-    function createEventListenerWrapperWithPriority(targetContainer, domEventName, eventSystemFlags) {
+    function createEventListenerWrapperWithPriority(
+        targetContainer,
+        domEventName,
+        eventSystemFlags
+    ) {
         // 事件的基本优先级，存在了一个Map对象下
         var eventPriority = getEventPriorityForPluginSystem(domEventName);
         var listenerWrapper;
@@ -213,14 +220,20 @@
                 listenerWrapper = dispatchEvent;
                 break;
         }
-        return listenerWrapper.bind(null, domEventName, eventSystemFlags, targetContainer);
+        return listenerWrapper.bind(
+            null,
+            domEventName,
+            eventSystemFlags,
+            targetContainer
+        );
     }
-
     ```
+
     [event0](../img/event0.jpg)
     [event1](../img/event1.jpg)
 
-    OK，我们先不看具体的执行时机，接下来获取到了 listener后，就会根据是捕获还是冒泡，真实的的给dom节点添加事件。形如下面
+    OK，我们先不看具体的执行时机，接下来获取到了 listener 后，就会根据是捕获还是冒泡，真实的的给 dom 节点添加事件。形如下面
+
     ```js
     function addEventBubbleListener(target, eventType, listener) {
         target.addEventListener(eventType, listener, false);
@@ -1055,7 +1068,7 @@ if (next === null) {
 }
 ```
 
-以下是比较完整的多节点diff代码
+以下是比较完整的多节点 diff 代码
 
 [filename](../js/diff.js ':include :type=code')
 
@@ -1237,9 +1250,10 @@ if (next === null) {
 
     可以传引用类型，但是不合适，因为调用的方式会使它不可控
 
-    首先，要说明的是，依赖数组它是直接for 循环，然后判断 `nextDeps[i] === prevDeps[i]`
+    首先，要说明的是，依赖数组它是直接 for 循环，然后判断 `nextDeps[i] === prevDeps[i]`
 
     举个例子
+
     ```js
     const [obj, setobj] = useState({});
     useEffect(()=>{
@@ -1260,9 +1274,9 @@ if (next === null) {
     }
     ```
 
-6. useReducer为啥是作弊的useState？
+6. useReducer 为啥是作弊的 useState？
 
-    [useEffect指南](https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/)
+    [useEffect 指南](https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/)
 
     [demo](https://codesandbox.io/s/xzr480k0np?file=/src/index.js)
 
