@@ -168,15 +168,6 @@
     4. 使用事件委托，简化了 DOM 事件的处理逻辑，减少了内存开销
     5. 对事件进行归类，可以优先级分级干预
 
-    合成过程
-
-    1. 根据 fiber 节点找到对应事件的回调函数
-    2. 根据捕获或冒泡阶段给事件队列 listeners 添加回调函数
-        - 先将捕获事件的回调放入 listeners 里
-        - 如果是冒泡和捕获阶段都需要触发的事件，则放到 listener 的头部（unshift）
-        - 如果不是，捕获阶段的事件放到 listener 的尾部（pop）
-    3. 节点一直向上遍历，对于每个节点重复执行 1 和 2
-
     详细流程： [参考](https://juejin.cn/post/6922444987091124232)
 
     当我们为一个元素绑定事件时，会这样写：
@@ -189,7 +180,15 @@
 
     进入设置属性的函数`setInitialDOMProperties`，这个函数的作用是判断你的`propKey`类型并决定是设置属性。还是绑定事件。
 
-    不管是标签页好，nativeEvent 也好，最终都是会进入 `addTrappedEventListener` 方法，会有参数是否是捕获还是冒泡进来
+    不管是标签页好，nativeEvent 也好，最终都是会进入 `addTrappedEventListener` 方法，会有参数是否是捕获还是冒泡进来。
+
+    而添加好的事件，以前会存到数组中，现在直接存到一个Set集合中
+    ```js
+     if (!listenerSet.has(listenerSetKey)) {
+         addTrappedEventListener(targetElement, domEventName, IS_NON_DELEGATED, isCapturePhaseListener);
+        listenerSet.add(listenerSetKey);
+     }
+    ```
 
     这个方法会根据你的 keyname 来分配不同的 `listener`
 
