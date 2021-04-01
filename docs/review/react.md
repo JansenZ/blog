@@ -420,7 +420,7 @@
 
     取出 `taskQueue` 中最早过期的任务并执行他。
 
-    那么这两个队列，采用的是小顶堆的模式，这样方便排序，以及每次取顶部的那个，获取最早过期的复杂度 O(1)
+    那么这两个队列，采用的是**小顶堆**的模式，这样方便排序，以及每次取顶部的那个，获取最早过期的复杂度 O(1)
 
 4. 任务是怎么按时间分片执行的
 
@@ -473,7 +473,7 @@
     };
     ```
 
-    performWorkUntil`Deadline` 内部调用的是 `scheduledHostCallback`，它早在开始调度的时候就被 `requestHostCallback` 赋值为了 `flushWork`，具体可以翻到上面回顾一下 `requestHostCallback` 的实现。
+    `performWorkUntilDeadline` 内部调用的是 `scheduledHostCallback`，它早在开始调度的时候就被 `requestHostCallback` 赋值为了 `flushWork`
 
     `flushWork` 作为真正去执行任务的函数，它会循环 `taskQueue`，逐一调用里面的任务函数
 
