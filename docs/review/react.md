@@ -122,6 +122,10 @@
 
     可以利用 context 来做状态管理。封装 createPage 和 inject。
 
+    有了hooks后，就不需要 consumer 了
+
+    参考[react-context](https://github.com/JansenZ/react-context/blob/main/state/connect.js)
+
 11. react 所有生命周期的作用。
 
     - constructor 是 class 本身的，和 react 无关，但是可以作为 react 的一个初始化的函数。
@@ -154,13 +158,85 @@
     React 是自己实现的一套事件机制，主要是因为
 
     1. 抹平浏览器之间的兼容性差异
-    2. 可以跨平台了
-    3. 使用事件委托，简化了 DOM 事件的处理逻辑，减少了内存开销
-    4. 对事件进行归类，可以优先级分级干预
+    2. 对某些原生事件`（change，select，beforeInput等）`的升级和改造，这类事件注册时会附带注册一些依赖项
 
-    在`diff`完毕后，会进入设置属性的函数`setInitialDOMProperties`
+        例如，给input注册了onchange事件，那么`"blur", "change", "click", "focus", "input", "keydown", "keyup", "selectionchange"`这些事件全都会被注册
 
-    这个函数的作用是判断你的`propkey`类型并决定是设置属性。还是绑定事件。
+        原生只注册一个onchange的话，需要在失去焦点的时候才能触发这个事件，所以这个原生事件的缺陷react也帮我们弥补了。
+    3. 可以跨平台了
+    4. 使用事件委托，简化了 DOM 事件的处理逻辑，减少了内存开销
+    5. 对事件进行归类，可以优先级分级干预
+
+    合成过程
+    1. 根据fiber节点找到对应事件的回调函数
+    2. 根据捕获或冒泡阶段给事件队列 listeners 添加回调函数
+        - 先将捕获事件的回调放入 listeners 里
+        - 如果是冒泡和捕获阶段都需要触发的事件，则放到 listener 的头部（unshift）
+        - 如果不是，捕获阶段的事件放到 listener 的尾部（pop）
+    3. 节点一直向上遍历，对于每个节点重复执行1和2
+
+    详细流程： [参考](https://juejin.cn/post/6922444987091124232)
+
+    当我们为一个元素绑定事件时，会这样写：
+
+    `<div onClick={() => {/*do something*/}}>React</div>`
+
+    这个div节点最终要对应一个fiber节点，onClick则作为它的prop。
+
+    当这个fiber节点进入render阶段的complete阶段时，也就是`diff`完毕后，名称为 onClick 的 prop 会被识别为事件进行处理。
+
+    进入设置属性的函数`setInitialDOMProperties`，这个函数的作用是判断你的`propKey`类型并决定是设置属性。还是绑定事件。
+
+    不管是标签页好，nativeEvent也好，最终都是会进入 `addTrappedEventListener` 方法，会有参数是否是捕获还是冒泡进来
+    
+    这个方法会根据你的 keyname 来分配不同的 `listener`
+
+    这个 listener 就是比如点击执行的回调函数，既然是回调函数，也就是说最终 事件 触发会进入这个listener，所以它会根据事件类型的优先级，创建出不同的分发事件执行机
+    ```js
+    function createEventListenerWrapperWithPriority(targetContainer, domEventName, eventSystemFlags) {
+        // 事件的基本优先级，存在了一个Map对象下
+        var eventPriority = getEventPriorityForPluginSystem(domEventName);
+        var listenerWrapper;
+
+        switch (eventPriority) {
+            // 0 处理离散事件
+            case DiscreteEvent:
+                listenerWrapper = dispatchDiscreteEvent;
+                break;
+            // 1 处理用户阻塞事件
+            case UserBlockingEvent:
+                listenerWrapper = dispatchUserBlockingUpdate;
+                break;
+            // 2 处理连续事件
+            case ContinuousEvent:
+            default:
+                listenerWrapper = dispatchEvent;
+                break;
+        }
+        return listenerWrapper.bind(null, domEventName, eventSystemFlags, targetContainer);
+    }
+
+    ```
+    [event0](../img/event0.jpg)
+    [event1](../img/event1.jpg)
+
+    OK，我们先不看具体的执行时机，接下来获取到了 listener后，就会根据是捕获还是冒泡，真实的的给dom节点添加事件。形如下面
+    ```js
+    function addEventBubbleListener(target, eventType, listener) {
+        target.addEventListener(eventType, listener, false);
+        return listener;
+    }
+    function addEventCaptureListener(target, eventType, listener) {
+        target.addEventListener(eventType, listener, true);
+        return listener;
+    }
+    ```
+
+    当执行的时候，以用户阻塞的优先级级别为例： `dispatchUserBlockingUpdate`, 这个方法会直接执行 scheduler 中的`runWithPriority`函数
+
+    通过调用它，将优先级记录到利用 scheduler 中，所以调度器才能在调度的时候知道当前任务的优先级
+
+    以下是老版本的。可以不看了
 
     如果你是一个事件，它内部会有一个对象包含事件属性，比如你是一个`onClick`，会进入`ensureListeninTo`方法。
 
