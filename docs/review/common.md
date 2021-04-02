@@ -1,4 +1,3 @@
-
 1. 性能优化
 
     1. webpack 构建优化，使用 include/exclude.Happypack 开启多线程.自带的 tree-shaking 移除无用代码，自带的 hosit-scoping，移除无用计算。利用 import.then 拆分,babel 设置缓存。
@@ -30,6 +29,27 @@
 
         批量创建对象
         当同一个构造函数，需要多次 new 的时候，就需要考虑是不是可以用 工厂模式 来批量的创建实例对象了
+
+        `React.createElement` 就是工厂模式
+
+        ```js
+            // 某个需要创建的具体对象
+            class Product {
+                constructor (name) {
+                    this.name = name;
+                }
+                init () {}
+            }
+            // 工厂对象
+            class Creator {
+                create (name) {
+                    return new Product(name);
+                }
+            }
+            const creator = new Creator();
+            const p = creator.create(); // 通过工厂对象创建出来的具体对象
+        }
+        ```
 
     - 单例模式
 
@@ -278,7 +298,7 @@
 
     到了中间页后，我会先去我存的 session，然后获取当前的 historylen，应用里的。第一次进来肯定是没有的。所以我会存取时间戳和当前的 history.length，并跳到目标页。
 
-    然后再返回的时候，回到中间页，会再抓取当前的 session 记录，这个时候能抓到了就删除它，然后看这个session的值是不是1，如果是 1，代表它是第一张页面，会尝试关闭 webview
+    然后再返回的时候，回到中间页，会再抓取当前的 session 记录，这个时候能抓到了就删除它，然后看这个 session 的值是不是 1，如果是 1，代表它是第一张页面，会尝试关闭 webview
 
     比如你在微信
 
@@ -405,10 +425,11 @@
     <b>打点上报</b>
 
     用 new Image().src = '服务器地址，带参数'，这样方便，而且也不存在跨域的问题，不需要响应。可以给它包一个 requestIdlecallback。这个 imgae 标签最好挂在 window 对象上，防止还没打出去就被回收了。
-    
-    **为什么用1x1的gif图呢？**
-    1. 加载图片不需要操作DOM，性能更好，不会阻塞页面，只需要new Image， script需要插入
-    2. GIF的最低合法体积最小（最小的BMP文件需要74个字节，PNG需要67个字节，而合法的GIF，只需要43个字节）
+
+    **为什么用 1x1 的 gif 图呢？**
+
+    1. 加载图片不需要操作 DOM，性能更好，不会阻塞页面，只需要 new Image， script 需要插入
+    2. GIF 的最低合法体积最小（最小的 BMP 文件需要 74 个字节，PNG 需要 67 个字节，而合法的 GIF，只需要 43 个字节）
 
     ```js
     var data = JSON.stringify({
@@ -600,6 +621,7 @@
 24. 手写一个双向绑定
 
     [vue.js](https://zhenglin.vip/js/vue.js)
+
 25. nginx 知识点
 26. 骨架屏实现方案
 27. 代码生成技术文档
@@ -859,39 +881,40 @@
     }
     unVirtual(virtual);
     ```
+
 37. NPM install 运行机制
 
     [运行机制](https://www.zhihu.com/question/66629910/answer/273992383)
 
 38. 装修拖拽的技术方案
 
-    drag组件是包裹整个装修页面布局的，就是侧边栏和主区域都坐落在内部
+    drag 组件是包裹整个装修页面布局的，就是侧边栏和主区域都坐落在内部
 
     请求接口，从侧边栏展示出已经注册好的模块
 
-    包含模块的名称和模块的id，图片
+    包含模块的名称和模块的 id，图片
 
-    当mousedown的时候，通过 `ReactDOM.findDOMNode(this)` 获取当前的鼠标摸下去的模块。
+    当 mousedown 的时候，通过 `ReactDOM.findDOMNode(this)` 获取当前的鼠标摸下去的模块。
     `var clone = node.cloneNode(true);`
     `var rect = node.getBoundingClientRect();`
 
     复制当前鼠标摸的模块，并计算当前的偏移位置。`this.start = true`
 
-    监听 mousemove ,当然，得摸到任意一个模块，否则直接return
+    监听 mousemove ,当然，得摸到任意一个模块，否则直接 return
 
     然后改变当前的模块的 x,y 值，让它跟着鼠标一起走 `this.moved = true`
 
-    当触发 mouseUp 的时候，先判断当前 this.move 是不是true，不是 true 说明不是移动目标进来的
+    当触发 mouseUp 的时候，先判断当前 this.move 是不是 true，不是 true 说明不是移动目标进来的
 
-    判断 this.start 是不是true，不是true说明不是拖拽开始。
+    判断 this.start 是不是 true，不是 true 说明不是拖拽开始。
 
-    把当前添加的那个组件，remove掉。
+    把当前添加的那个组件，remove 掉。
 
     最后执行 onDragEnd;
 
-    同时监听主要展示区域的mousedown，如果是有组件落在自己的页面下，`this.dragStatus === 'putdown'`。
+    同时监听主要展示区域的 mousedown，如果是有组件落在自己的页面下，`this.dragStatus === 'putdown'`。
 
-    在 onDragEnd 的时候呢，判断当前的 dragStatus ，如果不是putdown，不做任何执行，说明没有把组件拖进来
+    在 onDragEnd 的时候呢，判断当前的 dragStatus ，如果不是 putdown，不做任何执行，说明没有把组件拖进来
 
     如果是 putdown ，说明有组件拖进来了，直接添加组件即可
 
@@ -899,10 +922,10 @@
 
     读取之前的配置并填入，最后保存。
 
-    对应模块的html和css是通过文本存在服务端的。
+    对应模块的 html 和 css 是通过文本存在服务端的。
 
-    然后在前台的时候回读取这部分数据，然后前台是有一个包裹组件，读取到后台吐的模块后，直接根据对应的模块id，渲染对应的模块数据
+    然后在前台的时候回读取这部分数据，然后前台是有一个包裹组件，读取到后台吐的模块后，直接根据对应的模块 id，渲染对应的模块数据
 
     其中所有的模块数据都会去继承一个基础模块，只需要复写里面的打点数据和请求数据，和自己的事件绑定即可。
 
-    而基础模块就是用来渲染对应模块的html，css和一些公共可抽出的数据信息。
+    而基础模块就是用来渲染对应模块的 html，css 和一些公共可抽出的数据信息。
