@@ -903,6 +903,7 @@
     包含模块的名称和模块的 id，图片
 
     当 mousedown 的时候，通过 `ReactDOM.findDOMNode(this)` 获取当前的鼠标摸下去的模块。
+
     `var clone = node.cloneNode(true);`
     `var rect = node.getBoundingClientRect();`
 

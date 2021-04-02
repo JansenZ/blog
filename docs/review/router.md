@@ -19,11 +19,11 @@
 
 2. 如何判断`hashchange`里是返回呢？
 
-    在进`hash`监听函数前，先复制 historyLen = history.length;
+    在进`hash`监听函数前，先复制 `historyLen = history.length`;
 
     然后进了监听后，比对当前的`history.length`和`historyLen`，如果相等的话，说明触发了`hashchange`但是`historylen`没变，那它很可能是返回
 
-    然后再比对一下自己存下来的`historys`的倒数第二个和当前的`url`比对，如果相等，那它可能是返回。为什么说可能，可以看下面第 4 题里面的注释
+    然后再比对一下自己存下来的`historys`的倒数第二个和当前的`url`比对，如果相等，那它可能是返回。为什么说可能，可以看下面第 7 题里面的注释
 
 3. 缓存
 
