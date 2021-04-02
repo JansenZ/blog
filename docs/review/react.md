@@ -547,13 +547,14 @@
     Reconciler 与 Renderer 是交替工作
 
 3. Fiber Reconciler 特点
+
    可打断，根据 `shouldYield` 判断， 因为可打断，所以不能交替渲染工作，需要整个 `Scheduler` 与 `Reconciler` 的工作都在内存中进行。只有当所有组件都完成 `Reconciler` 的工作，才会统一交给 `Renderer`。
 
     在 React16 中，`Reconciler` 与 `Renderer` 不再是交替工作。当 `Scheduler` 将任务交给 `Reconciler` 后，`Reconciler` 会为变化的虚拟 `DOM` 打上代表增/删/更新的标记
 
 4. React 16 渲染器
 
-    Renderer 根据 Reconciler 为虚拟 DOM 打的标记，同步执行对应的 DOM 操作。
+    Renderer 根据 Reconciler 为虚拟 DOM 打的标记，**同步**执行对应的 DOM 操作。
 
     更新流程为
     ![tu](../img/process.png)
