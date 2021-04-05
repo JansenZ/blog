@@ -38,10 +38,10 @@
     ```js
     const goResume = isnone && path == curentpath;
     // 说明要resume了
-    emit("resume");
+    emit('resume');
     isnone = false;
     const goNone = !isnone && path !== currentpath && cacheshas;
-    emit("pause");
+    emit('pause');
     isnone = true;
     ```
 
@@ -83,8 +83,8 @@
         module.exports = {
             //...
             externals: {
-                jquery: "jQuery"
-            }
+                jquery: 'jQuery',
+            },
         };
         ```
 
@@ -124,11 +124,106 @@
 
     4. webpack 5 模块联邦
 
-        只需要在webpack里插件配置，就可以引用远程应用的模块，并且只是加载一个js，由webpack来解决
+        只需要在 webpack 里插件配置，就可以引用远程应用的模块，并且只是加载一个 js，由 webpack 来解决
 
-        比如trade,多个页面，可以插进去。当然还是用现在的微前端模式
+        比如 trade,多个页面，可以插进去。当然还是用现在的微前端模式
 
-7. 原生 hash 实现路由
+7. qiankun 是如何做到沙箱隔离的？
+
+    1. css
+
+        css 主要是依靠命名空间来搞定，最外层就是子应用的 app class
+
+    2. js [15 分钟快速理解 qiankun 的 js 沙箱原理及其实现](https://juejin.cn/post/6920110573418086413)
+
+        1. 如果不支持 proxy，使用 window
+
+            原理：激活沙箱时，将 window 的快照信息存到 windowSnapshot 中， 如果 modifyPropsMap 有值，还需要还原上次的状态；激活期间，可能修改了 window 的数据；退出沙箱时，将修改过的信息存到 modifyPropsMap 里面，并且把 window 还原成初始进入的状态。
+
+            缺陷就是初始化需要遍历 window 属性，退出和进入都需要遍历 window 属性。
+
+            ```js
+            const iter = (window, callback) => {
+                for (const prop in window) {
+                    if (window.hasOwnProperty(prop)) {
+                        callback(prop);
+                    }
+                }
+            };
+            class SnapshotSandbox {
+                constructor() {
+                    this.proxy = window;
+                    this.modifyPropsMap = {};
+                }
+                // 激活沙箱
+                active() {
+                    // 缓存active状态的window
+                    this.windowSnapshot = {};
+                    iter(window, prop => {
+                        this.windowSnapshot[prop] = window[prop];
+                    });
+                    Object.keys(this.modifyPropsMap).forEach(p => {
+                        window[p] = this.modifyPropsMap[p];
+                    });
+                }
+                // 退出沙箱
+                inactive() {
+                    iter(window, prop => {
+                        if (this.windowSnapshot[prop] !== window[prop]) {
+                            // 记录变更
+                            this.modifyPropsMap[prop] = window[prop];
+                            // 还原window
+                            window[prop] = this.windowSnapshot[prop];
+                        }
+                    });
+                }
+            }
+            ```
+
+        2. 如果支持 proxy 的情况，优先用 proxy。
+
+        优势就是不需要遍历，简单许多，因为并不直接代理 window 对象，激活沙箱后，每次对 window 取值的时候，先从自己沙箱环境的 fakeWindow 里面找，如果不存在，就从 rawWindow(外部的 window)里去找；当对沙箱内部的 window 对象赋值的时候，会直接操作 fakeWindow，而不会影响到 rawWindow。
+
+        ```js
+        class ProxySandbox {
+            active() {
+                this.sandboxRunning = true;
+            }
+            inactive() {
+                this.sandboxRunning = false;
+            }
+            constructor() {
+                const rawWindow = window;
+                const fakeWindow = {};
+                const proxy = new Proxy(fakeWindow, {
+                    set: (target, prop, value) => {
+                        if (this.sandboxRunning) {
+                            target[prop] = value;
+                            return true;
+                        }
+                    },
+                    get: (target, prop) => {
+                        // 如果fakeWindow里面有，就从fakeWindow里面取，否则，就从外部的window里面取
+                        let value =
+                            prop in target ? target[prop] : rawWindow[prop];
+                        return value;
+                    },
+                });
+                this.proxy = proxy;
+            }
+        }
+
+        window.sex = '男';
+        let proxy1 = new ProxySandbox();
+        (window => {
+            proxy1.active();
+            console.log('修改前proxy1的sex', window.sex);
+            window.sex = '女';
+            console.log('修改后proxy1的sex', window.sex);
+        })(proxy1.proxy);
+        ```
+
+8. 原生 hash 实现路由
 
     ```js
     class Router {
@@ -136,9 +231,9 @@
             // 储存 hash 与 callback 键值对
             this.routes = {};
             // 当前 hash
-            this.currentUrl = "";
+            this.currentUrl = '';
             // tp
-            this.currentSpUrl = "";
+            this.currentSpUrl = '';
             // 记录出现过的 hash
             this.history = [];
             this.ignoreHashChangeCount = 0;
@@ -148,8 +243,8 @@
             this.onchange = this.onchange.bind(this);
             // 默认不是后退操作
             this.isBack = false;
-            window.addEventListener("load", this.refresh, false);
-            window.addEventListener("hashchange", this.onchange, false);
+            window.addEventListener('load', this.refresh, false);
+            window.addEventListener('hashchange', this.onchange, false);
 
             this.historyLen = history.length;
             // 由于history.length 最大是50，所以我们需要额外存一个histoy来进行使用判断。
@@ -158,7 +253,7 @@
         }
 
         route(path, callback) {
-            this.routes[path] = callback || function() {};
+            this.routes[path] = callback || function () {};
         }
 
         onchange() {
@@ -166,16 +261,16 @@
                 this.ignoreHashChangeCount--;
                 return;
             }
-            this.currentUrl = location.hash.slice(1) || "/";
-            this.currentSpUrl = this.currentUrl + "-" + Date.now();
+            this.currentUrl = location.hash.slice(1) || '/';
+            this.currentSpUrl = this.currentUrl + '-' + Date.now();
             console.log(
-                "%c======>>>>>>",
-                "color: #f20",
+                '%c======>>>>>>',
+                'color: #f20',
                 this.historyLen,
                 history.length,
                 this.mockHistoryLen
             );
-            console.log("%c======>>>>>>", "color: #f20", this.history);
+            console.log('%c======>>>>>>', 'color: #f20', this.history);
             // 为什么说只有length，因为触发返回拦截的时候再forward回来的时候，并没有新增historylen，所以那次也会触发。
             // 但是，如果加上了后面的那个条件后，在本路由组里没问题，但是如果刷新了后，
             // this.history会变空，那就不行了，返回就没法正确的表示了。
@@ -184,20 +279,20 @@
                 this.historyLen == this.mockHistoryLen ||
                 this.currentSpUrl == this.history[this.history.length - 2];
             // 这个事件还真只能新建一次
-            this.beforeBack = new Event("beforeback", {
+            this.beforeBack = new Event('beforeback', {
                 bubbles: true,
-                cancelable: true
+                cancelable: true,
             });
             if (this.isBack) {
                 window.dispatchEvent(this.beforeBack);
                 console.log(
-                    "%c======>>>>>+++>",
-                    "color: #f20",
+                    '%c======>>>>>+++>',
+                    'color: #f20',
                     this.beforeBack
                 );
                 this.history.pop();
                 if (this.beforeBack.defaultPrevented) {
-                    console.log("拒绝返回");
+                    console.log('拒绝返回');
                     this.ignoreHashChangeCount++;
                     history.forward();
                     return;
@@ -211,8 +306,8 @@
         }
 
         refresh() {
-            this.currentUrl = location.hash.slice(1) || "/";
-            this.currentSpUrl = this.currentUrl + "-" + Date.now();
+            this.currentUrl = location.hash.slice(1) || '/';
+            this.currentSpUrl = this.currentUrl + '-' + Date.now();
             this.history.push(this.currentSpUrl);
             this.routes[this.currentUrl]();
         }
@@ -224,44 +319,44 @@
     }
 
     window.router = new Router();
-    const button = document.querySelector("button");
+    const button = document.querySelector('button');
 
     function changeContent(value) {
-        document.getElementsByTagName("h1")[0].innerHTML = value;
+        document.getElementsByTagName('h1')[0].innerHTML = value;
     }
 
     function onback(e) {
         e && e.preventDefault();
-        alert("别想走");
+        alert('别想走');
     }
 
-    router.route("/", function() {
-        console.log("");
-        changeContent("");
+    router.route('/', function () {
+        console.log('');
+        changeContent('');
     });
-    router.route("/a", function() {
-        console.log("a");
-        changeContent("a");
-        window.removeEventListener("beforeback", onback);
+    router.route('/a', function () {
+        console.log('a');
+        changeContent('a');
+        window.removeEventListener('beforeback', onback);
     });
-    router.route("/b", function() {
-        console.log("b");
-        changeContent("b");
-        window.removeEventListener("beforeback", onback);
+    router.route('/b', function () {
+        console.log('b');
+        changeContent('b');
+        window.removeEventListener('beforeback', onback);
     });
-    router.route("/c", function() {
-        console.log("c");
-        changeContent("c");
-        window.removeEventListener("beforeback", onback);
+    router.route('/c', function () {
+        console.log('c');
+        changeContent('c');
+        window.removeEventListener('beforeback', onback);
     });
-    router.route("/d", function() {
-        changeContent("d");
-        window.addEventListener("beforeback", onback);
+    router.route('/d', function () {
+        changeContent('d');
+        window.addEventListener('beforeback', onback);
     });
-    button.addEventListener("click", router.backOff, false);
+    button.addEventListener('click', router.backOff, false);
     ```
 
-8. react hash 实现参考
+9. react hash 实现参考
 
     不管是 hash 还是 history， 只要是 react 组件下的，无非就是三个组件
 
@@ -277,21 +372,21 @@
     ```js
     export default class BrowserRouter extends React.Component {
         state = {
-            currentPath: utils.extractHashPath(window.location.href)
+            currentPath: utils.extractHashPath(window.location.href),
         };
 
         onHashChange = e => {
             const currentPath = utils.extractHashPath(e.newURL);
-            console.log("onHashChange:", currentPath);
+            console.log('onHashChange:', currentPath);
             this.setState({ currentPath });
         };
 
         componentDidMount() {
-            window.addEventListener("hashchange", this.onHashChange);
+            window.addEventListener('hashchange', this.onHashChange);
         }
 
         componentWillUnmount() {
-            window.removeEventListener("hashchange", this.onHashChange);
+            window.removeEventListener('hashchange', this.onHashChange);
         }
 
         render() {
@@ -310,10 +405,10 @@
         </RouteContext.Consumer>
     );
 
-    export default ({ to, ...props }) => <a {...props} href={"#" + to} />;
+    export default ({ to, ...props }) => <a {...props} href={'#' + to} />;
     ```
 
-9. 原生 js history 参考
+10. 原生 js history 参考
 
     ```js
     class Routers {
@@ -329,7 +424,7 @@
         }
         // 将路径和对应回调函数加入hashMap储存
         route(path, callback) {
-            this.routes[path] = callback || function() {};
+            this.routes[path] = callback || function () {};
         }
 
         // 触发路由对应回调
@@ -343,7 +438,7 @@
         }
         // 监听popstate事件
         _bindPopState() {
-            window.addEventListener("popstate", e => {
+            window.addEventListener('popstate', e => {
                 const path = e.state && e.state.path;
                 this.routes[path] && this.routes[path]();
             });
@@ -351,26 +446,26 @@
     }
     ```
 
-10. history react 参考
+11. history react 参考
 
     ```js
     export default class HistoryRouter extends React.Component {
         state = {
-            currentPath: utils.extractUrlPath(window.location.href)
+            currentPath: utils.extractUrlPath(window.location.href),
         };
 
         onPopState = e => {
             const currentPath = utils.extractUrlPath(window.location.href);
-            console.log("onPopState:", currentPath);
+            console.log('onPopState:', currentPath);
             this.setState({ currentPath });
         };
 
         componentDidMount() {
-            window.addEventListener("popstate", this.onPopState);
+            window.addEventListener('popstate', this.onPopState);
         }
 
         componentWillUnmount() {
-            window.removeEventListener("popstate", this.onPopState);
+            window.removeEventListener('popstate', this.onPopState);
         }
 
         render() {
@@ -378,7 +473,7 @@
                 <RouteContext.Provider
                     value={{
                         currentPath: this.state.currentPath,
-                        onPopState: this.onPopState
+                        onPopState: this.onPopState,
                     }}
                 >
                     {this.props.children}
@@ -399,7 +494,7 @@
                     {...props}
                     onClick={e => {
                         e.preventDefault();
-                        window.history.pushState(null, "", to);
+                        window.history.pushState(null, '', to);
                         onPopState();
                     }}
                 />
@@ -408,7 +503,7 @@
     );
     ```
 
-11. 动态路由，怎么识别
+12. 动态路由，怎么识别
 
     首先，我们的路由是 `"/item/:id": Spu` 这样的结构，后面就是真正的 container。
 
@@ -433,15 +528,15 @@
     // str = ":id", match = :id, regex = ""; id = id, end = 0
     // str = "\d+:id", match = '\d+:id', regex = "\d+", id = id, end = 0;
 
-    const paths = name.split("/").map(item => {
+    const paths = name.split('/').map(item => {
         return !item
-            ? ""
+            ? ''
             : item.replace(/^(.*):([\w_]+)/, (match, regex, id, end) => {
                   // (this.map || (this.map = [])).push(id); 这个和路由id无关，但是因为作为map，最后会到params里。
-                  return "(" + (regex || "[^\\/]+") + ")";
+                  return '(' + (regex || '[^\\/]+') + ')';
               });
     });
-    this.regex = new RegExp("^" + paths.join("\\/") + "$", "i");
+    this.regex = new RegExp('^' + paths.join('\\/') + '$', 'i');
     ```
 
     我们举个例子，现在有个路由，叫 `'/item/:id'`， 那么 split('/') 后，得到的是`['', 'item', ':id']`
