@@ -84,9 +84,15 @@
 
 2. 打家劫舍问题
 
+    [leetcode 198](https://leetcode-cn.com/problems/house-robber/);
+
+    如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警。所以，请问你能抢到最多多少钱？
+
     `dp[n] = Max(dp[n-1], dp[n - 2] + nums[n])`
 
 3. 硬币问题
+
+    [leetcode 硬币问题](https://leetcode-cn.com/problems/coin-lcci/submissions/)
 
     `dp[n] = dp[n] + dp[n - coins[j]];`
 
@@ -108,6 +114,19 @@
     而第二次走 8 硬币，`dp[8] = 1,dp[13] = 0 + dp[5] = 1`;
 
     dp 初始化为 0，然后第一个是 1,比如，`dp[5] = 0 + dp[0]`。它是 1
+
+    ```js
+    var waysToChange = function (n) {
+        var dp = new Array(n + 1).fill(1);
+        var coins = [5, 10, 25];
+        for (var c = 0; c < coins.length; c++) {
+            for (var i = coins[c]; i <= n; i++) {
+                dp[i] = dp[i] + dp[i - coins[c]];
+            }
+        }
+        return dp[n] % 1000000007;
+    };
+    ```
 
 4. 鸡生蛋蛋生鸡
 
@@ -501,7 +520,26 @@ function TreeNode(val, left, right) {
 
     换成数组来说，那就是 1 2 1 2 2222 111 222 遇到不一样的，就互相抵消，遇到一样的，势力增加，显然，最后 2 获胜。
 
-    [对应 leetcode 169 题](https://leetcode-cn.com/problems/majority-element/)
+    [leetcode 169 题](https://leetcode-cn.com/problems/majority-element/)
+
+    ```js
+    var majorityElement = function (nums) {
+        // 给一个默认max
+        let max = nums[0];
+        let flag = 1;
+        for (var i = 1; i < nums.length; i++) {
+            if (flag == 0) {
+                // 重置max
+                max = nums[i];
+                flag = 1;
+            } else {
+                // 相同势力 + ，不同势力 -
+                max == nums[i] ? flag++ : flag--;
+            }
+        }
+        return max;
+    };
+    ```
 
 3. 需要需要分割 mid 的情况，到底是使用 math.floor 好还是 math.ceil 好？
 
@@ -523,7 +561,17 @@ function TreeNode(val, left, right) {
 
 5. 查看二进制数里有多少个 1？
 
-    可以拿这个数和 1 进行&操作，得到的值是 1，说明那个位就是 1，count++,然后 num 右移一位继续比较，出口条件是 num =0。
+    可以拿这个数和 1 进行&操作，得到的值是 1，说明那个位就是 1，count++,然后 num 右移一位继续比较，出口条件是 num = 0。
+
+    ```js
+    function getCount1(n) {
+        let count = 0;
+        while (n > 0) {
+            n & 1 && count++;
+            n = n >> 1;
+        }
+    }
+    ```
 
 6. 篝火绕圈淘汰问题
 
