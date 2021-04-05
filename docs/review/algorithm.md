@@ -84,7 +84,7 @@
 
 2. 打家劫舍问题
 
-    `dp[n] = Max(dp[n-1], dp[n - 2] + nums[n])` 
+    `dp[n] = Max(dp[n-1], dp[n - 2] + nums[n])`
 
 3. 硬币问题
 
@@ -292,11 +292,12 @@ function TreeNode(val, left, right) {
         2. 如果叔父节点是红色，把父亲和叔父变黑，把祖父节点变红即可，祖父变红后，可能触发更高级的双红缺陷，递归执行即可。
 
     红黑树的删除
+
     - A.如果删除的节点是叶子节点，判断是不是红色的，如果是红色的，直接删除。
     - B.如果删除的节点是叶子节点，不是红色的需要修复
-    - C.如果删除的节点不是叶子节点，那就拿这个节点，和它的最小直接后继节点进行交换（也可以和最大直接前驱交换）这样情况就会回到AB。
+    - C.如果删除的节点不是叶子节点，那就拿这个节点，和它的最小直接后继节点进行交换（也可以和最大直接前驱交换）这样情况就会回到 AB。
 
-    那么也就是说，只需要处理B的情况。
+    那么也就是说，只需要处理 B 的情况。
     // TODO
 
 ### 链表
@@ -397,11 +398,12 @@ function TreeNode(val, left, right) {
     如果不可以用内置的话，就采用快排的方式，快排就是比 target 小的放左边，比它大的放右边。时间复杂度是 O(nlogn);
 
     还可以用堆排序
+
     ```js
-    var getLeastNumbers = function(arr, k) {
+    var getLeastNumbers = function (arr, k) {
         var heap = new Heap(arr);
         var arr = [];
-        for(var i = 0; i < k; i ++) {
+        for (var i = 0; i < k; i++) {
             arr.push(heap.top());
             heap.deleteMax();
         }
@@ -424,7 +426,7 @@ function TreeNode(val, left, right) {
     删除的话，就是把第一个和最后一个交换，然后删除掉最后一个，对第一个进行 build
 
     插入的话，就把要插入的数据放在最后面，然后上溢操作，如果插入到最前面，可能会破坏堆堆结构性。主要是左右孩子不保证谁大的
-    
+
     ```js
     // 小顶堆，top返回最小值
     class Heap {
@@ -439,24 +441,27 @@ function TreeNode(val, left, right) {
             let i = this.min;
             while (i >= 0) {
                 this.rebuild(i);
-                i --;
+                i--;
             }
         }
         rebuild(i) {
             // 说明已经交换到叶子节点了，不用往下了
-            if(i > this.min) return;
+            if (i > this.min) return;
             let lc = i * 2 + 1;
             let rc = (i + 1) * 2;
-            if(rc && this.arr[lc] > this.arr[rc]) {
+            if (rc && this.arr[lc] > this.arr[rc]) {
                 this.swap(i, (i + 1) * 2);
             } else {
                 this.swap(i, i * 2 + 1);
             }
-         }
+        }
 
         swap(parent, child) {
-            if(this.arr[parent] > this.arr[child]) {
-                [this.arr[parent], this.arr[child]] = [this.arr[child], this.arr[parent]];
+            if (this.arr[parent] > this.arr[child]) {
+                [this.arr[parent], this.arr[child]] = [
+                    this.arr[child],
+                    this.arr[parent],
+                ];
                 this.rebuild(child);
             }
         }
@@ -467,10 +472,13 @@ function TreeNode(val, left, right) {
 
         deleteRoot() {
             // 交换
-            [this.arr[0], this.arr[this.len - 1]] = [this.arr[this.len - 1], this.arr[0]];
+            [this.arr[0], this.arr[this.len - 1]] = [
+                this.arr[this.len - 1],
+                this.arr[0],
+            ];
             this.arr.pop();
             this.rebuild(0);
-            this.len --;
+            this.len--;
         }
     }
     ```
@@ -530,7 +538,7 @@ function TreeNode(val, left, right) {
     干脆就记下来好了
 
     ```js
-    var lastRemaining = function(n, m) {
+    var lastRemaining = function (n, m) {
         let result = 0;
         for (let i = 2; i <= n; i++) {
             result = (m + result) % i;
@@ -544,7 +552,7 @@ function TreeNode(val, left, right) {
     只能背下来这个公式了把。。。
 
     ```js
-    var add = function(a, b) {
+    var add = function (a, b) {
         if (a == 0) return b;
         if (b == 0) return a;
         return add(a ^ b, (a & b) << 1);
@@ -566,7 +574,7 @@ function TreeNode(val, left, right) {
             []
         );
     }
-    
+
     // 外挂
     arr = arr.flat(Infinity); // flat里的参数是深度，无限就是无限深
     ```
