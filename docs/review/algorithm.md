@@ -181,6 +181,10 @@
     }
     ```
 
+5. 最大子序和
+
+[filename](../algorithm/maxsubarray.js ':include :type=code')
+
 ### 二叉树
 
 ```js
