@@ -6,120 +6,6 @@
 // 5.需要一个Dep，用来刚刚的收集和通知。同时，它也有一个depend方法，用来当watch get触发observerget，observerget里会调用dep.depend
 // 6.depdenpend调用watcher的addDep，watcher的addDep里判断这个id绑定了没，如果没有的话，调用dep的addSubs（this）;
 
-
-// 自己写的一个简单的
-class Observer {
-    constructor(data) {
-        this.data = data;
-        this.walk(data);
-    }
-
-    walk() {
-        Object.keys(data).forEach((key) => {
-            defineReactive(this.data, key, data[key]);
-        });
-    }
-}
-
-function defineReactive(obj, key, val) {
-    var dep = new Dep();
-    Object.defineProperty(obj, key, {
-        enumerable: true,
-        configurable: true,
-        get: () => {
-          if (Dep.target) {
-            dep.depend();
-          }
-          return val;
-        },
-        set: newVal => {
-          if (val === newVal) return;
-          val = newVal;
-          // 对新值进行监听
-        //   chlidOb = observe(newVal);
-          // 通知所有订阅者，数值被改变了
-          dep.notify();
-        },
-      });
-}
-
-class watcher {
-    constructor(data, key, callback) {
-        this.data = data;
-        this.callback = callback;
-        this.key = key;
-        this.depIds = {};
-        this.value = this.get();
-    }
-
-    update() {
-        const val = this.get();
-        if (val !== this.val) {
-            this.val = val;
-            this.callback(val);
-        }
-    }
-
-    addDep(dep) {
-        // 如果在depIds的hash中没有当前的id,可以判断是新Watcher,因此可以添加到dep的数组中储存
-        // 此判断是避免同id的Watcher被多次储存
-        if (!this.depIds.hasOwnProperty(dep.id)) {
-          dep.addSub(this);
-          this.depIds[dep.id] = dep;
-        }
-    }
-
-    get() {
-        Dep.target = this;
-        const value = this.data[this.key];
-        Dep.target = null;
-        return value;
-    }
-    
-}
-
-let uid = 0;
-class Dep {
-    constructor() {
-      // 设置id,用于区分新Watcher和只改变属性值后新产生的Watcher
-      this.id = uid++;
-      // 储存订阅者的数组
-      this.subs = [];
-    }
-    // 触发target上的Watcher中的addDep方法,参数为dep的实例本身
-    depend() {
-        Dep.target.addDep(this);
-    }
-    // 添加订阅者
-    addSub(sub) {
-      this.subs.push(sub);
-    }
-    notify() {
-      // 通知所有的订阅者(Watcher)，触发订阅者的相应逻辑处理
-      this.subs.forEach(sub => sub.update());
-    }
-  }
-  // 为Dep类设置一个静态属性,默认为null,工作时指向当前的Watcher
-  Dep.target = null;
-
-
-  const data = {
-    name: 'jansen',
-    sex: 'kk'
- };
-
-var observer = new Observer(data);
-
-data.name = '222';
-const watch = new watcher(data, 'name', (newval) => {
-    // htmlupdte
-    console.log('这是新设置的值，到了HTML那边哦', newval);
-});
-
-
-
-
-// 稍微完整的一版
 const Vue = (function() {
     let uid = 0;
     // 用于储存订阅者并发布消息
@@ -169,10 +55,9 @@ const Vue = (function() {
         enumerable: true,
         configurable: true,
         get: () => {
-          // 如果Dep类存在target属性，将其添加到dep实例的subs数组中
-          // target指向一个Watcher实例，每个Watcher都是一个订阅者
-          // Watcher实例在实例化过程中，会读取data中的某个属性，从而触发当前get方法
+          // 只有有这个target实例的时候，才能订阅，防止重复获取数值，从而产生多次订阅
           if (Dep.target) {
+            // 订阅数据
             dep.depend();
           }
           return val;
@@ -197,11 +82,11 @@ const Vue = (function() {
     }
   
     class Watcher {
-      constructor(vm, expOrFn, cb) {
+      constructor(vm, dataKey, cb) {
         this.depIds = {}; // hash储存订阅者的id,避免重复的订阅者
         this.vm = vm; // 被订阅的数据一定来自于当前Vue实例
         this.cb = cb; // 当数据更新时想要做的事情
-        this.expOrFn = expOrFn; // 被订阅的数据
+        this.dataKey = dataKey; // 被订阅的数据
         this.val = this.get(); // 维护更新之前的数据
       }
       // 对外暴露的接口，用于在订阅的数据被更新时，由订阅者管理员(Dep)调用
@@ -227,7 +112,8 @@ const Vue = (function() {
       get() {
         // 当前订阅者(Watcher)读取被订阅数据的最新更新后的值时，通知订阅者管理员收集当前订阅者
         Dep.target = this;
-        const val = this.vm._data[this.expOrFn];
+        // 通过如下代码，可以触发对应数据的get
+        const val = this.vm._data[this.dataKey];
         // 置空，用于下一个Watcher使用
         Dep.target = null;
         console.log(Dep.target, 2);
@@ -235,6 +121,7 @@ const Vue = (function() {
       }
     }
   
+    // 以下实际是包装，如果不需要，可以单写即可。
     class Vue {
       constructor(options = {}) {
         // 简化了$options的处理
@@ -250,6 +137,7 @@ const Vue = (function() {
       $watch(expOrFn, cb) {
         new Watcher(this, expOrFn, cb);
       }
+      // 这个主要是把data下的数据拉到表层用。
       _proxy(key) {
         Object.defineProperty(this, key, {
           configurable: true,
@@ -281,47 +169,68 @@ const Vue = (function() {
   demo.$watch('text', str => p.innerHTML = str);
   
 
-
-// 以下是思想草稿
-// MMVM， 双向绑定
-// 就是修改input， 改数据
-// 数据的变更，驱使html变更
-// 也就是说set的时候触发事件分发器。
-// 简单的说就是 发布订阅+数据劫持
-  event.add = function(callback) {
-    this.observers.push(callback);
-  }
-  event.noticy = function(key) {
-      this.observers.forEach((kk)=> {
-            kk(key);
-      })
-  }
-
-
-  var data = { 
-      name: 'k'
-  };
-
-  function observer(data, event) {
-    return new proxy(data, {
-        set() {
-            event.notify(key);
-        }
+  // 草稿版
+  // 可以不用看
+  function observe(value, event) {
+    // 当值不存在，或者不是复杂数据类型时，不再需要继续深入监听
+    if (!value || typeof value !== 'object') {
+      return;
+    }
+    return new Proxy(value, {
+        set(target, key, value, receiver) {
+            if(target[key] === value) return true;
+            observe(value);
+            event.notify();
+            return target[key] = value;
+        },
+        // get(target, key, receiver) {
+        //     if(Dep.target) {
+        //         dep.depend();
+        //     }
+        //     return target[key];
+        // }
     })
   }
 
-  function watch(data, callback) {
-        var event = new event();
-        event.add(callback);
-        observer(data, event);
+
+  class event {
+    constructor() {
+      // 设置id,用于区分新Watcher和只改变属性值后新产生的Watcher
+      this.id = uid++;
+      // 储存订阅者的数组
+      this.subs = [];
+    }
+    // 触发target上的Watcher中的addDep方法,参数为dep的实例本身
+    depend() {
+      Dep.target.addDep(this);
+    }
+    // 添加订阅者
+    addSub(sub) {
+      this.subs.push(sub);
+    }
+    notify() {
+      // 通知所有的订阅者(Watcher)，触发订阅者的相应逻辑处理
+      this.subs.forEach(sub => sub.update());
+    }
   }
 
-  html.addEventListener(()=> {
-      data.name = e.target;
-  })
+var data = { 
+  name: 'k'
+};
 
-  watch(data, (key) => {
-    if(key == name) {
-        // html p 标签 变化。
-    }
-  })
+function watch(data, callback) {
+  var event = new event();
+  // 收集依赖
+  event.add(callback);
+  observe(data, event);
+}
+
+html.addEventListener(()=> {
+  data.name = e.target;
+})
+
+watch(data, (key) => {
+  if(key == 'name') {
+      // html name 标签 变化。
+  }
+})
