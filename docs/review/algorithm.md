@@ -185,6 +185,41 @@
 
 [filename](../algorithm/maxsubarray.js ':include :type=code')
 
+6. 翻译情况
+
+[filename](../leetcode/swordoffer/46.js ':include :type=code')
+
+7. 最长不含重复字符的子字符串
+
+请从字符串中找出一个最长的不包含重复字符的子字符串，计算该最长子字符串的长度。
+
+```js
+// 输入: "abcabcbb"
+// 输出: 3
+// 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+
+// 利用滑动窗口
+// 遇到不一样的更新startIdx位置
+var lengthOfLongestSubstring = function(s) {
+    let map = {};
+    let max = 0;
+    let startIdx = 0;
+    let endIdx = 0;
+    for(var i = 0; i < s.length; i++) {
+        // 说明遇到的这个字符串在startIdx后出现过
+        // 直接把startIdx 移动到 这个位子 + 1
+        if(map[s[i]] < startIdx) {
+            max = Math.max(max, endIdx - startIdx);
+            startIdx = map[s[i]] + 1;
+        }
+        map[s[i]] = endIdx;
+        endIdx ++;
+    }
+    return Math.max(max, endIdx - startIdx);
+};
+
+```
+
 ### 二叉树
 
 ```js
