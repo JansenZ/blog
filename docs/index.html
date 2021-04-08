@@ -86,6 +86,10 @@
       self.innerHTML =  self.innerHTML == '开' ? '关' : '开';
     })
 
+    window.addEventListener('hashchange', function() {
+      document.getElementById('open_btn').innerHTML = '开';
+    });
+
   </script>
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
