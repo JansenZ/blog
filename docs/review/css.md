@@ -1,6 +1,8 @@
 
 1. 一像素边框解决方案
 
+    <details open>
+
    after 标签使用 transform: scale(0.5);
 
    如果只要单边的边框的话，对应的那边的 after 标签 border-XX-width: 0 即可。
@@ -35,6 +37,8 @@
 
 2. 环绕文字的 css 属性 shape-outside
 
+    <details open>
+
    ```css
    shape-outside: circle();
    shape-outside: ellipse();
@@ -46,6 +50,8 @@
 
 3. 什么是 BFC，触发 BFC 的方式
 
+    <details open>
+
    简单来说，BFC 就是一个独立不干扰外界也不受外界干扰的盒子。
 
    浮动元素、绝对定位元素，'display' 特性为 "inline-block"，"table-cell"， "table-caption" 的元素，
@@ -53,6 +59,8 @@
    以及 'overflow' 不是 "visible" 的元素，会创建新的 BFC(Block formatting contexts)。
 
 4. rem 的写法 VW 的写法
+
+    <details open>
 
    device-width / 750 \* 100;
 
@@ -75,6 +83,8 @@
 
 5. css 画三角形、梯形的原理
 
+    <details open>
+
    利用 border 来画。
 
    如果是个向上的三角型。那么给它的底边框上色。div 宽为 0，上边框是 0，左右设置 10px，下边框 20px，上左右颜色透明。
@@ -85,6 +95,8 @@
 
 6. css 如何实现定宽高比
 
+    <details open>
+
    假如某个元素要有定宽高比，先给他上个 display: flex，然后给他加个 after
 
    这个 after 写个 padding-top: 100%;那么这个时候，这个元素改宽度，高度也会跟着变。
@@ -93,6 +105,8 @@
 
 7. background-repeat 新属性值
 
+    <details open>
+
    round 和 space 一个是取整，一个是间距
 
    round 是尽可能的多重复，铺满背景，可能会拉伸。
@@ -100,6 +114,8 @@
    而 space 是保证不缩放的前提下铺图片，并等分空隙。
 
 8. 如何实现一个滚动视差
+
+    <details open>
 
    ```css
    <section class="g-word">Header</section>
@@ -116,6 +132,8 @@
 
 9. 非背景的情况下，img 如何保持它自己的尺寸比例 比如外面是 300-100，它自己是 300-300
 
+    <details open>
+
    使用 object-fit 可以保持原有的尺寸比例，
 
    contain 就是以小边为基准
@@ -124,9 +142,13 @@
 
 10. 背景虚化，毛玻璃效果，比如登陆的时候希望背景模糊
 
+    <details open>
+
     可以使用 filter: blur(1px);来解决
 
 11. img srcset， image-set
+
+    <details open>
 
     多数情况下，我们的图片都是以 dpr2 来设置的，也就是说，实际情况下，iphoneX 下显示的图片会有略微的模糊。但是专门去适配的很少，因为都是网络上传的图片。
 
@@ -148,9 +170,13 @@
 
 12. css 选择器的优先级
 
+    <details open>
+
     在同一个层级下，important> 内联 > ID 选择器 > 类选择器 > 标签选择器。
 
 13. reflow 和 repaint，compositions（？复合）
+
+    <details open>
 
     回流的话就是动了结构，浏览器会重新渲染部分内容或全部内容，重绘的话是不改变结构，只变个颜色之类的，回流必然会导致重绘，重绘不一定导致回流。
 
@@ -161,6 +187,8 @@
     让渲染引擎为其单独实现一个图层，当这些变换发生时，仅仅只是利用合成线程去处理这些变换，而不牵扯到主线程，大大提高渲染效率。
 
 14. 如何减少回流呢？
+
+    <details open>
 
     1. 避免逐项更改样式。最好一次性更改style属性，或者将样式列表定义为class并一次性更改class属性。
     2. 避免循环读取 offsetLeft 等属性。在循环之前把它们存起来。
@@ -174,6 +202,8 @@
 
 14. block,inline,inline-block 的区别
 
+    <details open>
+
     - block 元素会独占一行，多个 block 元素会各自新起一行。默认情况下，block 元素宽度自动填满其父元素宽度。
     - block 元素可以设置 width,height 属性。块级元素即使设置了宽度,仍然是独占一行。
     - block 元素可以设置 margin 和 padding 属性。
@@ -184,6 +214,8 @@
 
 15. 移动端适配（dp,ppi,dpr,dip)
 
+    <details open>
+
     - dp,设备物理像素。比如 iphone6 屏幕分辨率是 750\*1334. iphoneX 是 1125\*xxxx
     - ppi,像素密度，就是每英寸的物理像素点数有多少。
     - dip，设备独立像素，可以称为逻辑像素，就是我们正常使用的 375,414,使用 window.screen.width 可以获取。
@@ -193,6 +225,8 @@
 
 16. 检测横屏
 
+    <details open>
+
     ```css
     window.orientation === 90 || window.orientation === -90 就代表是横屏
 
@@ -200,6 +234,8 @@
     ```
 
 17. iphoneX 适配
+
+    <details open>
 
     `<meta name="viewport" content="viewport-fit=cover">`
 
@@ -225,6 +261,8 @@
 
 18. css 里常用的@
 
+    <details open>
+
     - @charset 声明编码格式
     - @import 引入 css 文件
     - @media 不用说了
@@ -233,19 +271,29 @@
     - @font-face 定义字体
 
 19. css 里常用的函数
+
+    <details open>
+
     - calc() 计算函数，中间必须要有空格
     - max,min, 取大小
     - filter 对图片进行滤镜处理
     - transform 各种变换
+
 20. 如何让图文不可复制
 
-    user-select: none;
+    <details open>
+
+    `user-select: none;`
 
 21. 实现永久动画
 
-    animation-iteration-count: infinite
+    <details open>
+
+    `animation-iteration-count: infinite`
 
 22. 如何让网站全站变灰色
+
+    <details open>
 
     给HTML元素，上一段CSS
     ```css

@@ -1,4 +1,5 @@
-1. 性能优化
+1. 性能优化的方式
+    <details open>
 
     1. webpack 构建优化，使用 include/exclude.Happypack 开启多线程.自带的 tree-shaking 移除无用代码，自带的 hosit-scoping，移除无用计算。利用 import.then 拆分,babel 设置缓存。
     2. http 网络请求开启 gzip，可以压缩 HTTP 响应的 70%。这个要服务端配置一下，会增大 CPU 的开销去解压、压缩，Webpack 中 用 CompressionWebpackPlugin 插件开启 Gzip ,事实上就是为了在构建过程中去做一部分服务器的工作，为服务器分压。
@@ -21,7 +22,8 @@
     18. 防抖（搜索输入）、节流(scroll 监听)
     19. ssr
 
-2. 设计模式
+2. 常见的设计模式
+    <details open>
 
     我认为很多设计模式我们在不知道它的名字的时候，我们就已经在用它了，
 
@@ -135,6 +137,7 @@
       用组合的话，可以拼装，就可以避免这个问题。
 
 3. 什么是双向绑定，什么是单向绑定，区别是什么？
+    <details open>
 
     双向绑定，就是数据驱动 UI，UI 的改变，比如用户输入，也直接改变数据，写的不得当的话，很难管理这些数据。你也不知道从哪里被改变了。
 
@@ -143,6 +146,7 @@
     而单向数据流，就是通过 setstate 这样的数据驱动，改变数据后，驱动 UI 改变，而 UI 点击，比如通过回调 onChange。这样的好处是数据易于管控。
 
 4. redux 对比 mobx
+    <details open>
 
     两者对比:
 
@@ -155,6 +159,7 @@
     - 数据可变性的不同, Redux 是 immutable 的，每次都返回一个新的数据，而 Mobx 从始至终都是一份引用。因此 Redux 是支持数据回溯的；
 
 5. immutable 的特点是什么，它的优势是什么，对比 immer 呢？
+    <details open>
 
     当我想在对 react 组件进行性能优化时，需要监测 state 或 props 的变化来判断是否 render，而怎么监测变化=>用浅比较，但浅比较存在更新对象属性时引用没变的问题，然而深拷贝的话浪费性能不说，万一只改了一个属性，亏，所以只要能解决这个问题，浅比较依然是好方案，因此 immutable 的出现解决的就是有变化就返回新引用，故而浅比较+immutable 就是性能优化的利器，然后后面出现的 Immer 是比 immutable 更好的方案
 
@@ -259,6 +264,7 @@
     ```
 
 6. 为什么用 React + mobx？
+    <details open>
 
     React 和 Vue 有许多相似之处，它们都有：
 
@@ -272,6 +278,7 @@
     虽然用了 Mobx,但是比如修改数据的时候，还是通过一个文件下的回调，然后完成数据变更。
 
 7. 返回拦截
+    <details open>
 
     返回劫持弹窗，我们的项目的路由不是 react-router，是我们老大自己实现的一个，所以更没有`prompt`，但是好在他在`navigation`返回的时候，判断`isback`的时候，添加了一个事件
 
@@ -309,6 +316,7 @@
     如果不是 1 的话，说明前面还有页面，直接 back
 
 8. rn 热更新原理
+    <details open>
 
     react-native 的程序实际上是原生的模块+JS 和图片资源模块，热更新，就是更新其中的 js 和图片资源。
     安卓程序把它名字命名为 zip 解压后可以清楚的看到其中的 bundle 文件和资源文件
@@ -320,6 +328,7 @@
     如果是增量热更新的话，会返回一个 pdiffUrl，拿到这个 url 下载下来的就是增量数据，然后客户端进行数据合并完成增量热更新。
 
 9. rn im 的问题
+    <details open>
 
     [im 问题链接](https://segmentfault.com/n/1330000011795138)
 
@@ -356,6 +365,7 @@
 11. rn webview 新闻 难点
 
 12. 调试技巧...
+    <details open>
 
     1. element 是可以 copy 的
     2. console.log('%c this is a message','color:#f20;') 可以输入带颜色的 log,自己在 vscode 里自定义个预设片段就可以了。
@@ -369,6 +379,7 @@
     把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
 
 14. 监控错误，打点上报，捕获异常。
+    <details open>
 
     <b>监控性能</b>
 
@@ -449,15 +460,18 @@
 
     现在最新的标准里，其实可以利用 fetch，然后二参里设置 keep-alive 为 true，说这个可以替代 sendBeacon，这个限制是 64KB
     这样在页面关闭的时候，照样能发送出去。如果没这个参数，可能会停掉。
+    ```js
     window.onunload = function() {
-    fetch('/analytics', {
-    method: 'POST',
-    body: "statistics",
-    keepalive: true
-    });
+        fetch('/analytics', {
+            method: 'POST',
+            body: "statistics",
+            keepalive: true
+        });
     };
+    ```
 
 15. 前端模块化
+    <details open>
 
     [这个链接将的浅显易懂](https://juejin.cn/post/6844903712553435149)
 
@@ -498,6 +512,7 @@
     - 这样的结果就是 CommonJS 规范可能因为循环引用而找不到对应函数发生报错，而 es6 不会。
 
 16. 听过 Style-components 吗？
+    <details open>
 
     我们目前使用的是 css namespace，公共的写在 common 里
 
@@ -520,6 +535,7 @@
     - css modules，把对应的 css 文件引入成为对象，然后在 div 上的时候，写成 styles.xxx，webpack 配置一下 css-loader 的 options，会去自动添加一串 hash。
 
 17. 路由守卫怎么做的
+    <details open>
 
     包装一个方法，跳转的时候先进这个方法。
 
@@ -532,6 +548,7 @@
     假如是通过 url 直接输入的，可以给每一个页面外面包装一个路由授权组件，在组件里调用上述的方法，好像也可以哦。
 
 18. 二维码扫码登陆原理
+    <details open>
 
     首先，二维码本身就是一个 url，并且包含这个页面当前的唯一 token,用于标识是哪张页面点进了二维码登陆的页面。
     在手机端，比如微信，那么我扫码后，会跳转到这个登录确认的页面，并且把我的个人信息及唯一 token 发送给服务端，然后服务端会标记已扫码。
@@ -540,6 +557,7 @@
     在 PC 端，轮训去找服务端问，用户是否扫码，如果已经扫码了，这时候接口应该返回待确认的字段，如果点击确认后，再请求这个接口，服务端会吐出已确认，并且应该会种 cookie，然后重定向到首页，完成登陆。
 
 19. 懒加载怎么实现
+    <details open>
 
     - 第一个方案：
       使用 IntersectionObserver 可以做一个。它的回调接受两个参数，一个是 IntersectionObserverEntry 数组，一个是 obsever 自己
@@ -573,6 +591,7 @@
     preact 没有事件系统，直接用的浏览器的
 
 21. 你知道单点登录吗？如何实现呢？
+    <details open>
 
     1. 如果是同域名下的，直接用 cookie 就可以了。
 
@@ -597,6 +616,7 @@
         ![tu](https://user-gold-cdn.xitu.io/2020/1/5/16f74f3f11a6fbad?imageslim)
 
 22. RN 原理是什么
+    <details open>
 
     JS 的话内置一个 javascript core，安卓的话使用 webkit.org.jsc.cso
     rn 会把 js 编译成一个 bundle 文件，和 webpack 一样，如果是原生的会通过 bridge 调用方法。
@@ -604,6 +624,7 @@
     rn 项目下会有一个 native_modules，通过这个模块可以调用原生方法。
 
 23. MVC， MVP, MVVM
+    <details open>
 
     - MVC
 
@@ -632,6 +653,7 @@
 27. 骨架屏实现方案
 28. 代码生成技术文档
 29. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
+    <details open>
 
     1. 初始的时候，发现，点击直接跳转过去的时候，会出现里面的图文加载，导致的内容撑开
        然后我在电脑上试的时候，发现，如果把 timeout 设置为 0 的话，安卓一些比较不错的手机，并不会锚点错位。
@@ -676,8 +698,12 @@
     ```
 
 30. SWR
+    <details open>
+
     [原理分析](https://zhuanlan.zhihu.com/p/93824106)
+
     [中文文档](https://swr.vercel.app/zh-CN)
+
     特点
 
     - 相当于封装了 fetch，可以自动不断的获取最新的数据流
@@ -687,9 +713,13 @@
     - 获取数据的时候，非常简单，简易
 
 31. Taro 是什么?
+    <details open>
+
     Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发 微信 / 京东 / 百度 / 支付宝 / 字节跳动 / QQ 小程序 / H5 等应用。现如今市面上端的形态多种多样，Web、React Native、微信小程序等各种端大行其道，当业务要求同时在不同的端都要求有所表现的时候，针对不同的端去编写多套代码的成本显然非常高，这时候只编写一套代码就能够适配到多端的能力就显得极为需要。
 
 32. Recoil
+    <details open>
+
     这个是一个新出的状态管理库，facebook 出的
 
     ```js
@@ -729,6 +759,7 @@
     vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，具体的不了解了，因为暂时不可能替代 webpack
 
 34. JS bridge 原理是什么？
+    <details open>
 
     有两种方式：
 
@@ -792,15 +823,18 @@
     因为如果通过 location.href 连续调用 Native，很容易丢失一些调用。
 
 35. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
+    <details open>
 
     - 可以使用 `document.activeElement.scrollIntoViewIfNeeded()` 把对应的元素滚动到可见区域
     - window.resize 的时候，把 button 变成 relative
 
 36. eslint 和 prettier 冲突怎么办
+    <details open>
 
     其他冲突规则也用类似方法处理，要么修改 eslintrc，要么修改 prettier 配置，但是如果为了少改动老代码，推荐修改 prettier 配置去适应老的 eslint 规则。
 
 37. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
+    <details open>
 
     要做这个题前， 先要知道节点类型
 
@@ -889,6 +923,7 @@
     ```
 
 38. NPM install 运行机制
+    <details open>
 
     [运行机制](https://www.zhihu.com/question/66629910/answer/273992383)
 
@@ -901,6 +936,7 @@
     2. 如果你 npm install 具体某个包名，同样会去检查 package.json。保证前后的一致性。
 
 39. 装修拖拽的技术方案
+    <details open>
 
     drag 组件是包裹整个装修页面布局的，就是侧边栏和主区域都坐落在内部
 

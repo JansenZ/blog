@@ -1,4 +1,5 @@
 1. 设计方式
+    <details open>
 
     目前有`hashchange`和`history api`两种方式
 
@@ -18,6 +19,7 @@
     - 相同 `hash`值不会触发动作将记录加入到历史栈中，而 `pushState`则可以。
 
 2. 如何判断`hashchange`里是返回呢？
+    <details open>
 
     在进`hash`监听函数前，先复制 `historyLen = history.length`;
 
@@ -26,6 +28,7 @@
     然后再比对一下自己存下来的`historys`的倒数第二个和当前的`url`比对，如果相等，那它可能是返回。为什么说可能，可以看下面第 7 题里面的注释
 
 3. 缓存
+    <details open>
 
     如果是想对路由做缓存处理的话，可以在`Route`组件里，渲染的时候，判断下`path`是不是在`caches`里，如果是并且不是当前的`path`，`display none`即可。
 
@@ -54,6 +57,7 @@
     如果是返回的话，一样的路径，只是会把 cache 末位的那个删了而已。
 
 4. 如何给页面加 resume, pause 事件。
+    <details open>
 
     首先，只有缓存的情况下，才有必要。
 
@@ -64,6 +68,7 @@
     那么，接受他们的话，可以用装饰器，封装到类上，这样只要加上这个装饰器，就有生命周期了
 
 5. 子应用如何使用公共类库又不打包呢？
+    <details open>
 
     1. 比如 trade 用 core
 
@@ -98,7 +103,8 @@
         ></script>
         ```
 
-6. 微前端
+6. 微前端的方式
+    <details open>
 
     1. iframe
 
@@ -129,6 +135,7 @@
         比如 trade,多个页面，可以插进去。当然还是用现在的微前端模式
 
 7. qiankun 是如何做到沙箱隔离的？
+    <details open>
 
     1. css
 
@@ -224,6 +231,7 @@
         ```
 
 8. 原生 hash 实现路由
+    <details open>
 
     ```js
     class Router {
@@ -357,6 +365,7 @@
     ```
 
 9. react hash 实现参考
+    <details open>
 
     不管是 hash 还是 history， 只要是 react 组件下的，无非就是三个组件
 
@@ -409,6 +418,7 @@
     ```
 
 10. 原生 js history 参考
+    <details open>
 
     ```js
     class Routers {
@@ -447,6 +457,7 @@
     ```
 
 11. history react 参考
+    <details open>
 
     ```js
     export default class HistoryRouter extends React.Component {
@@ -504,6 +515,7 @@
     ```
 
 12. 动态路由，怎么识别
+    <details open>
 
     首先，我们的路由是 `"/item/:id": Spu` 这样的结构，后面就是真正的 container。
 
