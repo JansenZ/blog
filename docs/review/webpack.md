@@ -62,7 +62,7 @@
     27. 如果使用了不需要构建的第三方依赖，如 Jquery 或者是 loadsh,可以用 module: { noParse: /jquery|loadsh/ } 来搞定。
     28. 如果使用了第三方的包的时候，自己的代码需要用到 `import $ from 'jquery'`，可以配置 externals: { 'jquery': 'jQuery'} ,这样全局就会有 jQuery 变量了。
     29. webpack 自己会有 `tree-shaking` 功能，没有 import 的代码它不会打包出来。
-    30. 使用 `scope hosting`，可以自动省略不必要的代码。比如只写了 let a = 1;let b = 2;let c = a+b;console.log(c);它会直接打包成 console.log(3);前面的都没了。
+    30. 使用 `scope hosting`，可以自动省略不必要的代码。比如只写了 `let a = 1;let b = 2;let c = a+b;console.log(c);`它会直接打包成 console.log(3);前面的都没了。
 
 3. webpack 按需加载是怎么做到的？
 
