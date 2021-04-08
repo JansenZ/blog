@@ -621,17 +621,19 @@ function TreeNode(val, left, right) {
     }
     ```
 
-6. 篝火绕圈淘汰问题
+6. 篝火绕圈淘汰,约瑟夫环 问题
 
     比如有 n 个人，从 0 开始，每次移动 m 位置，第 m 位置的那个人出局，问最后剩下的人的编号。
 
-    这个题我看了几遍也没太能理解
+    [最佳答案](https://leetcode-cn.com/problems/yuan-quan-zhong-zui-hou-sheng-xia-de-shu-zi-lcof/solution/huan-ge-jiao-du-ju-li-jie-jue-yue-se-fu-huan-by-as/)
 
-    能记住的就是，当只剩下 2 个人的时候，用 m % 2,得到的编号就是最后留下的那个人，
+    剩下的那个人的编号肯定是在初始数组里的那个编号，所以要做的就是还原的过程。
 
-    然后每次加一个人的时候，把这个编号加上 m 再次取余即可。
+    主要就是反推，最后一个人的下标肯定是0，那么如何还原回两个人呢？
 
-    干脆就记下来好了
+    因为是个环，所以可以把上一轮出局的人，加到后面，然后右移m位，就能还原。
+
+    但是因为数组长度只有i，所以是 (idx + m) % i
 
     ```js
     var lastRemaining = function (n, m) {
