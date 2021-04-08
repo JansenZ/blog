@@ -1,4 +1,5 @@
 0. 什么是UDP，和TCP有什么区别
+    <details open>
 
    1. UDP 相比 TCP 简单的多，不需要建立连接也就是说不需要三次握手（无连接）
    2. 不需要验证数据报文（不可靠）
@@ -12,6 +13,7 @@
    UDP 不止支持一对一的传输方式，同样支持一对多，多对多，多对一的方式，也就是说 UDP 提供了单播，多播，广播的功能。
 
 1. 常用的 HTTP 状态码有哪些？
+    <details open>
 
    - 2xx 请求成功
      - 200 OK 看的最多的
@@ -33,12 +35,14 @@
      - 504 超时
 
 2. HTTP/1.1 协议中有哪些方法
+    <details open>
 
    HTTP 方法的幂等性是指一次和多次请求某一个资源应该具有同样的副作用）（get 它本身不会对资源本身产生影响，因此满足幂等性。
 
    GET(幂等)、POST（非幂等）、HEAD（幂等）、PUT（幂等）、DELETE（幂等）、OPTIONS
 
 3. POST 与 GET 的区别
+    <details open>
 
    - GET 请求会被浏览器主动 cache，而 POST 不会.
    - GET 请求只能进行 url 编码，而 POST 支持多种编码方式。
@@ -53,6 +57,7 @@
    - 关于两个数据包的事情，100continue，这个不要说了，是错的，并不一定会发送两个数据包，不一样的。
 
 4. HTTP 请求头和响应头都有哪些内容
+    <details open>
 
    - content-type: 传输的媒体类型，是图片还是 JSON 数据还是 text/html 之类的东西
    - ETag: 配合缓存使用的资源标识
@@ -70,6 +75,7 @@
    - set-cookie: 设置 cookie
 
 5. HTTP 缓存机制流程
+    <details open>
 
    分为强制缓存和协商缓存
 
@@ -95,6 +101,7 @@
      - 在性能上，Last-Modified 优于 ETag，也很简单理解，Last-Modified 仅仅只是记录一个时间点，而 Etag 需要根据文件的具体内容生成哈希值。
 
 6. HTTPS
+    <details open>
 
    - https 比 http 多了个 ssl 层，会对数据进行加密，对身份进行认证会更安全
    - https 默认端口号是 443，http 是 80
@@ -140,10 +147,12 @@
    ![ssltu](../img/ssl.png)
 
 7. 什么是 DNS 劫持
+    <details open>
 
    运营商会把你访问的地址给跳到它要跳的地址。因为你访问域名解析的时候，通常这个服务是运营商提供的。给你解析一个他想跳的广告地址。
 
 8. HTTP2/3 对比 HTTP1.1
+    <details open>
 
    - 二进制分帧，HTTP1.x 是文本协议，不管是啥样的请求格式，最终都是文本，而 http2 是二进制，用二进制协议解析效率会更高
    - 多路复用 这样的话基本就不会阻塞。
@@ -169,6 +178,7 @@
    [HTTP3介绍](https://zhuanlan.zhihu.com/p/114384277)
    
 9. 什么是队头阻塞
+    <details open>
 
    HTTP1的效率低，问题在于他是半双工的。
    
@@ -193,6 +203,7 @@
    需要注意HTTP2没有完全解决队头阻塞问题，因为实际中TCP的连接buffer有限，一个响应又慢，又大的请求会把链接buffer完全占满，导致buffer阻塞，从而导致跟队头阻塞一样的效果。 
 
 9. 跨域的解决方案
+    <details open>
 
    跨域是由于浏览器的同源策略造成的，同源就是指域名、协议、端口均相同。主要是为了安全。
 
@@ -238,12 +249,14 @@
    4. iframe。B 页面是 A 页面的一个 iframe，A 页面把数据变更填到 B 页面的 url 上。然后 B 页面监听 url 变化。
 
 10. script async 和 defer 的区别（对 csr 来说已经失去了意义，毕竟 HTML 本来就只有 root 标签了）
+    <details open>
 
     async 和 defer 都是立马下载 js，和 html 是异步的
 
     但是 async 下载完了会立马执行，如果这个时候 html 还没渲染完，还是会阻塞。defer 的话需要等待 domcontentLoaded 结束后再执行。
 
 11. DOCTYPE 是啥，head 里面的东西代表啥
+    <details open>
 
     DTD,就是 DOCTYPE 用来声明文档的解析类型，浏览器判断应该用哪种协议来解析，比如 html5 和 html4
 
@@ -254,6 +267,7 @@
     meta 里可以写 viewport，针对移动端，可以在 content 里定义最小最大缩放比例，宽高。
 
 12. 浏览器渲染的主要进程与职责
+    <details open>
 
     浏览器的渲染进程是多线程的,我们来看看它有哪些主要线程
 
@@ -291,6 +305,8 @@
 
 13. cookie, sessionstoreage， localstorage 区别
 
+    <details open>
+
     - cookie 是和服务端交互时使用的，会带在请求头上，随着请求的增多，会造成性能浪费
     - cookie 的大小只有 4KB
     - cookie 可能会被篡改
@@ -308,6 +324,9 @@
     - sessionstorage 在窗口关闭后就没有了
 
 14. 浏览器渲染全流程
+
+    <details open>
+
     网络：输入地址-构建请求-先查找强缓存-命中缓存的话用缓存。（HTTP 缓存机制）
 
     没有的话，进入 DNS 解析，检查是否有 dns 缓存，有的话直接用，没有的话还要去查找到对应网址的 IP 地址，在去查找 Ip 的过程中如果有 CDN 缓存的话，会返回 CDN 缓存服务器的地址。然后建立 TCP 连接，通过三次握手的方式建立连接。
@@ -330,24 +349,29 @@
     绘制结束后，四次挥手后关闭连接。
 
 15. 为什么三次握手不能两次搞定？
+    <details open>
 
     因为第二次握手的时候，是服务端回 SYN+ACK 报文，在客户端收到这条消息后，确定了服务端的发送和接收能力是没有问题的。
 
     但是，并不能确认客户端接收有没有问题。也就是说，服务端并不知道客户端收到了这条消息了没有，所以必须要有第三次握手，这个特点也是 SYN 攻击的一种方式。
 
 16. 什么是半连接队列（三次握手）
+    <details open>
 
     服务端在二次握手后，就进入半连接队列，会占用部分资源。
 
 17. 三次握手可以带数据吗？
+    <details open>
 
     第三次可以，前两次不行，第三次是由客户端发起，其实也就证明了连接没问题，所以可以带数据，前两次的话都不能证明连接有没有问题，所以不能带数据。
 
 18. 客户端和服务端连接通过后，中间要是断了怎么办？
+    <details open>
 
     服务端回等到超时，然后发现没有客户端消息，会发送探测报文给客户端，如果多次发送都没有回应，就说明客户端不在了，就可以关闭连接。
 
 19. 说说四次挥手
+    <details open>
 
     四次挥手客户端和服务端都可以发起。
 
@@ -362,10 +386,12 @@
     第四次，客户端收到消息后，进入 TIME_WAIT 状态，并发送一个 ACK 报文，告诉服务端我关闭了。服务端收到后关闭自己。TIME_WAIT 事件到后关闭连接。
 
 20. 四次挥手为什么要有 TIME_WAIT 等待 2MSL（4 分钟）
+    <details open>
 
     防止第四次服务端没收到，1MSL 就是单片段最大存活时间，如果服务端过了 1msl 没收到，会发送一个 fin 给客户端，客户端收到这个说明服务端没有收到上次的消息，于是重发并充值 time_wait。如果等 2MSL 服务端没反应，说明没问题，关闭连接。
 
 21. 原生 ajax,fetch、axios
+    <details open>
 
     ```js
     let xhr = new XMLHttpRequest();
@@ -416,6 +442,7 @@
     - xhr 有现成的 onprogress 获取进度，fetch 没有，想要实现我不会。
 
 22. load 和 DomContentLoaded 区别
+    <details open>
 
     - DomContentLoaded 正常是 DOM 解析完就触发了
     - css 加载不会阻塞 DOM 树的解析,因为本来就是并行的
@@ -430,6 +457,7 @@
       [这个链接说的非常好](https://www.cnblogs.com/Bonnie3449/p/8419609.html)
 
 23. 浏览器的 GC 机制,内存泄漏的几种方式
+    <details open>
 
     内存泄漏多了会导致内存溢出从而服务器变慢到崩溃，内存泄漏通常就是 GC 不行之类所导致的，
 
@@ -447,6 +475,7 @@
       不能完全避免，可以优化自己的代码，比如使用弱引用的，weakMap 这样的东西。
 
 24. service worker/ PWA（渐进式应用）
+    <details open>
 
     可以拦截 HTTP 请求进行修改，可以做离线存储，可以做缓存。
 
@@ -501,6 +530,7 @@
     ```
 
 25. XSS、CSRF、中间人攻击（如何攻击，如何防御）
+    <details open>
 
     XSS 攻击，跨站脚本攻击，cross site scripting
 
@@ -535,8 +565,11 @@
     当然防御中间人攻击其实并不难，只需要增加一个安全通道来传输信息。HTTPS 就可以用来防御中间人攻击，但是并不是说使用了 HTTPS 就可以高枕无忧了，因为如果你没有完全关闭 HTTP 访问的话，攻击方可以通过某些方式将 HTTPS 降级为 HTTP 从而实现中间人攻击。
 
 26. location 下有哪些常用属性
+    <details open>
+
     以这个链接为例子
     `https://www.ly.cn/product/?app=SUIBIAN#/cart?page_source=sxgouwuche`
+
     - hash 返回哈希部分 `#/cart?page_source=sxgouwuche`
     - host 返回主机名和端口 `www.ly.cn`
     - href 返回完整的 url
@@ -547,16 +580,19 @@
     - origin 返回 URL 的协议，主机名和端口号 `https://www.ly.cn`
     - 正常的拼接就是 orgion + pathname `https://www.ly.cn/product/`
 27. navigator 对象下有哪些常用属性
+    <details open>
 
     包含浏览器和设备的一些相关信息,
 
     常见的有 userAgent， online（判断是否有网） cookieEnabled 是否允许 cookie，platform 浏览器所在的系统平台
 
 28. SYN 攻击是什么？
+    <details open>
 
     SYN 攻击是典型的 DOS 攻击，就是利用大量不存在的 IP 地址的和服务端建立 TCP 连接，第三次握手频频得不到，导致服务端的半连接队列爆了至崩溃，解决方案就是缩短超时时间。或者是增加半连接上限。
 
 29. CDN 的作用和原理
+    <details open>
 
     CDN 作用就是有缓存。
 
@@ -568,6 +604,7 @@
     6. 客户端请求缓存服务器上的文件
 
 30. 回源是什么意思？
+    <details open>
 
     当 cdn 缓存服务器中没有符合客户端要求的资源的时候，缓存服务器会请求上一级缓存服务器，以此类推，直到获取到。
 
@@ -576,6 +613,7 @@
     那都有哪些时候会回源呢？没有资源，资源过期，访问的资源是不缓存资源等都会导致回源。
 
 31. 理解 WebSocket 协议的底层原理、与 HTTP 的区别
+    <details open>
 
     HTTP 通信只能由客户端发起。HTTP2 支持服务端推送。
 
@@ -590,6 +628,7 @@
     7. 通常情况下，为了避免超时断连，我们会采用一个心跳包的形式，来告知我们还在，别断线。
 
 32. DOM,BOM 区别
+    <details open>
 
     js 由三种组成
 
@@ -599,6 +638,7 @@
        `window.history / window.navigator / window.screen / window.location` 都是 BOM
 
 33. cookie session token
+    <details open>
 
     - cookie呢它的缺点，首先，数据比较大，每次请求都带，浪费，其次呢，一旦被劫持，数据别人都知道了，就说显式的不太合适。
     - session,前端登录完了后，后端会生成一个 sessionid 并 set 到 cookie 里，session 是存储在 tomcat 容器中，所以如果后端及其有多台的话，多机器之间是无法共享 session 的，可以用 spring 提供的分布式 session 解决方案，把 session 存到 redis 中去。
@@ -609,6 +649,8 @@
     而 token 的话，就是把用户信息，直接加密存起来，这样解密后直接就知道这个用户是谁了。这样也就啥也不用存了，唯一的缺点是用户信息肯定不能存太多，不然也不是很安全。他在用户请求的时候，会直接把过期时间放在 jwt 上，然后再带回来的时候，匹配即可。而且有自己的私钥，没那么容易被破解的。
 
 34. 301 和 302 对 SEO 的影响
+    <details open>
+
     301 重定向指永久的将某个网站的全部链接或网站的某个页面的链接，指向一个新的网站地址或网站中的页面地址，这也意味着旧页面的权重也会被转移到新的网站地址中。
     被转移的包括以下三个方面：
 
@@ -632,9 +674,11 @@
     302 重定向时，会保留旧页面的网页排名，页面权限，网页流量价值等，而指向的页面，不会累积任何的页面权重。
 
 35. Restful 接口和 graphql 对比
+    <details open>
 
     什么是restful，就是一眼就知道它是干嘛的
-    举个例子`https://api.example.com/users`，这样的一个借口，我通过get获取，post创建,put更新,delete删除。就是用HTTP方法来替代名称。
+
+    举个例子`https://api.example.com/users`，这样的一个接口，我通过get获取，post创建,put更新,delete删除。就是用HTTP方法来替代名称。
     而graphql呢，是
     ```js
     {
@@ -654,6 +698,7 @@
     缺点是查错麻烦，要一个一个对接口看。因为都是一个接口，而且需要后端弄，主要是后端弄，前端用。
 
 36. API网关和BFF
+    <details open>
 
     使用node+graphql做一个中间服务，应该就属于BFF吧。
 
@@ -675,6 +720,7 @@
     通常会有这些公共参数
     
 37. SSE协议
+    <details open>
 
     SSE协议就是Websocket的单向版本
 
@@ -743,6 +789,7 @@
     这样前台就不需要轮训了。只需要接受即可。
 
 38. V8的排序算法了解吗？
+    <details open>
 
     数组小于10的时候，插入排序，因为插入排序是稳定的算法，而且小于10的时候，综合速度也不错
 
