@@ -96,6 +96,10 @@
 
     参考[core-loader](../js/core-loader.js)
 
+    如果是个异步的loader的话，是`const callback = this.async();`
+
+    异步执行完调用  `callback(null, output);`
+
 6. manifest
 
     一旦你的应用在浏览器中以 index.html 文件的形式被打开，一些 bundle 和应用需要的各种资源都需要用某种方式被加载与链接起来。在经过打包、压缩、为延迟加载而拆分为细小的 chunk 这些 webpack 优化 之后，你精心安排的 /src 目录的文件结构都已经不再存在。所以 webpack 需要它

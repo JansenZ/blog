@@ -45,7 +45,12 @@ var reversePairs = function(nums) {
                 arr.push(left[i]);
                 i++
             } else {
-                // 唯一多的一行
+                // 唯一比归并排序多的一行代码
+                // 按照shift那种写法反而好理解
+                // 左边的如果大与右边的，因为是从小到大排序
+                // 比如左边的5和右边的3比较，进入这循环
+                // 所以左边的后续所有的值，都大于右边的这个3
+                // 所以左边后续的值的length就是left.length - i;
                 sum+= left.length - i;
                 arr.push(right[j]);
                 j++
