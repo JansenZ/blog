@@ -162,7 +162,7 @@
     1. 抹平浏览器之间的兼容性差异
     2. 对某些原生事件`（change，select，beforeInput等）`的升级和改造，这类事件注册时会附带注册一些依赖项
 
-        例如，给 input 注册了 onchange 事件，那么`"blur", "change", "click", "focus", "input", "keydown", "keyup", "selectionchange"`这些事件全都会被注册
+        例如，给 input 注册了 onchange 事件，那么 "blur", "change", "click", "focus", "input", "keydown", "keyup", "selectionchange" 这些事件全都会被注册
 
         原生只注册一个 onchange 的话，需要在失去焦点的时候才能触发这个事件，所以这个原生事件的缺陷 react 也帮我们弥补了。
 
@@ -289,7 +289,7 @@
     }
     ```
 
-    而这个`shouldYield`的判断呢，其实就是需不需要把控制权交还给 UI，初始预留给 js 的时间是 [5ms](https://github.com/facebook/react/blob/8e5adfbd7e605bda9c5e96c10e015b3dc0df688e/packages/scheduler/src/forks/SchedulerHostConfig.default.js#L115)
+    而这个`shouldYield`的判断呢，其实就是需不需要把控制权交还给 UI，初始预留给 js 的时间是 [5ms(源码查看)](https://github.com/facebook/react/blob/8e5adfbd7e605bda9c5e96c10e015b3dc0df688e/packages/scheduler/src/forks/SchedulerHostConfig.default.js#L115)
 
     具体里面的打断逻辑我们到调度器说。
 
