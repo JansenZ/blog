@@ -976,11 +976,11 @@
     }
 
     MyArray.prototype = Object.create(Array.prototype, {
-    constructor: {
-        value: MyArray,
-        writable: true,
-        configurable: true
-    }
+        constructor: {
+            value: MyArray,
+            writable: true,
+            configurable: true
+        }
     });
 
     var colors = new MyArray();
