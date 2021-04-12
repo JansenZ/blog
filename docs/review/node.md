@@ -118,19 +118,21 @@ browser-sync start --server --files "_._"
 - URL 模块
 
   url 里可以对 url 进行操作。
-  const myURL = new URL("https://github.com/webfansplz#hello");
+  `const myURL = new URL("https://github.com/webfansplz#hello");`
   myUrl 就是一个对象。里面有 url 的信息。
 
 - 压缩 zlib 模块
 
   gzip = gzip 头+ deflate + gzip 尾
   文件压缩， createGzip, 解压就是 createGunzip;
+  ```js
   const zlib = require('zlib')
   const fs = require('fs')
   const gzip = zlib.createGzip()
   const inp = fs.createReadStream('zlib.txt')
   const out = fs.createWriteStream('zlib.txt.gz')
   inp.pipe(gzip).pipe(out)
+  ```
   服务端压缩就是在 http 进来后，gzip req
 
 exports 和 module.exports

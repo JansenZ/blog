@@ -96,9 +96,9 @@
 
     参考[core-loader](../js/core-loader.js)
 
-    如果是个异步的loader的话，是`const callback = this.async();`
+    如果是个异步的 loader 的话，是`const callback = this.async();`
 
-    异步执行完调用  `callback(null, output);`
+    异步执行完调用 `callback(null, output);`
 
 6. manifest
 
@@ -177,9 +177,32 @@
 
     轮训判断文件的最后编辑事件是否有变化，然后到了执行时间后开始再次编译。
 
-9. webpack 热更新原理
-   [参考 1](https://zhuanlan.zhihu.com/p/30669007)
-   [参考 2](https://juejin.cn/post/6844904008432222215)
+9. 如何去配置一个可配置的环境变量？
+
+    1. 首先，使用`dotenv`这个库，`require('dotenv').config()`
+    2. 创建 .env 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
+    3. 使用 DefinePlugin 这个插件，把对应的这些 process.env 都收敛起来。
+    4. 然后创建 .env.vm 文件，指向是`REACT_APP_CACHE_URL="${cache_url}"`
+    5. 创建 auto-config.xml 文件
+
+    ```js
+    <?xml version="1.0" encoding="UTF-8"?>
+        <config>
+        <group>
+            <property name="homepage_url" />
+            <property name="cache_url" />
+        </group>
+        <script>
+            <generate template=".env.vm" destfile=".env" charset="UTF-8"/>
+            <generate template="package.json.vm" destfile="package.json" charset="UTF-8"/>
+        </script>
+    </config>s
+    ```
+    6. 最后再后台配置autoconfig,也就是对应变量的值，从而完成整体配置。
+
+10. webpack 热更新原理
+    [参考 1](https://zhuanlan.zhihu.com/p/30669007)
+    [参考 2](https://juejin.cn/post/6844904008432222215)
 
     早期的 webpack 确实是个 SSE 协议，后来才改的 WS
 
@@ -242,7 +265,7 @@
 
     ![tutu](https://pic1.zhimg.com/80/v2-f7139f8763b996ebfa28486e160f6378_1440w.jpg)
 
-10. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
+11. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
 
     我的理解是，功能块的解耦，各个模块各司其职，`dev-server/client` 只负责消息的传递而不负责新模块的获取
 
