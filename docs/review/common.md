@@ -969,6 +969,17 @@
 
     如果是 putdown ，说明有组件拖进来了，直接添加组件即可
 
+    在目标区域监听 mousemove 的时候，判断当前拖拽的X, Y 和整个列表上的模块的 `getBoundingClientRect`比较
+
+    ```js
+    let rect = tgt.getBoundingClientRect();
+    let boundary = rect.top + rect.height / 2;
+    this.setState({emptyIndex: elemIndex + (event.pageY < boundary ? 0 : 1)});
+    ```
+    从而确定它拖拽的位子，然后限时一个 释放鼠标将模块添加到此处 的组件，这个组件是插到对应的index里的。
+
+    当然，这个 mousemove 生效的前提是你有一个draginfo，也就是正在拖拽的模块。
+
     当你选中了对应要编辑的模块后，右侧会出现一个设置界面，用工厂模式根据配置表，渲染出对应的配置，
 
     读取之前的配置并填入，最后保存。
