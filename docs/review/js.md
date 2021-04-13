@@ -827,16 +827,16 @@
     // node10以上 start nexttick1 time1 ntick2 time2
     // node10以下 start nexttick1 time1 time2 tick2
 
-    setTimeout(()={
+    setTimeout(() => {
         console.log("time1");
-        Promise.resolve.then(()=>{
+        Promise.resolve().then(()=>{
             console.log("pthen1");
         });
     });
 
-    setTimeout(()={
+    setTimeout(()=>{
         console.log("time2");
-        Promise.resolve.then(()=>{
+        Promise.resolve().then(()=>{
             console.log("pthen2");
         });
     });
@@ -885,6 +885,27 @@
     ```
 
     这段的话，settimeout 要在 4s 后才能执行，加多少个 then 都得等 then，因为他们属于同一个宏任务下没执行完的微任务。
+
+    把上面node的那个例子改造一下
+
+    ```js
+    var now = +new Date();
+    setTimeout(() => {
+        console.log("time1");
+        Promise.resolve().then(() => {
+            while(Date.now() - now < 2000) {}
+            console.log("pthen1");
+        });
+    });
+
+    setTimeout(() => {
+        console.log("time2");
+        Promise.resolve().then(()=>{
+            console.log("pthen2");
+        });
+    });
+    ```
+    输出是 time1, 2s 后输出 pthen1, time2, pthen2，一样论证了settimeout等待。
 
 24. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
     <details open>
