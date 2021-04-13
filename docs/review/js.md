@@ -978,6 +978,9 @@
             configurable: true
         }
     })
+    // 或者
+    Sub.prototype = Object.create(Super.prototype);
+    Sub.prototype.constructor = Sub;
     ```
 
     - 类继承
