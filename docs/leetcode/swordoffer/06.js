@@ -65,3 +65,5 @@ var reversePrint = function(head) {
     return arr;
 };
 
+
+// 看起来写复杂了，要么直接unshift，要吗就反转链表后直接打印

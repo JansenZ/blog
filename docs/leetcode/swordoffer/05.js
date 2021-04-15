@@ -20,3 +20,6 @@ var replaceSpace = function(s) {
     }
     return s2;
 };
+
+// 正则
+// charAt 跑空格

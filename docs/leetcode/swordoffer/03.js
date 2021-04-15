@@ -21,3 +21,14 @@ var findRepeatNumber = function(nums) {
         obj[t] = 1;
     }
 };
+
+var findRepeatNumber = function(nums) {
+    let ws = new Set();
+    for(let v of nums) {
+        if(ws.has(v)) return v;
+        ws.add(v);
+    }
+    return false;
+};
+
+// 没有任何难度，没有题解

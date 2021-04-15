@@ -54,3 +54,6 @@ var findNumberIn2DArray = function(matrix, target) {
     }
     return false;
 };
+
+// 2分法
+// 每一排都要看
