@@ -163,17 +163,26 @@
 
     参考[react-context](https://github.com/JansenZ/react-context/blob/main/state/connect.js)
 
-12. react 所有生命周期的作用。
+12. react 所有生命周期。
 
     <details open>
 
-    - constructor 是 class 本身的，和 react 无关，但是可以作为 react 的一个初始化的函数。
-    - componentWillMount 组件将要挂载
+    Mount阶段
+    - `constructor` 是 class 本身的，和 react 无关，但是可以作为 react 的一个初始化的函数。
+    - `[unsafe]componentWillMount` 组件将要挂载
+    - `static getDerivedStateFromProps`替换上面的，传入 nextprops 和 prevState, return 的值就是更新的 state,return null 就是不更新
+      配合 componentDidUpdate 使用更佳 getDerivedStateFromProps 是一个静态方法，而组件实例无法继承静态方法，所以该生命周期钩子内部无法通过使用 this 获取组件实例的属性/方法。
     - render 渲染
     - componentDidMount 组件挂载完成
-    - static getDerivedStateFromProps 传入 nextprops 和 prevState, return 的值就是更新的 state,return null 就是不更新
-      配合 componentDidUpdate 使用更佳 getDerivedStateFromProps 是一个静态方法，而组件实例无法继承静态方法，所以该生命周期钩子内部无法通过使用 this 获取组件实例的属性/方法。
-    - shouldComponentUpdate 询问组件是否要更新 ->yes? componentWillUpdate-> render -> componentdidUpdate
+
+    update阶段
+    - `static getDerivedStateFromProps`
+    - `shouldComponentUpdate` 询问组件是否要更新 ->yes? componentWillUpdate-> render -> componentdidUpdate
+    - render()
+    - getSnapshotBeforeUpdate()
+    - componentDidUpdate()
+
+    卸载
     - componentWillUnmount 组件卸载之前
 
 13. React 如何判断是类组件还是 function 组件
