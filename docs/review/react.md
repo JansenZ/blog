@@ -1463,7 +1463,7 @@ if (next === null) {
 
     useLayoutEffect hook从上一次更新的销毁函数调用到本次更新的回调函数调用是同步执行的。而useEffect则需要先调度，在Layout阶段完成后再异步执行。
 
-    这就是useLayoutEffect与useEffect的区别。
+    useLayoutEffect 会在所有的DOM 变更之后同步调用effect，可以用它来读取dom布局并同步触发重渲染，所以要慎用，避免阻塞视觉更新。
 
 ### SetState
 
