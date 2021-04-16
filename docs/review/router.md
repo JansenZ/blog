@@ -76,7 +76,7 @@
 
         然后再子应用里，在使用一个自定义 loader 来把代码里的 `import xx from 'core'` 替换为 `var a = core || var {a,b} = core` 这样子。
 
-        [core-loader](../js/core-loader.js)
+        [core-loader](https://zhenglin.vip/js/core-loader.js)
 
     2. 使用 webpack 的 externals
 

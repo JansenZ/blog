@@ -248,7 +248,7 @@
     ```
 
     ![event0](../img/event0.jpg)
-    ![event1](../img/event1.jpg)
+    ![event1](../img/event.jpg)
 
     OK，我们先不看具体的执行时机，接下来获取到了 listener 后，就会根据是捕获还是冒泡，真实的的给 dom 节点添加事件。形如下面
 

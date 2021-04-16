@@ -94,7 +94,7 @@
 
     最后`this.callback(null, content, inputSourceMap);`
 
-    参考[core-loader](../js/core-loader.js)
+    参考[core-loader](https://zhenglin.vip/js/core-loader.js)
 
     如果是个异步的 loader 的话，是`const callback = this.async();`
 
