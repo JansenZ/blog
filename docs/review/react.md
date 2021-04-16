@@ -1,11 +1,13 @@
 ### 常见问题
 
 1. 什么是控制反转？
+
     <details open>
 
     控制反转是指把对象的依赖管理从内部转移至外部，降低内部耦合，依赖注入，hoc，render props 都算控制反转。
 
 2. HOOK 的实践(非常重要！！！)
+
     <details open>
 
     那有了 HOOK 之后，其实很多上述的一些方法可以用 `HOOK` 来改写，更加的直观。
@@ -24,6 +26,7 @@
     - useDebugValue: debugger 方法
 
 3. hooks 缺陷
+
     <details open>
 
     1. 使用 `Hooks` 编写代码时候，你必须清楚代码中 `useEffect` 和 `useCallback` 的“依赖项数组”的改变时机。有时候，你的 `useEffect` 依赖某个函数的不可变性，这个函数的不可变性又依赖于另一个函数的不可变性，这样便形成了一条依赖链。一旦这条依赖链的某个节点意外地被改变了，你的 `useEffect` 就被意外地触发了。
@@ -32,11 +35,13 @@
     4. 然后遇到实在需要存储的变量的时候，类似于挂在 `this` 上的时候，就需要使用 `useRef + ref.current`，不是很优雅
 
 4. 为什么写 JSX 的时候，即使没用 React 也必须 import react 呢？
+
     <details open>
 
     因为即使写的是函数式代码，实际上 Babel 都会转译成 `React.createElement`,不引入的话就不能使用了。
 
 5. this.setState 里参数是函数的时候和 Object 区别是什么
+
     <details open>
 
     不管是函数还是对象，最后都是合成了一个新的状态对象。`return Object.assign({}, prevState, partialState)`;
@@ -48,11 +53,13 @@
     都还是批处理异步的。
 
 6. this.forceUdate 是干嘛用的
+
     <details open>
 
     正常，`state`或者是`props`变化时，会触发`render`渲染，但是如果有些情况需要其他数据，那就可以用`forceUpdate`，调用它后会让组件强制调用`render`方法。
 
 7. 为什么函数式组件不能使用`ref`，想用怎么办？
+
     <details open>
 
     因为`ref`是放在`class`实例下的，函数式组件没有实例，所以就不能使用`ref`。
@@ -63,7 +70,25 @@
 
     在渲染`beginwork`开始的时候，对于最外面的这个是`class`还是`function`是不知道的，当然，通过`forwardRef`的会把里面标记为`forwardRef`组件。然后在`update`的时候，`forwardRef`会把`ref`提出来，而其他`renderWithHooks`的对应位置参数是`context`，后面的和无状态组件就一样了
 
-8. 什么是虚拟 dom
+8. ref 是怎么把 dom 塞进 current 属性里的？
+
+    <details open>
+
+    React.createRef 生成一个只含有 current 的对象。
+
+    然后在组件挂载的时候，给这个 current 属性存入 DOM 元素，并在卸载的时候传入 null。ref 会在 didmount 和 didupdate 触发前更新。在渲染出来后，会执行 `commitAttachRef` 方法，卸载的时候执行 `detach` 方法解除 ref。
+
+    这个方法目前就两种方式，里面有这个 Fiber 对象节点和 ref 的对象，它会把 `Fiber.stateNode` 赋值给 `ref.current`，如果 ref 是函数的话，直接把 `Fiber.stateNode` 作为参数调用那个方法
+
+    ```js
+    instanceToUse = fiber.stateNode;
+    typeof ref === "function"
+        ? ref(instanceToUse)
+        : (ref.current = instanceToUse);
+    ```
+
+9. 什么是虚拟 dom
+
     <details open>
 
     虚拟 DOM 就是一个 JS 对象模拟 DOM 树。
@@ -106,7 +131,8 @@
     2. 同样的，通过 `Virtual DOM` 我们可以渲染到其他的平台，比如实现 `SSR`、同构渲染等等。
     3. 实现组件的高度抽象化
 
-9. React.Children.map 这个方法是干嘛用的
+10. React.Children.map 这个方法是干嘛用的
+
     <details open>
 
     `React.Children` 提供了用于处理 `this.props.children` 不透明数据结构的方法，并且利用 `traverseAllChildrenImplf` 方法打平数组，返回的一定是一个一纬数组。
@@ -123,7 +149,8 @@
 
     比如我这个架子里，`this.props.children`是不透明的，又需要注入一些 props，就只能通过这个方法。
 
-10. react context
+11. react context
+
     <details open>
 
     React.createContext 其实就是返回了一个 ctx 对象，标记它的 ctx 类型
@@ -136,7 +163,8 @@
 
     参考[react-context](https://github.com/JansenZ/react-context/blob/main/state/connect.js)
 
-11. react 所有生命周期的作用。
+12. react 所有生命周期的作用。
+
     <details open>
 
     - constructor 是 class 本身的，和 react 无关，但是可以作为 react 的一个初始化的函数。
@@ -148,12 +176,14 @@
     - shouldComponentUpdate 询问组件是否要更新 ->yes? componentWillUpdate-> render -> componentdidUpdate
     - componentWillUnmount 组件卸载之前
 
-12. React 如何判断是类组件还是 function 组件
+13. React 如何判断是类组件还是 function 组件
+
     <details open>
 
     `ClassComponent.prototype.isReactComponent = {};` 类组件原型有这个，function 没有
 
-13. 为什么要废弃一些生命周期
+14. 为什么要废弃一些生命周期
+
     <details open>
 
     - [UNSAFE_]componentWillMount（弃用）
@@ -166,9 +196,37 @@
 
     而那些 didxxx 因为是在 commit 阶段执行，所以不会被打断，所以也是安全的
 
+15. react concurrent 模式的思想是什么
+
+    <details open>
+
+    1. useTransition
+    2. useDeferredValue
+    3. Suspense
+
+    我们从研究得知悬停和文本输入之类的交互需要在很短的时间内处理，而点击和页面转换可以等待稍长时间而不会感到迟缓。Concurrent 模式在内部使用不同的“优先级”，大致对应于人类感知研究中的交互类别。
+
+    总结就是 A 点跳 B 的时候，先停留在 A 页面一会，先预加载 B，然后多少 ms 后跳转到 B 去，如果速度快这个时候 B 就已经出来了，如果速度慢，这个时候再出加载也没啥问题。
+
+16. React.createElement
+
+    <details open>
+
+    正常写 jsx 的代码会被 babel 转译成该方法，方法接收三+个参数，一个是 type,一个是 prop obj,一个是 children
+    第一个参数如果是 html 标签，那就是个普通的 type，如果是一个 React 组件的话，会去判断这个 type 下有没有 defaultProps 属性，如果有的话，会给对应的 props 上默认值。
+    第二个参数上来会剔除 key 和 ref，然后赋值给 prop，还有 children 也是。
+    第三个+以后的参数就是 children 了，源码里会判断它的 length，如果只有一个的话 children=它，否则话 children=[]；
+    最后生成一个 ReactElement 出来。
+    这个对象会有一个属性\$\$typeof 标记它是一个 React 对象，type,key,ref,prop 都有
+
+17. React 有 Component 和 pureComponent，我们写的类都是继承它的，这样我们就拥有了 setState,和 forceUpdate 方法。
+
+    在`PureCompent`和`Component`的区别就是，`PureComponent`就是继承自`Component`,然后添加了一个原型属性`isPureComponent`代表它是`pure`，具体的判断应该就是在 react-dom 里面了。
+
 ### React 合成事件
 
 1. 合成事件特点
+
     <details open>
 
     React 是自己实现的一套事件机制，主要是因为
@@ -185,6 +243,7 @@
     5. 对事件进行归类，可以优先级分级干预
 
 2. 合成事件流程
+
     <details open>
 
     详细流程： [参考](https://juejin.cn/post/6922444987091124232)
@@ -201,12 +260,18 @@
 
     不管是标签页好，nativeEvent 也好，最终都是会进入 `addTrappedEventListener` 方法，会有参数是否是捕获还是冒泡进来。
 
-    而添加好的事件，以前会存到数组中，现在直接存到一个Set集合中
+    而添加好的事件，以前会存到数组中，现在直接存到一个 Set 集合中
+
     ```js
-     if (!listenerSet.has(listenerSetKey)) {
-         addTrappedEventListener(targetElement, domEventName, IS_NON_DELEGATED, isCapturePhaseListener);
+    if (!listenerSet.has(listenerSetKey)) {
+        addTrappedEventListener(
+            targetElement,
+            domEventName,
+            IS_NON_DELEGATED,
+            isCapturePhaseListener
+        );
         listenerSet.add(listenerSetKey);
-     }
+    }
     ```
 
     这个方法会根据你的 keyname 来分配不同的 `listener`
@@ -268,6 +333,7 @@
     通过调用它，将优先级记录到利用 scheduler 中，所以调度器才能在调度的时候知道当前任务的优先级
 
 3. 合成事件流程（老）
+
     <details open>
 
     以下是老版本的。可以不看了
@@ -287,6 +353,7 @@
 ### React Fiber
 
 1. 设计理念
+
     <details open>
 
     我们知道，JS 可以操作 DOM，GUI 渲染线程与 JS 线程是互斥的。所以 JS 脚本执行和浏览器布局、绘制不能同时执行。
@@ -311,6 +378,7 @@
     具体里面的打断逻辑我们到调度器说。
 
 2. Fiber 的含义
+
     <details open>
 
     1. 作为架构来说，之前 React15 的 Reconciler 采用递归的方式执行，数据保存在递归调用栈中，所以被称为 stack Reconciler。React16 的 Reconciler 基于 Fiber 节点实现，被称为 Fiber Reconciler。
@@ -320,6 +388,7 @@
     3. 作为动态的工作单元来说，每个 Fiber 节点保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）。
 
 3. Fiber 结构
+
     <details open>
 
     ```js
@@ -384,6 +453,7 @@
     ```
 
 4. 双缓存树
+
     <details open>
 
     在 React 中最多会同时存在两棵 Fiber 树。当前屏幕上显示内容对应的 Fiber 树称为 current Fiber 树，正在内存中构建的 Fiber 树称为 workInProgress Fiber 树。
@@ -404,6 +474,7 @@
     而通过每个 fiber 节点的 alternate 属性对比，决定是否复用的过程，就是 Diff 算法，diff 单独讲
 
 5. FiberRoot RootFiber
+
     <details open>
 
     FiberRoot 是整个应用的根节点，通过它的 current 指向当前的 current Fiber，也就是 rootFiber `fiberRootNode.current = rootFiber;`
@@ -411,11 +482,13 @@
 ### 调度器 Scheduler
 
 1. 如何判断当前用户的输入是否被挂起？
+
     <details open>
 
     `navigator.scheduling.isInputPending`这个 API 可以判断
 
 2. React 调度如何判断是否需要交还控制权给 UI？
+
     <details open>
 
     [SchedulerHostConfig.js](https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/scheduler/src/forks/SchedulerHostConfig.default.js#L228-L234)
@@ -431,6 +504,7 @@
         2. 如果不支持 `isInputPending`,那就当没有优化 300ms 这回事，依然每跑 5ms 就交还控制权。
 
 3. React 同一时间任务很多，它是怎么做的？
+
     <details open>
 
     采用两个队列，一个是还没过期的任务，一个是过期任务
@@ -447,6 +521,7 @@
     那么这两个队列，采用的是**小顶堆**的模式，这样方便排序，以及每次取顶部的那个，获取最早过期的复杂度 O(1)
 
 4. 任务是怎么按时间分片执行的
+
     <details open>
 
     ```js
@@ -509,6 +584,7 @@
     取出 `taskQueue` 中最早过期的任务并执行他。若任务函数返回值为函数，那么就说明当前任务尚未完成，需要继续调用任务函数，否则任务完成。`workLoop` 就是通过这样的办法判断单个任务的完成状态。
 
 5. React 中有哪些优先级
+
     <details open>
 
     ```js
@@ -546,6 +622,7 @@
     - Suspense 使用低优先级
 
 6. 什么是 Lane 模型
+
     <details open>
 
     [LANE](https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactFiberLane.js#L77-L107)
@@ -559,6 +636,7 @@
 ### 协调器/调和器 Reconciler
 
 1. 调和的主要工作有
+
     <details open>
 
     每当有更新发生时，`Reconciler` 会做如下工作：
@@ -569,6 +647,7 @@
     - 通知 `Renderer` 将变化的虚拟 `DOM` 渲染到页面上
 
 2. stack Reconciler 特点
+
     <details open>
 
     由于递归执行，一旦任务开始进行，就无法中断，那么 `js`将一直占用主线程， 一直要等到整棵 `Virtual DOM` 树计算完成之后，才能把执行权交给渲染引擎，那么这就会导致一些用户交互、动画等任务无法立即得到处理，就会有卡顿，非常的影响用户体验。
@@ -576,13 +655,15 @@
     Reconciler 与 Renderer 是交替工作
 
 3. Fiber Reconciler 特点
-    <details open>
 
-   可打断，根据 `shouldYield` 判断， 因为可打断，所以不能交替渲染工作，需要整个 `Scheduler` 与 `Reconciler` 的工作都在内存中进行。只有当所有组件都完成 `Reconciler` 的工作，才会统一交给 `Renderer`。
+     <details open>
+
+    可打断，根据 `shouldYield` 判断， 因为可打断，所以不能交替渲染工作，需要整个 `Scheduler` 与 `Reconciler` 的工作都在内存中进行。只有当所有组件都完成 `Reconciler` 的工作，才会统一交给 `Renderer`。
 
     在 React16 中，`Reconciler` 与 `Renderer` 不再是交替工作。当 `Scheduler` 将任务交给 `Reconciler` 后，`Reconciler` 会为变化的虚拟 `DOM` 打上代表增/删/更新的标记
 
 4. React 16 渲染器
+
     <details open>
 
     Renderer 根据 Reconciler 为虚拟 DOM 打的标记，**同步**执行对应的 DOM 操作。
@@ -598,6 +679,7 @@
     由于红框中的工作都在内存中进行，不会更新页面上的 DOM，所以即使反复中断，用户也不会看见更新不完全的 DOM。
 
 5. render 方法的执行过程
+
     <details open>
 
     ```js
@@ -654,6 +736,7 @@
 ### 调和器 beginWork
 
 1. beginWork 干哪些事
+
     <details open>
 
     `beginWork` 的工作是传入当前 `Fiber` 节点，创建子 `Fiber` 节点，我们从传参来看看具体是如何做的
@@ -688,6 +771,7 @@
     pendingProps 里保存的就是对应的 reactElement
 
 2. 更新的时候，如何判断可以复用 current 节点呢？
+
     <details open>
 
     - oldProps === newProps && workInProgress.type === current.type，即 props 与 fiber.type 不变
@@ -701,6 +785,7 @@
     经过观察，发现，除了根节点外的一些东西，里面的只要大的改动了，即使 props 前后字面一样，也不会相等，所以基本没啥用，后面还是会去 reconcileChildren 来 diff。
 
 3. mount 的时候组件类型有哪些
+
     <details open>
 
     [类型集合](https://github.com/facebook/react/blob/1fb18e22ae66fdb1dc127347e169e73948778e5a/packages/react-reconciler/src/ReactWorkTags.js)
@@ -708,6 +793,7 @@
     对于我们常见的组件类型，如`（FunctionComponent/ClassComponent/HostComponent）`，最终会进入 `reconcileChildren` 方法。
 
 4. reconcileChildren 方法
+
     <details open>
 
     ```js
@@ -768,6 +854,7 @@
 ### 调和器 completeWork
 
 1. completeWork 干哪些活
+
     <details open>
 
     进入 `completeWork` 后，目前只有 `fiber` 形态变了，对于原生 `DOM` 组件（HostComponent）和文本节点（HostText）的 fiber 来说，对应的 DOM 节点（fiber.stateNode）并未变化。
@@ -782,6 +869,7 @@
     4. 自下而上收集 `effectList`，最终收集到 `root` 上
 
 2. 它是怎么收集 effectList，这样的好处是什么？
+
     <details open>
 
     作为 `DOM` 操作的依据，`commit` 阶段需要找到所有有 `effectTag` 的 `Fiber` 节点并依次执行 `effectTag` 对应操作。难道需要在 `commit` 阶段再遍历一次 `Fiber` 树寻找 `effectTag !== null` 的 Fiber 节点么？
@@ -858,6 +946,7 @@
 ### React Diff
 
 1. 新的 diff 的预设限制是啥，为什么？
+
     <details open>
 
     由于 Diff 操作本身也会带来性能损耗，React 文档中提到，即使在最前沿的算法中，将前后两棵树完全比对的算法的复杂程度为 O(n 3 )，其中 n 是树中元素的数量。
@@ -1170,7 +1259,7 @@ if (next === null) {
     return callback;
     ```
 
-2. useState原理
+2. useState 原理
 
     <details open>
 
@@ -1527,33 +1616,6 @@ if (next === null) {
 
 ### 其他
 
-1. react concurrent 模式的思想是什么
-
-    <details open>
-
-    1. useTransition
-    2. useDeferredValue
-    3. Suspense
-
-    我们从研究得知悬停和文本输入之类的交互需要在很短的时间内处理，而点击和页面转换可以等待稍长时间而不会感到迟缓。Concurrent 模式在内部使用不同的“优先级”，大致对应于人类感知研究中的交互类别。
-
-    总结就是 A 点跳 B 的时候，先停留在 A 页面一会，先预加载 B，然后多少 ms 后跳转到 B 去，如果速度快这个时候 B 就已经出来了，如果速度慢，这个时候再出加载也没啥问题。
-
-2. React.createElement
-
-    <details open>
-
-    正常写 jsx 的代码会被 babel 转译成该方法，方法接收三+个参数，一个是 type,一个是 prop obj,一个是 children
-    第一个参数如果是 html 标签，那就是个普通的 type，如果是一个 React 组件的话，会去判断这个 type 下有没有 defaultProps 属性，如果有的话，会给对应的 props 上默认值。
-    第二个参数上来会剔除 key 和 ref，然后赋值给 prop，还有 children 也是。
-    第三个+以后的参数就是 children 了，源码里会判断它的 length，如果只有一个的话 children=它，否则话 children=[]；
-    最后生成一个 ReactElement 出来。
-    这个对象会有一个属性\$\$typeof 标记它是一个 React 对象，type,key,ref,prop 都有
-
-3. React 有 Component 和 pureComponent，我们写的类都是继承它的，这样我们就拥有了 setState,和 forceUpdate 方法。
-
-    在`PureCompent`和`Component`的区别就是，`PureComponent`就是继承自`Component`,然后添加了一个原型属性`isPureComponent`代表它是`pure`，具体的判断应该就是在 react-dom 里面了。
-
 4. setState 工作流（旧）
 
     <details open>
@@ -1570,24 +1632,7 @@ if (next === null) {
 
     根据标识`shouldUpdate`来决定是否对组件实例进行重新渲染，而标识`shouldUpdate`的值则取决于`PureComponent`组件浅比较结果或者生命周期函数`shouldComponentUpdate`执行结果；
 
-5. ref 是怎么把 dom 塞进 current 属性里的？
-
-    <details open>
-
-    React.createRef 生成一个只含有 current 的对象。
-
-    然后在组件挂载的时候，给这个 current 属性存入 DOM 元素，并在卸载的时候传入 null。ref 会在 didmount 和 didupdate 触发前更新。在渲染出来后，会执行 `commitAttachRef` 方法，卸载的时候执行 detach 方法解除 ref。
-
-    这个方法目前就两种方式，里面有这个 Fiber 对象节点和 ref 的对象，它会把 `Fiber.stateNode` 赋值给 `ref.current`，如果 ref 是函数的话，直接把 `Fiber.stateNode` 作为参数调用那个方法
-
-    ```js
-    instanceToUse = fiber.stateNode;
-    typeof ref === "function"
-        ? ref(instanceToUse)
-        : (ref.current = instanceToUse);
-    ```
-
-6. React.render()方法全过程
+5. React.render()方法全过程
 
     <details open>
 
@@ -1623,11 +1668,11 @@ if (next === null) {
     5. render 阶段（`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
     6. commit 阶段（`commitRoot`）
 
-7. scheduleWork()调度的原理。
+6. scheduleWork()调度的原理。
 
-    <details open>
+     <details open>
 
-   JS 和渲染引擎是一个互斥关系。（不然就乱了）。如果 JS 在执行代码，那么渲染引擎工作就会被停止。假如我们有一个很复杂的复合组件需要重新渲染，那么调用栈可能会很长
+    JS 和渲染引擎是一个互斥关系。（不然就乱了）。如果 JS 在执行代码，那么渲染引擎工作就会被停止。假如我们有一个很复杂的复合组件需要重新渲染，那么调用栈可能会很长
 
     scheduleWork 里会获取 fiberd 对象的 root，以及标记优先级，然后进入 requestWork
 
@@ -1664,7 +1709,7 @@ if (next === null) {
 
     后面的操作就是`commitRoot`后续, 把`Diff`的结果反映到真实 `DOM`的过程。
 
-8. react hook 原理（old）
+7. react hook 原理（old）
 
     <details open>
 

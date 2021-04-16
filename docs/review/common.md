@@ -993,6 +993,7 @@
     而基础模块就是用来渲染对应模块的 html，css 和一些公共可抽出的数据信息。
 
 40. 硬链接和软链接的区别
+    <details open>
 
     1. 连接方式不同
        - 硬： `ln oldfile newfile`
@@ -1000,3 +1001,25 @@
     2. 硬链接只能在同一文件系统中的文件之间进行链接，不能对目录进行创建，而软连接是可以对目录进行连接的
     3. 硬的是多个文件指向同一个索引节点，而软的是指向对方目录的一个索引
     4. 如果删除硬链接对应的源文件，则硬链接文件仍然存在，而且保存了原有的内容，而软连接删除了源文件的话，就不行了，相关软连接就变成了死链接。
+
+41. 如果没有promise，如何实现一个串行操作？
+    <details open>
+
+    可以自己写一个包裹函数，类迭代器。
+
+    ```js
+    var schemeQueue = [];
+    function iteratorRegister(fn) {
+        var next = function () {
+            if (schemeQueue.length === 0) {
+                return;
+            }
+            schemeQueue.shift()(next);
+        };
+
+        schemeQueue.push(fn);
+    }
+    ```
+
+    这样在使用的时候，我的 fn 就是一个一个函数，我只需要进来一次，就把它们添加到我的队列，但是这些 fn 会有 callback ，没有 callback 就当它不是异步，直接执行 next ，如果是异步在 callback 里执行 next，从而达到一个串行的目的。
+
