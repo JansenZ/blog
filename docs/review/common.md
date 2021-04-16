@@ -1,26 +1,40 @@
 1. 性能优化的方式
     <details open>
 
-    1. webpack 构建优化，使用 include/exclude.Happypack 开启多线程.自带的 tree-shaking 移除无用代码，自带的 hosit-scoping，移除无用计算。利用 import.then 拆分,babel 设置缓存。
-    2. http 网络请求开启 gzip，可以压缩 HTTP 响应的 70%。这个要服务端配置一下，会增大 CPU 的开销去解压、压缩，Webpack 中 用 CompressionWebpackPlugin 插件开启 Gzip ,事实上就是为了在构建过程中去做一部分服务器的工作，为服务器分压。
+    HTTP方面
+    1. http 网络请求开启 gzip，可以压缩 HTTP 响应的 70%。这个要服务端配置一下，会增大 CPU 的开销去解压、压缩，Webpack 中 用 CompressionWebpackPlugin 插件开启 Gzip ,事实上就是为了在构建过程中去做一部分服务器的工作，为服务器分压。
        2.1 使用 CDN 缓存。dns 预解析，dns prefetch，可以预解析。script defer async 防止 js 阻塞。
-    3. 图片也做好压缩，雪碧图, 小图使用 base64 可以减少请求，大图不能用 bas64，因为 base64 会膨胀到 4/3 大小，那时候省的 http 请求还不如膨胀的多。然后 svg 的话渲染成本比较高，而且对设计要求也比较高。
-    4. webp 格式，前端处理的话，包装 src 函数，然后去 caniuse 维护一个浏览器支持的表，然后支持就用 webp 不支持直接把 webp 分割掉就可以了。
-    5. webp 格式，后端处理的话，就是判断我图片过去的请求头 accept 里有没有 img/webp。有就说明我这浏览器支持，然后就吐给我 webp 的资源就可以了。比如 Chrome 就有，safari 就没有
-    6. 使用 HTTP 强缓存，cache-control > expires。expire 里面写的是过期日期，是和本地电脑比的，而 cache-control 是过期时间段，所以 cache-control 更准。
-    7. cache-control 值，public，本地和服务器都会缓存走强缓存，private，只有本地缓存走强缓存，no-cache，本地缓存，但是会绕过强缓存去协商。no-store 的话就直接绕过所有全部重新下载了
-    8. 使用 HTTP 协商缓存，协商缓存本身数据也是存在本地的， Last-Modified（请求带上 If-Modified-Since），返回 304，但是如果改了文件名的话，last-modified 就找不到了，就会重新返回。所以还要一个 etag（请求带上 If-None-Match），两者共同配合完成 304.
-    9. 体积不大的会放在 from memory cahce，比如 base64,小的 css，体积稍大会放 from disk cache。
-    10. 还可以使用 service worker。
-    11. 以上 http 的缓存，实际上现在多数都是后台网关缓存，走 redis。永远给我 200。
-    12. 本地存储，cookie,storage。 cookie 里少放信息，因为会跟着 http 请求头跑，很浪费。如果本地存储需求量很大的话，比如你要实现一个 im 的话，可以用 indexDB,本地数据库
-    13. 采用服务端渲染，当然了，会加大服务端的消耗。
-    14. react 本身的虚拟 dom，react fiber 计算 diff。（减少比对 dom 的成本）减少操作 dom。有效的减少回流和重绘。
-    15. 比如图片给定好它的高度。也可以减少回流。offsetTop、offsetLeft、 offsetWidth、offsetHeight、scrollTop、scrollLeft、scrollWidth、scrollHeight、clientTop、clientLeft、clientWidth、clientHeight 这些属性的获取，都会触发回流。
-    16. 不重要的类似日志打点这样的，放在 requestidlecallback
-    17. 图片懒加载 intersectionobserver
-    18. 防抖（搜索输入）、节流(scroll 监听)
-    19. ssr
+    2. 使用 HTTP 强缓存，cache-control > expires。expire 里面写的是过期日期，是和本地电脑比的，而 cache-control 是过期时间段，所以 cache-control 更准。
+    3. cache-control 值，public，本地和服务器都会缓存走强缓存，private，只有本地缓存走强缓存，no-cache，本地缓存，但是会绕过强缓存去协商。no-store 的话就直接绕过所有全部重新下载了
+    4. 使用 HTTP 协商缓存，协商缓存本身数据也是存在本地的， Last-Modified（请求带上 If-Modified-Since），返回 304，但是如果改了文件名的话，last-modified 就找不到了，就会重新返回。所以还要一个 etag（请求带上 If-None-Match），两者共同配合完成 304.
+    5. 体积不大的会放在 from memory cahce，比如 base64,小的 css，体积稍大会放 from disk cache。
+    6. 还可以使用 service worker。
+    7. 以上 http 的缓存，实际上现在多数都是后台网关缓存，走 redis。永远给我 200。
+    8. 本地存储，cookie,storage。 cookie 里少放信息，因为会跟着 http 请求头跑，很浪费。如果本地存储需求量很大的话，比如你要实现一个 im 的话，可以用 indexDB,本地数据库
+
+    WEBPACK
+    1. webpack 构建优化，使用 include/exclude.
+    2. Happypack 开启多线程
+    3. 自带的 tree-shaking 移除无用代码
+    4. 自带的 hosit-scoping，移除无用计算。
+    5. 利用 import.then 拆分,babel 设置缓存。
+
+    React方面
+    1. 采用服务端渲染，当然了，会加大服务端的消耗。
+    2. react 本身的虚拟 dom，react fiber 计算 diff。（减少比对 dom 的成本）减少操作 dom。有效的减少回流和重绘。
+    3. 利用 key 提升 diff 性能
+    4. 利用 context 来减少中间组件的渲染
+    5. 利用 shouldComponentUpdate 、 pureComponent 来做渲染优化
+    6. 利用 immer 来做数据层面优化
+
+    其他方面
+    1. 图片也做好压缩，雪碧图, 小图使用 base64 可以减少请求，大图不能用 bas64，因为 base64 会膨胀到 4/3 大小，那时候省的 http 请求还不如膨胀的多。然后 svg 的话渲染成本比较高，而且对设计要求也比较高。
+    2. webp 格式，前端处理的话，包装 src 函数，然后去 caniuse 维护一个浏览器支持的表，然后支持就用 webp 不支持直接把 webp 分割掉就可以了。
+    3. webp 格式，后端处理的话，就是判断我图片过去的请求头 accept 里有没有 img/webp。有就说明我这浏览器支持，然后就吐给我 webp 的资源就可以了。比如 Chrome 就有，safari 就没有
+    4. 比如图片给定好它的高度。也可以减少回流。offsetTop、offsetLeft、 offsetWidth、offsetHeight、scrollTop、scrollLeft、scrollWidth、scrollHeight、clientTop、clientLeft、clientWidth、clientHeight 这些属性的获取，都会触发回流。
+    5. 不重要的类似日志打点这样的，放在 requestidlecallback
+    6. 图片懒加载 intersectionobserver
+    7. 防抖（搜索输入）、节流(scroll 监听)
 
 2. 常见的设计模式
     <details open>
