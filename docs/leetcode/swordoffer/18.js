@@ -1,42 +1,79 @@
-// 请实现一个函数用来匹配包含'. '和'*'的正则表达式。模式中的字符'.'表示任意一个字符，而'*'表示它前面的字符可以出现任意次（含0次）。在本题中，匹配是指字符串的所有字符匹配整个模式。例如，字符串"aaa"与模式"a.a"和"ab*ac*a"匹配，但与"aa.a"和"ab*a"均不匹配。
-
+// 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。
+// 返回删除后的链表的头节点。
+// 注意：此题对比原题有改动
 // 示例 1:
-
-// 输入:
-// s = "aa"
-// p = "a"
-// 输出: false
-// 解释: "a" 无法匹配 "aa" 整个字符串。
+// 输入: head = [4,5,1,9], val = 5
+// 输出: [4,1,9]
+// 解释: 给定你链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9.
 // 示例 2:
 
-// 输入:
-// s = "aa"
-// p = "a*"
-// 输出: true
-// 解释: 因为 '*' 代表可以匹配零个或多个前面的那一个元素, 在这里前面的元素就是 'a'。因此，字符串 "aa" 可被视为 'a' 重复了一次。
-// 示例 3:
+// 输入: head = [4,5,1,9], val = 1
+// 输出: [4,5,9]
+// 解释: 给定你链表中值为 1 的第三个节点，那么在调用了你的函数之后，该链表应变为 4 -> 5 -> 9.
+ 
+// 说明：
 
-// 输入:
-// s = "ab"
-// p = ".*"
-// 输出: true
-// 解释: ".*" 表示可匹配零个或多个（'*'）任意字符（'.'）。
-// 示例 4:
-
-// 输入:
-// s = "aab"
-// p = "c*a*b"
-// 输出: true
-// 解释: 因为 '*' 表示零个或多个，这里 'c' 为 0 个, 'a' 被重复一次。因此可以匹配字符串 "aab"。
-// 示例 5:
-
-// 输入:
-// s = "mississippi"
-// p = "mis*is*p*."
-// 输出: false
-// s 可能为空，且只包含从 a-z 的小写字母。
-// p 可能为空，且只包含从 a-z 的小写字母以及字符 . 和 *，无连续的 '*'。
+// 题目保证链表中节点的值互不相同
+// 若使用 C 或 C++ 语言，你不需要 free 或 delete 被删除的节点
 
 // 来源：力扣（LeetCode）
-// 链接：https://leetcode-cn.com/problems/zheng-ze-biao-da-shi-pi-pei-lcof
+// 链接：https://leetcode-cn.com/problems/shan-chu-lian-biao-de-jie-dian-lcof
 // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+/**
+ * @param {ListNode} head
+ * @param {number} val
+ * @return {ListNode}
+ */
+var deleteNode = function(head, val) {
+
+    if(!head) return null;
+    if(head.val == val) {
+        // 说明只有一个节点，直接删除出null
+        if(!head.next) return null
+        // 否则head指向q即可
+        head = head.next;
+    }
+    let p = head;
+    let q = head.next;
+    let deleted = false;
+    while(q && !deleted) {
+        if(q.val == val) {
+            p.next = q.next;
+            deleted = true;
+        } else {
+            // 不相等，后移
+            p = q;
+            q = q.next;
+        }
+    }
+    return head;
+};
+
+// 如果加一个哨兵点的话
+var deleteNode = function(head, val) {
+    var preNode = new ListNode(null);
+    preNode.next = head;
+    // 这样的话，上面的那些null的处理其实都解决了
+    let p = preNode;
+    let q = preNode.next;
+    let deleted = 0;
+    while(q && !deleted) {
+        if(q.val == val) {
+            p.next = q.next;
+            deleted = 1;
+        } else {
+            // 不相等，后移
+            p = q;
+            q = q.next;
+        }
+    }
+    return preNode.next;
+};

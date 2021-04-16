@@ -1,73 +1,53 @@
-// 实现函数double Power(double base, int exponent)，求base的exponent次方。不得使用库函数，同时不需要考虑大数问题。
+// 请实现一个函数，输入一个整数，输出该数二进制表示中 1 的个数。例如，把 9 表示成二进制是 1001，有 2 位是 1。因此，如果输入 9，则该函数输出 2。
 
-// 示例 1:
+// 示例 1：
 
-// 输入: 2.00000, 10
-// 输出: 1024.00000
-// 示例 2:
+// 输入：00000000000000000000000000001011
+// 输出：3
+// 解释：输入的二进制串 00000000000000000000000000001011 中，共有三位为 '1'。
+// 示例 2：
 
-// 输入: 2.10000, 3
-// 输出: 9.26100
-// 示例 3:
+// 输入：00000000000000000000000010000000
+// 输出：1
+// 解释：输入的二进制串 00000000000000000000000010000000 中，共有一位为 '1'。
+// 示例 3：
 
-// 输入: 2.00000, -2
-// 输出: 0.25000
-// 解释: 2-2 = 1/22 = 1/4 = 0.25
-//  
+// 输入：11111111111111111111111111111101
+// 输出：31
+// 解释：输入的二进制串 11111111111111111111111111111101 中，共有 31 位为 '1'。
 
 // 来源：力扣（LeetCode）
-// 链接：https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof
+// 链接：https://leetcode-cn.com/problems/er-jin-zhi-zhong-1de-ge-shu-lcof
 // 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
 
 
 /**
- * @param {number} x
- * @param {number} n
+ * @param {number} n - a positive integer
  * @return {number}
  */
-// 非递归写法，吃不住-212213213123那个指数
-var myPow = function(x, n) {
-    if(n == 0) {
-        return 1;
-    }
-    let c = n > 0 ? x : 1 / x;
-    const m = Math.abs(n);
-    const oldc = c;
-    for(var i = 1; i < m; i ++) {
-        c = c * oldc
-    } 
-    return c;
-};
-// 递归写法, 依然爆栈
-var myPow = function(x, n) {
-    if(n == 0) {
-        return 1;
-    }
-    let c = n > 0 ? x : 1 / x;
-    return c * myPow(c, Math.abs(n) - 1);
-};
-// 自己的优化
-var myPow = function(x, n) {
-    if(n == 0) {
-        return 1;
-    }
-
-    let c = x;
-    let absn = n;
-    if(n < 0) {
-        c = 1 / x;
-        absn = -n;
-    }
-    if(absn % 2 == 0) {
-        return myPow(c * c, absn / 2)
-    }
-    return c * myPow(c, absn - 1);
+// js弱智解法
+var hammingWeight = function(n) {
+    return n.toString(2).split('').filter((k) => k == 1).length
 };
 
-// 优化，别人的。思路就是如果n%2是0，那base就可以升级，然后n 就可以除以2
-var myPow = function(x, n) {
-    if(n==0) return 1
-    if(n<0) return 1/myPow(x,-n)
-    if(n%2) return x * myPow(x,n-1)
-    return myPow(x*x,n/2)
+// 正规解法
+// 十进制转二进制
+// 101 / 2 = 50 ..... 1
+// 50 / 2 = 25  .----- 0
+// 25 / 2 = 12 ----- 1
+// 12 / 2 = 6 -------0
+// 6 / 2 = 3 -------0
+// 3 / 2 = 1 ------- 1
+// 1 / 2 = 0 ------ 1
+// 所以101的二进制就是1100101
+var hammingWeight = function(n) {
+    let count = 0;
+    while(n >= 1) {
+        let rest = n % 2;
+        rest > 0 && count++;
+        n = Math.floor(n / 2);
+    }
+    return count;
 };
+
+// 还可以改用按位与解决
