@@ -926,11 +926,17 @@
 
     - 处理 DOM 节点渲染/删除后的 autoFocus、blur 逻辑。
 
-    - 调用 getSnapshotBeforeUpdate 生命周期钩子。
+    - 调用 `getSnapshotBeforeUpdate` 生命周期钩子。
 
-    - 调度 useEffect。
+    - 调度 `useEffect`。
 
 2. mutation 阶段（执行 DOM 操作）
+
+    主要执行`commitMutationEffects`，而它会遍历effectList，对每个Fiber节点执行如下三个操作：
+
+    1. 根据ContentReset effectTag重置文字节点
+    2. 更新ref
+    3. 根据effectTag分别处理，其中effectTag包括(Placement | Update | Deletion | Hydrating)
 
     遇到删除操作的时候会有如下步骤
 
@@ -939,8 +945,17 @@
     3. 调度 useEffect 的销毁函数
 
 3. layout 阶段（执行 DOM 操作后）
+
+    主要执行 `commitLayoutEffects`
+
+    对于 ClassComponent，他会通过`current === null`区分是 mount 还是 update
+
+    调用componentDidMount 或componentDidUpdate, 所以这两个执行时机其实是一样的。 [源码](https://github.com/facebook/react/blob/970fa122d8188bafa600e9b5214833487fbf1092/packages/react-reconciler/src/ReactFiberCommitWork.new.js#L592)
+
+    对于 FunctionComponent 及相关类型，他会调用 useLayoutEffect hook 的回调函数， 调度 useEffect 的销毁与回调函数
+
     1. 赋值 ref，因为 dom 已经出来了
-    2. 执行 setstate 回调
+    2. 执行 setstate 回调, 执行 useLayoutEffect 的回调函数 或者是 didxxx
     3. 其他一些需要后续的操作
 
 ### React Diff
@@ -1435,6 +1450,20 @@ if (next === null) {
     [useEffect 指南](https://overreacted.io/zh-hans/a-complete-guide-to-useeffect/)
 
     [demo](https://codesandbox.io/s/xzr480k0np?file=/src/index.js)
+
+7. useEffect 和 useLayoutEffect 有什么区别？
+
+    <details open>
+
+    首先，这两个 hook 的执行流程都是遵循 **全部销毁**再**全部执行**的顺序。
+
+    也就是说，在阶段一，会遍历并执行所有的 useEffect 的销毁函数， 在阶段二，会遍历并执行所有 useEffect的回调函数
+
+    而 useEffect 执行的时机要比 useLayoutEffect 靠前， useLayoutEffect 的销毁要在 commit阶段的 mutation阶段才会执行。
+
+    useLayoutEffect hook从上一次更新的销毁函数调用到本次更新的回调函数调用是同步执行的。而useEffect则需要先调度，在Layout阶段完成后再异步执行。
+
+    这就是useLayoutEffect与useEffect的区别。
 
 ### SetState
 
