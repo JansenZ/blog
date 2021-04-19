@@ -105,3 +105,11 @@
 ### Mobx
 
 [mobx](https://zhenglin.vip/js/mobx.js)
+
+### deepCopy
+
+[deepcopy](https://zhenglin.vip/js/deepcopy.js)
+
+### eventEmmiter
+
+[eventEmmiter](https://zhenglin.vip/js/eventEmmiter.js)
