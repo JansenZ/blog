@@ -1033,10 +1033,32 @@
 
     找一个中间值,Symbol('fn')就可以了。
 
-29. 常见的正则标识符
+29. 正则
     <details open>
 
-    \s 空格，\w 包括下划线在内的单个字符，[A-Za-z0-9_]， \b 单次边界, \i 忽略大小写
+    - \s 空格
+    - \w 包括下划线在内的单个字符
+    - [A-Za-z0-9_]
+    - \b 单次边界
+    - \i 忽略大小写
+
+    实例属性有
+    - reg.flags ,返回 flags属性中的标志以字典序排序（从左到右，即"gimuy"）。 u是编码方面的。
+    ```js
+    // polyfill
+    if (RegExp.prototype.flags === undefined) {
+        Object.defineProperty(RegExp.prototype, 'flags', {
+            configurable: true,
+            get: function() {
+                return this.toString().match(/[gimuy]*$/)[0];
+            }
+        });
+    }
+    ```
+    - reg.source， 返回正则本身，不包含 i g那些
+    - reg.global, 是否用了 g
+    - reg.ignoreCase, 是否用了 i， 大小写
+    - reg.multiline , 是否用了 m 多行标志
 
 30. 千位分割符正则
     <details open>
