@@ -775,11 +775,30 @@
 34. JS bridge 原理是什么？
     <details open>
 
+    [jsbridge原理实践](https://juejin.cn/post/6844904025511444493)
+
     有两种方式：
 
     - 注入 API
 
     注入 API 方式的主要原理是，通过 WebView 提供的接口，向 JavaScript 的 Context（window）中注入对象或者方法
+    ```js
+     // 安卓端
+     public class InjectNativeObject { // 注入到JavaScript的对象
+        private Context context;
+        public InjectNativeObject(Context context) {
+            this.context = context;
+        }
+
+        @JavascriptInterface
+        public void quit() { // 退出app
+            finish();
+        }
+    }
+    webView.addJavascriptInterface(new InjectNativeObject(this), "NativeBridge");
+    // 前端
+    window.NativeBridge.quit();
+    ```
 
     JavaScript 调用时，直接执行相应的 Native 代码逻辑，达到 JavaScript 调用 Native 的目的。
 
