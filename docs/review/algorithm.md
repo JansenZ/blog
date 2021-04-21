@@ -436,6 +436,91 @@ function TreeNode(val, left, right) {
     };
     ```
 
+2. 反转K个一组的链表[leetcode 25](https://leetcode-cn.com/problems/reverse-nodes-in-k-group/)
+
+    给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+
+    k 是一个正整数，它的值小于或等于链表的长度。
+
+    如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序
+
+    首先，遇到这类题目，反转K个一组，或者是反转链表中的start到end，就不要用交换方向法，而是改用头插法。
+
+    ```js
+    var reverseKGroup = function(head, k) {
+        let node = head;
+        let len = k;
+        // 判断len和node谁长
+        while(node && len > 0) {
+            node = node.next;
+            len --;
+        }
+        // 如果len还有值，说明len长，直接return head
+        if(len) return head;
+        // 到这里说明一样长
+        // 重置node
+        node = head;
+        // 重置长度
+        len = k;
+        // 采用头插法
+        let pre = null;
+        let newHead = new ListNode(-1);
+        // 记录一个node节点，用于最后拼接，因为这个节点就是第一个会把next指向pre也就是null的人
+        let waitNode = node;
+
+        while(node && len > 0) {
+            let next = node.next;
+
+            node.next = pre;
+            newHead.next = node;
+
+            pre = node;
+            node = next;
+            len --;
+        }
+        // 矫正拼接
+        // 递归
+        waitNode.next = reverseKGroup(node, k);
+        return newHead.next;
+    };
+    ```
+3. 链表翻转，start 到 end翻转[leetcode 206](https://leetcode-cn.com/problems/reverse-linked-list-ii/)
+
+    ```js
+    var reverseBetween = function(head, left, right) {
+        let shaobing = new ListNode(-1);
+        shaobing.next = head;
+        let pre = shaobing;
+        for (let i = 0; i < left - 1; i++) {
+            pre = pre.next;
+        }
+        // 上面的可以找到start的那个节点的前一个位子，也就是Pre，可以做为头插的newHead来用
+        // 采用头插法
+        let newHead = pre;
+        // 跑的len
+        let len = right - left + 1;
+        // 开始反转的node
+        let node = pre.next;
+        // 把pre置为null，方便后面矫正
+        pre = null;
+        // 记录一个node节点，用于最后拼接，因为这个节点就是第一个会把next指向pre也就是null的人
+        let waitNode = node;
+        while(node && len > 0) {
+            let next = node.next;
+
+            node.next = pre;
+            newHead.next = node;
+
+            pre = node;
+            node = next;
+            len --;
+        }
+        // 矫正拼接
+        waitNode.next = node;
+        return shaobing.next;
+    };
+    ```
+
 ### 排序
 
 1. 插入排序
