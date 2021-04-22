@@ -1025,17 +1025,7 @@
 
     而基础模块就是用来渲染对应模块的 html，css 和一些公共可抽出的数据信息。
 
-40. 硬链接和软链接的区别
-    <details open>
-
-    1. 连接方式不同
-       - 硬： `ln oldfile newfile`
-       - 软： `ln -s old new`, 比如将 `core` 软连接到 `node_modules` 下 (run `ln -s ../../mall-core/ ./node_modules`);
-    2. 硬链接只能在同一文件系统中的文件之间进行链接，不能对目录进行创建，而软连接是可以对目录进行连接的
-    3. 硬的是多个文件指向同一个索引节点，而软的是指向对方目录的一个索引
-    4. 如果删除硬链接对应的源文件，则硬链接文件仍然存在，而且保存了原有的内容，而软连接删除了源文件的话，就不行了，相关软连接就变成了死链接。
-
-41. 如果没有promise，如何实现一个串行操作？
+40. 如果没有promise，如何实现一个串行操作？
     <details open>
 
     可以自己写一个包裹函数，类迭代器。
@@ -1056,3 +1046,42 @@
 
     这样在使用的时候，我的 fn 就是一个一个函数，我只需要进来一次，就把它们添加到我的队列，但是这些 fn 会有 callback ，没有 callback 就当它不是异步，直接执行 next ，如果是异步在 callback 里执行 next，从而达到一个串行的目的。
 
+41. 硬链接和软链接的区别
+    <details open>
+
+    1. 连接方式不同
+       - 硬： `ln oldfile newfile`
+       - 软： `ln -s old new`, 比如将 `core` 软连接到 `node_modules` 下 (run `ln -s ../../mall-core/ ./node_modules`);
+    2. 硬链接只能在同一文件系统中的文件之间进行链接，不能对目录进行创建，而软连接是可以对目录进行连接的
+    3. 硬的是多个文件指向同一个索引节点，而软的是指向对方目录的一个索引
+    4. 如果删除硬链接对应的源文件，则硬链接文件仍然存在，而且保存了原有的内容，而软连接删除了源文件的话，就不行了，相关软连接就变成了死链接。
+    5. 为什么？因为删除文件本质上是删除引用节点，软连接如果删除就真没指向了，而硬链接就像复制一样，还会有引用。
+
+    ![haard](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8fd6096a17a64d58a73f9e2f2cfc7051~tplv-k3u1fbpfcp-watermark.image)
+
+    ![ruan](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5e9d3c5e59454006abde22b822ec22a8~tplv-k3u1fbpfcp-watermark.image)
+
+42. Npm 和 Yarn 和 Pnpm的区别
+
+    [npm和yarn的区别，我们该如何选择](https://juejin.cn/post/6844903582903320589)
+
+    [PNPM 原理](https://juejin.cn/post/6916101419703468045)
+
+    ```js
+    "5.0.3", // 安装指定版本
+    "~5.0.3", // 安装 5.0.X 最新版本
+    "^5.0.3" // 安装 5.X.X 最新版本
+    ```
+
+    - 速度
+       并行安装：无论 npm 还是 Yarn 在执行包的安装时，都会执行一系列任务。npm 是按照队列执行每个 package，也就是说必须要等到当前 package 安装完成之后，才能继续后面的安装。而 Yarn 是同步执行所有任务，提高了性能
+    - 离线模式
+       如果之前已经安装过一个软件包，用Yarn再次安装时之间从缓存中获取，就不用像npm那样再从网络下载了。
+    - 锁定版本
+        yarn 用yarn.lock
+
+        npm 早期用`npm shrinkwrap`生成`npm-shrinkwrap.json`文件， 后来用默认的`package-lock.json`文件和yarn竞争。
+    - 输出日志
+        yarn 看起来更友好
+    - pnpm 利用 硬链接的形式，可以复用nodemodules包, 所以磁盘空间利用非常高效。
+    - 在使用 npm/yarn 的时候，由于 node_module 的扁平结构，如果 A 依赖 B， B 依赖 C，那么 A 当中是可以直接使用 C 的，但问题是 A 当中并没有声明 C 这个依赖。因此会出现这种非法访问的情况。但 pnpm 脑洞特别大，自创了一套依赖管理方式，利用软连接的形式，保持的引用的结构，很好地解决了这个问题，保证了安全性
