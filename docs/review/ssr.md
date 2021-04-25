@@ -21,6 +21,12 @@
         - 缺点，同时，由于是缓存，不会进行二次渲染，也就是说，当初打包时页面是怎么样，那么预渲染就是什么样，如果页面上有数据实时更新，那么浏览器第一次加载的时候只会渲染当时的数据，等到 JS 下载完毕再次渲染的时候才会更新数据更新，会造成数据延迟的错觉。
         - Prerender 就是利用 Chrome 官方出品的 Puppeteer 工具，对页面进行爬取。它提供了一系列的 API, 可以在无 UI 的情况下调用 Chrome 的功能, 适用于爬虫、自动化处理等各种场景。它很强大，所以很简单就能将运行时的 HTML 打包到文件中。原理是在 Webpack 构建阶段的最后，在本地启动一个 Puppeteer 的服务，访问配置了预渲染的路由，然后将 Puppeteer 中渲染的页面输出到 HTML 文件中，并建立路由对应的目录。
 
+    - 现有方案 [plugin.js](https://zhenglin.vip/js/plugin.js)
+
+        首先，动态路由做不了，是静态路由，类似prerender的方案，但是是更简陋的，写了一个preload.js，然后在这个js里，请求数据，渲染div，和css。就是一个简陋的页面。不绑定js事件
+
+        通过自定义插件的形式，把原有的 bundle.js 替换成这个 js，然后再这个js里渲染完了之后，load原来的bundle.js
+
 2. ReactDom.hydrate 和 ReactDom.render 区别
 
     hydrate 与 render() 相同，但它用于在 ReactDOMServer 渲染的容器中对 HTML 的内容进行 hydrate 操作。React 会尝试在已有标记上绑定事件监听器。
