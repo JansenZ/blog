@@ -17,7 +17,8 @@
     2. Happypack 开启多线程
     3. 自带的 tree-shaking 移除无用代码
     4. 自带的 hosit-scoping，移除无用计算。
-    5. 利用 import.then 拆分,babel 设置缓存。
+    5. 利用 import.then 拆分, 生成对应的hash.chunk.js
+    6. babel 设置缓存 cacheDirectory:true
 
     React方面
     1. 采用服务端渲染，当然了，会加大服务端的消耗。
@@ -394,6 +395,40 @@
 
 14. 监控错误，打点上报，捕获异常。
     <details open>
+
+    [troy监控性能和错误](https://zhenglin.vip/js/troy.js)
+
+    - 使用 `localstorage`，存储记录数据
+    - 使用 `performance.timing.fetchStart || Date.now()`记录开始时间
+    - 在 `onload` 和 `DOMContendLoaded` 的时候记录时间节点数据。
+    - 在 `unload` 的时候，保存还未上报的数据到 `localstorage` 上
+    - 记录数据本质上还是利用 this.records 的这样一个 Map 来存储数据, 如果 key 相同，会把值添加起来，给count++;
+    - 发送数据的要求是队列里的长度超过 30 个或者 5s 后发送（都可以通过 options 配置）
+    - 发送数据单个结构如下，数组包裹，然后 base64 编码发送
+    ```js
+    appName: "xxxx"
+    hash: "#/xxxx"
+    logMessage: "xxevent"
+    logTime: "2021-04-25 09:30:08.645"
+    perfData: 191201
+    type: "perf"
+    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
+    v: "1.0.0"
+    // 如果是错误的type
+    type: "fault"
+    errorCol: 31227
+    errorLine: 1
+    errorStack: "TypeErrorxxxx"
+    errorUrl: "xxxxx"
+    ```
+    - onload 的时候除了记录 onload 时间节点，还会根据performance基本的那些数据发送对应的性能数据。
+    ```js
+    this.record('domComplete', t.domComplete - t.domContentLoadedEventEnd);
+    this.record('loadEvent', t.loadEventEnd - t.loadEventStart);
+    this.record('unloadEvent', t.unloadEventEnd - t.unloadEventStart);
+    this.record('request', request);
+    this.record('domContentLoaded', domContentLoaded);
+    ```
 
     <b>监控性能</b>
 
