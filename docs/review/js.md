@@ -1681,6 +1681,8 @@
 
 66. 如何给映射类型加上反映射？
 
+    <details open>
+
     比如`CartType.B2C = 1`,我也希望能知道`CartType[1] = 'B2C'`,避免需要再次匹配的情况
 
     写法也很简答
@@ -1691,3 +1693,13 @@
     ```
 
     这样写即可
+
+67. e.target 和 e.currentTarget有什么区别
+
+    <details open>
+
+    e.target就是指我点击的那个对象，而e.currentTarget如果事件是绑在外面的，指的就是外面的那个对象。
+
+68. 如果一个悬浮球，需要我判断e.target，点击到它才算，但是呢，我这个div里面还有span标签，e.target肯定是span标签，如何判断我点到了这个球？
+
+    通过e.target.parentNode，做一个while判断。如果最后都不等于，return false,否则，return true;
