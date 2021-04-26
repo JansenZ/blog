@@ -1098,6 +1098,8 @@
 
 42. Npm 和 Yarn 和 Pnpm的区别
 
+    <details open>
+
     [npm和yarn的区别，我们该如何选择](https://juejin.cn/post/6844903582903320589)
 
     [PNPM 原理](https://juejin.cn/post/6916101419703468045)
@@ -1120,3 +1122,91 @@
         yarn 看起来更友好
     - pnpm 利用 硬链接的形式，可以复用nodemodules包, 所以磁盘空间利用非常高效。
     - 在使用 npm/yarn 的时候，由于 node_module 的扁平结构，如果 A 依赖 B， B 依赖 C，那么 A 当中是可以直接使用 C 的，但问题是 A 当中并没有声明 C 这个依赖。因此会出现这种非法访问的情况。但 pnpm 脑洞特别大，自创了一套依赖管理方式，利用软连接的形式，保持的引用的结构，很好地解决了这个问题，保证了安全性
+
+43. 自动化部署 [前端自动化部署](https://juejin.cn/post/6844904009333997582)
+
+    <details open>
+
+    - 使用Dockerfile来构建镜像
+    - 通过镜像创建容器
+    - 启动容器搭载静态服务器
+    - 利用 travis-ci ，在项目的根目录下创建 .travis.yml 文件。里面会写script，和各个生命周期的钩子
+    - 提交代码会自动执行。
+    - 然后通过公钥和私钥，免密登录，直接把打包好的文件推送到指定服务器上。
+
+    ```yaml
+    language: node_js
+    node_js:
+    - 14
+
+    env:
+    - BUILD_NAME=bd
+
+    install:
+    - npm install
+
+    branches:
+    only:
+    - main
+    - "/^.*-ci$/"
+
+    notifications:
+    email:
+        recipients:
+        - $EMAIL_SELF
+        on_success: always # default: change
+        on_failure: always # default: always
+
+    stages:
+    - test
+    - name: page
+        if: commit_message =~ /pub\s+page/
+    - name: publish
+        if: commit_message =~ /release/
+
+    jobs:
+    exclude:
+        - if: branch = dev OR commit_message =~ /(no-ci)/
+    include:
+        - stage: test
+        script: npm run test
+        - stage: page
+        script: npm run $BUILD_NAME && mv dist/ /tmp/demo
+        deploy:
+            provider: pages
+            cleanup: true
+            local_dir: /tmp/demo
+            token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+            on:
+            branch: main
+
+        - stage: publish
+        before_install:
+            # 解密
+            - openssl aes-256-cbc -K $encrypted_db599200e721_key -iv $encrypted_db599200e721_iv -in id_rsa.enc -out ~/.ssh/id_rsa -d
+            # 设置正确的权限
+            - chmod 600 ~/.ssh/id_rsa
+            # 目标IP不进行校验，防止阻碍流程
+            - echo -e "Host $HOST_IP\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+        script:
+            # 构建脚本
+            - npm run $BUILD_NAME
+            # 截取分支名，ci-qa 获得 qa，并设置为 DEST_DIR 变量
+            - export DEST_DIR=`echo $TRAVIS_BRANCH | cut -d "-" -f 1`
+            # 删除远程目标文件夹，并新建目录（这一步需要自己衡量是否需要，一般个人开发建议删除）
+            - ssh travis@$HOST_IP -p $HOST_PORT "rm -rf ~/$DEST_DIR && mkdir ~/$DEST_DIR"
+            # 将本地文件上传到服务器
+            # dist/ 将会在目标文件夹下 存在一个 dist 文件夹
+            # dist/. 将直接存储dist目录下的所有文件，而不包括目录名
+            - scp  -P $HOST_PORT -r dist/. travis@$HOST_IP:~/$DEST_DIR
+            # 上传文件完毕后，可能需要 启动服务 等，自行替换
+            - ssh travis@$HOST_IP -p $HOST_PORT "echo 'replace your exec';"
+    ```
+
+    - dockerfile + docker-compose来构建docker容器
+    - travis-ci + github 来hook repo的变动
+    - travis-ci 调用 dockerfile打包 docker image并push到dockerhub
+    - travis-ci ssh 登录到目标机器,copy docker-compose并执行来完成部署
+
+    当我们点击提测的时候，会自动创建一个新的test分支，然后当我们在这个开发环境上提交代码的时候，会通过git hook的一个钩子，对jenkins服务器接口发送一个post请求，那边收到这个请求会触发任务，利用docker来执行对应的操作。
+    
