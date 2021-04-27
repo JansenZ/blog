@@ -230,7 +230,46 @@
 
 17. React 有 Component 和 pureComponent，我们写的类都是继承它的，这样我们就拥有了 setState,和 forceUpdate 方法。
 
+    <details open>
+
     在`PureCompent`和`Component`的区别就是，`PureComponent`就是继承自`Component`,然后添加了一个原型属性`isPureComponent`代表它是`pure`，具体的判断应该就是在 react-dom 里面了。
+
+18. React为什么要通过 props.children 来渲染达到优化的目的？
+
+    <details open>
+
+    因为这样的话可以尽可能的走`bailout`逻辑
+
+    ```js
+    function Son() {
+        console.log('child render!');
+        return <div>Son</div>;
+    }
+
+
+    function Parent(props) {
+        const [count, setCount] = React.useState(0);
+
+        return (
+            <div onClick={() => {setCount(count + 1)}}>
+                count:{count}
+                {props.children}
+                // <Son/>
+            </div>
+        );
+    }
+
+    function App() {
+        return (
+            <Parent>
+                <Son/>
+            </Parent>
+        );
+    }
+    ```
+    这样写点击也不会触发son的更新，但是如果直接把`son`写到`props.children`那里，因为外面会触发重新渲染，导致虽然前后的<Son />是一样东西，即使本次更新与上次更新props中每一项参数都没有变化，但是本次更新 是`React.createElement` 的执行结果，是一个全新的props引用，所以`oldProps !== newProps`。
+
+    而如果直接使用 `this.props.children` 的话，它看到的子组件`(this.props.children)`是 App 传给他的，不需要重新用 `React.createElement` 创建，所以`this.props.children`是不变的
 
 ### React 合成事件
 
