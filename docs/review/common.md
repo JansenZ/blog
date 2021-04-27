@@ -17,7 +17,7 @@
     2. Happypack 开启多线程
     3. 自带的 tree-shaking 移除无用代码
     4. 自带的 hosit-scoping，移除无用计算。
-    5. 利用 import.then 拆分, 生成对应的hash.chunk.js
+    5. 利用 import.then 进行懒加载拆分, 生成对应的hash.chunk.js，比如交易流程主要流程不要懒加载，但是一些用户点击率低的页面，通过懒加载的形式加载。
     6. babel 设置缓存 cacheDirectory:true
 
     React方面
@@ -1209,4 +1209,3 @@
     - travis-ci ssh 登录到目标机器,copy docker-compose并执行来完成部署
 
     当我们点击提测的时候，会自动创建一个新的test分支，然后当我们在这个开发环境上提交代码的时候，会通过git hook的一个钩子，对jenkins服务器接口发送一个post请求，那边收到这个请求会触发任务，利用docker来执行对应的操作。
-    
