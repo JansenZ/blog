@@ -1,7 +1,9 @@
 1. 性能优化的方式
+
     <details open>
 
-    HTTP方面
+    HTTP 方面
+
     1. http 网络请求开启 gzip，可以压缩 HTTP 响应的 70%。这个要服务端配置一下，会增大 CPU 的开销去解压、压缩，Webpack 中 用 CompressionWebpackPlugin 插件开启 Gzip ,事实上就是为了在构建过程中去做一部分服务器的工作，为服务器分压。
        2.1 使用 CDN 缓存。dns 预解析，dns prefetch，可以预解析。script defer async 防止 js 阻塞。
     2. 使用 HTTP 强缓存，cache-control > expires。expire 里面写的是过期日期，是和本地电脑比的，而 cache-control 是过期时间段，所以 cache-control 更准。
@@ -13,18 +15,22 @@
     8. 本地存储，cookie,storage。 cookie 里少放信息，因为会跟着 http 请求头跑，很浪费。如果本地存储需求量很大的话，比如你要实现一个 im 的话，可以用 indexDB,本地数据库
 
     WEBPACK
+
     1. webpack 构建优化，使用 include/exclude.
     2. Happypack 开启多线程
-    3. 自带的 tree-shaking 移除无用代码, 主要是借助es6的模块是静态解析的，所以才能实现，利用内置的 UglifyJSPlugin 来完成。
+    3. 自带的 tree-shaking 移除无用代码, 主要是借助 es6 的模块是静态解析的，所以才能实现，利用内置的 UglifyJSPlugin 来完成。
     4. 自带的 hosit-scoping，移除无用计算。
-    5. 利用 import.then 进行懒加载拆分, 生成对应的hash.chunk.js，比如交易流程主要流程不要懒加载，但是一些用户点击率低的页面，通过懒加载的形式加载。
+    5. 利用 import.then 进行懒加载拆分, 生成对应的 hash.chunk.js，比如交易流程主要流程不要懒加载，但是一些用户点击率低的页面，通过懒加载的形式加载。
+
     ```js
     import(/* webpackChunkName:xxxname */ './show').then()
     output: chunkFilename: "static/js/[name].[contenthash:8].chunk.js",
     ```
+
     6. babel 设置缓存 cacheDirectory:true
 
-    React方面
+    React 方面
+
     1. 采用服务端渲染，当然了，会加大服务端的消耗。
     2. react 本身的虚拟 dom，react fiber 计算 diff。（减少比对 dom 的成本）减少操作 dom。有效的减少回流和重绘。
     3. 利用 key 提升 diff 性能
@@ -33,6 +39,7 @@
     6. 利用 immer 来做数据层面优化
 
     其他方面
+
     1. 图片也做好压缩，雪碧图, 小图使用 base64 可以减少请求，大图不能用 bas64，因为 base64 会膨胀到 4/3 大小，那时候省的 http 请求还不如膨胀的多。然后 svg 的话渲染成本比较高，而且对设计要求也比较高。
     2. webp 格式，前端处理的话，包装 src 函数，然后去 caniuse 维护一个浏览器支持的表，然后支持就用 webp 不支持直接把 webp 分割掉就可以了。
     3. webp 格式，后端处理的话，就是判断我图片过去的请求头 accept 里有没有 img/webp。有就说明我这浏览器支持，然后就吐给我 webp 的资源就可以了。比如 Chrome 就有，safari 就没有
@@ -40,9 +47,10 @@
     5. 不重要的类似日志打点这样的，放在 requestidlecallback
     6. 图片懒加载 intersectionobserver
     7. 防抖（搜索输入）、节流(scroll 监听)
-    8. 接入性能监控优化的时候，在 onload 完了后利用 requestIdleCallback 记录，并且record要满足一定数量后再去请求。
+    8. 接入性能监控优化的时候，在 onload 完了后利用 requestIdleCallback 记录，并且 record 要满足一定数量后再去请求。
 
 2. 常见的设计模式
+
     <details open>
 
     我认为很多设计模式我们在不知道它的名字的时候，我们就已经在用它了，
@@ -157,6 +165,7 @@
       用组合的话，可以拼装，就可以避免这个问题。
 
 3. 什么是双向绑定，什么是单向绑定，区别是什么？
+
     <details open>
 
     双向绑定，就是数据驱动 UI，UI 的改变，比如用户输入，也直接改变数据，写的不得当的话，很难管理这些数据。你也不知道从哪里被改变了。
@@ -166,19 +175,20 @@
     而单向数据流，就是通过 setstate 这样的数据驱动，改变数据后，驱动 UI 改变，而 UI 点击，比如通过回调 onChange。这样的好处是数据易于管控。
 
 4. redux 对比 mobx
+
     <details open>
 
     两者对比:
 
     - redux 将数据保存在单一的 store 中，mobx 将数据保存在分散的多个 store 中
     - redux 使用 plain object 保存数据，需要手动处理变化后的操作；mobx 适用 observable 保存数据，数据变化后自动处理响应的操作
-    - redux 使用不可变状态，这意味着状态是只读的，不能直接去修改它，而是应该返回一个新的状态，同时使用纯函数；mobx 中的状态是可变的，可以直接对其进行修改
     - mobx 相对来说比较简单，在其中有很多的抽象，mobx 更多的使用面向对象的编程思维；redux 会比较复杂，因为其中的函数式编程思想掌握起来不是那么容易，同时需要借助一系列的中间件来处理异步和副作用
     - mobx 中有更多的抽象和封装，调试会比较困难，同时结果也难以预测；而 redux 提供能够进行时间回溯的开发工具，同时其纯函数以及更少的抽象，让调试变得更加的容易
     - 设计思想的不同, Redux 的编程范式是函数式的而 Mobx 是面向对象的；
     - 数据可变性的不同, Redux 是 immutable 的，每次都返回一个新的数据，而 Mobx 从始至终都是一份引用。因此 Redux 是支持数据回溯的；
 
 5. immutable 的特点是什么，它的优势是什么，对比 immer 呢？
+
     <details open>
 
     当我想在对 react 组件进行性能优化时，需要监测 state 或 props 的变化来判断是否 render，而怎么监测变化=>用浅比较，但浅比较存在更新对象属性时引用没变的问题，然而深拷贝的话浪费性能不说，万一只改了一个属性，亏，所以只要能解决这个问题，浅比较依然是好方案，因此 immutable 的出现解决的就是有变化就返回新引用，故而浅比较+immutable 就是性能优化的利器，然后后面出现的 Immer 是比 immutable 更好的方案
@@ -284,6 +294,7 @@
     ```
 
 6. 为什么用 React + mobx？
+
     <details open>
 
     React 和 Vue 有许多相似之处，它们都有：
@@ -298,6 +309,7 @@
     虽然用了 Mobx,但是比如修改数据的时候，还是通过一个文件下的回调，然后完成数据变更。
 
 7. 返回拦截
+
     <details open>
 
     返回劫持弹窗，我们的项目的路由不是 react-router，是我们老大自己实现的一个，所以更没有`prompt`，但是好在他在`navigation`返回的时候，判断`isback`的时候，添加了一个事件
@@ -336,6 +348,7 @@
     如果不是 1 的话，说明前面还有页面，直接 back
 
 8. rn 热更新原理
+
     <details open>
 
     react-native 的程序实际上是原生的模块+JS 和图片资源模块，热更新，就是更新其中的 js 和图片资源。
@@ -348,6 +361,7 @@
     如果是增量热更新的话，会返回一个 pdiffUrl，拿到这个 url 下载下来的就是增量数据，然后客户端进行数据合并完成增量热更新。
 
 9. rn im 的问题
+
     <details open>
 
     [im 问题链接](https://segmentfault.com/n/1330000011795138)
@@ -385,6 +399,7 @@
 11. rn webview 新闻 难点
 
 12. 调试技巧...
+
     <details open>
 
     1. element 是可以 copy 的
@@ -399,40 +414,44 @@
     把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
 
 14. 监控错误，打点上报，捕获异常。
+
     <details open>
 
-    [troy监控性能和错误](https://zhenglin.vip/js/troy.js)
+    [troy 监控性能和错误](https://zhenglin.vip/js/troy.js)
 
     - 使用 `localstorage`，存储记录数据
     - 使用 `performance.timing.fetchStart || Date.now()`记录开始时间
     - 在 `onload` 和 `DOMContendLoaded` 的时候记录时间节点数据。
     - 在 `unload` 的时候，保存还未上报的数据到 `localstorage` 上
-    - 记录数据本质上还是利用 this.records 的这样一个 Map 来存储数据, 如果 key 相同，会把值添加起来，给count++;
+    - 记录数据本质上还是利用 this.records 的这样一个 Map 来存储数据, 如果 key 相同，会把值添加起来，给 count++;
     - 发送数据的要求是队列里的长度超过 30 个或者 5s 后发送（都可以通过 options 配置）
     - 发送数据单个结构如下，数组包裹，然后 base64 编码发送
+
     ```js
-    appName: "xxxx"
-    hash: "#/xxxx"
-    logMessage: "xxevent"
-    logTime: "2021-04-25 09:30:08.645"
-    perfData: 191201
-    type: "perf"
-    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1"
-    v: "1.0.0"
+    appName: "xxxx";
+    hash: "#/xxxx";
+    logMessage: "xxevent";
+    logTime: "2021-04-25 09:30:08.645";
+    perfData: 191201;
+    type: "perf";
+    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
+    v: "1.0.0";
     // 如果是错误的type
-    type: "fault"
-    errorCol: 31227
-    errorLine: 1
-    errorStack: "TypeErrorxxxx"
-    errorUrl: "xxxxx"
+    type: "fault";
+    errorCol: 31227;
+    errorLine: 1;
+    errorStack: "TypeErrorxxxx";
+    errorUrl: "xxxxx";
     ```
-    - onload 的时候除了记录 onload 时间节点，还会根据performance基本的那些数据发送对应的性能数据。
+
+    - onload 的时候除了记录 onload 时间节点，还会根据 performance 基本的那些数据发送对应的性能数据。
+
     ```js
-    this.record('domComplete', t.domComplete - t.domContentLoadedEventEnd);
-    this.record('loadEvent', t.loadEventEnd - t.loadEventStart);
-    this.record('unloadEvent', t.unloadEventEnd - t.unloadEventStart);
-    this.record('request', request);
-    this.record('domContentLoaded', domContentLoaded);
+    this.record("domComplete", t.domComplete - t.domContentLoadedEventEnd);
+    this.record("loadEvent", t.loadEventEnd - t.loadEventStart);
+    this.record("unloadEvent", t.unloadEventEnd - t.unloadEventStart);
+    this.record("request", request);
+    this.record("domContentLoaded", domContentLoaded);
     ```
 
     <b>监控性能</b>
@@ -514,10 +533,11 @@
 
     现在最新的标准里，其实可以利用 fetch，然后二参里设置 keep-alive 为 true，说这个可以替代 sendBeacon，这个限制是 64KB
     这样在页面关闭的时候，照样能发送出去。如果没这个参数，可能会停掉。
+
     ```js
     window.onunload = function() {
-        fetch('/analytics', {
-            method: 'POST',
+        fetch("/analytics", {
+            method: "POST",
             body: "statistics",
             keepalive: true
         });
@@ -525,6 +545,7 @@
     ```
 
 15. 前端模块化
+
     <details open>
 
     [这个链接将的浅显易懂](https://juejin.cn/post/6844903712553435149)
@@ -566,6 +587,7 @@
     - 这样的结果就是 CommonJS 规范可能因为循环引用而找不到对应函数发生报错，而 es6 不会。
 
 16. 听过 Style-components 吗？
+
     <details open>
 
     我们目前使用的是 css namespace，公共的写在 common 里
@@ -589,6 +611,7 @@
     - css modules，把对应的 css 文件引入成为对象，然后在 div 上的时候，写成 styles.xxx，webpack 配置一下 css-loader 的 options，会去自动添加一串 hash。
 
 17. 路由守卫怎么做的
+
     <details open>
 
     包装一个方法，跳转的时候先进这个方法。
@@ -602,6 +625,7 @@
     假如是通过 url 直接输入的，可以给每一个页面外面包装一个路由授权组件，在组件里调用上述的方法，好像也可以哦。
 
 18. 二维码扫码登陆原理
+
     <details open>
 
     首先，二维码本身就是一个 url，并且包含这个页面当前的唯一 token,用于标识是哪张页面点进了二维码登陆的页面。
@@ -611,6 +635,7 @@
     在 PC 端，轮训去找服务端问，用户是否扫码，如果已经扫码了，这时候接口应该返回待确认的字段，如果点击确认后，再请求这个接口，服务端会吐出已确认，并且应该会种 cookie，然后重定向到首页，完成登陆。
 
 19. 懒加载怎么实现
+
     <details open>
 
     - 第一个方案：
@@ -645,6 +670,7 @@
     preact 没有事件系统，直接用的浏览器的
 
 21. 你知道单点登录吗？如何实现呢？
+
     <details open>
 
     1. 如果是同域名下的，直接用 cookie 就可以了。
@@ -670,6 +696,7 @@
         ![tu](https://user-gold-cdn.xitu.io/2020/1/5/16f74f3f11a6fbad?imageslim)
 
 22. RN 原理是什么
+
     <details open>
 
     JS 的话内置一个 javascript core，安卓的话使用 webkit.org.jsc.cso
@@ -678,6 +705,7 @@
     rn 项目下会有一个 native_modules，通过这个模块可以调用原生方法。
 
 23. MVC， MVP, MVVM
+
     <details open>
 
     - MVC
@@ -699,7 +727,7 @@
 
 25. mobx 原理
 
-    类似于vue的数据劫持
+    类似于 vue 的数据劫持
 
     [mobx](https://zhenglin.vip/js/mobx.js)
 
@@ -707,6 +735,7 @@
 27. 骨架屏实现方案
 28. 代码生成技术文档
 29. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
+
     <details open>
 
     1. 初始的时候，发现，点击直接跳转过去的时候，会出现里面的图文加载，导致的内容撑开
@@ -752,6 +781,7 @@
     ```
 
 30. SWR
+
     <details open>
 
     [原理分析](https://zhuanlan.zhihu.com/p/93824106)
@@ -767,11 +797,13 @@
     - 获取数据的时候，非常简单，简易
 
 31. Taro 是什么?
+
     <details open>
 
     Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发 微信 / 京东 / 百度 / 支付宝 / 字节跳动 / QQ 小程序 / H5 等应用。现如今市面上端的形态多种多样，Web、React Native、微信小程序等各种端大行其道，当业务要求同时在不同的端都要求有所表现的时候，针对不同的端去编写多套代码的成本显然非常高，这时候只编写一套代码就能够适配到多端的能力就显得极为需要。
 
 32. Recoil
+
     <details open>
 
     这个是一个新出的状态管理库，facebook 出的
@@ -813,15 +845,17 @@
     vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，具体的不了解了，因为暂时不可能替代 webpack
 
 34. JS bridge 原理是什么？
+
     <details open>
 
-    [jsbridge原理实践](https://juejin.cn/post/6844904025511444493)
+    [jsbridge 原理实践](https://juejin.cn/post/6844904025511444493)
 
     有两种方式：
 
     - 注入 API
 
     注入 API 方式的主要原理是，通过 WebView 提供的接口，向 JavaScript 的 Context（window）中注入对象或者方法
+
     ```js
      // 安卓端
      public class InjectNativeObject { // 注入到JavaScript的对象
@@ -896,17 +930,20 @@
     因为如果通过 location.href 连续调用 Native，很容易丢失一些调用。
 
 35. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
+
     <details open>
 
     - 可以使用 `document.activeElement.scrollIntoViewIfNeeded()` 把对应的元素滚动到可见区域
     - window.resize 的时候，把 button 变成 relative
 
 36. eslint 和 prettier 冲突怎么办
+
     <details open>
 
     其他冲突规则也用类似方法处理，要么修改 eslintrc，要么修改 prettier 配置，但是如果为了少改动老代码，推荐修改 prettier 配置去适应老的 eslint 规则。
 
 37. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
+
     <details open>
 
     要做这个题前， 先要知道节点类型
@@ -996,6 +1033,7 @@
     ```
 
 38. NPM install 运行机制
+
     <details open>
 
     [运行机制](https://www.zhihu.com/question/66629910/answer/273992383)
@@ -1009,6 +1047,7 @@
     2. 如果你 npm install 具体某个包名，同样会去检查 package.json。保证前后的一致性。
 
 39. 装修拖拽的技术方案
+
     <details open>
 
     drag 组件是包裹整个装修页面布局的，就是侧边栏和主区域都坐落在内部
@@ -1042,16 +1081,17 @@
 
     如果是 putdown ，说明有组件拖进来了，直接添加组件即可
 
-    在目标区域监听 mousemove 的时候，判断当前拖拽的X, Y 和整个列表上的模块的 `getBoundingClientRect`比较
+    在目标区域监听 mousemove 的时候，判断当前拖拽的 X, Y 和整个列表上的模块的 `getBoundingClientRect`比较
 
     ```js
     let rect = tgt.getBoundingClientRect();
     let boundary = rect.top + rect.height / 2;
-    this.setState({emptyIndex: elemIndex + (event.pageY < boundary ? 0 : 1)});
+    this.setState({ emptyIndex: elemIndex + (event.pageY < boundary ? 0 : 1) });
     ```
-    从而确定它拖拽的位子，然后限时一个 释放鼠标将模块添加到此处 的组件，这个组件是插到对应的index里的。
 
-    当然，这个 mousemove 生效的前提是你有一个draginfo，也就是正在拖拽的模块。
+    从而确定它拖拽的位子，然后限时一个 释放鼠标将模块添加到此处 的组件，这个组件是插到对应的 index 里的。
+
+    当然，这个 mousemove 生效的前提是你有一个 draginfo，也就是正在拖拽的模块。
 
     当你选中了对应要编辑的模块后，右侧会出现一个设置界面，用工厂模式根据配置表，渲染出对应的配置，
 
@@ -1065,7 +1105,8 @@
 
     而基础模块就是用来渲染对应模块的 html，css 和一些公共可抽出的数据信息。
 
-40. 如果没有promise，如何实现一个串行操作？
+40. 如果没有 promise，如何实现一个串行操作？
+
     <details open>
 
     可以自己写一个包裹函数，类迭代器。
@@ -1073,7 +1114,7 @@
     ```js
     var schemeQueue = [];
     function iteratorRegister(fn) {
-        var next = function () {
+        var next = function() {
             if (schemeQueue.length === 0) {
                 return;
             }
@@ -1087,11 +1128,12 @@
     这样在使用的时候，我的 fn 就是一个一个函数，我只需要进来一次，就把它们添加到我的队列，但是这些 fn 会有 callback ，没有 callback 就当它不是异步，直接执行 next ，如果是异步在 callback 里执行 next，从而达到一个串行的目的。
 
 41. 硬链接和软链接的区别
+
     <details open>
 
     1. 连接方式不同
-       - 硬： `ln oldfile newfile`
-       - 软： `ln -s old new`, 比如将 `core` 软连接到 `node_modules` 下 (run `ln -s ../../mall-core/ ./node_modules`);
+        - 硬： `ln oldfile newfile`
+        - 软： `ln -s old new`, 比如将 `core` 软连接到 `node_modules` 下 (run `ln -s ../../mall-core/ ./node_modules`);
     2. 硬链接只能在同一文件系统中的文件之间进行链接，不能对目录进行创建，而软连接是可以对目录进行连接的
     3. 硬的是多个文件指向同一个索引节点，而软的是指向对方目录的一个索引
     4. 如果删除硬链接对应的源文件，则硬链接文件仍然存在，而且保存了原有的内容，而软连接删除了源文件的话，就不行了，相关软连接就变成了死链接。
@@ -1101,41 +1143,42 @@
 
     ![ruan](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5e9d3c5e59454006abde22b822ec22a8~tplv-k3u1fbpfcp-watermark.image)
 
-42. Npm 和 Yarn 和 Pnpm的区别
+42. Npm 和 Yarn 和 Pnpm 的区别
 
     <details open>
 
-    [npm和yarn的区别，我们该如何选择](https://juejin.cn/post/6844903582903320589)
+    [npm 和 yarn 的区别，我们该如何选择](https://juejin.cn/post/6844903582903320589)
 
     [PNPM 原理](https://juejin.cn/post/6916101419703468045)
 
     ```js
     "5.0.3", // 安装指定版本
-    "~5.0.3", // 安装 5.0.X 最新版本
-    "^5.0.3" // 安装 5.X.X 最新版本
+        "~5.0.3", // 安装 5.0.X 最新版本
+        "^5.0.3"; // 安装 5.X.X 最新版本
     ```
 
     - 速度
-       并行安装：无论 npm 还是 Yarn 在执行包的安装时，都会执行一系列任务。npm 是按照队列执行每个 package，也就是说必须要等到当前 package 安装完成之后，才能继续后面的安装。而 Yarn 是同步执行所有任务，提高了性能
+      并行安装：无论 npm 还是 Yarn 在执行包的安装时，都会执行一系列任务。npm 是按照队列执行每个 package，也就是说必须要等到当前 package 安装完成之后，才能继续后面的安装。而 Yarn 是同步执行所有任务，提高了性能
     - 离线模式
-       如果之前已经安装过一个软件包，用Yarn再次安装时之间从缓存中获取，就不用像npm那样再从网络下载了。
+      如果之前已经安装过一个软件包，用 Yarn 再次安装时之间从缓存中获取，就不用像 npm 那样再从网络下载了。
     - 锁定版本
-        yarn 用yarn.lock
+      yarn 用 yarn.lock
 
-        npm 早期用`npm shrinkwrap`生成`npm-shrinkwrap.json`文件， 后来用默认的`package-lock.json`文件和yarn竞争。
+        npm 早期用`npm shrinkwrap`生成`npm-shrinkwrap.json`文件， 后来用默认的`package-lock.json`文件和 yarn 竞争。
+
     - 输出日志
-        yarn 看起来更友好
-    - pnpm 利用 硬链接的形式，可以复用nodemodules包, 所以磁盘空间利用非常高效。
+      yarn 看起来更友好
+    - pnpm 利用 硬链接的形式，可以复用 nodemodules 包, 所以磁盘空间利用非常高效。
     - 在使用 npm/yarn 的时候，由于 node_module 的扁平结构，如果 A 依赖 B， B 依赖 C，那么 A 当中是可以直接使用 C 的，但问题是 A 当中并没有声明 C 这个依赖。因此会出现这种非法访问的情况。但 pnpm 脑洞特别大，自创了一套依赖管理方式，利用软连接的形式，保持的引用的结构，很好地解决了这个问题，保证了安全性
 
 43. 自动化部署 [前端自动化部署](https://juejin.cn/post/6844904009333997582)
 
     <details open>
 
-    - 使用Dockerfile来构建镜像
+    - 使用 Dockerfile 来构建镜像
     - 通过镜像创建容器
     - 启动容器搭载静态服务器
-    - 利用 travis-ci ，在项目的根目录下创建 .travis.yml 文件。里面会写script，和各个生命周期的钩子
+    - 利用 travis-ci ，在项目的根目录下创建 .travis.yml 文件。里面会写 script，和各个生命周期的钩子
     - 提交代码会自动执行。
     - 然后通过公钥和私钥，免密登录，直接把打包好的文件推送到指定服务器上。
 
@@ -1208,9 +1251,9 @@
             - ssh travis@$HOST_IP -p $HOST_PORT "echo 'replace your exec';"
     ```
 
-    - dockerfile + docker-compose来构建docker容器
-    - travis-ci + github 来hook repo的变动
-    - travis-ci 调用 dockerfile打包 docker image并push到dockerhub
-    - travis-ci ssh 登录到目标机器,copy docker-compose并执行来完成部署
+    - dockerfile + docker-compose 来构建 docker 容器
+    - travis-ci + github 来 hook repo 的变动
+    - travis-ci 调用 dockerfile 打包 docker image 并 push 到 dockerhub
+    - travis-ci ssh 登录到目标机器,copy docker-compose 并执行来完成部署
 
-    当我们点击提测的时候，会自动创建一个新的test分支，然后当我们在这个开发环境上提交代码的时候，会通过git hook的一个钩子，对jenkins服务器接口发送一个post请求，那边收到这个请求会触发任务，利用docker来执行对应的操作。
+    当我们点击提测的时候，会自动创建一个新的 test 分支，然后当我们在这个开发环境上提交代码的时候，会通过 git hook 的一个钩子，对 jenkins 服务器接口发送一个 post 请求，那边收到这个请求会触发任务，利用 docker 来执行对应的操作。
