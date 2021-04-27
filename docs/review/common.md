@@ -34,9 +34,8 @@
     1. 采用服务端渲染，当然了，会加大服务端的消耗。
     2. react 本身的虚拟 dom，react fiber 计算 diff。（减少比对 dom 的成本）减少操作 dom。有效的减少回流和重绘。
     3. 利用 key 提升 diff 性能
-    4. 利用 context 来减少中间组件的渲染
-    5. 利用 shouldComponentUpdate 、 pureComponent 来做渲染优化
-    6. 利用 immer 来做数据层面优化
+    4. 利用 shouldComponentUpdate 、 pureComponent 来做渲染优化
+    5. 利用 immer 来做数据层面优化
 
     其他方面
 
