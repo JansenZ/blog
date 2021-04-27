@@ -201,55 +201,58 @@
 
     在 redux 中，实际上就是发布订阅的原理，监听数据的变更。在 createStore 的时候，就生成了一个 store,和对应的 dispatch。而 mobx 的数据依赖于运行时。数据劫持。只是思想不一样，一个是函数式，一个是 oop 的形式。
 
-    但是有了hooks之后，其实利用useContext和useReducer，再通过hoc的形式封装一下，小项目的情况下，已经不需要使用任何状态管理器了。复用代码和分层也都非常容易做到。
+    但是有了 hooks 之后，其实利用 useContext 和 useReducer，再通过 hoc 的形式封装一下，小项目的情况下，已经不需要使用任何状态管理器了。复用代码和分层也都非常容易做到。
 
-6. redux的原理 [原理](https://juejin.cn/post/6844904080255483912)
+6. redux 的原理 [原理](https://juejin.cn/post/6844904080255483912)
 
     本质上来说，通过发布订阅的形式来完成的。
 
-    通过createStore，入参`reducer`，`初始state`，得到一个 `subscribe`, `dispatch`和`getState`。
+    通过 createStore，入参`reducer`，`初始state`，得到一个 `subscribe`, `dispatch`和`getState`。
 
-    subscribe就是添加订阅吗，然后dispatch的时候，会去执行reducer函数，得到新的state。并执行监听的函数来触发修改。
+    subscribe 就是添加订阅吗，然后 dispatch 的时候，会去执行 reducer 函数，得到新的 state。并执行监听的函数来触发修改。
 
     ```js
     function dispatch(action) {
-        state = reducer(state, action)
+        state = reducer(state, action);
         /* 执行通知 */
         for (let i = 0; i < listeners.length; i++) {
-        const listener = listeners[i]
-        listener()
+            const listener = listeners[i];
+            listener();
         }
     }
     ```
 
-    多个reducer的话，通过`combineReducers`来合并reducer。原理就是返回一个新的reducer，挨个的跑传进去的reducer。
+    多个 reducer 的话，通过`combineReducers`来合并 reducer。原理就是返回一个新的 reducer，挨个的跑传进去的 reducer。
+
     ```js
     return function combination(state = {}, action) {
         /*生成的新的state*/
-        const nextState = {}
+        const nextState = {};
 
         /*遍历执行所有的reducers，整合成为一个新的state*/
         for (let i = 0; i < reducerKeys.length; i++) {
-        const key = reducerKeys[i]
-        const reducer = reducers[key]
-        /*之前的 key 的 state*/
-        const previousStateForKey = state[key]
-        /*执行 分 reducer，获得新的state*/
-        const nextStateForKey = reducer(previousStateForKey, action)
+            const key = reducerKeys[i];
+            const reducer = reducers[key];
+            /*之前的 key 的 state*/
+            const previousStateForKey = state[key];
+            /*执行 分 reducer，获得新的state*/
+            const nextStateForKey = reducer(previousStateForKey, action);
 
-        nextState[key] = nextStateForKey
+            nextState[key] = nextStateForKey;
         }
-        return nextState
-    }
+        return nextState;
+    };
     ```
 
-    分离state的话，其实还是一份state的，只是写法上可以拆分，利用createStore里面的
+    分离 state 的话，其实还是一份 state 的，只是写法上可以拆分，利用 createStore 里面的
+
     ```js
-      dispatch({ type: Symbol() })
+    dispatch({ type: Symbol() });
     ```
-    来完成一个default，因为reducer需要你写defaut: return state
 
-6. immutable 的特点是什么，它的优势是什么，对比 immer 呢？
+    来完成一个 default，因为 reducer 需要你写 defaut: return state
+
+7. immutable 的特点是什么，它的优势是什么，对比 immer 呢？
 
     <details open>
 
@@ -355,7 +358,7 @@
     }
     ```
 
-7. 为什么用 React + mobx？
+8. 为什么用 React + mobx？
 
     <details open>
 
@@ -370,7 +373,7 @@
 
     虽然用了 Mobx,但是比如修改数据的时候，还是通过一个文件下的回调，然后完成数据变更。
 
-8. 返回拦截
+9. 返回拦截
 
     <details open>
 
@@ -409,7 +412,7 @@
 
     如果不是 1 的话，说明前面还有页面，直接 back
 
-9. rn 热更新原理
+10. rn 热更新原理
 
     <details open>
 
@@ -422,7 +425,7 @@
     启动程序的时候，会发一个请求给服务器，带上自己当前`app`的`key`值。服务端会判读两次上传的包的异同来决定是否需要全量热更新还是增量热更新，如果是全量热更新会返回一个`downloadurl`，这个`url`就是自己在 react-native-update 后台配置的那个下载的 url。手机会下载整个 bundlejs 下来完成全量热更新。
     如果是增量热更新的话，会返回一个 pdiffUrl，拿到这个 url 下载下来的就是增量数据，然后客户端进行数据合并完成增量热更新。
 
-10. rn im 的问题
+11. rn im 的问题
 
     <details open>
 
@@ -456,11 +459,11 @@
     };
     ```
 
-11. rn flatlist 将屏幕外的视图组件回收，达到高性能的目的。
+12. rn flatlist 将屏幕外的视图组件回收，达到高性能的目的。
 
-12. rn webview 新闻 难点
+13. rn webview 新闻 难点
 
-13. 调试技巧...
+14. 调试技巧...
 
     <details open>
 
@@ -471,11 +474,11 @@
     5. 阴影这样的可以直接在页面上调，直接点击样式，就唤起弹窗，快速调试
     6. 断点可以加条件，这样不必一直进这个断点，比如 for，判断 i==5 才进。
 
-14. 调试文字样式 debug， document.designModel = 'on'
+15. 调试文字样式 debug， document.designModel = 'on'
 
     把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
 
-15. 监控错误，打点上报，捕获异常。
+16. 监控错误，打点上报，捕获异常。
 
     <details open>
 
@@ -606,7 +609,7 @@
     };
     ```
 
-16. 前端模块化
+17. 前端模块化
 
     <details open>
 
@@ -648,7 +651,7 @@
     - 而 ES6 的话模块加载是在编译时做的，也就是在编译阶段确定好模块的依赖关系，而不是在运行阶段。
     - 这样的结果就是 CommonJS 规范可能因为循环引用而找不到对应函数发生报错，而 es6 不会。
 
-17. 听过 Style-components 吗？
+18. 听过 Style-components 吗？
 
     <details open>
 
@@ -672,7 +675,7 @@
 
     - css modules，把对应的 css 文件引入成为对象，然后在 div 上的时候，写成 styles.xxx，webpack 配置一下 css-loader 的 options，会去自动添加一串 hash。
 
-18. 路由守卫怎么做的
+19. 路由守卫怎么做的
 
     <details open>
 
@@ -686,7 +689,7 @@
 
     假如是通过 url 直接输入的，可以给每一个页面外面包装一个路由授权组件，在组件里调用上述的方法，好像也可以哦。
 
-19. 二维码扫码登陆原理
+20. 二维码扫码登陆原理
 
     <details open>
 
@@ -696,7 +699,7 @@
 
     在 PC 端，轮训去找服务端问，用户是否扫码，如果已经扫码了，这时候接口应该返回待确认的字段，如果点击确认后，再请求这个接口，服务端会吐出已确认，并且应该会种 cookie，然后重定向到首页，完成登陆。
 
-20. 懒加载怎么实现
+21. 懒加载怎么实现
 
     <details open>
 
@@ -726,12 +729,12 @@
     - 第三个方案：
       不需要 scrollTop，直接把上面的 offsetTop 改成 img.getBoundingClientRect().top 对比 screenH 即可
 
-21. preact
+22. preact
 
     preact 实现 hook 是数组的方式
     preact 没有事件系统，直接用的浏览器的
 
-22. 你知道单点登录吗？如何实现呢？
+23. 你知道单点登录吗？如何实现呢？
 
     <details open>
 
@@ -757,7 +760,7 @@
 
         ![tu](https://user-gold-cdn.xitu.io/2020/1/5/16f74f3f11a6fbad?imageslim)
 
-23. RN 原理是什么
+24. RN 原理是什么
 
     <details open>
 
@@ -766,7 +769,7 @@
     ios 和安卓对于 rn 来说，是提供一个壳，并且提供了一些原生方法。
     rn 项目下会有一个 native_modules，通过这个模块可以调用原生方法。
 
-24. MVC， MVP, MVVM
+25. MVC， MVP, MVVM
 
     <details open>
 
@@ -783,20 +786,39 @@
       viewmodel。controller。model。
       model 改了动 view，view 改了动 model。就是 vue 那种。我们现在分的层也类似这样。
 
-25. 手写一个双向绑定
+26. 手写一个双向绑定
 
     [vue.js](https://zhenglin.vip/js/vue.js)
 
-26. mobx 原理
+27. mobx 原理
 
     类似于 vue 的数据劫持
 
     [mobx](https://zhenglin.vip/js/mobx.js)
 
-27. nginx 知识点
-28. 骨架屏实现方案
-29. 代码生成技术文档
-30. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
+    其中 computed 就相当于 即是一个 observerable，又是一个 autorun [模拟](https://github.com/yu-tou/s-mobx/blob/master/src/s-computed.js)
+
+    而且 computed 只能有 get，不能 set，因为它是计算的值。
+
+    举个例子，我们在 autorun 里的 cb 函数中，用到了 computed 的值，那么根据 autorun 的原理，上来肯定会跑一下 cb 函数的，而这个 cb 函数里，用到了 computed 的函数，就会触发 computed 下的 get。在这个 get 里，和 observerable 的 get 一样，依赖收集，但是会多一步，先去执行一个 bindAutoCompute
+
+    在这个 bindAutoCompute 李，一样的，就是和 autorun 基本一样，会先去执行一次\_recomputed，而\_recomputed 里面就是执行这个 computed 的函数，比如你写了
+
+    ```js
+    @computed
+    get fcname() {
+        return this.name + this.sex;
+    }
+    ```
+
+    那是不是就会执行到 this.name 和 this.sex 了啊，对吧。会执行到他们的 get，从而添加依赖。
+
+    这个时候，我修改了 name 的值，set 里就会通知到所有订阅者，而 computed 就订阅到了，它订阅的，就是\_recomputed，这里面，还会去通知所有订阅 computed 的值的订阅者，而 autorun 的 cb 就是它的订阅者，所以会执行过去。这就是 computed 的原理。
+
+28. nginx 知识点
+29. 骨架屏实现方案
+30. 代码生成技术文档
+31. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
 
     <details open>
 
@@ -842,7 +864,7 @@
     );
     ```
 
-31. SWR
+32. SWR
 
     <details open>
 
@@ -858,13 +880,13 @@
     - 聚焦是重新验证，网络恢复时重新验证，支持 Suspense
     - 获取数据的时候，非常简单，简易
 
-32. Taro 是什么?
+33. Taro 是什么?
 
     <details open>
 
     Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发 微信 / 京东 / 百度 / 支付宝 / 字节跳动 / QQ 小程序 / H5 等应用。现如今市面上端的形态多种多样，Web、React Native、微信小程序等各种端大行其道，当业务要求同时在不同的端都要求有所表现的时候，针对不同的端去编写多套代码的成本显然非常高，这时候只编写一套代码就能够适配到多端的能力就显得极为需要。
 
-33. Recoil
+34. Recoil
 
     <details open>
 
@@ -902,11 +924,11 @@
 
     这样不同的组件都可以共享数据。通过这个 useRecoilState
 
-34. vite
+35. vite
 
     vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，具体的不了解了，因为暂时不可能替代 webpack
 
-35. JS bridge 原理是什么？
+36. JS bridge 原理是什么？
 
     <details open>
 
@@ -991,20 +1013,20 @@
 
     因为如果通过 location.href 连续调用 Native，很容易丢失一些调用。
 
-36. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
+37. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
 
     <details open>
 
     - 可以使用 `document.activeElement.scrollIntoViewIfNeeded()` 把对应的元素滚动到可见区域
     - window.resize 的时候，把 button 变成 relative
 
-37. eslint 和 prettier 冲突怎么办
+38. eslint 和 prettier 冲突怎么办
 
     <details open>
 
     其他冲突规则也用类似方法处理，要么修改 eslintrc，要么修改 prettier 配置，但是如果为了少改动老代码，推荐修改 prettier 配置去适应老的 eslint 规则。
 
-38. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
+39. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
 
     <details open>
 
@@ -1094,7 +1116,7 @@
     unVirtual(virtual);
     ```
 
-39. NPM install 运行机制
+40. NPM install 运行机制
 
     <details open>
 
@@ -1108,7 +1130,7 @@
 
     2. 如果你 npm install 具体某个包名，同样会去检查 package.json。保证前后的一致性。
 
-40. 装修拖拽的技术方案
+41. 装修拖拽的技术方案
 
     <details open>
 
@@ -1167,7 +1189,7 @@
 
     而基础模块就是用来渲染对应模块的 html，css 和一些公共可抽出的数据信息。
 
-41. 如果没有 promise，如何实现一个串行操作？
+42. 如果没有 promise，如何实现一个串行操作？
 
     <details open>
 
@@ -1189,7 +1211,7 @@
 
     这样在使用的时候，我的 fn 就是一个一个函数，我只需要进来一次，就把它们添加到我的队列，但是这些 fn 会有 callback ，没有 callback 就当它不是异步，直接执行 next ，如果是异步在 callback 里执行 next，从而达到一个串行的目的。
 
-42. 硬链接和软链接的区别
+43. 硬链接和软链接的区别
 
     <details open>
 
@@ -1205,7 +1227,7 @@
 
     ![ruan](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5e9d3c5e59454006abde22b822ec22a8~tplv-k3u1fbpfcp-watermark.image)
 
-43. Npm 和 Yarn 和 Pnpm 的区别
+44. Npm 和 Yarn 和 Pnpm 的区别
 
     <details open>
 
@@ -1233,7 +1255,7 @@
     - pnpm 利用 硬链接的形式，可以复用 nodemodules 包, 所以磁盘空间利用非常高效。
     - 在使用 npm/yarn 的时候，由于 node_module 的扁平结构，如果 A 依赖 B， B 依赖 C，那么 A 当中是可以直接使用 C 的，但问题是 A 当中并没有声明 C 这个依赖。因此会出现这种非法访问的情况。但 pnpm 脑洞特别大，自创了一套依赖管理方式，利用软连接的形式，保持的引用的结构，很好地解决了这个问题，保证了安全性
 
-44. 自动化部署 [前端自动化部署](https://juejin.cn/post/6844904009333997582)
+45. 自动化部署 [前端自动化部署](https://juejin.cn/post/6844904009333997582)
 
     <details open>
 
