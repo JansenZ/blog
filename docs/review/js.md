@@ -1,3 +1,118 @@
+### TS
+
+1. 配合react组件使用的时候，`Component<IProps, IState> {}`
+2. 常用类型
+
+    ```js
+    import { FormComponentProps } from "antd/lib/form/Form";
+    interface ISearchProps extends FormComponentProps {
+        // 数组类型
+        roleGroups: string[];
+        // 函数
+        add: () => void;
+        // 基本类型
+        sellerType: number;
+        // 可有可无
+        keyoukewu?: number;
+        // 联合类型
+        uniType: string | number;
+    }
+    ```
+
+3. keyof
+
+    ```js
+    interface Point {
+        x: number;
+        y: number;
+    }
+
+    // type keys = "x" | "y"
+    type keys = keyof Point;
+
+    ```
+
+4. 泛型 T + keyof
+
+    如果某个函数，它的返回值的类型是不确定的，就需要利用泛型。
+    ```js
+    const data = {
+        a: 3,
+        hello: 'world'
+    }
+    // T extends object，T就是代指任意类型。
+    // K extends keyof T,K就是代指它的K
+    // 这个时候T和K就已经确定了，如果这个时候，你输入的name是ab，肯定会报错。因为没有
+    function get<T extends object, K extends keyof T>(o: T, name: K): T[K] {
+        return o[name]
+    }
+    ```
+
+    ![T](../img/t.jpg)
+
+5. 空值合并运算符 ??
+
+    ??与||的功能是相似的，区别在于 ??在左侧表达式结果为 null 或者 undefined 时，才会返回右侧表达式 。
+
+    `let b = a ?? 10 => let b = a !== null && a !== void 0 ? a : 10;`
+
+    而 || 表达式，大家知道的，则对 false、''、NaN、0 等逻辑空值也会生效，不适于我们做对参数的合并。
+
+6. 可选链运算符 ?.
+
+    `a?.b => a === null || a === void 0 ? void 0 : a.b;`
+
+    之所以用void 0，是因为undefined可以被赋值，`void 0` 一定返回 undefined
+
+7. in ，遍历枚举类型。
+
+    ```js
+    type Keys = "a" | "b" | "c"
+
+    type Obj =  {
+        [p in Keys]: number
+    } // -> { a: number, b: number, c: number }
+
+
+    // 这个类型可以将任何类型的键值转化成number类型
+    type TypeToNumber<T> = {
+        [key in keyof T]: number
+    }
+    ```
+8. interface 和 type 的区别是什么？
+
+    1. type可以用于其他类型，而interface不行
+    ```js
+    type PartialPointX = { x: number };
+    type PartialPointY = { y: number };
+
+    // union(联合)
+    type PartialPoint = PartialPointX | PartialPointY;
+
+    // tuple(元祖)
+    type Data = [PartialPointX, PartialPointY];
+
+    //primitive(原始值)
+    type Name = Number;
+
+    // typeof的返回值
+    let div = document.createElement('div');
+    type B = typeof div;
+    ```
+    2. interface多次声明会合并，而type不行
+    ```js
+    interface Point {
+        x: number;
+    }
+    interface Point {
+        y: number;
+    }
+
+    const point: Point = { x: 1, y: 2 };
+    ```
+    3. interface 可以 extends ,type 需要用 &
+    4. 使用 in 和 keyof的时候，都是配type使用。
+
 ### ES6
 
 1. `ES6`中暂时性死区`TDZ`是什么？
