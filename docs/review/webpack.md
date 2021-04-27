@@ -79,14 +79,19 @@
 
     import()只是一个语法糖，当前模块没有加载时，内部会发起一个 JSONP 请求来加载目标代码模块， 返回值是一个 Promise 对象，可以在 then 方法内得到真正的模块。
 
-4. Loader 和 Plugin 的区别
+4. webpack 的 tree-shaking 原理是什么
+
+    首先，它是依托于 es6 modules 才能完成，因为 esm 的依赖关系是确认的，和运行时无关，是编译时就确定的。正因为如此，它才能做 tree-shaking
+    而 tree-shaking 呢，就是在转换 AST 的时候，把死路径给摇掉，现在都是 UglifyJSPlugin 来完成 js 的 dce
+
+5. Loader 和 Plugin 的区别
 
     - Loader 本质就是一个函数，在该函数中对接收到的内容进行转换，返回转换后的结果。因为 Webpack 只认识 JavaScript，所以 Loader 就成了翻译官，对其他类型的资源进行转译的预处理工作。
     - Plugin 就是插件，基于事件流框架 Tapable，插件可以扩展 Webpack 的功能，在 Webpack 运行的生命周期中会广播出许多事件，Plugin 可以监听这些事件，在合适的时机通过 Webpack 提供的 API 改变输出结果。
     - Loader 在 module.rules 中配置，作为模块的解析规则，类型为数组。每一项都是一个 Object，内部包含了 test(类型文件)、loader、options (参数)等属性。
     - Plugin 在 plugins 中单独配置，类型为数组，每一项是一个 Plugin 的实例，参数都通过构造函数传入。
 
-5. 如何写一个自定义的 loader？
+6. 如何写一个自定义的 loader？
 
     第一个参数 source 就是文件内容，然后你该替换替换
 
@@ -100,7 +105,7 @@
 
     异步执行完调用 `callback(null, output);`
 
-6. manifest
+7. manifest
 
     一旦你的应用在浏览器中以 index.html 文件的形式被打开，一些 bundle 和应用需要的各种资源都需要用某种方式被加载与链接起来。在经过打包、压缩、为延迟加载而拆分为细小的 chunk 这些 webpack 优化 之后，你精心安排的 /src 目录的文件结构都已经不再存在。所以 webpack 需要它
 
@@ -135,7 +140,7 @@
 
     这样就可以返回正确的路径了
 
-7. 如何开启 gzip? 如何 localhost 代理访问开发接口？
+8. 如何开启 gzip? 如何 localhost 代理访问开发接口？
 
     ```js
     //webpack.config.js
@@ -173,11 +178,11 @@
     }
     ```
 
-8. 文件监听原理是什么
+9. 文件监听原理是什么
 
     轮训判断文件的最后编辑事件是否有变化，然后到了执行时间后开始再次编译。
 
-9. 如何去配置一个可配置的环境变量？
+10. 如何去配置一个可配置的环境变量？
 
     1. 首先，使用`dotenv`这个库，`require('dotenv').config()`
     2. 创建 .env 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
@@ -198,9 +203,10 @@
         </script>
     </config>s
     ```
-    6. 最后再后台配置autoconfig,也就是对应变量的值，从而完成整体配置。
 
-10. webpack 热更新原理
+    6. 最后再后台配置 autoconfig,也就是对应变量的值，从而完成整体配置。
+
+11. webpack 热更新原理
     [参考 1](https://zhuanlan.zhihu.com/p/30669007)
     [参考 2](https://juejin.cn/post/6844904008432222215)
 
@@ -265,7 +271,7 @@
 
     ![tutu](https://pic1.zhimg.com/80/v2-f7139f8763b996ebfa28486e160f6378_1440w.jpg)
 
-11. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
+12. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
 
     我的理解是，功能块的解耦，各个模块各司其职，`dev-server/client` 只负责消息的传递而不负责新模块的获取
 
