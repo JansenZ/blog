@@ -71,8 +71,8 @@
 
     type Obj =  {
         [p in Keys]: number
-    } // -> { a: number, b: number, c: number }
-
+    }
+    // -> { a: number, b: number, c: number }
 
     // 这个类型可以将任何类型的键值转化成number类型
     type TypeToNumber<T> = {
