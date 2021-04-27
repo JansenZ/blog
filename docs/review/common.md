@@ -15,9 +15,13 @@
     WEBPACK
     1. webpack 构建优化，使用 include/exclude.
     2. Happypack 开启多线程
-    3. 自带的 tree-shaking 移除无用代码
+    3. 自带的 tree-shaking 移除无用代码, 主要是借助es6的模块是静态解析的，所以才能实现，利用内置的 UglifyJSPlugin 来完成。
     4. 自带的 hosit-scoping，移除无用计算。
     5. 利用 import.then 进行懒加载拆分, 生成对应的hash.chunk.js，比如交易流程主要流程不要懒加载，但是一些用户点击率低的页面，通过懒加载的形式加载。
+    ```js
+    import(/* webpackChunkName:xxxname */ './show').then()
+    output: chunkFilename: "static/js/[name].[contenthash:8].chunk.js",
+    ```
     6. babel 设置缓存 cacheDirectory:true
 
     React方面
