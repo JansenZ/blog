@@ -113,6 +113,23 @@
     3. interface 可以 extends ,type 需要用 &
     4. 使用 in 和 keyof的时候，都是配type使用。
 
+9. 联合类型中如果我已经知道对应类型是什么的情况下，怎么做呢？
+
+    因为联合类型的话，只能访问他们的公共属性，所以下面会报错
+    ```js
+    function getLength(something: string | number): number {
+        return something.length;
+        // Property 'length' does not exist on type 'number'.
+    }
+    ```
+    可以使用类型断言来完成。
+    ```js
+    function getLength(something: string | number): number {
+        let data = something as string;
+        return data.length;
+    }
+    ```
+
 ### ES6
 
 1. `ES6`中暂时性死区`TDZ`是什么？
