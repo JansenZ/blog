@@ -36,6 +36,7 @@
     5. 不重要的类似日志打点这样的，放在 requestidlecallback
     6. 图片懒加载 intersectionobserver
     7. 防抖（搜索输入）、节流(scroll 监听)
+    8. 接入性能监控优化的时候，在 onload 完了后利用 requestIdleCallback 记录，并且record要满足一定数量后再去请求。
 
 2. 常见的设计模式
     <details open>
