@@ -21,6 +21,14 @@
 
     因为他们都不是线程安全的，如果要安全要用 concurrentHashMap,会在操作的时候，锁那一小部分区域。从而不会出问题。
 
+8. 如何通过ssh的形式拉仓库
+
+    通过ssh key的形式，相当于我把我这台电脑的身份发给了github，后续交互的时候就不需要输入密码了。
+
+    1. 检查sshkey是否存在 `ls -al ~/.ssh` ,存在的话看里面是否有 `id_rsa.pub`
+    2. 如果没有的话生成新的 `ssh-keygen -t rsa -C "your_email@example.com"`
+    3. 复制 rsa 到 git 服务器上 `pbcopy < ~/.ssh/id_rsa.pub`
+
 ### 思想
 
 1. 什么是囚徒困境
