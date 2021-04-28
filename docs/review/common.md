@@ -1340,3 +1340,19 @@
     - travis-ci ssh 登录到目标机器,copy docker-compose 并执行来完成部署
 
     当我们点击提测的时候，会自动创建一个新的 test 分支，然后当我们在这个开发环境上提交代码的时候，会通过 git hook 的一个钩子，对 jenkins 服务器接口发送一个 post 请求，那边收到这个请求会触发任务，利用 docker 来执行对应的操作。
+
+46. 如何自己发一个npm包
+
+    <details open>
+
+    1. 写好自己要发的代码
+    2. 通过 webpack 打包，如果用到了react，记得把 react 加到 externals 里去
+    3. 配置package.json 里的name， 还有main，main里默认是index.js，如果你配置的是dist，要改成dist/index.js
+    4. npm run build 生成最终的那个文件
+    5. npm pack打本地包
+    6. 把本地包复制出去，到另一个应用里npm install 它，然后就正常的import试验
+    7. 没问题后npm login
+    8. npm run build
+    9. npm publish
+
+    完结，很简单对吧
