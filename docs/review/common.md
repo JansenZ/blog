@@ -1345,9 +1345,14 @@
 
     <details open>
 
+    [npm引入React Hooks轮子库报错Minified React error#321的解决方法](https://zhuanlan.zhihu.com/p/93773786)
+    
+    [使用npm发布一个vue组件](https://juejin.cn/post/6844903918414102535)
+
     1. 写好自己要发的代码
     2. 通过 webpack 打包，如果用到了react，记得把 react 加到 externals 里去
     3. 配置package.json 里的name， 还有main，main里默认是index.js，如果你配置的是dist，要改成dist/index.js
+    4. output要配置 umd，不然导出去没法用
     4. npm run build 生成最终的那个文件
     5. npm pack打本地包
     6. 把本地包复制出去，到另一个应用里npm install 它，然后就正常的import试验
