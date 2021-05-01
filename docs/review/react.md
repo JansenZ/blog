@@ -82,7 +82,7 @@
 
     ```js
     instanceToUse = fiber.stateNode;
-    typeof ref === "function"
+    typeof ref === 'function'
         ? ref(instanceToUse)
         : (ref.current = instanceToUse);
     ```
@@ -142,7 +142,7 @@
         return React.cloneElement(child, {
             key: child.id,
             currentIdx: this.state.currentIdx,
-            onTabClick: this.onTabClick
+            onTabClick: this.onTabClick,
         });
     });
     ```
@@ -167,7 +167,8 @@
 
     <details open>
 
-    Mount阶段
+    Mount 阶段
+
     - `constructor` 是 class 本身的，和 react 无关，但是可以作为 react 的一个初始化的函数。
     - `[unsafe]componentWillMount` 组件将要挂载
     - `static getDerivedStateFromProps`替换上面的，传入 nextprops 和 prevState, return 的值就是更新的 state,return null 就是不更新
@@ -175,7 +176,8 @@
     - render 渲染
     - componentDidMount 组件挂载完成
 
-    update阶段
+    update 阶段
+
     - `static getDerivedStateFromProps`
     - `shouldComponentUpdate` 询问组件是否要更新 ->yes? componentWillUpdate-> render -> componentdidUpdate
     - render()
@@ -183,6 +185,7 @@
     - componentDidUpdate()
 
     卸载
+
     - componentWillUnmount 组件卸载之前
 
 13. React 如何判断是类组件还是 function 组件
@@ -234,7 +237,7 @@
 
     在`PureCompent`和`Component`的区别就是，`PureComponent`就是继承自`Component`,然后添加了一个原型属性`isPureComponent`代表它是`pure`，具体的判断应该就是在 react-dom 里面了。
 
-18. React为什么要通过 props.children 来渲染达到优化的目的？
+18. React 为什么要通过 props.children 来渲染达到优化的目的？
 
     <details open>
 
@@ -246,15 +249,18 @@
         return <div>Son</div>;
     }
 
-
     function Parent(props) {
         const [count, setCount] = React.useState(0);
 
         return (
-            <div onClick={() => {setCount(count + 1)}}>
+            <div
+                onClick={() => {
+                    setCount(count + 1);
+                }}
+            >
                 count:{count}
                 {props.children}
-                // <Son/>
+                // <Son />
             </div>
         );
     }
@@ -262,14 +268,30 @@
     function App() {
         return (
             <Parent>
-                <Son/>
+                <Son />
             </Parent>
         );
     }
     ```
-    这样写点击也不会触发son的更新，但是如果直接把`son`写到`props.children`那里，因为外面会触发重新渲染，导致虽然前后的<Son />是一样东西，即使本次更新与上次更新props中每一项参数都没有变化，但是本次更新 是`React.createElement` 的执行结果，是一个全新的props引用，所以`oldProps !== newProps`。
+
+    这样写点击也不会触发 son 的更新，但是如果直接把`son`写到`props.children`那里，因为外面会触发重新渲染，导致虽然前后的<Son />是一样东西，即使本次更新与上次更新 props 中每一项参数都没有变化，但是本次更新 是`React.createElement` 的执行结果，是一个全新的 props 引用，所以`oldProps !== newProps`。
 
     而如果直接使用 `this.props.children` 的话，它看到的子组件`(this.props.children)`是 App 传给他的，不需要重新用 `React.createElement` 创建，所以`this.props.children`是不变的
+
+19. ErrorBoundary 中 getDerivedStateFromError 和 componentDidCatch 的区别
+
+    - componentDidCatch:
+        - 只能在客户端使用，因为 ssr 是没有 commit 阶段的
+        - 在 DOM 已更新的“提交阶段”中调用
+        - 应该用于错误报告之类的东西
+    - getDerivedStateFromError:
+        - SSR 期间也可以使用
+        - 当 DOM 尚未更新时，在“渲染阶段”调用
+        - 应该用于呈现后备 UI
+
+    getDerivedStateFromError 不会强制同步渲染。由于 commit 阶段生命周期中的状态更新始终是同步的，并且由于在 commit 阶段会调用 componentDidCatch，因此使用 componentDidCatch 进行错误恢复不是最佳方法，因为它会强制回退 UI 始终同步呈现。
+
+    所以，还是用 getDerivedStateFromError return state, 用 componentDidCatch 来打日志
 
 ### React 合成事件
 
@@ -980,11 +1002,11 @@
 
 2. mutation 阶段（执行 DOM 操作）
 
-    主要执行`commitMutationEffects`，而它会遍历effectList，对每个Fiber节点执行如下三个操作：
+    主要执行`commitMutationEffects`，而它会遍历 effectList，对每个 Fiber 节点执行如下三个操作：
 
-    1. 根据ContentReset effectTag重置文字节点
-    2. 更新ref
-    3. 根据effectTag分别处理，其中effectTag包括(Placement | Update | Deletion | Hydrating)
+    1. 根据 ContentReset effectTag 重置文字节点
+    2. 更新 ref
+    3. 根据 effectTag 分别处理，其中 effectTag 包括(Placement | Update | Deletion | Hydrating)
 
     遇到删除操作的时候会有如下步骤
 
@@ -998,7 +1020,7 @@
 
     对于 ClassComponent，他会通过`current === null`区分是 mount 还是 update
 
-    调用componentDidMount 或componentDidUpdate, 所以这两个执行时机其实是一样的。 [源码](https://github.com/facebook/react/blob/970fa122d8188bafa600e9b5214833487fbf1092/packages/react-reconciler/src/ReactFiberCommitWork.new.js#L592)
+    调用 componentDidMount 或 componentDidUpdate, 所以这两个执行时机其实是一样的。 [源码](https://github.com/facebook/react/blob/970fa122d8188bafa600e9b5214833487fbf1092/packages/react-reconciler/src/ReactFiberCommitWork.new.js#L592)
 
     对于 FunctionComponent 及相关类型，他会调用 useLayoutEffect hook 的回调函数， 调度 useEffect 的销毁与回调函数
 
@@ -1059,7 +1081,7 @@
         currentFirstChild: Fiber | null,
         newChild: any
     ): Fiber | null {
-        const isObject = typeof newChild === "object" && newChild !== null;
+        const isObject = typeof newChild === 'object' && newChild !== null;
         // 如果是数组，比如是div下的多个p节点，isObject一样是true，但是，newChild.$$typeof就没有值了，因为它是数组
         if (isObject) {
             // object类型，可能是 REACT_ELEMENT_TYPE 或 REACT_PORTAL_TYPE
@@ -1070,7 +1092,7 @@
             }
         }
 
-        if (typeof newChild === "string" || typeof newChild === "number") {
+        if (typeof newChild === 'string' || typeof newChild === 'number') {
             // 调用 reconcileSingleTextNode 处理
             // ...省略
         }
@@ -1303,7 +1325,7 @@ if (next === null) {
             baseState: null,
             baseQueue: null,
             queue: null,
-            next: null
+            next: null,
         };
         // 可以发现的就是，不管是useState，还是其它，都使用的一个hook对象，而这些hook对象，会连起来。
         const nextDeps = deps === undefined ? null : deps;
@@ -1340,7 +1362,7 @@ if (next === null) {
             pending: null,
             dispatch: null,
             lastRenderedReducer: basicStateReducer,
-            lastRenderedState: initialState
+            lastRenderedState: initialState,
         });
         // ...创建dispatch
         var dispatch = (queue.dispatch = dispatchAction.bind(
@@ -1358,7 +1380,7 @@ if (next === null) {
             action: action,
             eagerReducer: null,
             eagerState: null,
-            next: null
+            next: null,
         };
         // 这个和class那个一样，就是搞一个 update 链表出来。
         var pending = queue.pending;
@@ -1407,7 +1429,7 @@ if (next === null) {
             baseState: null,
             baseQueue: null,
             queue: null,
-            next: null
+            next: null,
         };
 
         if (workInProgressHook === null) {
@@ -1505,13 +1527,13 @@ if (next === null) {
 
     首先，这两个 hook 的执行流程都是遵循 **全部销毁**再**全部执行**的顺序。
 
-    也就是说，在阶段一，会遍历并执行所有的 useEffect 的销毁函数， 在阶段二，会遍历并执行所有 useEffect的回调函数
+    也就是说，在阶段一，会遍历并执行所有的 useEffect 的销毁函数， 在阶段二，会遍历并执行所有 useEffect 的回调函数
 
-    而 useEffect 执行的时机要比 useLayoutEffect 靠前， useLayoutEffect 的销毁要在 commit阶段的 mutation阶段才会执行。
+    而 useEffect 执行的时机要比 useLayoutEffect 靠前， useLayoutEffect 的销毁要在 commit 阶段的 mutation 阶段才会执行。
 
-    useLayoutEffect hook从上一次更新的销毁函数调用到本次更新的回调函数调用是同步执行的。而useEffect则需要先调度，在Layout阶段完成后再异步执行。
+    useLayoutEffect hook 从上一次更新的销毁函数调用到本次更新的回调函数调用是同步执行的。而 useEffect 则需要先调度，在 Layout 阶段完成后再异步执行。
 
-    useLayoutEffect 会在所有的DOM 变更之后同步调用effect，可以用它来读取dom布局并同步触发重渲染，所以要慎用，避免阻塞视觉更新。
+    useLayoutEffect 会在所有的 DOM 变更之后同步调用 effect，可以用它来读取 dom 布局并同步触发重渲染，所以要慎用，避免阻塞视觉更新。
 
 ### SetState
 
@@ -1676,7 +1698,7 @@ if (next === null) {
         }, 0);
     };
 
-    var flushSyncCallbackQueue = function() {
+    var flushSyncCallbackQueue = function () {
         a = updateQueue.reduce((accumulator, currentValue) => {
             return currentValue.a || accumulator;
         }, a);
