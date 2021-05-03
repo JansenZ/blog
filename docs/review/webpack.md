@@ -76,7 +76,9 @@
 
     可以做到按需加载，在执行到这段代码后才会加载，已经替代掉 `require.ensure` 了。
 
-    `import()` 只是一个语法糖，当前模块没有加载时，内部会发起一个 `JSONP` 请求来加载目标代码模块， 返回值是一个 `Promise` 对象，可以在 `then` 方法内得到真正的模块。
+    `import()` 只是一个语法糖，当前模块没有加载时，懒加载会给 `window.webpackJsonp` 这个数组 push 进去，内部会发起一个 `JSONP` 请求来加载目标代码模块， 返回值是一个 `Promise` 对象，可以在 `then` 方法内得到真正的模块。
+
+    同时，需要配合 babel 的插件 `@babel/plugin-syntax-dynamic-import` 来使用。
 
 4. webpack 的 tree-shaking 原理是什么
 
@@ -104,10 +106,59 @@
 
     异步执行完调用 `callback(null, output);`
 
-7. 如何写一个自定义 `plugin` ？
-8. 插件的 `hooks` 有哪些？
-9. `compiler` 和 `compilation` 区别是什么？
-10. manifest
+7. 常用的几个插件
+
+    1. 通过 MiniCssExtractPlugin 来生成单独的 css 文件， 所以这个是和 style-loader 是冲突的，因为 style-loader 是把 css 文件插到 html 里的，要改用 MiniCssExtractPlugin.loader
+    2. HtmlWebpackPlugin 简化了 HTML 文件的创建， 同时也可以压缩 HTML
+    3. 使用 CssMinimizerWebpackPlugin 来压缩 css 文件
+    4. 使用 cleanWebpackPlugin 来清理 dist 文件
+    5. 使用 postcss-loader 以及 autoprefixer 插件来完成 css3 的前缀补全
+    6. 多页面打包，利用 glob 来获取对应路径下的所有入口，再写个函数，生成 entry 和 plugins（htmlwebpackplugins）
+    7. 开发环境上 sourcemap 和补上的区别，就是上了的话，可以直接看自己写的源代码，而如果不上的话，虽然没有压缩，但是看到的是已经转译后的代码，不方便调试。
+    8. 利用 splitchuncksPlugin 来分离代码
+
+        默认情况下，它只会影响到按需加载的 chunks，因为修改 initial chunks 会影响到项目的 HTML 文件中的脚本标签。
+
+        webpack 将根据以下条件自动拆分 chunks：
+
+        - 新的 chunk 可以被共享，或者模块来自于 node_modules 文件夹
+        - 新的 chunk 体积大于 20kb（在进行 min+gz 之前的体积）
+        - 当按需加载 chunks 时，并行请求的最大数量小于或等于 30
+        - 当加载初始化页面时，并发请求的最大数量小于或等于 30
+        - 当尝试满足最后两个条件时，最好使用较大的 chunks。
+
+    9. 使用 friendlyErrorWebpackPlugin 来完成打日志，这样会有颜色告诉你成功信息，stats 同时要设置为 errors-only, 不然输出太干了。
+    10. 利用 webpack-merge 来组合配置，比如需要有 webpack.config.base.js， 有 dev,有 Production，然后就要去合并基础的。
+
+        ```js
+        module.exports = merge(baseConfig, devConfig);
+        ```
+
+    11. 利用内置的 stats 对象来分析基本信息，时间和大小，但是 stats 颗粒度太粗了，所以需要插件来分析。
+    12. 利用 `speedMeasureWebpackPlugin` 来观察插件和 Loader 的执行速度。
+        通过 module.export = smp.wrap({...})
+    13. 使用 webpackBundleAnalyzer 来进行体积大小分析，会打开 8888 端口号的一个页面，可以在里面看到图片分析。类似热词图
+
+8. 什么是 DCE(dead code elimination) 消除死代码?
+    - 代码不会被执行，不可到达，比如使用了 if(false)
+    - 代码的执行结果没有使用，就没有引用。
+    - 代码只会影响死变量，只写不读
+9. 如何写一个自定义 `plugin` ？
+
+    其实就是利用 this.hooks.的生命周期来做事情，比如
+
+    ```js
+    this.hooks.done.tap('done', stats => {
+        console.log(stats.compilation.error);
+    });
+    ```
+
+    用来打日志，this 就是 compiler 对象
+
+10. 插件的 `hooks` 有哪些？
+11. `compiler` 和 `compilation` 区别是什么？
+12. 如何使用 husky 来做到 precommit 管控
+13. manifest
 
     一旦你的应用在浏览器中以 index.html 文件的形式被打开，一些 `bundle` 和应用需要的各种资源都需要用某种方式被加载与链接起来。在经过打包、压缩、为延迟加载而拆分为细小的 `chunk` 这些 `webpack` 优化 之后，你精心安排的 /src 目录的文件结构都已经不再存在。所以 `webpack` 需要它
 
@@ -142,7 +193,7 @@
 
     这样就可以返回正确的路径了
 
-11. 如何开启 gzip? 如何 localhost 代理访问开发接口？
+14. 如何开启 gzip? 如何 localhost 代理访问开发接口？
 
     ```js
     //webpack.config.js
@@ -180,7 +231,7 @@
     }
     ```
 
-12. 文件监听原理是什么
+15. 文件监听原理是什么
 
     轮训判断文件的最后编辑事件是否有变化，当某个文件发生变化的时候，并不会立马告诉监听者，而是先缓存起来，等到 `aggregateTimeout` 后才通知。默认是 300ms
 
@@ -195,7 +246,32 @@
     };
     ```
 
-13. 如何去配置一个可配置的环境变量？
+16. 文件指纹几种的区别是什么？
+
+    ```js
+    // hash: 8， 这个8代指前8位hash
+    filename: '[name][hash:8].js',
+    filename: '[name][chunkhash:8].js',
+    filename: '[name][contenthash:8].js',
+    ```
+
+    有 hash 指纹，有 chunkhash，有 contenthash。
+
+    其实颗粒度就是由粗到细，变化等级由高到低。
+
+    比如有一个多入口文件，只修改了其中一个文件，如果是用的 hash，就会造成修改一个文件，导致另外一个文件跟着变化，而另外的文件并没有修改啊，所以不合理，需要改用 chunkhash，一个入口一个模块，一个 chunkhash。
+
+    `output.chunkFileName`
+
+    那么如果用了 chunkhash，如果你用了 css，css 也用了 chunkhash，由于一个入口引用到了，如果没改 css，而改了入口中其它 js,一样会导致变化，所以 css 要用 contenthash
+
+    所以单入口单出口，出口用 hash 和 chunkhash 是一样的。
+
+    而图片文件的那个 hash，是直接 md5 的，是自己单独的策略，和别人无关
+
+    开发环境都用 hash，不然因为持久缓存，反而增加编译时间，影响热更新的使用。
+
+17. 如何去配置一个可配置的环境变量？
 
     1. 首先，使用`dotenv`这个库，`require('dotenv').config()`
     2. 创建 .env 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
@@ -219,7 +295,7 @@
 
     6. 最后再后台配置 autoconfig,也就是对应变量的值，从而完成整体配置。
 
-14. `webpack` 热更新原理
+18. `webpack` 热更新原理
     [参考 1](https://zhuanlan.zhihu.com/p/30669007)
     [参考 2](https://juejin.cn/post/6844904008432222215)
 
@@ -284,7 +360,7 @@
 
     ![tutu](https://pic1.zhimg.com/80/v2-f7139f8763b996ebfa28486e160f6378_1440w.jpg)
 
-15. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
+19. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
 
     我的理解是，功能块的解耦，各个模块各司其职，`dev-server/client` 只负责消息的传递而不负责新模块的获取
 
