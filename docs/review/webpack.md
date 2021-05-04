@@ -400,7 +400,9 @@
 
     它上面也有多个 hooks，主要是偏内置的。负责模块的编译打包和优化的一个过程。
 
-    在compiler的一些hooks里会调用compilation的一些生命周期方法
+    在 compiler 的一些 hooks 里会调用 compilation 的一些生命周期方法
+
+    Compiler 是每次 Webpack 全部生命周期的对象，而 Compilation 是 Webpack 中每次构建过程的生命周期对象，Compilation 是通过 Compiler 创建的实例。两个类都有自己生命周期，即有自己不同的 Hook，通过添加对应 Hook 事件，可以拿到各自生命周期关键数据和对象。Compilation 有个很重要的对象是 Stats 对象，通过这个对象可以得到 Webpack 打包后的所有 module、chunk 和 assets 信息，通过分析 Stats 对象可以得到很多有用的信息，比如 webpack-bundle-analyzer 这类分析打包结果的插件都是通过分析 Stats 对象来得到分析报告的。
 
 14. Tapable 是什么？
 
