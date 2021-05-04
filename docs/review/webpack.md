@@ -6,13 +6,14 @@
 
     webpack 流程是一个串行的过程, 从启动到结束会依次执行以下流程 :
 
-    1. 初始化参数：从配置文件和`Shell`语句中读取与合并参数,得出最终的参数。
-    2. 开始编译：用上一步得到的参数初始化`Compiler`对象,加载所有配置的插件,执行对象的`run`方法开始执行编译。
-    3. 确定入口：根据配置中的`entry`找出所有的入口文件。
-    4. 编译模块：从入口文件出发,调用所有配置的`Loader`对模块进行翻译,再找出该模块依赖的模块,再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理。
-    5. 完成模块编译：在经过第 4 步使用`Loader`翻译完所有模块后,得到了每个模块被翻译后的最终内容以及它们之间的依赖关系。
-    6. 输出资源：根据入口和模块之间的依赖关系,组装成一个个包含多个模块的 Chunk,再把每个`Chunk`转换成一个单独的文件加入到输出列表,这步是可以修改输出内容的最后机会。
-    7. 输出完成：在确定好输出内容后,根据配置确定输出的路径和文件名,把文件内容写入到文件系统。
+    1. 启动，通过命令行，比如`npm run build`， 会执行对应的命令，然后找 `webpack`，从 `node_modules/.bin` 目录开始查找，最后再 `node_modules\webpack\bin\webpack.js` 找到，然后开始执行这个 js，找到 `webpack-cli/webpack-command` 这个 npm 包，然后执行 cli
+    2. 初始化参数：从配置文件和`Shell`语句中读取与合并参数,得出最终的参数。
+    3. 开始编译：用上一步得到的参数初始化`Compiler`对象`compiler = webpack(options)`, 加载所有配置的插件,执行对象的`run`方法开始执行编译。
+    4. 确定入口：根据配置中的`entry`找出所有的入口文件。
+    5. 编译模块：从入口文件出发,调用所有配置的`Loader`对模块进行翻译,再找出该模块依赖的模块,再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理。
+    6. 完成模块编译：在经过第 4 步使用`Loader`翻译完所有模块后,得到了每个模块被翻译后的最终内容以及它们之间的依赖关系。
+    7. 输出资源：根据入口和模块之间的依赖关系,组装成一个个包含多个模块的 Chunk,再把每个`Chunk`转换成一个单独的文件加入到输出列表,这步是可以修改输出内容的最后机会。
+    8. 输出完成：在确定好输出内容后,根据配置确定输出的路径和文件名,把文件内容写入到文件系统。
 
     在以上过程中,`Webpack`会在特定的时间点广播出特定的事件, 插件在监听到感兴趣的事件后会执行特定的逻辑, 并且插件可以调用`Webpack`提供的`API`改变`Webpack`的运行结果。
 
@@ -330,43 +331,8 @@
 
 12. 插件的 `hooks` 有哪些？
 13. `compiler` 和 `compilation` 区别是什么？
-14. 如何使用 husky 来做到 precommit 管控
-15. manifest
-
-    一旦你的应用在浏览器中以 index.html 文件的形式被打开，一些 `bundle` 和应用需要的各种资源都需要用某种方式被加载与链接起来。在经过打包、压缩、为延迟加载而拆分为细小的 `chunk` 这些 `webpack` 优化 之后，你精心安排的 /src 目录的文件结构都已经不再存在。所以 `webpack` 需要它
-
-    它是给映射资源用的，比如 `ssr` 的时候，都会写好 js,css 的路径，但是打包的时候，会给它添加一个 `hash` 值
-
-    使用 `DllPlugin` 进行分包，使用 `DllReferencePlugin`(索引链接) 对 manifest.json 引用，让一些基本不会改动的代码先打包成静态资源，避免反复编译浪费时间。HashedModuleIdsPlugin 可以解决模块数字 id 问题
-
-    ```js
-    {
-        "main.css": "main.198b3634.css",
-        "main.js": "main.d312f172.js",
-        "index.html": "index.html"
-    }
-
-    const buildPath = require('./dist/manifest.json');
-
-    res.send(`
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>ssr</title>
-    <link href="${buildPath['main.css']}" rel="stylesheet"></head>
-    <body>
-    <div id="app"></div>
-    <script type="text/javascript" src="${buildPath['main.js']}"></script></body>
-    </html>
-    `);
-    ```
-
-    这样就可以返回正确的路径了
-
-16. 如何开启 gzip? 如何 localhost 代理访问开发接口？
+14. 如何使用 `husky` 来做到 `precommit` 管控
+15. 如何开启 gzip? 如何 localhost 代理访问开发接口？
 
     ```js
     //webpack.config.js
@@ -404,7 +370,7 @@
     }
     ```
 
-17. 文件监听原理是什么
+16. 文件监听原理是什么
 
     轮训判断文件的最后编辑事件是否有变化，当某个文件发生变化的时候，并不会立马告诉监听者，而是先缓存起来，等到 `aggregateTimeout` 后才通知。默认是 300ms
 
@@ -419,7 +385,7 @@
     };
     ```
 
-18. 文件指纹几种的区别是什么？
+17. 文件指纹几种的区别是什么？
 
     ```js
     // hash: 8， 这个8代指前8位hash
@@ -444,7 +410,7 @@
 
     开发环境都用 hash，不然因为持久缓存，反而增加编译时间，影响热更新的使用。
 
-19. 如何去配置一个可配置的环境变量？
+18. 如何去配置一个可配置的环境变量？
 
     1. 首先，使用`dotenv`这个库，`require('dotenv').config()`
     2. 创建 .env 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
@@ -468,7 +434,7 @@
 
     6. 最后再后台配置 autoconfig,也就是对应变量的值，从而完成整体配置。
 
-20. `webpack` 热更新原理
+19. `webpack` 热更新原理
     [参考 1](https://zhuanlan.zhihu.com/p/30669007)
     [参考 2](https://juejin.cn/post/6844904008432222215)
 
@@ -535,7 +501,7 @@
 
     ![tutu](https://pic1.zhimg.com/80/v2-f7139f8763b996ebfa28486e160f6378_1440w.jpg)
 
-21. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
+20. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
 
     我的理解是，功能块的解耦，各个模块各司其职，`dev-server/client` 只负责消息的传递而不负责新模块的获取
 
