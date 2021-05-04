@@ -12,7 +12,7 @@
     4. 确定入口：根据配置中的`entry`找出所有的入口文件。
     5. 编译模块：从入口文件出发,调用所有配置的`Loader`对模块进行翻译,再找出该模块依赖的模块,再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理。
     6. 完成模块编译：在经过第 4 步使用`Loader`翻译完所有模块后,得到了每个模块被翻译后的最终内容以及它们之间的依赖关系。
-    7. 输出资源：根据入口和模块之间的依赖关系,组装成一个个包含多个模块的 Chunk,再把每个`Chunk`转换成一个单独的文件加入到输出列表,这步是可以修改输出内容的最后机会。
+    7. 输出资源：根据入口和模块之间的依赖关系, 组装成一个个包含多个模块的 Chunk,再把每个`Chunk`转换成一个单独的文件加入到输出列表,这步是可以修改输出内容的最后机会。
     8. 输出完成：在确定好输出内容后,根据配置确定输出的路径和文件名,把文件内容写入到文件系统。
 
     在以上过程中,`Webpack`会在特定的时间点广播出特定的事件, 插件在监听到感兴趣的事件后会执行特定的逻辑, 并且插件可以调用`Webpack`提供的`API`改变`Webpack`的运行结果。
@@ -325,14 +325,119 @@
     this.hooks.done.tap('done', stats => {
         console.log(stats.compilation.error);
     });
+    // 用来打日志，this 就是 compiler 对象
+
+    // 比如
+    class xxxPlugin {
+        apply(compiler) {
+            compiler.hooks.beforeRun.tap('xxxPlugin', compiler => {
+                // ... do sth.
+            });
+        }
+    }
     ```
 
-    用来打日志，this 就是 compiler 对象
+    具体的 tap 里的参数，需要去看 hooks 里的具体参数，有的是 compiler，有的是 compilation，有的又是 stats， 看下面就知道
 
-12. 插件的 `hooks` 有哪些？
-13. `compiler` 和 `compilation` 区别是什么？
-14. 如何使用 `husky` 来做到 `precommit` 管控
-15. 如何开启 gzip? 如何 localhost 代理访问开发接口？
+12. compiler 是什么？
+
+    [源码位子](https://github.com/webpack/webpack/blob/master/lib/Compiler.js)
+
+    compiler 是继承自 Tapable 的一个类，初始化的时候会 new 一个 compiler 实例。
+
+    compiler 实例下有多个 hook,在 constructor 下会声明
+
+    ```js
+    this.hooks = Object.freeze({
+        initialize: new SyncHook([]),
+        shouldEmit: new SyncBailHook(['compilation']),
+        done: new AsyncSeriesHook(['stats']),
+        afterDone: new SyncHook(['stats']),
+        additionalPass: new AsyncSeriesHook([]),
+        beforeRun: new AsyncSeriesHook(['compiler']),
+        run: new AsyncSeriesHook(['compiler']),
+        emit: new AsyncSeriesHook(['compilation']),
+        assetEmitted: new AsyncSeriesHook(['file', 'info']),
+        afterEmit: new AsyncSeriesHook(['compilation']),
+        thisCompilation: new SyncHook(['compilation', 'params']),
+        compilation: new SyncHook(['compilation', 'params']),
+        normalModuleFactory: new SyncHook(['normalModuleFactory']),
+        contextModuleFactory: new SyncHook(['contextModuleFactory']),
+        beforeCompile: new AsyncSeriesHook(['params']),
+        compile: new SyncHook(['params']),
+        make: new AsyncParallelHook(['compilation']),
+        finishMake: new AsyncSeriesHook(['compilation']),
+        afterCompile: new AsyncSeriesHook(['compilation']),
+        watchRun: new AsyncSeriesHook(['compiler']),
+        failed: new SyncHook(['error']),
+        invalid: new SyncHook(['filename', 'changeTime']),
+        watchClose: new SyncHook([]),
+        shutdown: new AsyncSeriesHook([]),
+        infrastructureLog: new SyncBailHook(['origin', 'type', 'args']),
+        environment: new SyncHook([]),
+        afterEnvironment: new SyncHook([]),
+        afterPlugins: new SyncHook(['compiler']),
+        afterResolvers: new SyncHook(['compiler']),
+        entryOption: new SyncBailHook(['context', 'entry']),
+    });
+    ```
+
+    其实多数都是同步的钩子，然后使用的时候，比如上面的 done 吧，就是
+
+    ```js
+    compiler.hooks.done.tap('xxxx', () => {
+        // dosth
+    });
+    ```
+
+    而 compiler 类里，会在合适的阶段去执行 this.hooks.xxx.call('');
+
+    然后在 run 的时候，去检查 config.js 下的 plugins，然后通过 for of 挨个 apply(compiler) 即可注册进去。
+
+13. compilation 是什么？
+
+    compilation 也是集成自 Tapable 的一个类。
+
+    它上面也有多个 hooks，主要是偏内置的。负责模块的编译打包和优化的一个过程。
+
+    在compiler的一些hooks里会调用compilation的一些生命周期方法
+
+14. Tapable 是什么？
+
+    类似于 `node` 中的 `eventEmmiter` 的发布订阅模块，所以 `webpack` 本质就是基于事件流的编程范例，一些列的插件运行。
+
+    它控制钩子函数的发布与订阅，控制着 `webpack` 的插件系统，它暴露了很多 `HOOK` 类，为插件提供挂载的钩子。
+
+    ```js
+    const {
+        SyncHook,
+        SyncBailHook,
+        SyncWaterHook,
+        SyncLoopHook,
+        AsyncParallelHook,
+        AsyncParallelBailHook,
+        AsyncSeriesHook,
+        AsyncSeriesBailHook,
+        AsyncSeriesWaterHook,
+    } = require('tapable')
+    waterfall = 同步方法，会传值给下一个函数。
+    Bail = 是当函数有返回值，在当前执行函数会停止。
+    Loop = 监听函数返回true代表继续，返回undefined代表结束
+    ```
+
+    使用方式通常就是
+
+    ```js
+    const hook1 = new SyncHook(['arg1', 'agr2', 'arg3']);
+    hook1.tap('hook1', (a, b, c) => console.log(a, b, c)); // 1,2,3
+    hook1.call(1, 2, 3);
+    // 这个tap类似于On
+    // 这个call类似于trigger
+    ```
+
+15. 插件的 `hooks` 有哪些？
+16. 如何使用 `husky` 来做到 `precommit` 管控
+17. 如何开启 gzip? 如何 localhost 代理访问开发接口？
 
     ```js
     //webpack.config.js
@@ -370,7 +475,7 @@
     }
     ```
 
-16. 文件监听原理是什么
+18. 文件监听原理是什么
 
     轮训判断文件的最后编辑事件是否有变化，当某个文件发生变化的时候，并不会立马告诉监听者，而是先缓存起来，等到 `aggregateTimeout` 后才通知。默认是 300ms
 
@@ -385,7 +490,7 @@
     };
     ```
 
-17. 文件指纹几种的区别是什么？
+19. 文件指纹几种的区别是什么？
 
     ```js
     // hash: 8， 这个8代指前8位hash
@@ -410,7 +515,7 @@
 
     开发环境都用 hash，不然因为持久缓存，反而增加编译时间，影响热更新的使用。
 
-18. 如何去配置一个可配置的环境变量？
+20. 如何去配置一个可配置的环境变量？
 
     1. 首先，使用`dotenv`这个库，`require('dotenv').config()`
     2. 创建 .env 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
@@ -434,7 +539,7 @@
 
     6. 最后再后台配置 autoconfig,也就是对应变量的值，从而完成整体配置。
 
-19. `webpack` 热更新原理
+21. `webpack` 热更新原理
     [参考 1](https://zhuanlan.zhihu.com/p/30669007)
     [参考 2](https://juejin.cn/post/6844904008432222215)
 
@@ -501,7 +606,7 @@
 
     ![tutu](https://pic1.zhimg.com/80/v2-f7139f8763b996ebfa28486e160f6378_1440w.jpg)
 
-20. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
+22. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
 
     我的理解是，功能块的解耦，各个模块各司其职，`dev-server/client` 只负责消息的传递而不负责新模块的获取
 
