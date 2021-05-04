@@ -138,6 +138,51 @@
     12. 利用 `speedMeasureWebpackPlugin` 来观察插件和 Loader 的执行速度。
         通过 module.export = smp.wrap({...})
     13. 使用 `webpackBundleAnalyzer` 来进行体积大小分析，会打开 8888 端口号的一个页面，可以在里面看到图片分析。类似热词图
+    14. 使用 `terser-webpack-plugin` 开启 parallel 参数，开启并行压缩，减少构建时间。
+
+        ```js
+        module.exports = {
+            // 自带的属性，优化属性
+            optimization: {
+                minimizer: [
+                    new TerserPlugin({
+                        parallel: 4, // 设为true的话，默认是电脑CPU数量的两倍减去1
+                        cache: true, // 提升二次构建速度，和loader的cacheDirectory:true 类似
+                    }),
+                ],
+            },
+        };
+        ```
+
+    15. 使用 `new HardSourceWebpackPlugin()` 一样可以完成缓存，是针对模块的解析的缓存，提升二次构建速度,几种缓存都会放到 `node_modules` 下的 `.cache` 目录下。
+    16. 使用 `image-webpack-loader` 直接对图片压缩，可以试验一下。
+
+    ```js
+    {
+        loader: 'image-webpack-loader',
+        options: {
+            mozjpeg: {
+                progressive: true,
+                quality: 65
+            },
+            // optipng.enabled: false will disable optipng
+            optipng: {
+                enabled: false,
+            },
+            pngquant: {
+                quality: '65-90',
+                speed: 4
+            },
+            gifsicle: {
+                interlaced: false,
+            },
+            // the webp option will enable WEBP
+            webp: {
+                quality: 75
+            }
+        }
+    }
+    ```
 
 8. HappyPack / thread-loader 原理是什么？
 
@@ -180,10 +225,54 @@
     性能的话看起来好像 `thread-loader` 好一点点，而且配置简单，使用容易一点，直接在要开的 loader 上面添加即可。
 
 9. 什么是 DCE(dead code elimination) 消除死代码?
+
     - 代码不会被执行，不可到达，比如使用了 if(false)
     - 代码的执行结果没有使用，就没有引用。
     - 代码只会影响死变量，只写不读
-10. 如何写一个自定义 `plugin` ？
+
+10. 如何使用 `DLLPlugin` 来完成分包呢？
+
+    这个插件是在一个额外的独立的 webpack 设置中创建一个只有 dll 的 bundle(dll-only-bundle)。 这个插件会生成一个名为 `manifest.json` 的文件，这个文件是用来让 `DLLReferencePlugin` 映射到相关的依赖上去的。
+
+    弄一个新的 webpack.dll.js 文件
+
+    ```js
+    module.exports = {
+        entry: {
+            library: ['react', 'react-dom'],
+        },
+        output: {
+            filename: '[name]_[hash].dll.js', // 不能使用chunkhash/contenthash
+            path: path.join(__dirname, 'build/library'),
+            library: '[name]_[hash]',
+        },
+        plugins: [
+            // 内置的插件
+            new webpack.DllPlugin({
+                name: '[name]_[hash]',
+                path: path.join(__dirname, 'build/library/[name].json'),
+            }),
+        ],
+    };
+    ```
+
+    这样会生成 xx.json 文件。
+
+    然后在正式的配置里，通过
+
+    ```js
+    new webpack.DllReferencePlugin({
+        manifest: require('./build/library/library.json')
+    }),
+    // 需要 AddAssetHtmlPlugin 这个插件
+    new AddAssetHtmlPlugin({
+        filepath: path.resolve(__dirname, 'build/library/*.dll.js'),
+    }),
+    ```
+
+    这样的话，就会自动把对应的 js，插到 html 里，从而完成分包。
+
+11. 如何写一个自定义 `plugin` ？
 
     其实就是利用 this.hooks.的生命周期来做事情，比如
 
@@ -195,16 +284,16 @@
 
     用来打日志，this 就是 compiler 对象
 
-11. 插件的 `hooks` 有哪些？
-12. `compiler` 和 `compilation` 区别是什么？
-13. 如何使用 husky 来做到 precommit 管控
-14. manifest
+12. 插件的 `hooks` 有哪些？
+13. `compiler` 和 `compilation` 区别是什么？
+14. 如何使用 husky 来做到 precommit 管控
+15. manifest
 
     一旦你的应用在浏览器中以 index.html 文件的形式被打开，一些 `bundle` 和应用需要的各种资源都需要用某种方式被加载与链接起来。在经过打包、压缩、为延迟加载而拆分为细小的 `chunk` 这些 `webpack` 优化 之后，你精心安排的 /src 目录的文件结构都已经不再存在。所以 `webpack` 需要它
 
     它是给映射资源用的，比如 `ssr` 的时候，都会写好 js,css 的路径，但是打包的时候，会给它添加一个 `hash` 值
 
-    使用 `DllPlugin` 进行分包，使用 DllReferencePlugin(索引链接) 对 manifest.json 引用，让一些基本不会改动的代码先打包成静态资源，避免反复编译浪费时间。HashedModuleIdsPlugin 可以解决模块数字 id 问题
+    使用 `DllPlugin` 进行分包，使用 `DllReferencePlugin`(索引链接) 对 manifest.json 引用，让一些基本不会改动的代码先打包成静态资源，避免反复编译浪费时间。HashedModuleIdsPlugin 可以解决模块数字 id 问题
 
     ```js
     {
@@ -233,7 +322,7 @@
 
     这样就可以返回正确的路径了
 
-15. 如何开启 gzip? 如何 localhost 代理访问开发接口？
+16. 如何开启 gzip? 如何 localhost 代理访问开发接口？
 
     ```js
     //webpack.config.js
@@ -271,7 +360,7 @@
     }
     ```
 
-16. 文件监听原理是什么
+17. 文件监听原理是什么
 
     轮训判断文件的最后编辑事件是否有变化，当某个文件发生变化的时候，并不会立马告诉监听者，而是先缓存起来，等到 `aggregateTimeout` 后才通知。默认是 300ms
 
@@ -286,7 +375,7 @@
     };
     ```
 
-17. 文件指纹几种的区别是什么？
+18. 文件指纹几种的区别是什么？
 
     ```js
     // hash: 8， 这个8代指前8位hash
@@ -311,7 +400,7 @@
 
     开发环境都用 hash，不然因为持久缓存，反而增加编译时间，影响热更新的使用。
 
-18. 如何去配置一个可配置的环境变量？
+19. 如何去配置一个可配置的环境变量？
 
     1. 首先，使用`dotenv`这个库，`require('dotenv').config()`
     2. 创建 .env 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
@@ -335,7 +424,7 @@
 
     6. 最后再后台配置 autoconfig,也就是对应变量的值，从而完成整体配置。
 
-19. `webpack` 热更新原理
+20. `webpack` 热更新原理
     [参考 1](https://zhuanlan.zhihu.com/p/30669007)
     [参考 2](https://juejin.cn/post/6844904008432222215)
 
@@ -402,7 +491,7 @@
 
     ![tutu](https://pic1.zhimg.com/80/v2-f7139f8763b996ebfa28486e160f6378_1440w.jpg)
 
-20. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
+21. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
 
     我的理解是，功能块的解耦，各个模块各司其职，`dev-server/client` 只负责消息的传递而不负责新模块的获取
 
