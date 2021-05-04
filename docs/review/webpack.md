@@ -85,14 +85,20 @@
     首先，它是依托于 es6 modules 才能完成，因为 esm 的依赖关系是确认的，和运行时无关，是编译时就确定的。正因为如此，它才能做 tree-shaking
     而 tree-shaking 呢，就是在转换 AST 的时候，把死路径给摇掉，现在都是 UglifyJSPlugin 来完成 js 的 dce
 
-5. Loader 和 Plugin 的区别
+5. 什么是 DCE(dead code elimination) 消除死代码?
+
+    - 代码不会被执行，不可到达，比如使用了 if(false)
+    - 代码的执行结果没有使用，就没有引用。
+    - 代码只会影响死变量，只写不读
+
+6. Loader 和 Plugin 的区别
 
     - Loader 本质就是一个函数，在该函数中对接收到的内容进行转换，返回转换后的结果。因为 `Webpack` 只认识 JavaScript，所以 `Loader` 就成了翻译官，对其他类型的资源进行转译的预处理工作。
     - `Plugin` 就是插件，基于事件流框架 Tapable，插件可以扩展 `Webpack` 的功能，在 `Webpack` 运行的生命周期中会广播出许多事件，Plugin 可以监听这些事件，在合适的时机通过 `Webpack` 提供的 `API` 改变输出结果。
     - `Loader` 在 module.rules 中配置，作为模块的解析规则，类型为数组。每一项都是一个 Object，内部包含了 test(类型文件)、loader、options (参数)等属性。
     - `Plugin` 在 `plugins` 中单独配置，类型为数组，每一项是一个 `Plugin` 的实例，参数都通过构造函数传入。
 
-6. 如何写一个自定义的 loader？
+7. 如何写一个自定义的 loader？
 
     第一个参数 `source` 就是文件内容，然后你该替换替换
 
@@ -106,7 +112,7 @@
 
     异步执行完调用 `callback(null, output);`
 
-7. 常用的几个插件
+8. 常用的几个插件
 
     1. 通过 MiniCssExtractPlugin 来生成单独的 css 文件， 所以这个是和 style-loader 是冲突的，因为 style-loader 是把 css 文件插到 html 里的，要改用 MiniCssExtractPlugin.loader
     2. HtmlWebpackPlugin 简化了 HTML 文件的创建， 同时也可以压缩 HTML
@@ -114,6 +120,48 @@
     4. 使用 cleanWebpackPlugin 来清理 dist 文件
     5. 使用 postcss-loader 以及 autoprefixer 插件来完成 css3 的前缀补全
     6. 多页面打包，利用 glob 来获取对应路径下的所有入口，再写个函数，生成 entry 和 plugins（htmlwebpackplugins）
+
+        ```js
+        const setMPA = () => {
+            const entry = {};
+            const htmlWebpackPlugins = [];
+            const entryFiles = glob.sync(
+                path.join(__dirname, './src/*/index.js')
+            );
+
+            Object.keys(entryFiles).map(index => {
+                const entryFile = entryFiles[index];
+                let match = entryFiles[index].match(/src\/(.*)\/index.js/);
+                let pageName = match && match[1];
+
+                entry[pageName] = entryFile;
+                htmlWebpackPlugins.push(
+                    new HtmlWebpackPlugin({
+                        template: path.join(
+                            __dirname,
+                            `src/${pageName}/index.html`
+                        ),
+                        filename: `${pageName}.html`,
+                        chunks: ['vendors', pageName],
+                        inject: true,
+                        minify: {
+                            html5: true,
+                            collapseWhitespace: true,
+                            preserveLineBreaks: false,
+                            minifyCSS: true,
+                            minifyJS: true,
+                            removeComments: false,
+                        },
+                    })
+                );
+            });
+            return {
+                entry,
+                htmlWebpackPlugins,
+            };
+        };
+        ```
+
     7. 开发环境上 sourcemap 和补上的区别，就是上了的话，可以直接看自己写的源代码，而如果不上的话，虽然没有压缩，但是看到的是已经转译后的代码，不方便调试。
     8. 利用 splitchuncksPlugin 来分离代码
 
@@ -157,34 +205,36 @@
     15. 使用 `new HardSourceWebpackPlugin()` 一样可以完成缓存，是针对模块的解析的缓存，提升二次构建速度,几种缓存都会放到 `node_modules` 下的 `.cache` 目录下。
     16. 使用 `image-webpack-loader` 直接对图片压缩，可以试验一下。
 
-    ```js
-    {
-        loader: 'image-webpack-loader',
-        options: {
-            mozjpeg: {
-                progressive: true,
-                quality: 65
-            },
-            // optipng.enabled: false will disable optipng
-            optipng: {
-                enabled: false,
-            },
-            pngquant: {
-                quality: '65-90',
-                speed: 4
-            },
-            gifsicle: {
-                interlaced: false,
-            },
-            // the webp option will enable WEBP
-            webp: {
-                quality: 75
+        ```js
+        {
+            loader: 'image-webpack-loader',
+            options: {
+                mozjpeg: {
+                    progressive: true,
+                    quality: 65
+                },
+                // optipng.enabled: false will disable optipng
+                optipng: {
+                    enabled: false,
+                },
+                pngquant: {
+                    quality: '65-90',
+                    speed: 4
+                },
+                gifsicle: {
+                    interlaced: false,
+                },
+                // the webp option will enable WEBP
+                webp: {
+                    quality: 75
+                }
             }
         }
-    }
-    ```
+        ```
 
-8. HappyPack / thread-loader 原理是什么？
+    17. 使用 `PurgecssPlugin` 擦除没用到的 css
+
+9. HappyPack / thread-loader 原理是什么？
 
     默认的情况下，webpack 是一个进程，也就是一个 webpack，由 webpack 本身去解析模块，那么有了 happypack 后呢，在 webpack 的 compiler 实例 run 的时候，先解析 happypack plugin,然后 happypack 创建线程池子，然后线程池将构建任务分配给各个线程。每个线程都会去处理模块，处理完了后通过一个自己的通信方式，把信息传回 happypack 主进程。
 
@@ -223,12 +273,6 @@
     ```
 
     性能的话看起来好像 `thread-loader` 好一点点，而且配置简单，使用容易一点，直接在要开的 loader 上面添加即可。
-
-9. 什么是 DCE(dead code elimination) 消除死代码?
-
-    - 代码不会被执行，不可到达，比如使用了 if(false)
-    - 代码的执行结果没有使用，就没有引用。
-    - 代码只会影响死变量，只写不读
 
 10. 如何使用 `DLLPlugin` 来完成分包呢？
 
