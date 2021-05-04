@@ -57,7 +57,7 @@
     23. `DefinePlugin` 配合`dotenv`这个库，可以在.env 里写环境变量，webpack 首行直接 require('ditenv').config();这些环境变量就被打到了 process.env 里了。然后利用`.env.vm`，和服务器交互即可。可以利用它们，来做符合自己业务不同的环境
     24. exculde 优先级是高于`include`的
     25. 使用 `cache-loader` 或者是 `babel-loader` 下参数`cacheDirectory`设置为 true，可以让它在构建的过程尝试读取缓存，提高编译时间。
-    26. 使用 `HappyPack` 插件让`webpack`在构建的时候可以同时处理多个子进程，提高构建时间。
+    26. 使用 `HappyPack` 插件/ `thread-loader` 让`webpack`在构建的时候可以同时处理多个子线程/进程，提高构建时间。
     27. 如果使用了不需要构建的第三方依赖，如`Jquery`或者是 loadsh,可以用 module: { noParse: /jquery|loadsh/ } 来搞定。
     28. 如果使用了第三方的包的时候，自己的代码需要用到 `import $ from 'jquery'`，可以配置 externals: { 'jquery': 'jQuery'} ,这样全局就会有 jQuery 变量了。
     29. webpack 自己会有 `tree-shaking` 功能，没有 import 的代码它不会打包出来。
@@ -137,13 +137,53 @@
     11. 利用内置的 stats 对象来分析基本信息，时间和大小，但是 stats 颗粒度太粗了，所以需要插件来分析。
     12. 利用 `speedMeasureWebpackPlugin` 来观察插件和 Loader 的执行速度。
         通过 module.export = smp.wrap({...})
-    13. 使用 webpackBundleAnalyzer 来进行体积大小分析，会打开 8888 端口号的一个页面，可以在里面看到图片分析。类似热词图
+    13. 使用 `webpackBundleAnalyzer` 来进行体积大小分析，会打开 8888 端口号的一个页面，可以在里面看到图片分析。类似热词图
 
-8. 什么是 DCE(dead code elimination) 消除死代码?
+8. HappyPack / thread-loader 原理是什么？
+
+    默认的情况下，webpack 是一个进程，也就是一个 webpack，由 webpack 本身去解析模块，那么有了 happypack 后呢，在 webpack 的 compiler 实例 run 的时候，先解析 happypack plugin,然后 happypack 创建线程池子，然后线程池将构建任务分配给各个线程。每个线程都会去处理模块，处理完了后通过一个自己的通信方式，把信息传回 happypack 主进程。
+
+    ```js
+    1. 替换需要的loader为 use: 'happypack/loader?id=jsx'
+    2.
+    export.plugins = [
+        new HappyPack({
+            id: 'jsx',
+            threads: 4,
+            loaders: ['babel-loader']
+        })
+    ]
+    // 默认会开3个，如果不配的话。
+    // 相当于一个happypack分配了4个线程给 babel-loader, 快速处理jsx
+    // id的话是给多个happypack用的，如果只有一个，也不需要配置。
+    ```
+
+    但是 webpack3 才使用，webpack4 后就不用了，使用 `thread-loader` 来替换，原理是类似的。是分配 node 的多进程来做到的。
+
+    ```js
+    rules: [
+        {
+            test: /.js$/,
+            use: [
+                {
+                    loader: 'thread-loader',
+                    options: {
+                        workers: 3,
+                    },
+                },
+                'babel-loader',
+            ],
+        },
+    ];
+    ```
+
+    性能的话看起来好像 `thread-loader` 好一点点，而且配置简单，使用容易一点，直接在要开的 loader 上面添加即可。
+
+9. 什么是 DCE(dead code elimination) 消除死代码?
     - 代码不会被执行，不可到达，比如使用了 if(false)
     - 代码的执行结果没有使用，就没有引用。
     - 代码只会影响死变量，只写不读
-9. 如何写一个自定义 `plugin` ？
+10. 如何写一个自定义 `plugin` ？
 
     其实就是利用 this.hooks.的生命周期来做事情，比如
 
@@ -155,10 +195,10 @@
 
     用来打日志，this 就是 compiler 对象
 
-10. 插件的 `hooks` 有哪些？
-11. `compiler` 和 `compilation` 区别是什么？
-12. 如何使用 husky 来做到 precommit 管控
-13. manifest
+11. 插件的 `hooks` 有哪些？
+12. `compiler` 和 `compilation` 区别是什么？
+13. 如何使用 husky 来做到 precommit 管控
+14. manifest
 
     一旦你的应用在浏览器中以 index.html 文件的形式被打开，一些 `bundle` 和应用需要的各种资源都需要用某种方式被加载与链接起来。在经过打包、压缩、为延迟加载而拆分为细小的 `chunk` 这些 `webpack` 优化 之后，你精心安排的 /src 目录的文件结构都已经不再存在。所以 `webpack` 需要它
 
@@ -193,7 +233,7 @@
 
     这样就可以返回正确的路径了
 
-14. 如何开启 gzip? 如何 localhost 代理访问开发接口？
+15. 如何开启 gzip? 如何 localhost 代理访问开发接口？
 
     ```js
     //webpack.config.js
@@ -231,7 +271,7 @@
     }
     ```
 
-15. 文件监听原理是什么
+16. 文件监听原理是什么
 
     轮训判断文件的最后编辑事件是否有变化，当某个文件发生变化的时候，并不会立马告诉监听者，而是先缓存起来，等到 `aggregateTimeout` 后才通知。默认是 300ms
 
@@ -246,7 +286,7 @@
     };
     ```
 
-16. 文件指纹几种的区别是什么？
+17. 文件指纹几种的区别是什么？
 
     ```js
     // hash: 8， 这个8代指前8位hash
@@ -271,7 +311,7 @@
 
     开发环境都用 hash，不然因为持久缓存，反而增加编译时间，影响热更新的使用。
 
-17. 如何去配置一个可配置的环境变量？
+18. 如何去配置一个可配置的环境变量？
 
     1. 首先，使用`dotenv`这个库，`require('dotenv').config()`
     2. 创建 .env 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
@@ -279,23 +319,23 @@
     4. 然后创建 .env.vm 文件，指向是`REACT_APP_CACHE_URL="${cache_url}"`
     5. 创建 auto-config.xml 文件
 
-    ```js
-    <?xml version="1.0" encoding="UTF-8"?>
-        <config>
-        <group>
-            <property name="homepage_url" />
-            <property name="cache_url" />
-        </group>
-        <script>
-            <generate template=".env.vm" destfile=".env" charset="UTF-8"/>
-            <generate template="package.json.vm" destfile="package.json" charset="UTF-8"/>
-        </script>
-    </config>s
-    ```
+        ```js
+        <?xml version="1.0" encoding="UTF-8"?>
+            <config>
+            <group>
+                <property name="homepage_url" />
+                <property name="cache_url" />
+            </group>
+            <script>
+                <generate template=".env.vm" destfile=".env" charset="UTF-8"/>
+                <generate template="package.json.vm" destfile="package.json" charset="UTF-8"/>
+            </script>
+        </config>s
+        ```
 
     6. 最后再后台配置 autoconfig,也就是对应变量的值，从而完成整体配置。
 
-18. `webpack` 热更新原理
+19. `webpack` 热更新原理
     [参考 1](https://zhuanlan.zhihu.com/p/30669007)
     [参考 2](https://juejin.cn/post/6844904008432222215)
 
@@ -328,6 +368,7 @@
     4. 编译结束后，WDS 会通过 `socket` 把编译后生成的新的 `hash` 值,然后发送一个 Type hash 的消息，然后又会发送一个 type 为 ok 的信息。
     5. `webpack-dev-server/client/index.js` 当收到了 ok 的消息后，执行 `reloadApp`
     6. 执行`reloadApp`时，如果没有配置 hot，就直接执行`location.reload`刷新页面， 如果配置了，发送一个消息`webpackHotUpdate`出去，并带上 hash 值， 这个 js 的任务完成。
+
         ```js
         function reloadApp() {
             // ...
@@ -340,6 +381,7 @@
             }
         }
         ```
+
     7. 准备热更新并没有直接检查更新，为了职责明确，把事情移交给 `webpack/hot/dev-server.js` 来做。
     8. `webpack/hot/dev-server.js` 里是监听 `webpackHotUpdate` 消息的，收到了`hash` 后会去调用`webpack/lib/HotModuleReplacement.runtime（简称 HMR runtime）（终于上场了了）`中的 `check` 方法，检测是否有新的更新
     9. 在 check 过程中会利用 webpack/lib/JsonpMainTemplate.runtime（简称 jsonp runtime）中的两个方法 hotDownloadManifest 和 hotDownloadUpdateChunk
@@ -360,7 +402,7 @@
 
     ![tutu](https://pic1.zhimg.com/80/v2-f7139f8763b996ebfa28486e160f6378_1440w.jpg)
 
-19. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
+20. 为什么更新模块的代码不直接在第三步通过 websocket 发送到浏览器端，而是通过 jsonp 来获取呢？
 
     我的理解是，功能块的解耦，各个模块各司其职，`dev-server/client` 只负责消息的传递而不负责新模块的获取
 
