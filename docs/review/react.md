@@ -280,6 +280,8 @@
 
 19. ErrorBoundary 中 getDerivedStateFromError 和 componentDidCatch 的区别
 
+    <details open>
+
     - componentDidCatch:
         - 只能在客户端使用，因为 ssr 是没有 commit 阶段的
         - 在 DOM 已更新的“提交阶段”中调用
@@ -292,6 +294,36 @@
     getDerivedStateFromError 不会强制同步渲染。由于 commit 阶段生命周期中的状态更新始终是同步的，并且由于在 commit 阶段会调用 componentDidCatch，因此使用 componentDidCatch 进行错误恢复不是最佳方法，因为它会强制回退 UI 始终同步呈现。
 
     所以，还是用 getDerivedStateFromError return state, 用 componentDidCatch 来打日志
+
+20. useEffect 为什么不能支持 async function？
+
+    <details open>
+
+    ```js
+    useEffect(async () => {
+        await loadContent();
+    }, []);
+    ```
+    这样写会报警告，因为effect function 应该返回一个销毁函数，如果用了个async，返回值就变成了promise，执行销毁函数会报错，而且因为返回是promise，也导致不可控。
+
+    其实就是设计上的原因，有一个副作用存在，导致没那么随心所欲。
+
+    ```js
+    useEffect(() => {
+        // Create an scoped async function in the hook
+        async function anyNameFunction() {
+            await loadContent();
+        }
+        // Execute the created function directly
+        anyNameFunction();
+    }, []);
+
+    useEffect(()=> {
+        xxx.then();
+    })
+    ```
+
+    只能改用如上两种写法。
 
 ### React 合成事件
 
