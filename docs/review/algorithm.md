@@ -797,3 +797,7 @@ function TreeNode(val, left, right) {
         return reg.test(number.toString(4));
     }
     ```
+
+### LEETCODE HOT 100
+
+1. [两数之和](https://leetcode-cn.com/problems/two-sum/)
