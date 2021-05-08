@@ -927,6 +927,16 @@
 
     vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，具体的不了解了，因为暂时不可能替代 webpack
 
+36. gulp和webpack区别
+
+    gulp本质上是自动化构建工具， 模块化是靠各类插件，gulp对比grunt都是文件流，taskRunner，但是grunt是存到磁盘里，而gulp的编译是存在内存中的。
+
+    webpack当然也是内存，webpack集成了一堆功能，本来就是模块打包器。而且有loader,plugin强大的功能。
+
+    一个是为了构建而打包，一个是为了打包而构建。
+
+    所以这样看，gulp更适合mpa,webpack更适合spa
+
 36. JS bridge 原理是什么？
 
     <details open>
@@ -1254,7 +1264,7 @@
     - pnpm 利用 硬链接的形式，可以复用 nodemodules 包, 所以磁盘空间利用非常高效。
     - 在使用 npm/yarn 的时候，由于 node_module 的扁平结构，如果 A 依赖 B， B 依赖 C，那么 A 当中是可以直接使用 C 的，但问题是 A 当中并没有声明 C 这个依赖。因此会出现这种非法访问的情况。但 pnpm 脑洞特别大，自创了一套依赖管理方式，利用软连接的形式，保持的引用的结构，很好地解决了这个问题，保证了安全性
 
-45. 自动化部署CI/CD [前端自动化部署](https://juejin.cn/post/6844904009333997582)
+45. 自动化部署 CI/CD [前端自动化部署](https://juejin.cn/post/6844904009333997582)
 
     <details open>
 
@@ -1341,23 +1351,23 @@
 
     当我们点击提测的时候，会自动创建一个新的 test 分支，然后当我们在这个开发环境上提交代码的时候，会通过 git hook 的一个钩子，对 jenkins 服务器接口发送一个 post 请求，那边收到这个请求会触发任务，利用 docker 来执行对应的操作。
 
-46. 如何自己发一个npm包
+46. 如何自己发一个 npm 包
 
     <details open>
 
-    [npm引入React Hooks轮子库报错Minified React error#321的解决方法](https://zhuanlan.zhihu.com/p/93773786)
-    
-    [使用npm发布一个vue组件](https://juejin.cn/post/6844903918414102535)
+    [npm 引入 React Hooks 轮子库报错 Minified React error#321 的解决方法](https://zhuanlan.zhihu.com/p/93773786)
+
+    [使用 npm 发布一个 vue 组件](https://juejin.cn/post/6844903918414102535)
 
     1. 写好自己要发的代码
-    2. 通过 webpack 打包，如果用到了react，记得把 react 加到 externals 里去
-    3. 配置package.json 里的name， 还有main，main里默认是index.js，如果你配置的是dist，要改成dist/index.js
-    4. output要配置 umd，不然导出去没法用
-    4. npm run build 生成最终的那个文件
-    5. npm pack打本地包
-    6. 把本地包复制出去，到另一个应用里npm install 它，然后就正常的import试验
-    7. 没问题后npm login
-    8. npm run build
-    9. npm publish
+    2. 通过 webpack 打包，如果用到了 react，记得把 react 加到 externals 里去
+    3. 配置 package.json 里的 name， 还有 main，main 里默认是 index.js，如果你配置的是 dist，要改成 dist/index.js
+    4. output 要配置 umd，不然导出去没法用
+    5. npm run build 生成最终的那个文件
+    6. npm pack 打本地包
+    7. 把本地包复制出去，到另一个应用里 npm install 它，然后就正常的 import 试验
+    8. 没问题后 npm login
+    9. npm run build
+    10. npm publish
 
     完结，很简单对吧
