@@ -667,6 +667,8 @@ function TreeNode(val, left, right) {
 
 [filename](../algorithm/kmp.js ':include :type=code')
 
+### 单调栈类问题
+
 ### 通用
 
 1. 大数相加
