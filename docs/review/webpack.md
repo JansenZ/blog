@@ -1,5 +1,7 @@
 [优质链接](https://juejin.cn/post/6844904094281236487)
 
+[一文读懂webpack核心原理](https://juejin.cn/post/6949040393165996040)
+
 [mini-babel](https://github.com/jamiebuilds/the-super-tiny-compiler)
 
 1. Webpack 的运行流程
@@ -166,7 +168,11 @@
     7. 开发环境上 sourcemap 和补上的区别，就是上了的话，可以直接看自己写的源代码，而如果不上的话，虽然没有压缩，但是看到的是已经转译后的代码，不方便调试。
     8. 利用 splitchuncksPlugin 来分离代码
 
-        默认情况下，它只会影响到按需加载的 chunks，因为修改 initial chunks 会影响到项目的 HTML 文件中的脚本标签。
+        默认情况下，它只会影响到**按需加载**的 chunks，因为修改 initial chunks 会影响到项目的 HTML 文件中的脚本标签。
+
+        比如两个入口文件A，和B，它们都引用到了C。那么C肯定是打包两份到对应的文件里了，所以需要有分割操作。
+
+        或者是，比如一个入口文件A，还有一个按需加载文件C，都引用到了D模块，那么D如果多次被引用了，那么就会走splitChunks了。
 
         webpack 将根据以下条件自动拆分 chunks：
 
