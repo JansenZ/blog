@@ -12,7 +12,9 @@ Array.prototype.filter2 = function (callback, thisArg) {
     if(typeof callback !== 'function') {
         throw new Error('callback is not a function');
     }
-
+    // 这句话防止你是基本类型，然后会把它强转对象
+    // 这样下面for in 进不去，也不会报错
+    // 同样适用于call, apply
     let A = Object(this);
     let res = [];
     

@@ -1165,6 +1165,8 @@
 
     找一个中间值,Symbol('fn')就可以了。
 
+    [Object(this)的原因](https://stackoverflow.com/questions/44079391/what-is-the-purpose-of-doing-objectthis/44080309)
+
 29. 正则
     <details open>
 

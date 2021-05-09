@@ -11,7 +11,7 @@ function currying(fn, ...args1) {
         if(!args2.length) {
             return fn.call(null, ...args1);
         } else {
-            currying.call(null, ...args1, ...args2);
+            return currying.call(null, fn, ...args1, ...args2);
         }
     }
 }

@@ -4,12 +4,12 @@
 // 其次，为啥下面的改成用空函数呢
 // 因为如果直接修改res.prototype = self.prototype
 // 一样会改 到原函数的原型。所以用下面的中转一下。
-Function.prototype.bind2 = function(ctx, args1) {
+Function.prototype.bind2 = function(ctx, ...args1) {
     const self = this;
 
     const Fn = function() {};
 
-    const res = function() {
+    const res = function(...args2) {
         self.apply(ctx, args1.concat(args2));
     };
 
