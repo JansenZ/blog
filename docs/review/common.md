@@ -925,7 +925,11 @@
 
 35. vite
 
-    vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，具体的不了解了，因为暂时不可能替代 webpack
+    vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，暂时不可能替代 webpack
+
+    html的script type 要是module
+
+    它在开发阶段主要就干了两件事情，一个是启动一个http服务，第二个就是拦截import，把import xx from 'xx'，替换成相对路径或绝对路径或加载到这个包的文件引用过来。因为esm只能引用绝对或相对路径去找文件
 
 36. gulp和webpack区别
 
