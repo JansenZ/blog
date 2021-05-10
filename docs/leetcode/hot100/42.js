@@ -40,6 +40,7 @@ var trap = function(height) {
 // 但是核心就是
 // 每个下标位子它能加的值，就是它的左边的最大值，和它的右边的最大值，两个人的最小的，减去当前的值。
 // 所以同样利用双指针来做
+// https://leetcode-cn.com/problems/trapping-rain-water/solution/jie-yu-shui-by-leetcode-solution-tuvc/
 var trap = function(height) {
     let ans = 0;
     let low = 0;

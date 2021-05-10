@@ -210,22 +210,23 @@
 // 利用滑动窗口
 // 遇到不一样的更新startIdx位置
 var lengthOfLongestSubstring = function(s) {
-    let map = {};
+    let start = 0;
     let max = 0;
-    let startIdx = 0;
-    let endIdx = 0;
-    for(var i = 0; i < s.length; i++) {
-        // 说明遇到的这个字符串在startIdx后出现过
-        // 直接把startIdx 移动到 这个位子 + 1
-        if(map[s[i]] < startIdx) {
-            max = Math.max(max, endIdx - startIdx);
-            startIdx = map[s[i]] + 1;
+    let map = new Map();
+    let count = 0;
+    for(var k of s) {
+        // 这个判断是必要的，如果只用has的话，会出现后面的在最前面发现，从而导致也进来了。
+        if(map.get(k) > start) {
+            max = Math.max(max, count - start);
+            // 别直接为count，是上轮获取的。
+            start = map.get(k);
         }
-        map[s[i]] = endIdx;
-        endIdx ++;
+        count++;
+        map.set(k, count);
     }
-    return Math.max(max, endIdx - startIdx);
+    return Math.max(max, count - start);
 };
+
 
 ```
 
@@ -799,7 +800,3 @@ function TreeNode(val, left, right) {
         return reg.test(number.toString(4));
     }
     ```
-
-### LEETCODE HOT 100
-
-1. [两数之和](https://leetcode-cn.com/problems/two-sum/)

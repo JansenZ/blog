@@ -9,6 +9,7 @@ var maxArea = function(height) {
     let end = height.length - 1;
     while(start < end) {
         max = Math.max(max, (end - start) * Math.min(height[start], height[end]));
+        // 每次只滑一个
         if(height[start] < height[end]) {
             start ++
         } else {
