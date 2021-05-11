@@ -1393,3 +1393,7 @@
     10. npm publish
 
     完结，很简单对吧
+
+47. 白屏检测的方式
+
+    [document.elementsFromPoint juejin](https://juejin.cn/post/6904135847411941390)

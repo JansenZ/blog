@@ -334,3 +334,16 @@
         100% {background-color: green;}
     }
     ```
+
+26. overflow-anchor 这个属性的意义
+
+    可以利用Overflow-anchor，实现上方append了很多内容，而视窗纹丝不动，不会被挤下来，但是iphone 不支持。
+
+    [张鑫旭 overflow-anchor](https://www.zhangxinxu.com/wordpress/2020/08/css-overflow-anchor/)
+
+    [caniuse overflow-anchor](https://caniuse.com/?search=overflow-anchor)
+
+27. 如果在ios里，容器宽度发生变化的情况下，如何保证内容的第一行位置不变？
+
+    [张鑫旭 滚动容器 elementsFromPoint](https://www.zhangxinxu.com/wordpress/2018/02/container-scroll-position-hold/)
+
