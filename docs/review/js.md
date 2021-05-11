@@ -1843,3 +1843,26 @@
 68. 如果一个悬浮球，需要我判断e.target，点击到它才算，但是呢，我这个div里面还有span标签，e.target肯定是span标签，如何判断我点到了这个球？
 
     通过e.target.parentNode，做一个while判断。如果最后都不等于，return false,否则，return true;
+
+69. async await 对比 promise
+
+    <details open>
+
+    async/await 优点：
+
+    1. 它做到了真正的串行的同步写法，代码阅读相对容易
+    2. 对于条件语句和其他流程语句比较友好，可以直接写到判断条件里面
+    3. 处理复杂流程时，在代码清晰度方面有优势
+
+    async/await 缺点：
+
+    1. 无法处理 promise 返回的 reject 对象，要借助 try...catch...
+    2. 用 await 可能会导致性能问题，因为 await 会阻塞代码，也许之后的异步代码并不依赖于前者，但仍然需要等待前者完成，导致代码失去了并发性。需要用 promise.all
+    3. try...catch...内部的变量无法传递给下一个 try...catch...,Promise 和 then/catch 内部定义的变量，能通过 then 链条的参数传递到下一个 then/catch，但是 async/await 的 try 内部的变量，如果用 let 和 const 定义则无法传递到下一个 try...catch...，只能在外层作用域先定义好。
+    4. 但 async/await 确确实实是解决了 promise 一些问题的。更加灵活的处理异步
+
+    promise 的一些问题：
+
+    1. 一旦执行，无法中途取消，链式调用多个 then 中间不能随便跳出来
+    2. 错误无法在外部被捕捉到，只能在内部进行预判处理，如果不设置回调函数，Promise 内部抛出的错误，不会反应到外部
+    3. Promise 内部如何执行，监测起来很难，当处于 pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）
