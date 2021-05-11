@@ -1147,6 +1147,18 @@
 
     <details open>
 
+    后续可以使用H5的drag API 来替代
+
+    [HTML5原生拖拽/拖放 Drag & Drop 详解](https://juejin.cn/post/6844903513491767303)
+
+    [精读《结合 React 使用原生 Drag Drop API》](https://juejin.cn/post/6844904070910590984)
+
+    [ReactDND](https://react-dnd.github.io/react-dnd/examples/dustbin/multiple-targets)
+
+    [dragstart mdn](https://developer.mozilla.org/zh-CN/docs/Web/API/Document/dragstart_event)
+
+    [cloneNode mdn](https://developer.mozilla.org/en-US/docs/Web/API/Node/cloneNode)
+
     运营有日益新增的各种活动页需求，但是经过研究会发现，大多数的活动页面，主要组成部分就是图片，优惠券，商品
 
     那么为了节省开发的人力，采用装修拖拽的方案就显得有必要了。
