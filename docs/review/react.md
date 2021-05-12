@@ -1371,9 +1371,10 @@ if (next === null) {
     }
     // update 阶段特别简单
     // 判断update前后value是否变化
+    const prevState = hook.memoizedState;
     if (areHookInputsEqual(nextDeps, prevDeps)) {
         // 未变化
-        // 这个prevState剧是hook.memoizedState
+        // 直接返回对应的useCallback包裹函数
         return prevState[0];
     }
     hook.memoizedState = [callback, nextDeps];
@@ -1484,7 +1485,7 @@ if (next === null) {
 
     每次执行到一个`hook update`的时候，它都会去执行`updateWorkInProgressHook`方法
 
-    这个方法会让 `currentlyRenderingFiber$1.memoizedState` 往后移动一位，一旦用了条件语句，它的指向就会出错。
+    这个方法会让 `currentHook = nextCurrentHook;` 往后移动一位，一旦用了条件语句，它的指向就会出错。
 
     ```js
     function updateWorkInProgressHook() {
