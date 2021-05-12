@@ -1204,6 +1204,10 @@
 30. 千位分割符正则
     <details open>
 
+    第二种`reg = /(\d)(?=(\d{3})+$)/g`， 这样就可以用 `str.replace(/(\d)(?=(\d{3})+$)/g, '$1,')`了
+
+    第三种 `str.replace(/\d(?=(\d{3})+$)/g, (target)=> target + ',')`
+
     `reg = /\d(?=(\d{3})+$)/g`
 
     `str.replace(reg, '$&,')`
