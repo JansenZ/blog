@@ -50,7 +50,7 @@
 
     对于不是 React-router 而言，如果需要缓存的话，需要自己做 activity，一个 activity 就是一个页面，然后跳转事件统一用自己封装的，然后跳转的时候呢，用链表把前后串起来，触发 hashchange，然后在生成新的 activity，然后再 replace 掉，就是隐藏前面的，后面的用新的，而旧的 activity 会缓存起来，数据什么的都在里面。
 
-    刷新： startApp => 注册子应用 => 调用 startApplication => 生成新的 application 实例(包含路由匹配表(子项目注册)，路由跳转方法实例，页面管理器) => 调用 application.start => 开始监听页面 hashchange => 调用 this.navigate => 在路由匹配管理器里，去匹配路由，如果找到了直接返回，找不到还要去 loadProject（尝试加载子应用） => 发送对应链接的请求[怎么load的]() => 如果是 manifest，直接获取，如果是 html， 正则获取 => 获取到 css 和 js 的路径 => loadJS => 把 js 插入页面中 => 自动加载 js => 进入子应用的 entry.js => 注册子应用的路由 => 这样主应用的`await routeManager.match(url)` 就获取到了值 => 然后`this.currentActivity 是null`，就相当于直接 mount
+    刷新： startApp => 注册子应用 => 调用 startApplication => 生成新的 application 实例(包含路由匹配表(子项目注册)，路由跳转方法实例，页面管理器) => 调用 application.start => 开始监听页面 hashchange => 调用 this.navigate => 在路由匹配管理器里，去匹配路由，如果找到了直接返回，找不到还要去 loadProject（尝试加载子应用） => 发送对应链接的请求[怎么load的](https://zhenglin.vip/js/resource.js) => 如果是 manifest，直接获取，如果是 html， 正则获取 => 获取到 css 和 js 的路径 => loadJS => 把 js 插入页面中 => 自动加载 js => 进入子应用的 entry.js => 注册子应用的路由 => 这样主应用的`await routeManager.match(url)` 就获取到了值 => 然后`this.currentActivity 是null`，就相当于直接 mount
 
     跳转： 点击按钮 => transitionTo 方法 => 处理 url，判断是否是原生跳转还是 webview 跳转还是正常跳转， 正常跳转调用 => navigation.forward 方法 => 调用 Navigation 文件下自己的 transitionTo 方法 => 调用 application.navigate 方法 => location.hash = url => 创建或获取新的 activity(返回就是获取，在缓存里取) => `activity => preActivity.next = newActivity, new Activity.prev = preActivity` => 调用 activityManager.replaceActivity。
 

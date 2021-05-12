@@ -886,6 +886,8 @@
 
     经过观察，发现，除了根节点外的一些东西，里面的只要大的改动了，即使 props 前后字面一样，也不会相等，所以基本没啥用，后面还是会去 reconcileChildren 来 diff。
 
+    上述说的没啥用，其实这里就是 this.props.children 发挥的场所。
+
 3. mount 的时候组件类型有哪些
 
     <details open>
