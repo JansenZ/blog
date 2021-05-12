@@ -190,11 +190,11 @@
 
     <details open>
 
-    1. 避免逐项更改样式。最好一次性更改style属性，或者将样式列表定义为class并一次性更改class属性。
+    1. 避免逐项更改样式。最好一次性更改 style 属性，或者将样式列表定义为 class 并一次性更改 class 属性。
     2. 避免循环读取 offsetLeft 等属性。在循环之前把它们存起来。
     3. 绝对定位具有复杂动画的元素。绝对定位使它脱离文档刘，否则会引起父元素及后续元素大量的回流。
     4. 使用 transform 进合成层
-    5. **避免循环操作DOM。创建一个 documentFragment 或div，在它上面应用所有 DOM 操作，最后再把它添加到 window.document。**
+    5. **避免循环操作DOM。创建一个 documentFragment (文档片段) 或div (display: none)，在它上面应用所有 DOM 操作，最后再把它添加到 window.document。**
 
     因为文档片段存在于内存中，并不在DOM树中，所以将子元素插入到文档片段时不会引起页面回流（对元素位置和几何上的计算）。因此，使用文档片段通常会带来更好的性能。
 
