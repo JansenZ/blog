@@ -1,6 +1,6 @@
 [优质链接](https://juejin.cn/post/6844904094281236487)
 
-[一文读懂webpack核心原理](https://juejin.cn/post/6949040393165996040)
+[一文读懂 webpack 核心原理](https://juejin.cn/post/6949040393165996040)
 
 [mini-babel](https://github.com/jamiebuilds/the-super-tiny-compiler)
 
@@ -10,7 +10,22 @@
 
     1. 启动，通过命令行，比如`npm run build`， 会执行对应的命令，然后找 `webpack`，从 `node_modules/.bin` 目录开始查找，最后再 `node_modules\webpack\bin\webpack.js` 找到，然后开始执行这个 js，找到 `webpack-cli/webpack-command` 这个 npm 包，然后执行 cli
     2. 初始化参数：从配置文件和`Shell`语句中读取与合并参数,得出最终的参数。
-    3. 开始编译：用上一步得到的参数初始化`Compiler`对象`compiler = webpack(options)`, 加载所有配置的插件,执行对象的`run`方法开始执行编译。
+    3. 开始编译：用上一步得到的参数初始化`Compiler`对象`compiler = webpack(options)`
+
+        **加载所有配置的插件**[源码位置](https://github.com/webpack/webpack/blob/master/lib/webpack.js#L69),执行对象的`run`方法开始执行编译。
+
+        ```js
+        if (Array.isArray(options.plugins)) {
+            for (const plugin of options.plugins) {
+                if (typeof plugin === "function") {
+                    plugin.call(compiler, compiler);
+                } else {
+                    plugin.apply(compiler);
+                }
+            }
+        }
+        ```
+
     4. 确定入口：根据配置中的`entry`找出所有的入口文件。
     5. 编译模块：从入口文件出发,调用所有配置的`Loader`对模块进行翻译,再找出该模块依赖的模块,再递归本步骤直到所有入口依赖的文件都经过了本步骤的处理。
     6. 完成模块编译：在经过第 4 步使用`Loader`翻译完所有模块后,得到了每个模块被翻译后的最终内容以及它们之间的依赖关系。
@@ -34,11 +49,11 @@
     8. 想让它跑起来后，这个时候 console 的话，会映射到打包后的代码，如果想让他映射到原来的代码的话，因此，综合构建速度 - 开发环境推荐： `cheap-module-eval-source-map` - 生产环境推荐： `cheap-module-source-map`
        但是我通常排查错误的方式是直接代理一下，除了编译错误，其它的一下就能找到错误的位置明细了。
 
-    9. 想让 css 跑起来的话，要装不少插件 style-loader （动态创建 style 标签，将 css 插入到 head 中.）less-loader css-loader（负责处理 @import 等语句） postcss-loader(兼容) autoprefixer。loader 执行顺序是从右往左的。
+    9. 想让 css 跑起来的话，要装不少插件 `style-loader` （动态创建 style 标签，将 css 插入到 head 中.）`less-loader` `css-loader`（负责处理 @import 等语句） `postcss-loader`(兼容) autoprefixer。loader 执行顺序是从右往左的。
     10. 当然，loader 其实还有一个参数，可以修改优先级，enforce 参数，其值可以为: pre(优先执行) 或 post (滞后执行)。
     11. url-loader 配置可以读文件，背景图片，大小限制，小于限制的变 dataUrl
     12. 处理 html 上的本地图片，需要安装 html-withimg-loader 插件,但是这样的话，之前的 html 模板语言就不能用了
-    13. 配置 output 时，有一个 publickPath: '/'，直接就是根目录，配置成'/truck/', `http://localhost:3000/truck/` 就是默认的 indexhtml 展示的位子。build 完了后，资源会变成'./truck/xxxx'；
+    13. 配置 output 时，有一个 publickPath: '/'，直接就是根目录，配置成'/truck/', `http://localhost:3000/truck/` 就是默认的 index.html 展示的位子。build 完了后，资源会变成'./truck/xxxx'；
     14. 使用 clean-webpack-plugin 可以清空每次 dist 文件，防止 bundle 太多找不到.
     15. .babelrc 的配置，会优先 webpack.config 里的配置。
     16. 像浏览器的配置，可以放.browserslistrc 文件里，更清晰，而且可以多个 loader 共享使用
@@ -46,7 +61,7 @@
 
         ```js
         resolve: {
-            extensions: ['.js', '.jsx', '.json'];
+            extensions: [".js", ".jsx", ".json"];
         }
         ```
 
@@ -69,11 +84,11 @@
 3. webpack 按需加载是怎么做到的？
 
     ```js
-    import('./handle').then(fn => {
+    import("./handle").then(fn => {
         const sum = fn.sum;
         console.log(sum(3, 5));
     });
-    import('./handle').then(res => res.default);
+    import("./handle").then(res => res.default);
     // res.default 就是那个组件
     ```
 
@@ -129,7 +144,7 @@
             const entry = {};
             const htmlWebpackPlugins = [];
             const entryFiles = glob.sync(
-                path.join(__dirname, './src/*/index.js')
+                path.join(__dirname, "./src/*/index.js")
             );
 
             Object.keys(entryFiles).map(index => {
@@ -145,7 +160,7 @@
                             `src/${pageName}/index.html`
                         ),
                         filename: `${pageName}.html`,
-                        chunks: ['vendors', pageName],
+                        chunks: ["vendors", pageName],
                         inject: true,
                         minify: {
                             html5: true,
@@ -153,26 +168,26 @@
                             preserveLineBreaks: false,
                             minifyCSS: true,
                             minifyJS: true,
-                            removeComments: false,
-                        },
+                            removeComments: false
+                        }
                     })
                 );
             });
             return {
                 entry,
-                htmlWebpackPlugins,
+                htmlWebpackPlugins
             };
         };
         ```
 
-    7. 开发环境上 sourcemap 和补上的区别，就是上了的话，可以直接看自己写的源代码，而如果不上的话，虽然没有压缩，但是看到的是已经转译后的代码，不方便调试。
+    7. 开发环境上 sourcemap 和不上的区别，就是上了的话，可以直接看自己写的源代码，而如果不上的话，虽然没有压缩，但是看到的是已经转译后的代码，不方便调试。
     8. 利用 splitchuncksPlugin 来分离代码
 
         默认情况下，它只会影响到**按需加载**的 chunks，因为修改 initial chunks 会影响到项目的 HTML 文件中的脚本标签。
 
-        比如两个入口文件A，和B，它们都引用到了C。那么C肯定是打包两份到对应的文件里了，所以需要有分割操作。
+        比如两个入口文件 A，和 B，它们都引用到了 C。那么 C 肯定是打包两份到对应的文件里了，所以需要有分割操作。
 
-        或者是，比如一个入口文件A，还有一个按需加载文件C，都引用到了D模块，那么D如果多次被引用了，那么就会走splitChunks了。
+        或者是，比如一个入口文件 A，还有一个按需加载文件 C，都引用到了 D 模块，那么 D 如果多次被引用了，那么就会走 splitChunks 了。
 
         webpack 将根据以下条件自动拆分 chunks：
 
@@ -202,10 +217,10 @@
                 minimizer: [
                     new TerserPlugin({
                         parallel: 4, // 设为true的话，默认是电脑CPU数量的两倍减去1
-                        cache: true, // 提升二次构建速度，和loader的cacheDirectory:true 类似
-                    }),
-                ],
-            },
+                        cache: true // 提升二次构建速度，和loader的cacheDirectory:true 类似
+                    })
+                ]
+            }
         };
         ```
 
@@ -243,7 +258,7 @@
 
 9. HappyPack / thread-loader 原理是什么？
 
-    默认的情况下，webpack 是一个进程，也就是一个 webpack，由 webpack 本身去解析模块，那么有了 happypack 后呢，在 webpack 的 compiler 实例 run 的时候，先解析 happypack plugin,然后 happypack 创建线程池子，然后线程池将构建任务分配给各个线程。每个线程都会去处理模块，处理完了后通过一个自己的通信方式，把信息传回 happypack 主进程。
+    默认的情况下，webpack 是一个进程，也就是一个 webpack，由 webpack 本身去解析模块，那么有了 happypack 后呢，在 webpack 的 compiler 实例 run 的时候，**先解析 happypack plugin,然后 happypack 创建线程池子，然后线程池将构建任务分配给各个线程。每个线程都会去处理模块，处理完了后通过一个自己的通信方式，把信息传回 happypack 主进程。**
 
     ```js
     1. 替换需要的loader为 use: 'happypack/loader?id=jsx'
@@ -268,14 +283,14 @@
             test: /.js$/,
             use: [
                 {
-                    loader: 'thread-loader',
+                    loader: "thread-loader",
                     options: {
-                        workers: 3,
-                    },
+                        workers: 3
+                    }
                 },
-                'babel-loader',
-            ],
-        },
+                "babel-loader"
+            ]
+        }
     ];
     ```
 
@@ -290,20 +305,20 @@
     ```js
     module.exports = {
         entry: {
-            library: ['react', 'react-dom'],
+            library: ["react", "react-dom"]
         },
         output: {
-            filename: '[name]_[hash].dll.js', // 不能使用chunkhash/contenthash
-            path: path.join(__dirname, 'build/library'),
-            library: '[name]_[hash]',
+            filename: "[name]_[hash].dll.js", // 不能使用chunkhash/contenthash
+            path: path.join(__dirname, "build/library"),
+            library: "[name]_[hash]"
         },
         plugins: [
             // 内置的插件
             new webpack.DllPlugin({
-                name: '[name]_[hash]',
-                path: path.join(__dirname, 'build/library/[name].json'),
-            }),
-        ],
+                name: "[name]_[hash]",
+                path: path.join(__dirname, "build/library/[name].json")
+            })
+        ]
     };
     ```
 
@@ -328,7 +343,7 @@
     其实就是利用 this.hooks.的生命周期来做事情，比如
 
     ```js
-    this.hooks.done.tap('done', stats => {
+    this.hooks.done.tap("done", stats => {
         console.log(stats.compilation.error);
     });
     // 用来打日志，this 就是 compiler 对象
@@ -336,7 +351,7 @@
     // 比如
     class xxxPlugin {
         apply(compiler) {
-            compiler.hooks.beforeRun.tap('xxxPlugin', compiler => {
+            compiler.hooks.beforeRun.tap("xxxPlugin", compiler => {
                 // ... do sth.
             });
         }
@@ -356,42 +371,42 @@
     ```js
     this.hooks = Object.freeze({
         initialize: new SyncHook([]),
-        shouldEmit: new SyncBailHook(['compilation']),
-        done: new AsyncSeriesHook(['stats']),
-        afterDone: new SyncHook(['stats']),
+        shouldEmit: new SyncBailHook(["compilation"]),
+        done: new AsyncSeriesHook(["stats"]),
+        afterDone: new SyncHook(["stats"]),
         additionalPass: new AsyncSeriesHook([]),
-        beforeRun: new AsyncSeriesHook(['compiler']),
-        run: new AsyncSeriesHook(['compiler']),
-        emit: new AsyncSeriesHook(['compilation']),
-        assetEmitted: new AsyncSeriesHook(['file', 'info']),
-        afterEmit: new AsyncSeriesHook(['compilation']),
-        thisCompilation: new SyncHook(['compilation', 'params']),
-        compilation: new SyncHook(['compilation', 'params']),
-        normalModuleFactory: new SyncHook(['normalModuleFactory']),
-        contextModuleFactory: new SyncHook(['contextModuleFactory']),
-        beforeCompile: new AsyncSeriesHook(['params']),
-        compile: new SyncHook(['params']),
-        make: new AsyncParallelHook(['compilation']),
-        finishMake: new AsyncSeriesHook(['compilation']),
-        afterCompile: new AsyncSeriesHook(['compilation']),
-        watchRun: new AsyncSeriesHook(['compiler']),
-        failed: new SyncHook(['error']),
-        invalid: new SyncHook(['filename', 'changeTime']),
+        beforeRun: new AsyncSeriesHook(["compiler"]),
+        run: new AsyncSeriesHook(["compiler"]),
+        emit: new AsyncSeriesHook(["compilation"]),
+        assetEmitted: new AsyncSeriesHook(["file", "info"]),
+        afterEmit: new AsyncSeriesHook(["compilation"]),
+        thisCompilation: new SyncHook(["compilation", "params"]),
+        compilation: new SyncHook(["compilation", "params"]),
+        normalModuleFactory: new SyncHook(["normalModuleFactory"]),
+        contextModuleFactory: new SyncHook(["contextModuleFactory"]),
+        beforeCompile: new AsyncSeriesHook(["params"]),
+        compile: new SyncHook(["params"]),
+        make: new AsyncParallelHook(["compilation"]),
+        finishMake: new AsyncSeriesHook(["compilation"]),
+        afterCompile: new AsyncSeriesHook(["compilation"]),
+        watchRun: new AsyncSeriesHook(["compiler"]),
+        failed: new SyncHook(["error"]),
+        invalid: new SyncHook(["filename", "changeTime"]),
         watchClose: new SyncHook([]),
         shutdown: new AsyncSeriesHook([]),
-        infrastructureLog: new SyncBailHook(['origin', 'type', 'args']),
+        infrastructureLog: new SyncBailHook(["origin", "type", "args"]),
         environment: new SyncHook([]),
         afterEnvironment: new SyncHook([]),
-        afterPlugins: new SyncHook(['compiler']),
-        afterResolvers: new SyncHook(['compiler']),
-        entryOption: new SyncBailHook(['context', 'entry']),
+        afterPlugins: new SyncHook(["compiler"]),
+        afterResolvers: new SyncHook(["compiler"]),
+        entryOption: new SyncBailHook(["context", "entry"])
     });
     ```
 
     其实多数都是同步的钩子，然后使用的时候，比如上面的 done 吧，就是
 
     ```js
-    compiler.hooks.done.tap('xxxx', () => {
+    compiler.hooks.done.tap("xxxx", () => {
         // dosth
     });
     ```
@@ -436,8 +451,8 @@
     使用方式通常就是
 
     ```js
-    const hook1 = new SyncHook(['arg1', 'agr2', 'arg3']);
-    hook1.tap('hook1', (a, b, c) => console.log(a, b, c)); // 1,2,3
+    const hook1 = new SyncHook(["arg1", "agr2", "arg3"]);
+    hook1.tap("hook1", (a, b, c) => console.log(a, b, c)); // 1,2,3
     hook1.call(1, 2, 3);
     // 这个tap类似于On
     // 这个call类似于trigger
@@ -492,8 +507,8 @@
         watchOptions: {
             ignored: /node_modules/,
             aggregateTimeout: 300, //文件变动后多久发起构建，越大越好
-            poll: 1000, //每秒询问次数，越小越好
-        },
+            poll: 1000 //每秒询问次数，越小越好
+        }
     };
     ```
 
@@ -525,8 +540,8 @@
 19. 如何去配置一个可配置的环境变量？
 
     1. 首先，使用`dotenv`这个库，`require('dotenv').config()`
-    2. 创建 .env 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
-    3. 使用 `DefinePlugin` 这个插件，把对应的这些 process.env 都收敛起来。
+    2. 创建 `.env` 文件，在里面写我要定的全局变量，比如各种不同环境下会出的地址，当然是本地或者是开发环境的
+    3. 使用 `DefinePlugin` 这个插件，把对应的这些 `process.env` 都收敛起来。
     4. 然后创建 .env.vm 文件，指向是`REACT_APP_CACHE_URL="${cache_url}"`
     5. 创建 auto-config.xml 文件
 
@@ -584,8 +599,8 @@
         function reloadApp() {
             // ...
             if (hot) {
-                const hotEmitter = require('webpack/hot/emitter');
-                hotEmitter.emit('webpackHotUpdate', currentHash);
+                const hotEmitter = require("webpack/hot/emitter");
+                hotEmitter.emit("webpackHotUpdate", currentHash);
                 // ...
             } else {
                 self.location.reload();
@@ -595,9 +610,9 @@
 
     7. 准备热更新并没有直接检查更新，为了职责明确，把事情移交给 `webpack/hot/dev-server.js` 来做。
     8. `webpack/hot/dev-server.js` 里是监听 `webpackHotUpdate` 消息的，收到了`hash` 后会去调用`webpack/lib/HotModuleReplacement.runtime（简称 HMR runtime）（终于上场了了）`中的 `check` 方法，检测是否有新的更新
-    9. 在 check 过程中会利用 webpack/lib/JsonpMainTemplate.runtime（简称 jsonp runtime）中的两个方法 hotDownloadManifest 和 hotDownloadUpdateChunk
+    9. 在 check 过程中会利用 webpack/lib/JsonpMainTemplate.runtime（简称 jsonp runtime）中的两个方法 `hotDownloadManifest` 和 `hotDownloadUpdateChunk`
 
-    10. 利用上一次保存的 hash 值，调用 `hotDownloadManifest` 发送 xxx/hash.hot-update.json 的 ajax 请求
+    10. 利用上一次保存的 hash 值，调用 `hotDownloadManifest` 发送 `xxx/hash.hot-update.json` 的 ajax 请求
 
         ![tu](https://user-gold-cdn.xitu.io/2019/12/1/16ec04289af752da?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
 
