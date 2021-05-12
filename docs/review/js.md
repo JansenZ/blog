@@ -201,7 +201,7 @@
 5. class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
     <details open>
 
-    [好链接](https://juejin.cn/post/6844903704873664520)
+    [ES6 系列之 Babel 是如何编译 Class 的(上)](https://juejin.cn/post/6844903704873664520)
 
    写在外面就是它的原型函数
 
@@ -237,7 +237,7 @@
 
    ```
 
-   类不能直接执行，Person()会报错
+   **类不能直接执行，Person()会报错**
 
 6. 私有变量的实现方式
     <details open>
@@ -251,7 +251,7 @@
    var dd = Symbol('aaa');
    var obj={}
    obj[dd] = 'haha';
-   // 想用obj.dd是不可能的，只要不暴露。
+   // {Symbol(): "haha"}
    ```
 
 7. 装饰器
@@ -411,6 +411,20 @@
 
     let 在全局中创建的变量存在于一个块级作用域（Script）中,它与 window(Global)平级,
     var 在全局中创建的变量存在于window(Global)中;
+
+    const和let会生成块级作用域，可以理解为
+    
+    ```js
+    let a = 10;
+    const b = 20;
+    相当于：
+    (function(){
+            var  a = 10;
+            var b = 20;
+    })()
+    ```
+    ES5没有块级作用域的概念，只有函数作用域，可以近似理解成这样。
+    所以外层window必然无法访问。
 
 11. 为什么 for > forEach > map
     <details open>
