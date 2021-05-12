@@ -94,6 +94,29 @@
 
 </details>
 
+### 迭代器
+
+<details open>
+
+```js
+function createIterator(items) {
+       var i = 0;
+       return {
+           next: function() {
+               var done = i >= items.length;
+               var value = !done ? items[i++] : undefined;
+
+               return {
+                   done,
+                   value
+               };
+           }
+       };
+   }
+```
+
+</details>
+
 ### Promise
 
 [promise](https://zhenglin.vip/js/promise.js)

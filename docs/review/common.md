@@ -17,10 +17,14 @@
     WEBPACK
 
     1. webpack 构建优化，使用 include/exclude.
-    2. Happypack 开启多线程
-    3. 自带的 tree-shaking 移除无用代码, 主要是借助 es6 的模块是静态解析的，所以才能实现，利用内置的 UglifyJSPlugin 来完成。
-    4. 自带的 hosit-scoping，移除无用计算。
-    5. 利用 import.then 进行懒加载拆分, 生成对应的 hash.chunk.js，比如交易流程主要流程不要懒加载，但是一些用户点击率低的页面，通过懒加载的形式加载。
+    2. Happypack/thread-loader 开启多线程/多进程 处理 loader
+    3. 使用 terser-webpack-plugin 插件开启多 CPU 压缩
+    4. 使用 HardSourceWebpackPlugin 完成模块解析缓存， 提升二次构建速度
+    5. 使用 splitchuncksPlugin 来分离代码
+    6. 自带的 tree-shaking 移除无用代码, 主要是借助 es6 的模块是静态解析的，所以才能实现，利用内置的 UglifyJSPlugin 来完成。
+    7. 使用 PurgecssPlugin 移除无用 CSS
+    8. 自带的 hosit-scoping，移除无用计算。
+    9. 利用 import.then 进行懒加载拆分, 生成对应的 hash.chunk.js，比如交易流程主要流程不要懒加载，但是一些用户点击率低的页面，通过懒加载的形式加载。
 
     ```js
     import(/* webpackChunkName:xxxname */ './show').then()
@@ -36,6 +40,7 @@
     3. 利用 key 提升 diff 性能
     4. 利用 shouldComponentUpdate 、 pureComponent 来做渲染优化
     5. 利用 immer 来做数据层面优化
+    6. 使用 this.props.children 来改造透传，尽量去 bailout 复用
 
     其他方面
 
@@ -47,6 +52,7 @@
     6. 图片懒加载 intersectionobserver
     7. 防抖（搜索输入）、节流(scroll 监听)
     8. 接入性能监控优化的时候，在 onload 完了后利用 requestIdleCallback 记录，并且 record 要满足一定数量后再去请求。
+    9. 加入白屏检测，对错误进行监控。
 
 2. 常见的设计模式
 
@@ -927,21 +933,21 @@
 
     vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，暂时不可能替代 webpack
 
-    html的script type 要是module
+    html 的 script type 要是 module
 
-    它在开发阶段主要就干了两件事情，一个是启动一个http服务，第二个就是拦截import，把import xx from 'xx'，替换成相对路径或绝对路径或加载到这个包的文件引用过来。因为esm只能引用绝对或相对路径去找文件
+    它在开发阶段主要就干了两件事情，一个是启动一个 http 服务，第二个就是拦截 import，把 import xx from 'xx'，替换成相对路径或绝对路径或加载到这个包的文件引用过来。因为 esm 只能引用绝对或相对路径去找文件
 
-36. gulp和webpack区别
+36. gulp 和 webpack 区别
 
-    gulp本质上是自动化构建工具， 模块化是靠各类插件，gulp对比grunt都是文件流，taskRunner，但是grunt是存到磁盘里，而gulp的编译是存在内存中的。
+    gulp 本质上是自动化构建工具， 模块化是靠各类插件，gulp 对比 grunt 都是文件流，taskRunner，但是 grunt 是存到磁盘里，而 gulp 的编译是存在内存中的。
 
-    webpack当然也是内存，webpack集成了一堆功能，本来就是模块打包器。而且有loader,plugin强大的功能。
+    webpack 当然也是内存，webpack 集成了一堆功能，本来就是模块打包器。而且有 loader,plugin 强大的功能。
 
     一个是为了构建而打包，一个是为了打包而构建。
 
-    所以这样看，gulp更适合mpa,webpack更适合spa
+    所以这样看，gulp 更适合 mpa,webpack 更适合 spa
 
-36. JS bridge 原理是什么？
+37. JS bridge 原理是什么？
 
     <details open>
 
@@ -1026,20 +1032,20 @@
 
     因为如果通过 location.href 连续调用 Native，很容易丢失一些调用。
 
-37. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
+38. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
 
     <details open>
 
     - 可以使用 `document.activeElement.scrollIntoViewIfNeeded()` 把对应的元素滚动到可见区域
     - window.resize 的时候，把 button 变成 relative
 
-38. eslint 和 prettier 冲突怎么办
+39. eslint 和 prettier 冲突怎么办
 
     <details open>
 
     其他冲突规则也用类似方法处理，要么修改 eslintrc，要么修改 prettier 配置，但是如果为了少改动老代码，推荐修改 prettier 配置去适应老的 eslint 规则。
 
-39. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
+40. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
 
     <details open>
 
@@ -1129,7 +1135,7 @@
     unVirtual(virtual);
     ```
 
-40. NPM install 运行机制
+41. NPM install 运行机制
 
     <details open>
 
@@ -1143,13 +1149,13 @@
 
     2. 如果你 npm install 具体某个包名，同样会去检查 package.json。保证前后的一致性。
 
-41. 装修拖拽的技术方案
+42. 装修拖拽的技术方案
 
     <details open>
 
-    后续可以使用H5的drag API 来替代
+    后续可以使用 H5 的 drag API 来替代
 
-    [HTML5原生拖拽/拖放 Drag & Drop 详解](https://juejin.cn/post/6844903513491767303)
+    [HTML5 原生拖拽/拖放 Drag & Drop 详解](https://juejin.cn/post/6844903513491767303)
 
     [精读《结合 React 使用原生 Drag Drop API》](https://juejin.cn/post/6844904070910590984)
 
@@ -1163,7 +1169,7 @@
 
     那么为了节省开发的人力，采用装修拖拽的方案就显得有必要了。
 
-    目前在线上使用已经服务了1000+页面。
+    目前在线上使用已经服务了 1000+页面。
 
     drag 组件是包裹整个装修页面布局的，就是侧边栏和主区域都坐落在内部
 
@@ -1220,7 +1226,7 @@
 
     而基础模块就是用来渲染对应模块的 html，css 和一些公共可抽出的数据信息。
 
-42. 如果没有 promise，如何实现一个串行操作？
+43. 如果没有 promise，如何实现一个串行操作？
 
     <details open>
 
@@ -1242,7 +1248,7 @@
 
     这样在使用的时候，我的 fn 就是一个一个函数，我只需要进来一次，就把它们添加到我的队列，但是这些 fn 会有 callback ，没有 callback 就当它不是异步，直接执行 next ，如果是异步在 callback 里执行 next，从而达到一个串行的目的。
 
-43. 硬链接和软链接的区别
+44. 硬链接和软链接的区别
 
     <details open>
 
@@ -1258,7 +1264,7 @@
 
     ![ruan](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5e9d3c5e59454006abde22b822ec22a8~tplv-k3u1fbpfcp-watermark.image)
 
-44. Npm 和 Yarn 和 Pnpm 的区别
+45. Npm 和 Yarn 和 Pnpm 的区别
 
     <details open>
 
@@ -1286,7 +1292,7 @@
     - pnpm 利用 硬链接的形式，可以复用 nodemodules 包, 所以磁盘空间利用非常高效。
     - 在使用 npm/yarn 的时候，由于 node_module 的扁平结构，如果 A 依赖 B， B 依赖 C，那么 A 当中是可以直接使用 C 的，但问题是 A 当中并没有声明 C 这个依赖。因此会出现这种非法访问的情况。但 pnpm 脑洞特别大，自创了一套依赖管理方式，利用软连接的形式，保持的引用的结构，很好地解决了这个问题，保证了安全性
 
-45. 自动化部署 CI/CD [前端自动化部署](https://juejin.cn/post/6844904009333997582)
+46. 自动化部署 CI/CD [前端自动化部署](https://juejin.cn/post/6844904009333997582)
 
     <details open>
 
@@ -1373,7 +1379,7 @@
 
     当我们点击提测的时候，会自动创建一个新的 test 分支，然后当我们在这个开发环境上提交代码的时候，会通过 git hook 的一个钩子，对 jenkins 服务器接口发送一个 post 请求，那边收到这个请求会触发任务，利用 docker 来执行对应的操作。
 
-46. 如何自己发一个 npm 包
+47. 如何自己发一个 npm 包
 
     <details open>
 
@@ -1394,6 +1400,6 @@
 
     完结，很简单对吧
 
-47. 白屏检测的方式
+48. 白屏检测的方式
 
     [document.elementsFromPoint juejin](https://juejin.cn/post/6904135847411941390)

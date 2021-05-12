@@ -256,6 +256,22 @@ var maximalSquare = function(matrix) {
 };
 ```
 
+9. 干活能干最多的活问题。[lintcode 267](https://www.lintcode.com/problem/267/description)
+
+    A公司，B公司，在A干活，就不能再B干活，而且不能再一家公司连续干两天，求最多能干多少天的活。
+    A[1,1,0,0] B [0,1,1,0];
+
+    当天能干A活。 当天的值 = 前一天干了B活， 前一天啥活都没干。 的Max；
+    当天能干B活。 当天的值 = 前一天干了A活， 前一天啥活都没干。 的Max;
+    当天啥活都不能干。 当天的值 = 前一天干了A活， 前一天干了B活。 的Max。
+    这样的方式就能错开了。
+
+    ```js
+    dp[i][0] = Math.max(dp[i - 1][1], dp[i - 1][2]) + 1;
+    dp[i][1] = Math.max(dp[i - 1][0], dp[i - 1][2]) + 1;
+    dp[i][2] = Math.max(dp[i - 1][0], dp[i - 1][1]);
+    ```
+
 ### 二叉树
 
 ```js

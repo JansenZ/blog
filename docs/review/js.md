@@ -413,7 +413,7 @@
     var 在全局中创建的变量存在于window(Global)中;
 
     const和let会生成块级作用域，可以理解为
-    
+
     ```js
     let a = 10;
     const b = 20;
@@ -454,9 +454,9 @@
 
    array.some 里本来就是写一个函数用的，会把每一个参数自动投放进去，Array.isArray 不正好是一个函数吗？
 
-   但是反过来说，如果只写个Array.map(parseInt) 就要小心了，因为我parseInt收两个参数，正好第二个是进制，也就是说，123执行过来的话
+   但是反过来说，如果只写个Array.map(parseInt) 就要小心了，因为我parseInt收两个参数，正好第二个是进制，也就是说，0,1,2执行过来的话
 
-   结果应该是1，NaN, NaN， 因为3如果执行2进制，因为2进制里没有3，所以解析不了。
+   结果应该是1，NaN, NaN， 因为3如果执行2进制，因为2进制里没有3，所以解析不了。0的话就当它是10进制
 
 3. 你知道迭代器吗？如何自己写一个简单的迭代器
     <details open>
@@ -552,6 +552,8 @@
 
    ```js
    obj[Symbol.iterator] = function* () {
+       yield* Object.entries(this);
+       // 或者
        for(let [key, val] of Object.entires(this)) {
            yield {key, val};
        }
@@ -1139,11 +1141,29 @@
     - 类继承
       `xx extends`
 
-    普通继承和类继承是有区别的，es5 是借助构造函数实现，实质上是先创造子类的实例对象 this，然后再将父类的方法添加到这个 this 上去。
+    普通继承和类继承是有区别的，es5 是借助构造函数实现，实质上是**先创造子类的实例对象 this，然后再将父类的方法添加到这个 this 上去**
 
-    而 es6 的继承机制完全不同，实质上是先创造父类的实例对象 this（所以必须先调用 super 方法，）然后再用子类的构造函数修改 this。
+    而 es6 的继承机制完全不同，实质上是**先创造父类的实例对象 this（所以必须先调用 super 方法，）然后再用子类的构造函数修改 this。**
 
-    es6 在继承的语法上不仅继承了类的原型对象，还继承了类的静态属性和静态方法。
+    es6 在继承的语法上不仅继承了类的原型对象，还继承了类的**静态属性和静态方法**。
+
+    ```js
+    // ES5
+    function P() {}
+    P.getName = function() {return 'h'}
+    function C() {P.apply(this, arguments)}
+    C.prototype = Object.create(P.prototype);C.prototype.constructor = C;
+    C.getName() // Uncaught TypeError: C.getName is not a function
+
+    //ES6
+    class A {}
+    A.getName = function () {return 'h'}
+    A.getName() // "h"
+    class B extends A {}
+    B.getName() // "h" 没有报错哦
+    ```
+
+    生成实例化对象的时候，如果是原生对象，类实例化出来可以继承到，而es5的不行。
 
     通过代码来解释
     ```js
@@ -1175,7 +1195,7 @@
     ```
     在不是继承原生构造函数的情况下，A.call(this) 与 super() 在功能上是没有区别的
 
-    但是如果是原生对象，就不行了，是拿不到内部属性的
+    但是如果是**原生对象**，就不行了，是拿不到内部属性的
 
 28. 手写 call, apply, bind 出来
     <details open>
