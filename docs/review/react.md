@@ -283,7 +283,7 @@
     <details open>
 
     - componentDidCatch:
-        - 只能在客户端使用，因为 ssr 是没有 commit 阶段的
+        - 只能在客户端使用，**因为 ssr 是没有 commit 阶段的（也就是说didxx都不会执行）**
         - 在 DOM 已更新的“提交阶段”中调用
         - 应该用于错误报告之类的东西
     - getDerivedStateFromError:
@@ -1057,6 +1057,8 @@
     调用 componentDidMount 或 componentDidUpdate, 所以这两个执行时机其实是一样的。 [源码](https://github.com/facebook/react/blob/970fa122d8188bafa600e9b5214833487fbf1092/packages/react-reconciler/src/ReactFiberCommitWork.new.js#L592)
 
     对于 FunctionComponent 及相关类型，他会调用 useLayoutEffect hook 的回调函数， 调度 useEffect 的销毁与回调函数
+
+    还有 componentDidCatch 也是这个阶段里的
 
     1. 赋值 ref，因为 dom 已经出来了
     2. 执行 setstate 回调, 执行 useLayoutEffect 的回调函数 或者是 didxxx
