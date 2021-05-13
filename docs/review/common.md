@@ -11,8 +11,10 @@
     4. 使用 HTTP 协商缓存，协商缓存本身数据也是存在本地的， Last-Modified（请求带上 If-Modified-Since），返回 304，但是如果改了文件名的话，last-modified 就找不到了，就会重新返回。所以还要一个 etag（请求带上 If-None-Match），两者共同配合完成 304.
     5. 体积不大的会放在 from memory cahce，比如 base64,小的 css，体积稍大会放 from disk cache。
     6. 还可以使用 service worker。
-    7. 以上 http 的缓存，实际上现在多数都是后台网关缓存，走 redis。永远给我 200。
+    7. 以上 http 的缓存，静态资源CDN，动态请求靠服务端的 redis。
     8. 本地存储，cookie,storage。 cookie 里少放信息，因为会跟着 http 请求头跑，很浪费。如果本地存储需求量很大的话，比如你要实现一个 im 的话，可以用 indexDB,本地数据库
+    9. 合并request，并且并发请求，达到应用层面的多路复用, 避免队头阻塞
+    10. 推行升级到http2，protocol协议就是h2。缩短了8%。
 
     WEBPACK
 
@@ -32,6 +34,7 @@
     ```
 
     6. babel 设置缓存 cacheDirectory:true
+    7. 通过各方面的构建优化，包从多少缩小到多少，提高了%多少，节省了多少时间。
 
     React 方面
 
@@ -53,6 +56,8 @@
     7. 防抖（搜索输入）、节流(scroll 监听)
     8. 接入性能监控优化的时候，在 onload 完了后利用 requestIdleCallback 记录，并且 record 要满足一定数量后再去请求。
     9. 加入白屏检测，对错误进行监控。
+    10. XX迭代很多，数据量变大，进行数据精简，把后端的DTO进行清洗。缩短了10%
+    11. 优化布局，去掉更多的 DIV 标签。
 
 2. 常见的设计模式
 
@@ -527,6 +532,21 @@
     <b>监控性能</b>
 
     - MutationObserver 可以监控 dom 变化。
+
+        在index.html埋入 mutationObserver，监控childlist type，判断node节点的稳定性来推测分析加载的时间。
+        ```js
+        const config = { childList: true, subtree: true };
+        var nodeNum = 0;
+        function callback(mutationsList) {
+            for(let mutation of mutationsList) {
+                if (mutation.type === 'childList') {
+                    nodeNum++;
+                }
+            }
+        }
+        var mu = new MutationObserver(callback);
+        mu.observe(document, config);
+        ```
     - PerformanceObserver
 
     ```js
