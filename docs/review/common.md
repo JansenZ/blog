@@ -1256,6 +1256,7 @@
 
     ```js
     var schemeQueue = [];
+    var dirty = false;
     function iteratorRegister(fn) {
         var next = function() {
             if (schemeQueue.length === 0) {
@@ -1265,6 +1266,11 @@
         };
 
         schemeQueue.push(fn);
+        if(!dirty) {
+            dirty = true;
+            // 执行第一次
+            schemeQueue.shift()(next);
+        }
     }
     ```
 
@@ -1412,7 +1418,7 @@
     1. 写好自己要发的代码
     2. 通过 webpack 打包，如果用到了 react，记得把 react 加到 externals 里去
     3. 配置 package.json 里的 name， 还有 main，main 里默认是 index.js，如果你配置的是 dist，要改成 dist/index.js
-    4. output 要配置 umd，不然导出去没法用
+    4. output 的 librayTarget 要配置 umd，来适配各模块规范。
     5. npm run build 生成最终的那个文件
     6. npm pack 打本地包
     7. 把本地包复制出去，到另一个应用里 npm install 它，然后就正常的 import 试验
