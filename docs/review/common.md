@@ -213,13 +213,15 @@
 
     但是有了 hooks 之后，其实利用 useContext 和 useReducer，再通过 hoc 的形式封装一下，小项目的情况下，已经不需要使用任何状态管理器了。复用代码和分层也都非常容易做到。
 
-6. redux 的原理 [原理](https://juejin.cn/post/6844904080255483912)
+6. [redux 原理以及实现](https://juejin.cn/post/6844904080255483912)
 
     本质上来说，通过发布订阅的形式来完成的。
 
     通过 createStore，入参`reducer`，`初始state`，得到一个 `subscribe`, `dispatch`和`getState`。
 
     subscribe 就是添加订阅吗，然后 dispatch 的时候，会去执行 reducer 函数，得到新的 state。并执行监听的函数来触发修改。
+
+    在 react-redux 下的话，利用 connect 高阶组件里去 subscribe，subscribe里就是更新自己的界面的方法，这样dispatch触发后，就可以执行到这个回调。
 
     ```js
     function dispatch(action) {
