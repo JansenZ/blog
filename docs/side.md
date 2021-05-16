@@ -32,6 +32,4 @@
 
 * [书：Docker](book/docker/index.html)
 
-* [书：产品经理](book/pm/index.html)
-
 * [书：YCK](book/yck/index.html)
