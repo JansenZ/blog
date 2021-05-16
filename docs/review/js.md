@@ -1,4 +1,6 @@
-### TS
+### TS 
+
+[在线playground](https://typescript-play.js.org/)
 
 1. 配合react组件使用的时候，`Component<IProps, IState> {}`
 2. 常用类型
@@ -35,6 +37,7 @@
 4. 泛型 T + keyof
 
     如果某个函数，它的返回值的类型是不确定的，就需要利用泛型。
+
     ```js
     const data = {
         a: 3,
@@ -79,55 +82,113 @@
         [key in keyof T]: number
     }
     ```
+
 8. interface 和 type 的区别是什么？
 
     1. type可以用于其他类型，而interface不行
-    ```js
-    type PartialPointX = { x: number };
-    type PartialPointY = { y: number };
 
-    // union(联合)
-    type PartialPoint = PartialPointX | PartialPointY;
+        ```js
+        type PartialPointX = { x: number };
+        type PartialPointY = { y: number };
 
-    // tuple(元祖)
-    type Data = [PartialPointX, PartialPointY];
+        // union(联合)
+        type PartialPoint = PartialPointX | PartialPointY;
 
-    //primitive(原始值)
-    type Name = Number;
+        // tuple(元祖)
+        type Data = [PartialPointX, PartialPointY];
 
-    // typeof的返回值
-    let div = document.createElement('div');
-    type B = typeof div;
-    ```
+        //primitive(原始值)
+        type Name = Number;
+
+        // typeof的返回值
+        let div = document.createElement('div');
+        type B = typeof div;
+        ```
+
     2. interface多次声明会合并，而type不行
-    ```js
-    interface Point {
-        x: number;
-    }
-    interface Point {
-        y: number;
-    }
 
-    const point: Point = { x: 1, y: 2 };
-    ```
+        ```js
+        interface Point {
+            x: number;
+        }
+        interface Point {
+            y: number;
+        }
+
+        const point: Point = { x: 1, y: 2 };
+        ```
+
     3. interface 可以 extends ,type 需要用 &
     4. 使用 in 和 keyof的时候，都是配type使用。
 
 9. 联合类型中如果我已经知道对应类型是什么的情况下，怎么做呢？
 
     因为联合类型的话，只能访问他们的公共属性，所以下面会报错
+
     ```js
     function getLength(something: string | number): number {
         return something.length;
         // Property 'length' does not exist on type 'number'.
     }
     ```
+
     可以使用类型断言来完成。
+
     ```js
     function getLength(something: string | number): number {
         let data = something as string;
         return data.length;
     }
+    ```
+
+10. 枚举类型
+
+    枚举类型默认的就是从0开始
+
+    如果设置1，就是从 1 开始。而且会有反射功能。
+
+    如果是字符串是没有的。
+
+    ```js
+    // 转换前
+    // 普通枚举
+    enum Month1 {
+        Jane = 1,
+        Febary,
+        Happy
+    }
+    // 常量枚举
+    const enum Month {
+        Jan,
+        Feb,
+        Mar
+    }
+    // 编译完后发现常量枚举没了，直接把值接进来了
+    const data = [Month.Jan, Month.Feb];
+
+    // 字符串枚举
+    enum StrType {
+        ok = 'successed',
+        fail = 'failed'
+    }
+
+    // 转换后 =>
+    "use strict";
+    // 普通枚举
+    var Month1;
+    (function (Month1) {
+        Month1[Month1["Jane"] = 1] = "Jane";
+        Month1[Month1["Febary"] = 2] = "Febary";
+        Month1[Month1["Happy"] = 3] = "Happy";
+    })(Month1 || (Month1 = {}));
+    // 编译完后发现常量枚举没了，直接把值接进来了
+    const data = [0 /* Jan */, 1 /* Feb */];
+    // 字符串枚举
+    var StrType;
+    (function (StrType) {
+        StrType["ok"] = "successed";
+        StrType["fail"] = "failed";
+    })(StrType || (StrType = {}));
     ```
 
 ### ES6
