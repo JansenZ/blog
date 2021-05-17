@@ -128,7 +128,7 @@
         ```js
         class Plug {
             getName() {
-                return "港版插头";
+                return '港版插头';
             }
         }
 
@@ -137,7 +137,7 @@
                 this.plug = new Plug();
             }
             getName() {
-                return this.plug.getName() + " 适配器转二脚插头";
+                return this.plug.getName() + ' 适配器转二脚插头';
             }
         }
 
@@ -505,30 +505,30 @@
     - 发送数据单个结构如下，数组包裹，然后 base64 编码发送
 
     ```js
-    appName: "xxxx";
-    hash: "#/xxxx";
-    logMessage: "xxevent";
-    logTime: "2021-04-25 09:30:08.645";
+    appName: 'xxxx';
+    hash: '#/xxxx';
+    logMessage: 'xxevent';
+    logTime: '2021-04-25 09:30:08.645';
     perfData: 191201;
-    type: "perf";
-    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1";
-    v: "1.0.0";
+    type: 'perf';
+    userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_2_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.0.3 Mobile/15E148 Safari/604.1';
+    v: '1.0.0';
     // 如果是错误的type
-    type: "fault";
+    type: 'fault';
     errorCol: 31227;
     errorLine: 1;
-    errorStack: "TypeErrorxxxx";
-    errorUrl: "xxxxx";
+    errorStack: 'TypeErrorxxxx';
+    errorUrl: 'xxxxx';
     ```
 
     - onload 的时候除了记录 onload 时间节点，还会根据 performance 基本的那些数据发送对应的性能数据。
 
     ```js
-    this.record("domComplete", t.domComplete - t.domContentLoadedEventEnd);
-    this.record("loadEvent", t.loadEventEnd - t.loadEventStart);
-    this.record("unloadEvent", t.unloadEventEnd - t.unloadEventStart);
-    this.record("request", request);
-    this.record("domContentLoaded", domContentLoaded);
+    this.record('domComplete', t.domComplete - t.domContentLoadedEventEnd);
+    this.record('loadEvent', t.loadEventEnd - t.loadEventStart);
+    this.record('unloadEvent', t.unloadEventEnd - t.unloadEventStart);
+    this.record('request', request);
+    this.record('domContentLoaded', domContentLoaded);
     ```
 
     <b>监控性能</b>
@@ -542,7 +542,7 @@
         var nodeNum = 0;
         function callback(mutationsList) {
             for (let mutation of mutationsList) {
-                if (mutation.type === "childList") {
+                if (mutation.type === 'childList') {
                     nodeNum++;
                 }
             }
@@ -555,7 +555,7 @@
 
     ```js
     const observer = new PerformanceObserver(performanceCallBack);
-    observer.observe({ entryTypes: ["paint", "resource"] });
+    observer.observe({ entryTypes: ['paint', 'resource'] });
     observer.disconnect();
     ```
 
@@ -611,10 +611,10 @@
 
     ```js
     var data = JSON.stringify({
-        name: "Berwin",
+        name: 'Berwin',
     });
 
-    navigator.sendBeacon("/haopv", data);
+    navigator.sendBeacon('/haopv', data);
     ```
 
     使用 beacon 上报的话，默认是 post，不能修改，这个是利用原生的方法
@@ -630,9 +630,9 @@
 
     ```js
     window.onunload = function () {
-        fetch("/analytics", {
-            method: "POST",
-            body: "statistics",
+        fetch('/analytics', {
+            method: 'POST',
+            body: 'statistics',
             keepalive: true,
         });
     };
@@ -650,7 +650,7 @@
 
     ```js
     <script data-main="vender/main" src="vender/require.js"></script>;
-    main.js里通过require(["mo1", "mo2"], function (mod1, mod2) {});
+    main.js里通过require(['mo1', 'mo2'], function (mod1, mod2) {});
     ```
 
     小模块通过 define,return 的方式完成定义导出。主要就是定义 define 应该怎么写。
@@ -879,11 +879,11 @@
                           };
                           img.onerror = img.onload = ok;
                           if (autoLoadLazyImage) {
-                              var dataSrc = img.getAttribute("data-src");
+                              var dataSrc = img.getAttribute('data-src');
                               if (dataSrc) {
                                   img.src = dataSrc;
                                   img.style.opacity = 1;
-                                  img.removeAttribute("data-src");
+                                  img.removeAttribute('data-src');
                               }
                           }
                           if (img.complete) {
@@ -933,8 +933,8 @@
         );
     }
     const textState = atom({
-        key: "textState", // unique ID (with respect to other atoms/selectors)
-        default: "", // default value (aka initial value)
+        key: 'textState', // unique ID (with respect to other atoms/selectors)
+        default: '', // default value (aka initial value)
     });
 
     function TextInput() {
@@ -1021,22 +1021,22 @@
             schemeActions.push(callback);
             // 创建IFRAME
             if (!jsMessageIframe) {
-                jsMessageIframe = document.createElement("iframe");
-                jsMessageIframe.style.display = "none";
+                jsMessageIframe = document.createElement('iframe');
+                jsMessageIframe.style.display = 'none';
                 document.body.appendChild(jsMessageIframe);
             }
 
-            var schemeHeader = "qunarhy://";
+            var schemeHeader = 'qunarhy://';
 
             // 发送
             jsMessageIframe.src =
                 schemeHeader +
                 scheme +
                 (content
-                    ? "?content=" + encodeURIComponent(JSON.stringify(content))
-                    : "") +
-                (!!content ? "&" : "?") +
-                "_=" +
+                    ? '?content=' + encodeURIComponent(JSON.stringify(content))
+                    : '') +
+                (!!content ? '&' : '?') +
+                '_=' +
                 +new Date();
         }
 
@@ -1092,7 +1092,7 @@
     用的最多的应该就是 1 和 3 了
 
     ```js
-    const div = document.getElementsByClassName("div_style")[0];
+    const div = document.getElementsByClassName('div_style')[0];
     class VNode {
         constructor(tag, attr, value, type) {
             // 节点名 DIV/P啊这样的
@@ -1100,7 +1100,7 @@
             // 属性对象
             this.attr = attr;
             // 值，如果是文本节点就需要有值
-            this.value = String(value).trim().length ? value : "";
+            this.value = String(value).trim().length ? value : '';
             // 类型，节点类型
             this.type = type;
             // 孩子们
@@ -1306,9 +1306,9 @@
     [PNPM 原理](https://juejin.cn/post/6916101419703468045)
 
     ```js
-    "5.0.3", // 安装指定版本
-        "~5.0.3", // 安装 5.0.X 最新版本
-        "^5.0.3"; // 安装 5.X.X 最新版本
+    '5.0.3', // 安装指定版本
+        '~5.0.3', // 安装 5.0.X 最新版本
+        '^5.0.3'; // 安装 5.X.X 最新版本
     ```
 
     - 速度
