@@ -11,10 +11,10 @@
     4. 使用 HTTP 协商缓存，协商缓存本身数据也是存在本地的， Last-Modified（请求带上 If-Modified-Since），返回 304，但是如果改了文件名的话，last-modified 就找不到了，就会重新返回。所以还要一个 etag（请求带上 If-None-Match），两者共同配合完成 304.
     5. 体积不大的会放在 from memory cahce，比如 base64,小的 css，体积稍大会放 from disk cache。
     6. 还可以使用 service worker。
-    7. 以上 http 的缓存，静态资源CDN，动态请求靠服务端的 redis。
+    7. 以上 http 的缓存，静态资源 CDN，动态请求靠服务端的 redis。
     8. 本地存储，cookie,storage。 cookie 里少放信息，因为会跟着 http 请求头跑，很浪费。如果本地存储需求量很大的话，比如你要实现一个 im 的话，可以用 indexDB,本地数据库
-    9. 合并request，并且并发请求，达到应用层面的多路复用, 避免队头阻塞
-    10. 推行升级到http2，protocol协议就是h2。缩短了8%。
+    9. 合并 request，并且并发请求，达到应用层面的多路复用, 避免队头阻塞
+    10. 推行升级到 http2，protocol 协议就是 h2。缩短了 8%。
 
     WEBPACK
 
@@ -25,7 +25,7 @@
     5. 使用 splitchuncksPlugin 来分离代码
     6. 自带的 tree-shaking 移除无用代码, 主要是借助 es6 的模块是静态解析的，所以才能实现，利用内置的 UglifyJSPlugin 来完成。
     7. 使用 PurgecssPlugin 移除无用 CSS
-    8. 自带的 hosit-scoping，移除无用计算。
+    8. 自带的 hoist-scoping，移除无用计算。
     9. 利用 import.then 进行懒加载拆分, 生成对应的 hash.chunk.js，比如交易流程主要流程不要懒加载，但是一些用户点击率低的页面，通过懒加载的形式加载。
 
     ```js
@@ -56,7 +56,7 @@
     7. 防抖（搜索输入）、节流(scroll 监听)
     8. 接入性能监控优化的时候，在 onload 完了后利用 requestIdleCallback 记录，并且 record 要满足一定数量后再去请求。
     9. 加入白屏检测，对错误进行监控。
-    10. XX迭代很多，数据量变大，进行数据精简，把后端的DTO进行清洗。缩短了10%
+    10. XX 迭代很多，数据量变大，进行数据精简，把后端的 DTO 进行清洗。缩短了 10%
     11. 优化布局，去掉更多的 DIV 标签。
 
 2. 常见的设计模式
@@ -153,7 +153,7 @@
 
         ```js
         // 这个base就是装饰里的target
-        const testMixin = Base =>
+        const testMixin = (Base) =>
             class extends Base {
                 // ...
             };
@@ -221,7 +221,7 @@
 
     subscribe 就是添加订阅吗，然后 dispatch 的时候，会去执行 reducer 函数，得到新的 state。并执行监听的函数来触发修改。
 
-    在 react-redux 下的话，利用 connect 高阶组件里去 subscribe，subscribe里就是更新自己的界面的方法，这样dispatch触发后，就可以执行到这个回调。
+    在 react-redux 下的话，利用 connect 高阶组件里去 subscribe，subscribe 里就是更新自己的界面的方法，这样 dispatch 触发后，就可以执行到这个回调。
 
     ```js
     function dispatch(action) {
@@ -447,7 +447,7 @@
 
     ```js
     // radio进来的就是 宽 / 高
-    const measure = radio => {
+    const measure = (radio) => {
         const baseW = winWidth / 2;
         // 这里的比例也有限制，不可能无限按原图比例，所以就要有边界值。
         const mradio = radio < 0.5 ? 0.5 : radio > 2 ? 2 : radio;
@@ -466,7 +466,7 @@
         // 图片符合规范，按原有比例来即可。
         return {
             width: Math.ceil(width),
-            height: Math.ceil(height)
+            height: Math.ceil(height),
         };
     };
     ```
@@ -535,13 +535,14 @@
 
     - MutationObserver 可以监控 dom 变化。
 
-        在index.html埋入 mutationObserver，监控childlist type，判断node节点的稳定性来推测分析加载的时间。
+        在 index.html 埋入 mutationObserver，监控 childlist type，判断 node 节点的稳定性来推测分析加载的时间。
+
         ```js
         const config = { childList: true, subtree: true };
         var nodeNum = 0;
         function callback(mutationsList) {
-            for(let mutation of mutationsList) {
-                if (mutation.type === 'childList') {
+            for (let mutation of mutationsList) {
+                if (mutation.type === "childList") {
                     nodeNum++;
                 }
             }
@@ -549,6 +550,7 @@
         var mu = new MutationObserver(callback);
         mu.observe(document, config);
         ```
+
     - PerformanceObserver
 
     ```js
@@ -609,7 +611,7 @@
 
     ```js
     var data = JSON.stringify({
-        name: "Berwin"
+        name: "Berwin",
     });
 
     navigator.sendBeacon("/haopv", data);
@@ -627,11 +629,11 @@
     这样在页面关闭的时候，照样能发送出去。如果没这个参数，可能会停掉。
 
     ```js
-    window.onunload = function() {
+    window.onunload = function () {
         fetch("/analytics", {
             method: "POST",
             body: "statistics",
-            keepalive: true
+            keepalive: true,
         });
     };
     ```
@@ -648,7 +650,7 @@
 
     ```js
     <script data-main="vender/main" src="vender/require.js"></script>;
-    main.js里通过require(["mo1", "mo2"], function(mod1, mod2) {});
+    main.js里通过require(["mo1", "mo2"], function (mod1, mod2) {});
     ```
 
     小模块通过 define,return 的方式完成定义导出。主要就是定义 define 应该怎么写。
@@ -859,17 +861,20 @@
 
     ```js
     await Promise.all(
-        [].map.call(imgs, img => {
+        [].map.call(imgs, (img) => {
             return img.src && img.complete
                 ? true
                 : img.__load_promise__ ||
-                      (img.__load_promise__ = new Promise(resolve => {
+                      (img.__load_promise__ = new Promise((resolve) => {
                           var isOk = false;
                           var ok = () => {
                               if (!isOk) {
                                   isOk = true;
                                   resolve();
-                                  img.onerror = img.onload = img.__load_promise__ = null;
+                                  img.onerror =
+                                      img.onload =
+                                      img.__load_promise__ =
+                                          null;
                               }
                           };
                           img.onerror = img.onload = ok;
@@ -929,13 +934,13 @@
     }
     const textState = atom({
         key: "textState", // unique ID (with respect to other atoms/selectors)
-        default: "" // default value (aka initial value)
+        default: "", // default value (aka initial value)
     });
 
     function TextInput() {
         const [text, setText] = useRecoilState(textState);
 
-        const onChange = event => {
+        const onChange = (event) => {
             setText(event.target.value);
         };
 
@@ -1008,7 +1013,7 @@
     回调的话，native 会执行 window.下你的方法，从而达成回调
 
     ```js
-    var scheme = (function() {
+    var scheme = (function () {
         var schemeActions = [];
         var jsMessageIframe;
 
@@ -1035,11 +1040,11 @@
                 +new Date();
         }
 
-        window.onMessage = window.jsOnMessage = function(options) {
+        window.onMessage = window.jsOnMessage = function (options) {
             if (options) {
                 var actions = schemeActions;
                 if (actions && actions.length) {
-                    actions.forEach(function(action) {
+                    actions.forEach(function (action) {
                         action(options.data);
                     });
                     schemeActions = [];
@@ -1077,7 +1082,7 @@
     | :------------------------------- | --: | :---------------------------------------------------------------------------------------: |
     | Node.ELEMENT_NODE                |   1 |                            一个 元素 节点，例如 <p> 和 <div>。                            |
     | Node.TEXT_NODE                   |   3 |                              Element 或者 Attr 中实际的 文字                              |
-    | Node.CDATA_SECTION_NODE          |   4 |                         一个 CDATASection，例如 <!CDATA[[ … ]]>。                         |
+    | Node.CDATA_SECTION_NODE          |   4 |                          一个 CDATASection，例如 <!CDATA[[…]]>。                          |
     | Node.PROCESSING_INSTRUCTION_NODE |   7 | 一个用于 XML 文档的 ProcessingInstruction (en-US) ，例如 `<?xml-stylesheet ... ?>` 声明。 |
     | Node.COMMENT_NODE                |   8 |                                    一个 Comment 节点。                                    |
     | Node.DOCUMENT_NODE               |   9 |                                   一个 Document 节点。                                    |
@@ -1258,7 +1263,7 @@
     var schemeQueue = [];
     var dirty = false;
     function iteratorRegister(fn) {
-        var next = function() {
+        var next = function () {
             if (schemeQueue.length === 0) {
                 return;
             }
@@ -1266,7 +1271,7 @@
         };
 
         schemeQueue.push(fn);
-        if(!dirty) {
+        if (!dirty) {
             dirty = true;
             // 执行第一次
             schemeQueue.shift()(next);
