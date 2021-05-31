@@ -191,21 +191,30 @@
     })(StrType || (StrType = {}));
     ```
 
-### ES6
+### ES6+
 
-1. `ES6`中暂时性死区`TDZ`是什么？
+1. ECMAscript 发展进程中，都有哪些东西的添加？
+    <details open>
+
+    - es6 增加的最多。包含类，模块，迭代器，生成器、箭头函数、反代理和数据类型
+    - es7 只包含少量语法层面增强，比如 includes,和指数操作符
+    - es8 增加了异步函数 async/await 和 Object.values/Object.entries 等
+    - es9 增加 promise.finally 和异步迭代、剩余和扩展属性
+    - es10 增加了 flat/flatMap，固定了 sort 的顺序等等
+
+2. `ES6`中暂时性死区`TDZ`是什么？
      <details open>
 
     暂时性死区就是说如果函数外面写了一个 let a = 1;
     结果里面用的时候，先用了 a，又声明了 let a，会报错，因为它会形成一个封闭作用域。
     而且，用了`let`的话，就代表`typeof`不是绝对安全的了。
 
-2. BABEL 是怎么编译 let 的？
+3. BABEL 是怎么编译 let 的？
      <details open>
 
     如果对应变量没有相关性的话，会直接给变成`var`，但是如果有类似于多个相同的，不同地方引用的话，就是改变量名，使内外层的变量名称不一样。
 
-3. 什么是标签模板？模板字符串函数的参数你知道是啥吗？
+4. 什么是标签模板？模板字符串函数的参数你知道是啥吗？
      <details open>
 
     标签模板就是在模板字符串前面加个函数，然后通过函数处理这个模板字符串。
@@ -214,7 +223,7 @@
 
     实际上这个功能意义我觉得不大，因为进了函数处理后，我要先把它拼接起来。那我为什么不直接把整个字符串拿到后在用函数处理一下呢？
 
-4. weakmap 用过吗？ 知道它的使用场景吗？
+5. weakmap 用过吗？ 知道它的使用场景吗？
      <details open>
 
     `weakmap`就是弱引用，这样对于`gc`会更友好，而且只支持对象，但是它不可迭代，使用场景的话，比如写一个偏向公共的类
@@ -248,7 +257,7 @@
 
     然后写个 get 方法，那么这些 props 只能通过 get 获取了。
 
-5. Set WeakSet Map WeakMap
+6. Set WeakSet Map WeakMap
     <details open>
 
     首先，Set 和 Map 都很相似，只是 API 略有不同，Set 是通过 add 加值，Map 是通过 set 加值
@@ -259,7 +268,7 @@
 
     ![weak](../img/weak.jpg)
 
-6. class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
+7. class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
      <details open>
 
     [ES6 系列之 Babel 是如何编译 Class 的(上)](https://juejin.cn/post/6844903704873664520)
@@ -302,7 +311,7 @@
 
     **类不能直接执行，Person()会报错**
 
-7. 私有变量的实现方式
+8. 私有变量的实现方式
      <details open>
 
     - 最新的提案可以直接前面写#，这样就成为了私有变量
@@ -317,7 +326,7 @@
     // {Symbol(): "haha"}
     ```
 
-8. 装饰器
+9. 装饰器
      <details open>
 
     装饰器的话，从函数的角度来看，如果只是作用在`class`组件上的话，其实和`HOC`没多少区别，
@@ -407,7 +416,7 @@
     这两种是不可以混合使用的，使用会报错。
     具体所有类型的我都写在了 decoratorTest 上了，可以去看。
 
-9. HOC 和 renderprops
+10. HOC 和 renderprops
      <details open>
 
     HOC 和 renderprops 其实都是属于增强组件
@@ -458,7 +467,7 @@
 
     [hoc vs renderprops vs hook](https://jishuin.proginn.com/p/763bfbd36ecc)
 
-10. 箭头函数和普通函数的区别
+11. 箭头函数和普通函数的区别
      <details open>
 
     - 箭头函数的 this 是透传的
@@ -467,7 +476,7 @@
     - 箭头函数没有原型属性
     - 箭头函数不能通过 apply.call.bind 改变 this。
 
-11. 为啥 let 用 window 访问不到
+12. 为啥 let 用 window 访问不到
     <details open>
 
     let 在全局中创建的变量存在于一个块级作用域（Script）中,它与 window(Global)平级,
@@ -488,7 +497,7 @@
     ES5 没有块级作用域的概念，只有函数作用域，可以近似理解成这样。
     所以外层 window 必然无法访问。
 
-12. 为什么 for > forEach > map
+13. 为什么 for > forEach > map
     <details open>
 
     其实这三个循环方法并不完全等价：
@@ -497,11 +506,25 @@
     2. forEach 其次，因为它其实比我们想象得要复杂一些，它的函数签名实际上是 `array.forEach(function(currentValue, index, arr), thisValue)`它不是普通的 for 循环的语法糖，还有诸多参数和上下文需要在执行的时候考虑进来，这里可能拖慢性能；
     3. map 最慢，因为它的返回值是一个等长的全新的数组，数组创建和赋值产生的性能开销很大。
 
-13. 类数组加上 push 方法，length 会增加， 因为 push 设计的就是一个通用的[mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push#description)
+14. 类数组加上 push 方法，length 会增加， 因为 push 设计的就是一个通用的[mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push#description)
 
 ### JS
 
-1. reduce 方法知道吗？
+1. 什么是 BOM？
+    <details open>
+
+    BOM 其实就是浏览器的扩展，通常把任何特定于浏览器的扩展都归于 BOM 里
+
+    - 弹出新窗口的能力
+    - 移动和缩放和关闭窗口能力
+    - navigator 对象，提供浏览器信息
+    - location 对象，提供地址信息
+    - screen 对象，提供屏幕信息
+    - performance 对象，提供浏览器内存占用，时间统计等信息
+    - 对 cookie 的支持
+    - XMLHttpRequest
+
+2. reduce 方法知道吗？
      <details open>
 
     用于处理数组，比较好用。可以用来拼接字符串，求和,数组降维以及其他一些需要的数据操作
@@ -512,7 +535,7 @@
 
     第二个参数是初始值，如果没给的话，默认使用第一个值，这也是为什么如果空数组 reduce 的时候，如果不给初始值会报错的原因。
 
-2. array.some, array.every 方法里只写个 Array.isArray 是啥意思
+3. array.some, array.every 方法里只写个 Array.isArray 是啥意思
      <details open>
 
     array.some 里本来就是写一个函数用的，会把每一个参数自动投放进去，Array.isArray 不正好是一个函数吗？
@@ -521,7 +544,7 @@
 
     结果应该是 1，NaN, NaN， 因为 3 如果执行 2 进制，因为 2 进制里没有 3，所以解析不了。0 的话就当它是 10 进制
 
-3. 你知道迭代器吗？如何自己写一个简单的迭代器
+4. 你知道迭代器吗？如何自己写一个简单的迭代器
      <details open>
 
     迭代器就是一个拥有 next 方法的对象，每次调用会返回一个结果对象，该对象上有两个属性，`value`和`done`
@@ -544,7 +567,7 @@
     }
     ```
 
-4. 你知道生成器吗？
+5. 你知道生成器吗？
      <details open>
 
     生成器，就是 Generator ，它就是一个状态机。
@@ -605,7 +628,7 @@
      };
     ```
 
-5. for of, for in 的区别
+6. for of, for in 的区别
      <details open>
 
     for of 就是可以遍历拥有 iterator 属性的对象或数组,
@@ -638,7 +661,7 @@
 
     for in 主要用于遍历对象的属性，当然也可以用来遍历数组元素
 
-6. fetch 怎么用，如何封装一下它
+7. fetch 怎么用，如何封装一下它
      <details open>
 
     - `fetch`算是新一点的`api`，用法简单点
@@ -649,7 +672,7 @@
     - mode:"cors",是走 cors 模式跨域
     - 不过`fetch`不支持`node`，所有如果是有`ssr`的话，可以用`axios`
 
-7. Object.freeze（浅冻结）Object.seal 区别，如何深冻结一个对象？
+8. Object.freeze（浅冻结）Object.seal 区别，如何深冻结一个对象？
      <details open>
 
     - Object.freeze 是把对象的属性冻结，不能修改不能添加不能删除，但是是浅冻结
@@ -668,7 +691,7 @@
     }
     ```
 
-8. Object.defineProperty,Proxy 对象,Reflect 对象
+9. Object.defineProperty,Proxy 对象,Reflect 对象
      <details open>
 
     ```js
@@ -803,20 +826,20 @@
     Reflect.get(myObject, 'baz', myReceiverObject); // 8
     ```
 
-9. Number.isNaN 和 isNaN 的区别
+10. Number.isNaN 和 isNaN 的区别
      <details open>
 
     - isNaN 意思是这个是不是不是一个数字，比如它是 isNaN('abc') 就是 true。
     - Number.isNaN 只有 Number.isNaN(NaN)才是 true
     - Number.isNaN 是 es6 的，如果自己写的话，就是利用 typeof NaN 是 number 来写
 
-10. String.raw
+11. String.raw
     <details open>
 
     如果一串字符串，里面有\n 之类的，可能会被转译，如果不想让它被转译，想直出，
     用`String.raw`abc \n ss``,会把换行符号也返回出来，就是一个未加工的值，实际应用感觉没有。
 
-11. 描述一下事件传播
+12. 描述一下事件传播
     <details open>
 
     当事件发生在`DOM`元素上时，该事件并不完全发生在那个元素上。
@@ -831,20 +854,20 @@
 
     阻止冒泡使用的是`e.stoppropagation`,阻止捕获用的是`e.stopImmediatePropagation`
 
-12. 适合事件捕获的场景有哪些？
+13. 适合事件捕获的场景有哪些？
     <details open>
 
     1. 事件足够「抽象」：比如 load 事件，本身的定义就是基于父元素的内容，捕获阶段处理它会更加直观
     2. 事件足够「特别」：比如 scroll 事件，这是个触发很频繁的事件，因为操作是连续的，捕获阶段可以减少性能损失
     3. 事件足够「反常」：比如定义一个点击事件，让用户以为可以点击到某个元素但实际上父元素想发挥一个阻拦层区域效果的时候
 
-13. JavaScript 中的虚值是什么
+14. JavaScript 中的虚值是什么
     <details open>
 
     `const falsyValues = ['', 0, null, undefined, NaN, false];`
     这里面的都是虚值，虚值就是在转化成 boolean 时为 false 的值。
 
-14. Object.create 创建出来的对象和正常的区别是什么？如何创建一个没有原型的对象？
+15. Object.create 创建出来的对象和正常的区别是什么？如何创建一个没有原型的对象？
     <details open>
 
     通过 Object.create 创建出来的对象的原型指向传入的对象，也就是说
@@ -893,7 +916,7 @@
     };
     ```
 
-15. new 关键字有什么用？它到底做了啥？
+16. new 关键字有什么用？它到底做了啥？
     <details open>
 
     new 和构造函数创造一个对象。
@@ -906,7 +929,7 @@
 
     其实从这段代码就可以看出，虽然最后创建出来的对象是一致的，但是多赋值了一次，obj.\_\_proto\_\_ = Object.prototype,因为字面量创建的本来就是个对象了。所以，还是字面量方式更好
 
-16. 手写一个 promise
+17. 手写一个 promise
     <details open>
 
     - 第一步，先写这里的回调函数 三个状态，then 里的函数可以不传。
@@ -920,12 +943,12 @@
 
     [promise](https://zhenglin.vip/js/promise.js)
 
-17. 事件委托的原理
+18. 事件委托的原理
     <details open>
 
     因为事件传播正常是先捕获后冒泡，那么捕获/或者冒泡的时候，一定会经过目标元素的上级，这就是事件委托的原理。
 
-18. 原型、作用域、原型链、作用域链
+19. 原型、作用域、原型链、作用域链
     <details open>
 
     - js 本质上一切皆对象，每个对象都要有原型，这也是为什么有继承关系。
@@ -934,7 +957,7 @@
     - 函数有一个内部属性 [[scope]] ,当函数创建的时候，就会保存所有的父变量对象到其中。
     - [[scope]] 可以理解为所有父级变量对象的层级链
 
-19. instanceof 原理是啥？
+20. instanceof 原理是啥？
     <details open>
 
     instanceof 其实就是利用原型链去查找，找到了就返回 true
@@ -961,7 +984,7 @@
     console.log('hello world' instanceof PrimitiveString); // true
     ```
 
-20. null,undefined,未声明的变量的区别
+21. null,undefined,未声明的变量的区别
     <details open>
 
     - 未声明的变量就是不用 let ,var, const 关键字的比如直接写 a = 2;这样的，如果是在严格模式下，会报错
@@ -970,7 +993,7 @@
     - null 的话只能显式的被赋值，标识空值。
     - null == undefined；没有隐式转换。
 
-21. foreach 和 map 的区别
+22. foreach 和 map 的区别
     <details open>
 
     foreach 是遍历数组中的元素，没有返回值，通常需要修改原始数组的时候可以用 foreach, 如果直接`item = 2`， 这样 foreach 也不会改变原数组的，是没有意义的，只有`item.a = 2`,这样才是有意义的，虽然 map 也会改变，但是约定
@@ -983,13 +1006,13 @@
 
     foreach 不能用 await，无法保证顺序，而 for of 就可以，因为用的是迭代器。
 
-22. 宿主对象和原生对象的区别
+23. 宿主对象和原生对象的区别
     <details open>
 
     - 原生对象是由 `ECMAScript`规范定义的 `JavaScript`内置对象，比如`String`、`Math`、`RegExp`、`Object`、`Function`等等。
     - 宿主对象是由运行时环境（浏览器或 `Node`）提供，比如`window`、`XMLHTTPRequest`等等。比如`Node`的`process`,`setImmediate`。
 
-23. call,apply,bind 区别
+24. call,apply,bind 区别
     <details open>
 
     - call 第二个参数是一个一个的
@@ -998,7 +1021,7 @@
     - 实现 bind 就更简单了，context 不用动，传递下 this 函数，然后 return 个 function，参数和之前的组合一下，调用 apply 就可以了。
     - call 比 apply 快，因为 apply 内部还要判断参数是不是数组，还需要获取数组 length 等等，而 call 就没这些事
 
-24. 事件循环 event loop
+25. 事件循环 event loop
     <details open>
 
     我们知道`JavaScript`的一大特点就是单线程，而这个线程中拥有唯一的一个事件循环。
@@ -1143,7 +1166,7 @@
 
     输出是 time1, 2s 后输出 pthen1, time2, pthen2，一样论证了 settimeout 等待。
 
-25. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
+26. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
     <details open>
 
     基本完整版本参见 [deepCopy.js](https://zhenglin.vip/js/deepcopy.js)
@@ -1160,7 +1183,7 @@
     }
     ```
 
-26. typeof null 为啥是 object？
+27. typeof null 为啥是 object？
     <details open>
 
     原理是这样的，不同的对象在底层都表示为二进制，在`Javascript`中二进制前三位用来表示 `TYPE_TAG`
@@ -1169,7 +1192,7 @@
 
     null 在设计的时候是一个空指针，它的二进制表示全为 0，自然前三位也是 0，所以执行 typeof 时会返回"object"。
 
-27. 什么是闭包，闭包经典问题解法有哪几种？
+28. 什么是闭包，闭包经典问题解法有哪几种？
     <details open>
 
     闭包就是函数内可以访问函数外的变量，就属于闭包。但是我们常说的，是属于调用栈出栈了，依然能够中找到那个变量。
@@ -1193,7 +1216,7 @@
     - 用 let 封闭作用域
     - 用 settimeout 第三个参数就是传给 settimeout 里面的函数的入参。
 
-28. 实现继承的几种方式
+29. 实现继承的几种方式
     <details open>
 
     - 原型链继承
@@ -1287,7 +1310,7 @@
 
     但是如果是**原生对象**，就不行了，是拿不到内部属性的
 
-29. 手写 call, apply, bind 出来
+30. 手写 call, apply, bind 出来
     <details open>
 
     call 和 apply，就是传一个上下文进去，没有就赋值 window
@@ -1298,7 +1321,7 @@
 
     [Object(this)的原因](https://stackoverflow.com/questions/44079391/what-is-the-purpose-of-doing-objectthis/44080309)
 
-30. 正则
+31. 正则
     <details open>
 
     - \s 空格
@@ -1328,7 +1351,7 @@
     - reg.ignoreCase, 是否用了 i， 大小写
     - reg.multiline , 是否用了 m 多行标志
 
-31. 千位分割符正则
+32. 千位分割符正则
     <details open>
 
     第二种`reg = /(\d)(?=(\d{3})+$)/g`， 这样就可以用 `str.replace(/(\d)(?=(\d{3})+$)/g, '$1,')`了
@@ -1417,7 +1440,7 @@
 
     如果让你实现 get(ob, 'name.sex.k[a][b]'),就不能用$&的了
 
-32. observer 的几个 API
+33. observer 的几个 API
     <details open>
 
     - Intersection Observer，可以用它来做懒加载，比使用 getBoundingClientRect()的好处是它的性能会更好。
@@ -1442,7 +1465,7 @@
 
     - PerformanceObserver，监控浏览器性能的，我也没用的上。
 
-33. requestIdleCallback 和 requestAnimationFrame 的区别
+34. requestIdleCallback 和 requestAnimationFrame 的区别
     <details open>
 
     浏览器一帧里 16ms 要完成的任务
@@ -1477,19 +1500,19 @@
 
     缺点的话是 requestIdleCallback 的 FPS 只有 20, 一秒只有 20 次调用。
 
-34. 为什么 js 是单线程的？
+35. 为什么 js 是单线程的？
     <details open>
 
     因为 JS 是用来处理页面中的用户交互以及操作 DOM，css 的。
     如果它是多线程的话，可能会造成 UI 冲突。
     上操作锁的话，会增大复杂性，所以设计之初就是选择了单线程。
 
-35. 为什么 js 会阻塞页面加载
+36. 为什么 js 会阻塞页面加载
     <details open>
 
     因为 JS 可以操作页面，如果不阻塞的话，可能会导致数据不一致。
 
-36. for in, Object.keys,Object.getOwnPropertyNames,Reflect.ownKeys 区别
+37. for in, Object.keys,Object.getOwnPropertyNames,Reflect.ownKeys 区别
     <details open>
 
     - for in 遍历会把原型上的属性遍历出来。
@@ -1498,7 +1521,7 @@
     - Reflect.ownKeys 不会把原型上的属性遍历出来，不可枚举属性，但是 Symbol 是可以遍历出来，
       相当于 Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))
 
-37. 为何 try 里面放 return，finally 还会执行，理解其内部机制
+38. 为何 try 里面放 return，finally 还会执行，理解其内部机制
     <details open>
 
     try catch finally 是一个特殊的语法块。
@@ -1530,7 +1553,7 @@
 
     利用这个，可以在一个函数中间插入点东西执行。比如上面的 justLog 中间想在 return 前处理个数据，就可以利用 try catch finally 来搞。
 
-38. base64 的编码原理
+39. base64 的编码原理
     <details open>
 
     - `btoa('abc') = 'YWJj'` base64 编码 byte to ascii
@@ -1543,7 +1566,7 @@
 
     如果要编码的二进制数据不是 3 的倍数，最后剩下一个或者两个字节 Base64 会在末尾补零，再在编码的末尾加上一个或者两个‘=’。
 
-39. 几种进制的相互转换计算方法，在 JavaScript 中如何表示和转换
+40. 几种进制的相互转换计算方法，在 JavaScript 中如何表示和转换
     <details open>
 
     - 十进制转其他进制
@@ -1561,18 +1584,18 @@
 
     这样小数就会转换回 10 进制。
 
-40. 0.1+0.2 为什么不等于 0.3
+41. 0.1+0.2 为什么不等于 0.3
     <details open>
 
     因为 JavaScript 使用的是 64 位双精度浮点数编码，所以它的符号位占 **1**位(0 代表正，1 代表负),指数位占 **11** 位，尾数位占 **52** 位。
     然后 0.1+0.2 在转换成二进制的时候，会发生精度丢失，因为只取 64 位固定长度。
 
-41. 12.toString()为什么会报错
+42. 12.toString()为什么会报错
     <details open>
 
     因为 js 在编译的时候，12.会解析成一个数字，它会认为 toString 就是后面的小数，解决办法就是 12..toString()就可以了。
 
-42. 写代码要不要加分号，不加分号有哪些情况会出问题？（IIFE 为啥前面加分号）
+43. 写代码要不要加分号，不加分号有哪些情况会出问题？（IIFE 为啥前面加分号）
     <details open>
 
     有些语句会自动加分号，有些不会。
@@ -1584,12 +1607,12 @@
     - 正则开头的斜杠（和前面的字符串组起来了）
     - 加号，减号（这更不用说了）
 
-43. while 和 do while 的区别是什么？
+44. while 和 do while 的区别是什么？
     <details open>
 
     使用 while 的话必须满足条件才能进行，而 do while 的话是不管条件满足与否，都会先执行一次 do
 
-44. 位运算有哪些呢？
+45. 位运算有哪些呢？
     <details open>
 
     - 这里插一个\*\*， 就是乘方，不过它是右结合的， 4\*\*3\*\*2 会先求 3\*\*2
@@ -1604,12 +1627,12 @@
     - (>>) 有符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位。
       这两个不太好用。对于正数而言一样。对于负数而言不好算。
 
-45. 利用按位&来检查一个数字是否是奇偶数
+46. 利用按位&来检查一个数字是否是奇偶数
     <details open>
 
     n&1 其实就是二进制，1 的二进制最后一位是 1，那么偶数的最后一位是 0，所以 4&1 一定是 0，5&1 是 1
 
-46. 零宽空格
+47. 零宽空格
     <details open>
 
     零宽空格就是看不到任何迹象，实际上却占用一个位子
@@ -1621,7 +1644,7 @@
     \uFEFF。可以给代码加个料，别人复制了后肯定用不了。
     ```
 
-47. JavaScript 可以存储的最大数字、最大安全数字，JavaScript 处理大数字的方法、避免精度丢失的方法
+48. JavaScript 可以存储的最大数字、最大安全数字，JavaScript 处理大数字的方法、避免精度丢失的方法
     <details open>
 
     - Number.MAX_VALUE 可存储的最大数字 == (Math.pow(2,53) - 1) \* Math.pow(2, 971) 。 971 = 1023 - 52； 这个 1023 就说 2 的 10 次方-1，为什么是 10？暂不知道
@@ -1629,7 +1652,7 @@
     - 超过安全最大值精度就开始不准了。
     - 解决办法就是用 bigint 或者是变成字符串，小数字的话可以转换成整数。通常和钱相关，可以先乘 100
 
-48. 什么是 bigInt?
+49. 什么是 bigInt?
     <details open>
 
     BigInt 是一种新的数据类型，用于当整数值大于 Number 数据类型支持的范围时。这种数据类型允许我们安全地对大整数执行算术操作。
@@ -1640,7 +1663,7 @@
 
     给大数字后面加个 n 就可以了，兼容性还不好。
 
-49. 理解词法作用域和动态作用域
+50. 理解词法作用域和动态作用域
     <details open>
 
     作用域是指程序源代码中定义变量的区域。
@@ -1653,7 +1676,7 @@
 
     动态作用域就是函数的作用域是在函数调用的时候才决定的。
 
-50. this 的原理以及几种不同使用场景的取值
+51. this 的原理以及几种不同使用场景的取值
     <details open>
 
     - 显示绑定
@@ -1673,12 +1696,12 @@
       箭头函数没有 this, 因此也不能绑定。
       在箭头函数里的 this 会指向 外层的非箭头函数的 this。
 
-51. Object.is 和===的区别
+52. Object.is 和===的区别
     <details open>
 
     Object 在严格等于的基础上修复了一些特殊情况下的失误，具体来说就是+0 和-0 它修正为 false，NaN 和 NaN 修正为 true
 
-52. addEventListener 第三个参数是啥?
+53. addEventListener 第三个参数是啥?
     <details open>
 
     false 是冒泡，true 是捕获
@@ -1692,7 +1715,7 @@
     }
     ```
 
-53. 如何写一个自定义事件
+54. 如何写一个自定义事件
     <details open>
 
     ```js
@@ -1717,7 +1740,7 @@
 
     ```
 
-54. V8 内存回收机制
+55. V8 内存回收机制
     <details open>
 
     V8 给 JS 分配的内存实际上不多。在 64 位系统下也就一点几 G
@@ -1746,7 +1769,7 @@
 
     老生代的内存回收方式就是我们熟知的标记清除。先标记完了后，把这一轮剩余内存进行移动，往一端靠拢。然后再内存回收的过程中，时间会比较长，V8 也利用了类似 React fiber 一样，进行分片处理。
 
-55. 自己实现一个 eventEmmiter(也就是发布订阅)
+56. 自己实现一个 eventEmmiter(也就是发布订阅)
     <details open>
 
     ```js
@@ -1765,7 +1788,7 @@
 
     主要就是利用个对象完成。
 
-56. 隐式转换
+57. 隐式转换
     <details open>
 
     - 主要需要知道几点，转 String 的时候
@@ -1796,7 +1819,7 @@
 
     左边是对象，右边是 false，false 转数字是 0，[] tostring = '';''转数字是 0。
 
-57. array.slice(), arr.splice, str.substr, str.substring
+58. array.slice(), arr.splice, str.substr, str.substring
     <details open>
 
     下述的起始位置从 0 开始。
@@ -1814,24 +1837,24 @@
     - substr 第一个参数是起始位置，包含，第二个是 length
     - substring 第一个参数是起始位置，包含，第二个是 end，不包含
 
-58. 像掘金，复制的时候会有掘金版权声明，如何做到的
+59. 像掘金，复制的时候会有掘金版权声明，如何做到的
     <details open>
 
     先监听用户复制，然后在回调函数里拿到复制的文本，当文本大于一定 Length 的时候，添加版权声明，然后把新的值 set 到剪切板里去。
 
-59. vue 双向绑定的原理 2.0
+60. vue 双向绑定的原理 2.0
     <details open>
 
     利用 Object.defineProperty， 在 get 的时候判断当前值有没有被添加过，没有添加过的话就添加订阅，在初始化的时候 watch，回调里就是 update dom 的方法。然后在 set 的时候，就会通知各订阅更新。然后各订阅收到消息后，调用自己的 update 方法，就是 watch 的回调。完成 update。然后 dom 元素比如 input 发生改变的话，给 input 上一个监听，改变的时候同时改变你 defineproperty 的值就完成双向绑定了。
 
-60. vue 双向绑定原理 3.0
+61. vue 双向绑定原理 3.0
     <details open>
 
     其实就是把上面的方法换成 proxy
 
     [vue](https://zhenglin.vip/js/vue.js)
 
-61. 数组和链表的对比
+62. 数组和链表的对比
     <details open>
 
     - 数组静态分配内存，链表动态分配内存
@@ -1839,13 +1862,13 @@
     - 数组利用下标定位，时间复杂度是 O(1)，链表只能一个一个查，时间复杂度是 O(n).
     - 数组插入或者删除动作的的时间复杂度是 O(n),链表的话是 O(1)。因为数组删除或者是插入后要移位。而链表直接解除或者添加即可。不过唯一缺点是它有一个额外的域，存放内存中下一节点的地址。
 
-62. 微信小程序只展示最近的 20 个，最近命中的在上面，多的移除。
+63. 微信小程序只展示最近的 20 个，最近命中的在上面，多的移除。
     <details open>
 
     利用一个双向循环链表，每次新插数据的时候，先查询，如果查到了，把数据移到链表头部，当数据满了，就将链表尾部的丢弃。这个算法叫 LRU。
     比数组好的是，查询阶段，都是 O(n)，但是在移位阶段的时候，链表是 O(1)，数组是 O(n),删除尾部都是 O(1)
 
-63. MessageChannel 是啥，vue 的 nexttick 实现原理是什么
+64. MessageChannel 是啥，vue 的 nexttick 实现原理是什么
     <details open>
 
     ```js
@@ -1892,7 +1915,7 @@
 
     最后一版本是`Promise.then,MutationObserver, setImmediate,setTimeout`
 
-64. 为什么用 settimeout 模拟 setinterval 呢？
+65. 为什么用 settimeout 模拟 setinterval 呢？
     <details open>
 
     setInterval 有两个缺点：
@@ -1904,7 +1927,7 @@
 
     每个 setTimeout 产生的任务会直接 push 到任务队列中；而 setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。
 
-65. 实现 get(obj, 'a.b.c', 0), 类可选链
+66. 实现 get(obj, 'a.b.c', 0), 类可选链
     <details open>
 
     ```js
@@ -1927,7 +1950,7 @@
     }
     ```
 
-66. 原始类型的转换优先级是什么？
+67. 原始类型的转换优先级是什么？
     <details open>
 
     对象在转换类型的时候，会调用内置的 [[ToPrimitive]] 函数，对于该函数来说，算法逻辑一般来说如下：
@@ -1956,7 +1979,7 @@
 
     所以如果需要达到 `a===1 && a===2 && a===3` 这样的条件，是只能通过数据劫持的 get 才能做到
 
-67. 如何给映射类型加上反映射？
+68. 如何给映射类型加上反映射？
 
     <details open>
 
@@ -1971,17 +1994,17 @@
 
     这样写即可
 
-68. e.target 和 e.currentTarget 有什么区别
+69. e.target 和 e.currentTarget 有什么区别
 
     <details open>
 
     e.target 就是指我点击的那个对象，而 e.currentTarget 如果事件是绑在外面的，指的就是外面的那个对象。
 
-69. 如果一个悬浮球，需要我判断 e.target，点击到它才算，但是呢，我这个 div 里面还有 span 标签，e.target 肯定是 span 标签，如何判断我点到了这个球？
+70. 如果一个悬浮球，需要我判断 e.target，点击到它才算，但是呢，我这个 div 里面还有 span 标签，e.target 肯定是 span 标签，如何判断我点到了这个球？
 
     通过 e.target.parentNode，做一个 while 判断。如果最后都不等于，return false,否则，return true;
 
-70. async await 对比 promise
+71. async await 对比 promise
 
     <details open>
 
