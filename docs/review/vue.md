@@ -48,3 +48,12 @@
 35. 可以做全局 filter，这样组件内就不用写对应的过滤器了
 36. 如果需要给对象添加属性来监听，除了初始化，还可以 this.$set(xxObj, ‘a’, 2)； 这样的形式
 37. Nuxt 是一个集成化的方案，可以而且独创了 nuxt generate，可以直接生成静态站点。
+
+### vue composition API
+
+> 更多的聚合了逻辑，给复用写自定义 composition 带来非常大的提升
+
+1. 使用 setup 来替代之前的除 props 的所有 options， 比如 data、 methods、 computed 等等
+2. 使用 ref 和 reactive 来给数据添加响应式处理， 其中 ref 针对值类型，reactive 针对对象类型。需要注意的是，使用 reactive 的时候，不要在返回的时候解构，因为这样会使它失去响应式，这也很容易理解，mobx 也是类似的。
+3. 如果解构了，又不希望失去响应四，需要使用 toRefs 方法，但是它也是浅拷贝，所以谨慎使用
+4. 同时，有一点不太友好的是，如果已经是 Ref 响应式数据了，除在 template 中使用是直接使用，在内部使用的时候需要 .value，这是不符合常理的，为什么不在 getter 的时候处理掉呢？而使用 reactive 的话，浅层是自动解开的
