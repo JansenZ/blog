@@ -1553,7 +1553,35 @@
 
     利用这个，可以在一个函数中间插入点东西执行。比如上面的 justLog 中间想在 return 前处理个数据，就可以利用 try catch finally 来搞。
 
-39. base64 的编码原理
+39. 看看这一段代码如何输出
+    <details open>
+    ```js
+    function interview(callback) {
+        setTimeout(() => {
+            if(Math.random() < 0.1) {
+                callback('success')
+            } else {
+                throw new Error('fail')
+            }
+        }, 200)
+    }
+
+    try {
+        interview(function() {console.log('smile')})
+    } catch(e) {
+        console.log('cry', e)
+    }
+
+    ```
+    这段代码并不会输出`cry ERROR: fail`，而会直接抛出到最外层，`VM20921:4 Uncaught Error: fail at <anonymous>:4:61`
+
+    也就是说，没有被`try catch`捕获，原因是 调用栈的问题，`settimeout` 由于滞后执行，导致我的 `try catch` 块其实都执行完了，我都出栈了，`settimeout` 的回调函数才 `push` 进来，也就是说，同一时间 `call stack` 数组就是1。如果没有 `settiemout` ，那` call stack` 数组就是2
+
+    其实就是事件循环的原因，还记得`react setstate` 是怎么回事吗？ `try catch finally`,里面也是异步操作。
+
+    ```
+
+40. base64 的编码原理
     <details open>
 
     - `btoa('abc') = 'YWJj'` base64 编码 byte to ascii
@@ -1566,7 +1594,7 @@
 
     如果要编码的二进制数据不是 3 的倍数，最后剩下一个或者两个字节 Base64 会在末尾补零，再在编码的末尾加上一个或者两个‘=’。
 
-40. 几种进制的相互转换计算方法，在 JavaScript 中如何表示和转换
+41. 几种进制的相互转换计算方法，在 JavaScript 中如何表示和转换
     <details open>
 
     - 十进制转其他进制
@@ -1584,18 +1612,18 @@
 
     这样小数就会转换回 10 进制。
 
-41. 0.1+0.2 为什么不等于 0.3
+42. 0.1+0.2 为什么不等于 0.3
     <details open>
 
     因为 JavaScript 使用的是 64 位双精度浮点数编码，所以它的符号位占 **1**位(0 代表正，1 代表负),指数位占 **11** 位，尾数位占 **52** 位。
     然后 0.1+0.2 在转换成二进制的时候，会发生精度丢失，因为只取 64 位固定长度。
 
-42. 12.toString()为什么会报错
+43. 12.toString()为什么会报错
     <details open>
 
     因为 js 在编译的时候，12.会解析成一个数字，它会认为 toString 就是后面的小数，解决办法就是 12..toString()就可以了。
 
-43. 写代码要不要加分号，不加分号有哪些情况会出问题？（IIFE 为啥前面加分号）
+44. 写代码要不要加分号，不加分号有哪些情况会出问题？（IIFE 为啥前面加分号）
     <details open>
 
     有些语句会自动加分号，有些不会。
@@ -1607,12 +1635,12 @@
     - 正则开头的斜杠（和前面的字符串组起来了）
     - 加号，减号（这更不用说了）
 
-44. while 和 do while 的区别是什么？
+45. while 和 do while 的区别是什么？
     <details open>
 
     使用 while 的话必须满足条件才能进行，而 do while 的话是不管条件满足与否，都会先执行一次 do
 
-45. 位运算有哪些呢？
+46. 位运算有哪些呢？
     <details open>
 
     - 这里插一个\*\*， 就是乘方，不过它是右结合的， 4\*\*3\*\*2 会先求 3\*\*2
@@ -1627,12 +1655,12 @@
     - (>>) 有符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位。
       这两个不太好用。对于正数而言一样。对于负数而言不好算。
 
-46. 利用按位&来检查一个数字是否是奇偶数
+47. 利用按位&来检查一个数字是否是奇偶数
     <details open>
 
     n&1 其实就是二进制，1 的二进制最后一位是 1，那么偶数的最后一位是 0，所以 4&1 一定是 0，5&1 是 1
 
-47. 零宽空格
+48. 零宽空格
     <details open>
 
     零宽空格就是看不到任何迹象，实际上却占用一个位子
@@ -1644,7 +1672,7 @@
     \uFEFF。可以给代码加个料，别人复制了后肯定用不了。
     ```
 
-48. JavaScript 可以存储的最大数字、最大安全数字，JavaScript 处理大数字的方法、避免精度丢失的方法
+49. JavaScript 可以存储的最大数字、最大安全数字，JavaScript 处理大数字的方法、避免精度丢失的方法
     <details open>
 
     - Number.MAX_VALUE 可存储的最大数字 == (Math.pow(2,53) - 1) \* Math.pow(2, 971) 。 971 = 1023 - 52； 这个 1023 就说 2 的 10 次方-1，为什么是 10？暂不知道
@@ -1652,7 +1680,7 @@
     - 超过安全最大值精度就开始不准了。
     - 解决办法就是用 bigint 或者是变成字符串，小数字的话可以转换成整数。通常和钱相关，可以先乘 100
 
-49. 什么是 bigInt?
+50. 什么是 bigInt?
     <details open>
 
     BigInt 是一种新的数据类型，用于当整数值大于 Number 数据类型支持的范围时。这种数据类型允许我们安全地对大整数执行算术操作。
@@ -1663,7 +1691,7 @@
 
     给大数字后面加个 n 就可以了，兼容性还不好。
 
-50. 理解词法作用域和动态作用域
+51. 理解词法作用域和动态作用域
     <details open>
 
     作用域是指程序源代码中定义变量的区域。
@@ -1676,7 +1704,7 @@
 
     动态作用域就是函数的作用域是在函数调用的时候才决定的。
 
-51. this 的原理以及几种不同使用场景的取值
+52. this 的原理以及几种不同使用场景的取值
     <details open>
 
     - 显示绑定
@@ -1696,12 +1724,12 @@
       箭头函数没有 this, 因此也不能绑定。
       在箭头函数里的 this 会指向 外层的非箭头函数的 this。
 
-52. Object.is 和===的区别
+53. Object.is 和===的区别
     <details open>
 
     Object 在严格等于的基础上修复了一些特殊情况下的失误，具体来说就是+0 和-0 它修正为 false，NaN 和 NaN 修正为 true
 
-53. addEventListener 第三个参数是啥?
+54. addEventListener 第三个参数是啥?
     <details open>
 
     false 是冒泡，true 是捕获
@@ -1715,7 +1743,7 @@
     }
     ```
 
-54. 如何写一个自定义事件
+55. 如何写一个自定义事件
     <details open>
 
     ```js
@@ -1740,7 +1768,7 @@
 
     ```
 
-55. V8 内存回收机制
+56. V8 内存回收机制
     <details open>
 
     V8 给 JS 分配的内存实际上不多。在 64 位系统下也就一点几 G
@@ -1769,7 +1797,7 @@
 
     老生代的内存回收方式就是我们熟知的标记清除。先标记完了后，把这一轮剩余内存进行移动，往一端靠拢。然后再内存回收的过程中，时间会比较长，V8 也利用了类似 React fiber 一样，进行分片处理。
 
-56. 自己实现一个 eventEmmiter(也就是发布订阅)
+57. 自己实现一个 eventEmmiter(也就是发布订阅)
     <details open>
 
     ```js
@@ -1788,7 +1816,7 @@
 
     主要就是利用个对象完成。
 
-57. 隐式转换
+58. 隐式转换
     <details open>
 
     - 主要需要知道几点，转 String 的时候
@@ -1819,7 +1847,7 @@
 
     左边是对象，右边是 false，false 转数字是 0，[] tostring = '';''转数字是 0。
 
-58. array.slice(), arr.splice, str.substr, str.substring
+59. array.slice(), arr.splice, str.substr, str.substring
     <details open>
 
     下述的起始位置从 0 开始。
@@ -1837,24 +1865,24 @@
     - substr 第一个参数是起始位置，包含，第二个是 length
     - substring 第一个参数是起始位置，包含，第二个是 end，不包含
 
-59. 像掘金，复制的时候会有掘金版权声明，如何做到的
+60. 像掘金，复制的时候会有掘金版权声明，如何做到的
     <details open>
 
     先监听用户复制，然后在回调函数里拿到复制的文本，当文本大于一定 Length 的时候，添加版权声明，然后把新的值 set 到剪切板里去。
 
-60. vue 双向绑定的原理 2.0
+61. vue 双向绑定的原理 2.0
     <details open>
 
     利用 Object.defineProperty， 在 get 的时候判断当前值有没有被添加过，没有添加过的话就添加订阅，在初始化的时候 watch，回调里就是 update dom 的方法。然后在 set 的时候，就会通知各订阅更新。然后各订阅收到消息后，调用自己的 update 方法，就是 watch 的回调。完成 update。然后 dom 元素比如 input 发生改变的话，给 input 上一个监听，改变的时候同时改变你 defineproperty 的值就完成双向绑定了。
 
-61. vue 双向绑定原理 3.0
+62. vue 双向绑定原理 3.0
     <details open>
 
     其实就是把上面的方法换成 proxy
 
     [vue](https://zhenglin.vip/js/vue.js)
 
-62. 数组和链表的对比
+63. 数组和链表的对比
     <details open>
 
     - 数组静态分配内存，链表动态分配内存
@@ -1862,13 +1890,13 @@
     - 数组利用下标定位，时间复杂度是 O(1)，链表只能一个一个查，时间复杂度是 O(n).
     - 数组插入或者删除动作的的时间复杂度是 O(n),链表的话是 O(1)。因为数组删除或者是插入后要移位。而链表直接解除或者添加即可。不过唯一缺点是它有一个额外的域，存放内存中下一节点的地址。
 
-63. 微信小程序只展示最近的 20 个，最近命中的在上面，多的移除。
+64. 微信小程序只展示最近的 20 个，最近命中的在上面，多的移除。
     <details open>
 
     利用一个双向循环链表，每次新插数据的时候，先查询，如果查到了，把数据移到链表头部，当数据满了，就将链表尾部的丢弃。这个算法叫 LRU。
     比数组好的是，查询阶段，都是 O(n)，但是在移位阶段的时候，链表是 O(1)，数组是 O(n),删除尾部都是 O(1)
 
-64. MessageChannel 是啥，vue 的 nexttick 实现原理是什么
+65. MessageChannel 是啥，vue 的 nexttick 实现原理是什么
     <details open>
 
     ```js
@@ -1915,7 +1943,7 @@
 
     最后一版本是`Promise.then,MutationObserver, setImmediate,setTimeout`
 
-65. 为什么用 settimeout 模拟 setinterval 呢？
+66. 为什么用 settimeout 模拟 setinterval 呢？
     <details open>
 
     setInterval 有两个缺点：
@@ -1927,7 +1955,7 @@
 
     每个 setTimeout 产生的任务会直接 push 到任务队列中；而 setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。
 
-66. 实现 get(obj, 'a.b.c', 0), 类可选链
+67. 实现 get(obj, 'a.b.c', 0), 类可选链
     <details open>
 
     ```js
@@ -1950,7 +1978,7 @@
     }
     ```
 
-67. 原始类型的转换优先级是什么？
+68. 原始类型的转换优先级是什么？
     <details open>
 
     对象在转换类型的时候，会调用内置的 [[ToPrimitive]] 函数，对于该函数来说，算法逻辑一般来说如下：
@@ -1979,7 +2007,7 @@
 
     所以如果需要达到 `a===1 && a===2 && a===3` 这样的条件，是只能通过数据劫持的 get 才能做到
 
-68. 如何给映射类型加上反映射？
+69. 如何给映射类型加上反映射？
 
     <details open>
 
@@ -1994,17 +2022,17 @@
 
     这样写即可
 
-69. e.target 和 e.currentTarget 有什么区别
+70. e.target 和 e.currentTarget 有什么区别
 
     <details open>
 
     e.target 就是指我点击的那个对象，而 e.currentTarget 如果事件是绑在外面的，指的就是外面的那个对象。
 
-70. 如果一个悬浮球，需要我判断 e.target，点击到它才算，但是呢，我这个 div 里面还有 span 标签，e.target 肯定是 span 标签，如何判断我点到了这个球？
+71. 如果一个悬浮球，需要我判断 e.target，点击到它才算，但是呢，我这个 div 里面还有 span 标签，e.target 肯定是 span 标签，如何判断我点到了这个球？
 
     通过 e.target.parentNode，做一个 while 判断。如果最后都不等于，return false,否则，return true;
 
-71. async await 对比 promise
+72. async await 对比 promise
 
     <details open>
 
@@ -2026,3 +2054,30 @@
     1. 一旦执行，无法中途取消，链式调用多个 then 中间不能随便跳出来
     2. 错误无法在外部被捕捉到，只能在内部进行预判处理，如果不设置回调函数，Promise 内部抛出的错误，不会反应到外部
     3. Promise 内部如何执行，监测起来很难，当处于 pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）
+
+73. Promise 中的 then 的第二个参数处理错误和 catch 有什么区别？
+
+    首先，建议使用 catch 来捕获错误，而不是 then 的二参，因为 catch 定义很明确，区别如下
+
+    1. 如果在 promise 主体里发生了 reject 或者是报错，如果 then 的二参或者是 catch 都写的情况下，只会在 then 的二参里被捕获
+    2. 如果你在第一个 then 里发生了任何错误，如果你写的是二参，是无法捕获错误的，而写了 catch 的情况下，catch 是可以捕获的，也就是说，catch 的捕获范围更广
+
+74. 看如下一段代码，p 和 d 到底是什么？
+
+    ```js
+    var p = new Promise((resolve, reject) => {
+        resolve('ok');
+    });
+    var d = p.then((res) => {
+        // throw new Error('err')， 一样的
+        return Promise.reject('err');
+    });
+
+    d.catch((err) => {
+        console.log(err);
+    });
+    ```
+
+    p 是`Promise {<fulfilled>: "ok"}`
+    d 是`Promise {<rejected>: "err"}`
+    也就是说，d 拥有改变 promise 的能力，其实很简单，就是 then 也好，catch 也好，都是返回一个 `new promise`

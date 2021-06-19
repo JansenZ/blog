@@ -21,6 +21,8 @@
 7. Effective javascript
 8. CI/CD K8S Docker
 9. Taro
-
 10. hcysunyang 的vue系列文章
-11. Vue 相关
+12. 高效能人士的七个习惯
+13. 学会提问
+14. 金字塔原理
+15. 用图表说话

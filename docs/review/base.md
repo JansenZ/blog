@@ -21,13 +21,18 @@
 
     因为他们都不是线程安全的，如果要安全要用 concurrentHashMap,会在操作的时候，锁那一小部分区域。从而不会出问题。
 
-8. 如何通过ssh的形式拉仓库
+8. 如何通过 ssh 的形式拉仓库
 
-    通过ssh key的形式，相当于我把我这台电脑的身份发给了github，后续交互的时候就不需要输入密码了。
+    通过 ssh key 的形式，相当于我把我这台电脑的身份发给了 github，后续交互的时候就不需要输入密码了。
 
-    1. 检查sshkey是否存在 `ls -al ~/.ssh` ,存在的话看里面是否有 `id_rsa.pub`
+    1. 检查 sshkey 是否存在 `ls -al ~/.ssh` ,存在的话看里面是否有 `id_rsa.pub`
     2. 如果没有的话生成新的 `ssh-keygen -t rsa -C "your_email@example.com"`
     3. 复制 rsa 到 git 服务器上 `pbcopy < ~/.ssh/id_rsa.pub`
+
+9. 如何判断端口是否被占用？
+   查询端口`lsof -i:3000`，杀掉对应的占用 pid `kill -9 xxxx`
+
+10. `browser-sync start --server --files "_._"`
 
 ### 思想
 

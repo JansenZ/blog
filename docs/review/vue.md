@@ -51,9 +51,25 @@
 
 ### vue composition API
 
-> 更多的聚合了逻辑，给复用写自定义 composition 带来非常大的提升
+更多的聚合了逻辑，给复用写自定义 composition 带来非常大的提升
+[探索composition API](https://segmentfault.com/a/1190000040144197)
 
 1. 使用 setup 来替代之前的除 props 的所有 options， 比如 data、 methods、 computed 等等
 2. 使用 ref 和 reactive 来给数据添加响应式处理， 其中 ref 针对值类型，reactive 针对对象类型。需要注意的是，使用 reactive 的时候，不要在返回的时候解构，因为这样会使它失去响应式，这也很容易理解，mobx 也是类似的。
 3. 如果解构了，又不希望失去响应四，需要使用 toRefs 方法，但是它也是浅拷贝，所以谨慎使用
-4. 同时，有一点不太友好的是，如果已经是 Ref 响应式数据了，除在 template 中使用是直接使用，在内部使用的时候需要 .value，这是不符合常理的，为什么不在 getter 的时候处理掉呢？而使用 reactive 的话，浅层是自动解开的
+4. 同时，有一点不太友好的是，如果已经是 Ref 响应式数据了，除在 template 和 watch 中使用是直接使用，在内部使用的时候需要 .value，这是不符合常理的，为什么不在 getter 的时候处理掉呢？而使用 reactive 的话，浅层是自动解开的
+5. 使用 unref 可以肯定得到值而不是 ref。因为很多时候，你需要的就是 ref 和非 ref 联合操作，如果一个.value，一个没有，确实麻烦，所以直接用 unref 方便很多
+
+```js
+funcion unref(r) {
+    return isRef(r) ? r.value : r;
+}
+```
+
+6. 如果一个变量已经是 ref 后，再次对他进行 ref 是没关系的，会直接复用，也就是说,ref 的 function 里应该是
+
+```js
+function ref(r) {
+    return isRef(r) ? r : realRef(r);
+}
+```
