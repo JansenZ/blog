@@ -30,11 +30,11 @@
 17. computed 默认只有 getter，也可以添加一个 setter。
 18. watch 其实就有点类似于 hooks 利的依赖项参数
 19. 除了在 vm 里使用 watch 选项，也 可以对实例进行 vm.$watch。$就是内部属性。
-20. V-bind：class 有特有的增强语法 "{ active: isActive, 'text-danger': hasError }“，当然使用 computed 返回更合适的多，毕竟直接返回 object。显的更加舒服。
+20. V-bind：class 有特有的增强语法 `"{ active: isActive, 'text-danger': hasError }“`，当然使用 computed 返回更合适的多，毕竟直接返回 object。显的更加舒服。
 21. :class 也可以跟数组使用
-22. v-show  不支持  <template>  元素，也不支持  v-else。
+22. v-show  不支持  `<template>`  元素，也不支持  `v-else`。
 23. 一般来说，v-if  有更高的切换开销，而  v-show  有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用  v-show  较好；如果在运行时条件很少改变，则使用  v-if  较好。
-24. v-for 在遍历对象时，会按  Object.keys()  的结果遍历，但是不能保证它的结果在不同的 JavaScript 引擎下都一致。
+24. v-for 在遍历对象时，会按  `Object.keys()`  的结果遍历，但是不能保证它的结果在不同的 JavaScript 引擎下都一致。
 25. v-for 其实可以用 of 替代 In，更符合直觉
 26. 不要使用对象或数组之类的非基本类型值作为  v-for  的  key。请用字符串或数值类型的值。
 27. v-for 和 v-if 当它们处于同一节点，v-for  的优先级比  v-if  更高，这意味着  v-if  将分别重复运行于每个  v-for  循环中
@@ -43,16 +43,16 @@
 30. slot 可以设置 name，可以设置默认值，外面用 v-slot 来区分
 31. vue 里的 provide/inject 是非响应式的
 32. V-once， 只渲染一次，不会被响应式更新，会缓存。
-33. 通过 Minxin 复用的情况下，如果是对象，类似于{…mixins, 原本的}如果是方法，就都会调用。
+33. 通过 Minxin 复用的情况下，如果是对象，类似于`{…mixins, 原本的}`如果是方法，就都会调用。
 34. 还可以全局混入，如果一个应用或者一个页面有通用功能，可以利用它来全局混入
 35. 可以做全局 filter，这样组件内就不用写对应的过滤器了
-36. 如果需要给对象添加属性来监听，除了初始化，还可以 this.$set(xxObj, ‘a’, 2)； 这样的形式
-37. Nuxt 是一个集成化的方案，可以而且独创了 nuxt generate，可以直接生成静态站点。
+36. 如果需要给对象添加属性来监听，除了初始化，还可以 `this.$set(xxObj, ‘a’, 2)；` 这样的形式
+37. Nuxt 是一个集成化的方案，可以而且独创了 `nuxt generate`，可以直接生成静态站点。
 
-### vue composition API
+### Composition API
 
 更多的聚合了逻辑，给复用写自定义 composition 带来非常大的提升
-[探索composition API](https://segmentfault.com/a/1190000040144197)
+[探索 composition API](https://segmentfault.com/a/1190000040144197)
 
 1. 使用 setup 来替代之前的除 props 的所有 options， 比如 data、 methods、 computed 等等
 2. 使用 ref 和 reactive 来给数据添加响应式处理， 其中 ref 针对值类型，reactive 针对对象类型。需要注意的是，使用 reactive 的时候，不要在返回的时候解构，因为这样会使它失去响应式，这也很容易理解，mobx 也是类似的。
@@ -60,16 +60,16 @@
 4. 同时，有一点不太友好的是，如果已经是 Ref 响应式数据了，除在 template 和 watch 中使用是直接使用，在内部使用的时候需要 .value，这是不符合常理的，为什么不在 getter 的时候处理掉呢？而使用 reactive 的话，浅层是自动解开的
 5. 使用 unref 可以肯定得到值而不是 ref。因为很多时候，你需要的就是 ref 和非 ref 联合操作，如果一个.value，一个没有，确实麻烦，所以直接用 unref 方便很多
 
-```js
-funcion unref(r) {
-    return isRef(r) ? r.value : r;
-}
-```
+    ```js
+    funcion unref(r) {
+        return isRef(r) ? r.value : r;
+    }
+    ```
 
 6. 如果一个变量已经是 ref 后，再次对他进行 ref 是没关系的，会直接复用，也就是说,ref 的 function 里应该是
 
-```js
-function ref(r) {
-    return isRef(r) ? r : realRef(r);
-}
-```
+    ```js
+    function ref(r) {
+        return isRef(r) ? r : realRef(r);
+    }
+    ```
