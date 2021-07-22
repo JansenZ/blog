@@ -72,7 +72,7 @@
     20. webpack 的 resolve 配置很有用，可以里面配 `modules: [path.resolve(__dirname, 'node_modules')]`, 这样可以不用引路径
     21. 可以加 `extenstion`，这样不用写.jsx，它会默认从左往右查，所以使用频率最高的放前面。
     22. 还可以设置别名 `alias: {'react-native': '@my/react-native-web' //这个包名是我随便写的哈}` ，这样代码里就直接引入 react-native 而不是后者
-    23. `DefinePlugin` 配合`dotenv`这个库，可以在.env 里写环境变量，webpack 首行直接 require('ditenv').config();这些环境变量就被打到了 process.env 里了。然后利用`.env.vm`，和服务器交互即可。可以利用它们，来做符合自己业务不同的环境
+    23. `DefinePlugin` 配合`dotenv`这个库，可以在.env 里写环境变量，webpack 首行直接 require('dotenv').config();这些环境变量就被打到了 process.env 里了。然后利用`.env.vm`，和服务器交互即可。可以利用它们，来做符合自己业务不同的环境,详情可以参考[管理自己的Nodejs变量](https://zhuanlan.zhihu.com/p/64079159)，也可以直接看[nuxtjs的源码](https://github.com/nuxt/nuxt.js/blob/dev/packages/webpack/src/config/base.js#L179)
     24. exculde 优先级是高于`include`的
     25. 使用 `cache-loader` 或者是 `babel-loader` 下参数`cacheDirectory`设置为 true，可以让它在构建的过程尝试读取缓存，提高编译时间。
     26. 使用 `HappyPack` 插件/ `thread-loader` 让`webpack`在构建的时候可以同时处理多个子线程/进程，提高构建时间。
