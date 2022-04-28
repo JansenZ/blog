@@ -10,18 +10,20 @@
 
 [数据结构在线插入](https://www.cs.usfca.edu/~galles/visualization/Algorithms.html)
 
+[ts入门](https://ts.xcatliu.com/basics/primitive-data-types.html)
+
 ## TODO
 
-1. Nodejs 实战
-2. Typescript实战
-3. [x] Vue实际项目实战
+1. [~] Nodejs 实战
+2. [~] Typescript实战
+3. [~] Vue实际项目实战
 4. WebAssembly
 5. 犀牛书
 6. 红宝书第四版
 7. Effective javascript
 8. CI/CD K8S Docker serverless
 10. hcysunyang 的vue系列文章
-12. 高效能人士的七个习惯
-13. 学会提问
-14. 金字塔原理
+12. [~]高效能人士的七个习惯
+13. [~]学会提问
+14. [~]金字塔原理
 15. 用图表说话
