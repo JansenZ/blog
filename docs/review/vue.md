@@ -1,3 +1,28 @@
+### 常见问题
+
+1. Vue3 使用Proxy会带来响应式的问题
+   ```js
+   export default {
+     data() {
+        return {
+            testObj: {
+                haha: 1
+            }
+        }
+     },
+     method() {
+        xxx() {
+            const newObj = {}
+            this.testObj = newObj
+            newObj.haha = 2
+            // this.testobj.haha = 2
+            console.log('%c==============', 'color: red', newObj === this.testObj)
+        }
+     }
+   }
+   ```
+   以上的代码，在 `template` 中感知haha，默认是1，当触发了 `xxx` 方法的时候，在 `vue2` 中会打印 `true` 同时模版会变成2，而在 `vue3` 中是false，并且不会触发变更。只有改成注释代码，vue3 中才会变更。这是因为 `this.testObj` 是一个 `proxy` 对象，而 `newObj` 本身不会变。
+
 ### Vue 学习笔记
 
 笔记内容偏文档学习记录点，后面完全应用后会针对性的重写。
