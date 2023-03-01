@@ -23,6 +23,15 @@
    ```
    以上的代码，在 `template` 中感知haha，默认是1，当触发了 `xxx` 方法的时候，在 `vue2` 中会打印 `true` 同时模版会变成2，而在 `vue3` 中是false，并且不会触发变更。只有改成注释代码，vue3 中才会变更。这是因为 `this.testObj` 是一个 `proxy` 对象，而 `newObj` 本身不会变。
 
+2. 看如下代码
+   ```js
+    // <button :disabled="isApplying">立即申请</button>
+    function go() {
+        this.isApplying = "";
+    }
+   ```
+   在 `vue` 中，以上的代码，如果你的 `v-bind` 的 `attr` 是一个布尔类型，那么当 `isApplying` 是 `true` 或者是空字符串的时候,元素都会包含这个`disabled attribute`。所以最好的办法就是 `:disabled="!!isApplying"` 。防止出现不可控的状况。
+
 ### Vue 学习笔记
 
 笔记内容偏文档学习记录点，后面完全应用后会针对性的重写。
