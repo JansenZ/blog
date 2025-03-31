@@ -370,7 +370,7 @@
       如果想要解决这个问题的话，可以让服务端给返回头部 设置一个缓存 Access-Control-Max-Age: 120, 就是两分钟发一次。
    4. iframe。B 页面是 A 页面的一个 iframe，A 页面把数据变更填到 B 页面的 url 上。然后 B 页面监听 url 变化。
    5. nginx/node 配置反向代理，反向代理 之所以能解决跨域问题，是因为 服务端之间不存在跨域限制，跨域策略仅适用于浏览器端的请求。具体来说，反向代理通过让客户端的请求先到达一个与目标服务器相同域名的代理服务器，再由该代理服务器转发请求到目标服务器，最后把响应返回给客户端。
-      ```
+      ```js
       const Koa = require('koa');
       const proxy = require('koa-proxy');
       const app = new Koa();
@@ -407,42 +407,66 @@
 
     meta 里可以写 viewport，针对移动端，可以在 content 里定义最小最大缩放比例，宽高。
 
-12. 浏览器渲染的主要进程与职责
+12. 浏览器渲染的主要线程与职责
     <details open>
 
     浏览器的渲染进程是多线程的,我们来看看它有哪些主要线程
+    
+    1. 主线程 (Main Thread)  
+      - **职责**：主线程是浏览器中的核心线程，负责执行 JavaScript 代码、处理用户输入事件、更新 DOM 和渲染页面等任务。  
+      - **参与过程**：  
+        - 解析 HTML 和 CSS  
+        - 执行 JavaScript  
+        - 生成 DOM 和 CSSOM 树  
+        - 计算布局  
+        - 绘制页面内容  
 
-    1. GUI 渲染线程
+    2. 渲染线程 (Rendering Thread)  
+      - **职责**：渲染线程负责将 DOM 和 CSSOM 合并成渲染树，并计算布局、绘制页面内容。  
+      - **参与过程**：  
+        - 构建渲染树  
+        - 进行布局（回流）  
+        - 绘制（paint）页面元素  
+        - 合成图层  
+        - 渲染线程和主线程相互配合，确保页面内容正确渲染。  
 
-       - 负责渲染浏览器界面,解析 HTML,CSS,构建 DOM 树和 RenderObject 树,布局和绘制等。
-       - 当界面需要重绘（Repaint）或由于某种操作引发回流(reflow)时,该线程就会执行。
-       - 注意,GUI 渲染线程与 JS 引擎线程是互斥的,当 JS 引擎执行时 GUI 线程会被挂起（相当于被冻结了）,GUI 更新会被保存在一个队列中等到 JS 引擎空闲时立即被执行。
+    3. JavaScript 引擎线程 (JS Engine Thread)  
+      - **职责**：执行 JavaScript 代码，处理脚本中的逻辑和操作。  
+      - **参与过程**：  
+        - 执行脚本中的代码（如事件处理、DOM 操作、网络请求等）  
+        - 修改 DOM 和 CSSOM 树，并通知渲染线程进行更新  
+      - **注意**：JavaScript 线程通常会阻塞渲染线程（即执行 JavaScript 时，页面渲染可能会被阻塞），所以性能优化时常考虑减小主线程负担。  
 
-    2. JS 引擎线程
+    4. 事件线程 (Event Thread)  
+      - **职责**：处理 DOM 事件（如点击、鼠标移动、键盘输入等）并调度事件回调函数的执行。  
+      - **参与过程**：  
+        - 监听用户的交互行为，触发相应的事件处理程序  
+        - 执行事件回调时，会将事件任务交给主线程执行  
 
-       - Javascript 引擎,也称为 JS 内核,负责处理 Javascript 脚本程序。（例如 V8 引擎）
-       - JS 引擎线程负责解析 Javascript 脚本,运行代码。
-       - JS 引擎一直等待着任务队列中任务的到来,然后加以处理,一个 Tab 页（renderer 进程）中无论什么时候都只有一个 JS 线程在运行 JS 程序。
-       - 注意,GUI 渲染线程与 JS 引擎线程是互斥的,所以如果 JS 执行的时间过长,这样就会造成页面的渲染不连贯,导致页面渲染加载阻塞。
+    5. 定时器线程 (Timer Thread)  
+      - **职责**：管理 `setTimeout` 和 `setInterval` 等定时器的执行。  
+      - **参与过程**：  
+        - 当定时器到期时，将相关任务放入任务队列中，等待主线程空闲时执行。  
+        - 定时器线程本身不会直接影响渲染过程，但它影响主线程的执行节奏。  
 
-    3. 事件触发线程
+    6. I/O 线程 (IO Thread)  
+      - **职责**：处理与网络和文件系统的输入输出相关的任务（如网络请求、图片加载、字体加载等）。  
+      - **参与过程**：  
+        - 处理资源的获取（如从服务器获取 HTML、CSS、JS、图片、视频等）  
+        - 下载资源后将其交给主线程处理或渲染线程渲染。  
 
-       - 归属于浏览器而不是 JS 引擎,用来控制事件循环（可以理解,JS 引擎自己都忙不过来,需要浏览器另开线程协助）
-       - 当 JS 引擎执行代码块如 setTimeOut 时（也可来自浏览器内核的其他线程,如鼠标点击、AJAX 异步请求等）,会将对应任务添加到事件线程中
-       - 当对应的事件符合触发条件被触发时,该线程会把事件添加到待处理队列的队尾,等待 JS 引擎的处理
-       - 注意,由于 JS 的单线程关系,所以这些待处理队列中的事件都得排队等待 JS 引擎处理（当 JS 引擎空闲时才会去执行）
+    7. 合成线程 (Compositor Thread)  
+      - **职责**：在渲染过程中，负责图层的合成。将多个图层合并并交给 GPU 进行渲染。  
+      - **参与过程**：  
+        - 如果一个页面使用了多图层（如动画、变换效果等），合成线程负责将这些图层合成并传递给 GPU 进行高效渲染。  
+        - 合成线程加速了页面渲染，尤其在复杂的页面或动画效果较多的情况下。  
 
-    4. 定时触发器线程
+    8. GPU 线程 (GPU Thread)  
+      - **职责**：负责在 GPU 上进行图形渲染，处理硬件加速的绘制任务。  
+      - **参与过程**：  
+        - 渲染线程或合成线程将图层合成后，GPU 线程负责实际的图像渲染工作。  
+        - 这涉及到页面元素的像素绘制，包括 CSS 动画、WebGL、硬件加速等。  
 
-       - 传说中的 setInterval 与 setTimeout 所在线程
-       - 浏览器定时计数器并不是由 JavaScript 引擎计数的,（因为 JavaScript 引擎是单线程的, 如果处于阻塞线程状态就会影响记计时的准确）
-       - 因此通过单独线程来计时并触发定时（计时完毕后,添加到事件队列中,等待 JS 引擎空闲后执行）
-       - 注意,W3C 在 HTML 标准中规定,规定要求 setTimeout 中低于 4ms 的时间间隔算为 4ms。
-
-    5. 异步 http 请求线程
-
-       - 在 XMLHttpRequest 在连接后是通过浏览器新开一个线程请求。
-       - 将检测到状态变更时,如果设置有回调函数,异步线程就产生状态变更事件,将这个回调再放入事件队列中。再由 JavaScript 引擎执行。
 
 13. cookie, sessionstoreage， localstorage 区别
 
@@ -462,7 +486,7 @@
     - 跨域请求如果想要带上 cookie 的话，请求头里的 withCredentials 还要设置为 true。
 
     - localstorage 大小有 5M，持久化存储
-    - sessionstorage 在窗口关闭后就没有了
+    - sessionstorage 在窗口关闭后就没有了，所有的三个都受到同源的限制。
 
 14. 浏览器渲染全流程
 
@@ -470,14 +494,16 @@
 
     网络：输入地址-构建请求-先查找强缓存-命中缓存的话用缓存。（HTTP 缓存机制）
 
-    没有的话，进入 DNS 解析，检查是否有 dns 缓存，有的话直接用，没有的话还要去查找到对应网址的 IP 地址，在去查找 Ip 的过程中如果有 CDN 缓存的话，会返回 CDN 缓存服务器的地址。然后建立 TCP 连接，通过三次握手的方式建立连接。
+    没有的话，进入 DNS 解析，检查是否有 dns 缓存，有的话直接用，没有的话还要去查找到对应网址的 IP 地址，在去查找 ip 的过程中如果有 CDN 缓存的话，会返回 CDN 缓存服务器的地址。然后建立 TCP 连接，通过三次握手的方式建立连接。
 
-    1. 第一次握手：客户端给服务器发送一个 SYN 报文。
+    1. 第一次握手：客户端给服务器发送一个 SYN（Synchronize信号） 报文。
     2. 第二次握手：服务器收到 SYN 报文之后，会应答一个 SYN+ACK 报文。
     3. 第三次握手：客户端收到 SYN+ACK 报文之后，会回应一个 ACK 报文。
-    4. 服务器收到 ACK 报文之后，三次握手建立完成。
+    4. 服务器收到 ACK（Acknowledgment确认） 报文之后，三次握手建立完成。
 
-    然后就可以通信了，客户端发送 HTTP 请求，服务器得到请求后开始下发信息。
+    http情况下就可以通信了，https还需要说一下tls的加密过程。
+    
+    客户端发送 HTTP 请求，服务器得到请求后开始下发信息。
 
     解析：浏览器在得到了服务端回的 HTML 信息后，通过编译原理那套构建 DOM 树，同时，下载其中的 CSS 文件，CSS 文件下载完后，处理 CSS 生成 CSSOM 树。
 
@@ -545,6 +571,44 @@
     xhr.send();
     xhr.abort();是可以暂停异步请求的
     ```
+    原生 AJAX 不内置 Promise，因此你需要自己处理回调嵌套的问题，如果想实现
+    ```js
+    function xhrPromise(method, url, data = null) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url, true);
+
+        // 设置请求头，若需要发送 JSON 数据，可以使用这个
+        if (method === "POST" || method === "PUT") {
+          xhr.setRequestHeader("Content-Type", "application/json");
+        }
+
+        // 设置响应处理
+        xhr.onload = function () {
+          // 如果请求成功，返回解析的响应数据
+          if (xhr.status >= 200 && xhr.status < 300) {
+            resolve(xhr.responseText); // 你可以根据需要处理 xhr.responseText（比如 JSON.parse）
+          } else {
+            reject(new Error(`HTTP Error: ${xhr.status}`));
+          }
+        };
+
+        // 错误处理
+        xhr.onerror = function () {
+          reject(new Error('Network Error'));
+        };
+
+        // 超时处理
+        xhr.ontimeout = function () {
+          reject(new Error('Request Timeout'));
+        };
+
+        // 发送请求
+        xhr.send(data ? JSON.stringify(data) : null);
+      });
+    }
+
+    ```
 
     fetch，基于 promise 设计的，所以对于 async,await 友好。
 
@@ -568,7 +632,7 @@
     }
     ```
 
-    axios 就是在原生的基础上用 promise 封装的
+    axios 就是在原生的基础上用 promise 封装的，而且有强大的自定义功能，各种封装比较容易，且支持跨端，SSR必备
     对比
 
     - XMLHttpRequest 对象上有一个 `abort()` 方法，调用这个方法即可中断一个请求。此外 XHR 还有 `onabort` 事件，可以监听请求的中断并做出响应。
@@ -580,7 +644,59 @@
       然后请求的时候，fetch 第二个参数里要带上 `signal`，然后 `controller.abort` 即可，会比 Xhr 麻烦，但可以封装一下。
     - 可以利用 `abortcontroller` 和 `signal` 打断一个 promise 哦。[链接如下](https://codesandbox.io/embed/zq1929r1x?module=%2Fsrc%2FCheckout.js)
     - 对于超时请求，xhr 有现成的 timeout,设置好后，在 ontimeout 可以处理，而 fetch 的话，其实有了 abort，可以 settimeout，或者 promise.race。
-    - xhr 有现成的 onprogress 获取进度，fetch 没有，想要实现我不会。
+    ```js
+    function fetchWithTimeout(url, timeout) {
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      const timeoutId = setTimeout(() => {
+        controller.abort();  // 超时取消请求
+      }, timeout);
+
+      return fetch(url, { signal })
+        .then(response => {
+          clearTimeout(timeoutId);  // 清除超时计时器
+          return response.json();
+        })
+        .catch(error => {
+          if (error.name === 'AbortError') {
+            throw new Error('Request timed out');
+          }
+          throw error;
+        });
+    }
+
+    fetchWithTimeout('https://jsonplaceholder.typicode.com/posts', 5000)
+      .then(data => console.log(data))
+      .catch(error => console.error(error));
+
+    ```
+    - axios可以用CancelToken来取消请求
+    ```js
+    // 创建一个 CancelToken
+    const cancelTokenSource = axios.CancelToken.source();
+
+    // 发起请求时，传入 cancelToken
+    axios.get('https://jsonplaceholder.typicode.com/posts', {
+      cancelToken: cancelTokenSource.token
+    })
+      .then(response => {
+        console.log('Response received:', response);
+      })
+      .catch(error => {
+        if (axios.isCancel(error)) {
+          console.log('Request canceled:', error.message);
+        } else {
+          console.log('Error:', error);
+        }
+      });
+
+    // 取消请求
+    setTimeout(() => {
+      cancelTokenSource.cancel('Request has been canceled');
+    }, 1000);
+
+    ```
 
 22. load 和 DomContentLoaded 区别
     <details open>
@@ -730,7 +846,7 @@
 28. SYN 攻击是什么？
     <details open>
 
-    SYN 攻击是典型的 DOS 攻击，就是利用大量不存在的 IP 地址的和服务端建立 TCP 连接，第三次握手频频得不到，导致服务端的半连接队列爆了至崩溃，解决方案就是缩短超时时间。或者是增加半连接上限。
+    SYN 攻击是典型的 DOS 攻击，就是利用大量不存在的 IP 地址的和服务端建立 TCP 连接，第三次握手频频得不到，导致服务端的半连接队列爆了至崩溃，解决方案就是缩短超时时间。或者是增加半连接上限。或者使用SYN Cookies：在接收到SYN包时，不立即分配资源，而是通过计算一个特殊的Cookie来进行验证，避免占用服务器资源。
 
 29. CDN 的作用和原理
     <details open>
