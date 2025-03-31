@@ -232,7 +232,8 @@
 6. HTTPS
     <details open>
 
-   - https 比 http 多了个 ssl 层，会对数据进行加密，对身份进行认证会更安全
+   - https 比 http 多了个 ssl/tls 层，会对数据进行加密，对身份进行认证会更安全
+   - tls层是ssl的继任者，ssl已经过时，现在是tls 1.3
    - https 默认端口号是 443，http 是 80
    - https 是需要有证书的
 
