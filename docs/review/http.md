@@ -181,7 +181,7 @@
     - `Transfer-Encoding`: 响应体的传输编码方式。例如：`Transfer-Encoding: chunked`（分块传输编码）。
 
     **条件响应头**
-    - `ETag`: 资源的唯一标识符（通常是一个哈希值），与 `If-None-Match` 请求头一起使用来判断资源是否已被修改。
+    - `ETag`: 资源的唯一标识符（通常是一个哈希值），与 `If-None-Match` 请求头一起使用来判断资源是否已被修改。但是如果服务器是负载均衡的，可能会返回多个不同的etag。
     - `Last-Modified`: 资源的最后修改时间。如果与请求中的 `If-Modified-Since` 头匹配，服务器可以返回 304 响应。
 
     **缓存相关响应头**
@@ -217,8 +217,8 @@
    - 走协商缓存的情况下（post 不支持）
 
      - 看 last-modified 和 etag，服务器响应请求的时候，会把 last-modified 或 etag 的值给客户端。
-     - 客户端下次请求的时候，会带上 If-Modified-Since / If-None-Match，然后服务端进行比对，如果没有变动的话，直接返回 304，客户端自己用缓存数据。
-     - 其中，etag 和 last-modified 都支持的话，服务器会优先选 etag。
+     - 客户端**下次**请求的时候，会带上 If-Modified-Since / If-None-Match，然后服务端进行比对，如果没有变动的话，直接返回 304，客户端自己用缓存数据。
+     - 其中，etag 和 last-modified 都支持的话，服务器会优先选 etag。if-modified-since/if-none-match的值的内容就是响应的last-modified和etag的值
      - last-modified 的缺点是
 
        编辑了资源文件，但是文件内容并没有更改，这样也会造成缓存失效。
@@ -227,6 +227,7 @@
 
      - 而 etag 是根据您文件内容生成的 hash 值，所以不会有上述问题。
      - 在性能上，Last-Modified 优于 ETag，也很简单理解，Last-Modified 仅仅只是记录一个时间点，而 Etag 需要根据文件的具体内容生成哈希值。
+     - 如果你看不到if-none-match，说明你大概率开了浏览器开发者模式的
 
 6. HTTPS
     <details open>
