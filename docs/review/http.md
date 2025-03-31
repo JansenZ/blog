@@ -141,20 +141,66 @@
 4. HTTP 请求头和响应头都有哪些内容
     <details open>
 
-   - content-type: 传输的媒体类型，是图片还是 JSON 数据还是 text/html 之类的东西
-   - ETag: 配合缓存使用的资源标识
-   - cache-control: 资源缓存有效期
-   - Content-Encoding: 请求体/响应体的编码格式
-   - content-length: 请求体/响应体的长度，单位字节
-   - cookie: 缓存信息
-   - user-agent: 浏览器信息
-   - origin: 返回协议，主机名，端口号
-   - referer: 来自的地址
-   - expires: 过期时间
-   - status: 相应状态码
-   - date: 服务器事件
-   - last-modified: 该资源最后修改的时间
-   - set-cookie: 设置 cookie
+    HTTP 请求头包含了客户端向服务器发送的额外信息，用来描述请求的各个方面。
+
+    ### **通用请求头**
+    - `Accept`: 客户端能够处理的响应媒体类型。例如：`Accept: text/html, application/json`
+    - `Accept-Encoding`: 支持的内容编码类型（如 gzip、deflate 等），用于告诉服务器可以使用哪些压缩算法。
+    - `Accept-Language`: 客户端能够处理的语言。例如：`Accept-Language: en-US, en;q=0.9`
+    - `Connection`: 控制当前连接的选项。常见值：`keep-alive` 或 `close`。
+    - `Host`: 目标服务器的域名和端口。示例：`Host: www.example.com`
+    - `User-Agent`: 客户端的浏览器或应用信息，服务器可以用来识别请求的客户端。示例：`User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64)`
+    - `Referer`: 请求的来源页面（即上一个页面的 URL）。示例：`Referer: https://www.google.com/`
+    - `Authorization`: 用于传递身份验证信息，如基本认证（Basic Auth）或者 Bearer Token。
+    - `Cookie`: 客户端存储的 cookie 信息，会自动包含在请求中。
+
+    ### **请求头（条件性）**
+    - `If-Modified-Since`: 请求资源是否被修改过的时间。如果自某个时间之后未修改过资源，则返回 304 Not Modified 响应。
+    - `If-None-Match`: 与 `ETag` 头结合使用，判断资源是否与指定的版本匹配。如果不匹配，则返回请求的内容。
+    - `If-Range`: 如果资源未被修改，服务器将返回资源的部分内容；如果已被修改，则返回完整内容。
+
+    ### **内容相关请求头**
+    - `Content-Type`: 请求的内容类型，指定发送数据的格式。常见的值有：`application/json`、`application/x-www-form-urlencoded`、`multipart/form-data`。
+    - `Content-Length`: 请求体的大小，单位是字节。
+    - `Content-Encoding`: 请求体内容的编码方式（如 gzip、deflate）。
+
+    ### **自定义请求头**
+    - `X-Requested-With`: 主要用于标识 XMLHttpRequest 请求（通常是 AJAX 请求）。常见值为 `XMLHttpRequest`。
+
+    ---
+
+    HTTP 响应头包含了服务器返回给客户端的元数据，帮助客户端理解响应的内容和状态。
+
+    ### **通用响应头**
+    - `Cache-Control`: 控制缓存机制的响应头。常见值如：`no-cache`、`max-age=3600`、`public`、`private`。
+    - `Content-Type`: 响应数据的媒体类型。例如：`Content-Type: application/json` 或 `Content-Type: text/html; charset=UTF-8`。
+    - `Content-Length`: 响应体的大小，单位是字节。
+    - `Date`: 响应发送的日期和时间。
+    - `Server`: 服务器的类型或软件信息。例如：`Server: Apache/2.4.41 (Unix)`。
+    - `Connection`: 控制连接的选项。例如：`Connection: keep-alive` 或 `Connection: close`。
+    - `Transfer-Encoding`: 响应体的传输编码方式。例如：`Transfer-Encoding: chunked`（分块传输编码）。
+
+    ### **条件响应头**
+    - `ETag`: 资源的唯一标识符（通常是一个哈希值），与 `If-None-Match` 请求头一起使用来判断资源是否已被修改。
+    - `Last-Modified`: 资源的最后修改时间。如果与请求中的 `If-Modified-Since` 头匹配，服务器可以返回 304 响应。
+
+    ### **缓存相关响应头**
+    - `Expires`: 资源过期时间，客户端如果在该时间之前请求相同资源，则可以从缓存中获取。
+    - `Pragma`: 控制缓存行为的响应头。常见值为：`Pragma: no-cache`。
+    - `Vary`: 告诉缓存服务器根据某些条件（如请求头中的 `Accept-Encoding`）来缓存不同版本的响应。
+
+    ### **身份验证相关响应头**
+    - `WWW-Authenticate`: 告诉客户端进行身份验证的要求，常见于 `401 Unauthorized` 错误响应。例如：`WWW-Authenticate: Basic realm="Restricted Area"`。
+    - `Proxy-Authenticate`: 类似于 `WWW-Authenticate`，但用于代理服务器。
+
+    ### **CORS（跨域资源共享）相关响应头**
+    - `Access-Control-Allow-Origin`: 指定允许哪些源进行跨域请求。例如：`Access-Control-Allow-Origin: *`（允许所有域名）。
+    - `Access-Control-Allow-Methods`: 指定允许的 HTTP 方法，如：`Access-Control-Allow-Methods: GET, POST, PUT`。
+    - `Access-Control-Allow-Headers`: 指定允许的请求头，如：`Access-Control-Allow-Headers: Content-Type, X-Custom-Header`。
+
+    ### **重定向响应头**
+    - `Location`: 用于指示重定向的目标 URL，常见于 `301`、`302` 响应。例如：`Location: https://www.new-location.com`。
+
 
 5. HTTP 缓存机制流程
     <details open>
