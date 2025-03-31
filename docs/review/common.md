@@ -5,16 +5,17 @@
     HTTP 方面
 
     1. http 网络请求开启 gzip，可以压缩 HTTP 响应的 70%。这个要服务端配置一下，会增大 CPU 的开销去解压、压缩，Webpack 中 用 CompressionWebpackPlugin 插件开启 Gzip ,事实上就是为了在构建过程中去做一部分服务器的工作，为服务器分压。
-       2.1 使用 CDN 缓存。dns 预解析，dns prefetch，可以预解析。script defer async 防止 js 阻塞。
-    2. 使用 HTTP 强缓存，cache-control > expires。expire 里面写的是过期日期，是和本地电脑比的，而 cache-control 是过期时间段，所以 cache-control 更准。
-    3. cache-control 值，public，本地和服务器都会缓存走强缓存，private，只有本地缓存走强缓存，no-cache，本地缓存，但是会绕过强缓存去协商。no-store 的话就直接绕过所有全部重新下载了
+    2. 使用 CDN 缓存。dns 预解析，dns prefetch，可以预解析。script defer async 防止 js 阻塞。
+    3. 使用 link preload/link prefetch，preload可以as提前加载需要的资源，（比如桥依赖、埋点、异常上报等）prefetch提前加载下个页面需要的资源。
+    4. 使用 HTTP 强缓存，cache-control > expires。expire 里面写的是过期日期，是和本地电脑比的，而 cache-control 是过期时间段，所以 cache-control 更准。
+    4. cache-control 值，public，本地和服务器都会缓存走强缓存，private，只有本地缓存走强缓存，no-cache，本地缓存，但是会绕过强缓存去协商。no-store 的话就直接绕过所有全部重新下载了
     4. 使用 HTTP 协商缓存，协商缓存本身数据也是存在本地的， Last-Modified（请求带上 If-Modified-Since），返回 304，但是如果改了文件名的话，last-modified 就找不到了，就会重新返回。所以还要一个 etag（请求带上 If-None-Match），两者共同配合完成 304.
     5. 体积不大的会放在 from memory cahce，比如 base64,小的 css，体积稍大会放 from disk cache。
     6. 还可以使用 service worker。
     7. 以上 http 的缓存，静态资源 CDN，动态请求靠服务端的 redis。
     8. 本地存储，cookie,storage。 cookie 里少放信息，因为会跟着 http 请求头跑，很浪费。如果本地存储需求量很大的话，比如你要实现一个 im 的话，可以用 indexDB,本地数据库
     9. 合并 request，并且并发请求，达到应用层面的多路复用, 避免队头阻塞
-    10. 推行升级到 http2，protocol 协议就是 h2。缩短了 8%。
+    10. 推行升级到 http2，protocol 协议就是 h2。缩短了 8%。但是要对尾部流量进行特定优化，尾部流量用http2丢包的情况下会比http1.1差很多，需要增加单窗口面积才行。
 
     WEBPACK
 
