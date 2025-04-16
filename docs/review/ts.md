@@ -26,7 +26,7 @@
 - **void**：通常用于函数没有返回值的情况，如 `function sayHello(): void { console.log("Hello"); }`。
 - **never**：TypeScript 中的 never 类型表示永远不会出现的值（如抛出异常或无限循环的函数），比如一个函数，根本不可能走完，因为你抛出异常了，这个时候就可以给它的返回值写 never
 - **unknown**：TypeScript 中的 unknown 类型表示未知类型，必须经过类型检查后才能使用，比如需要类型检查的时候，参数可以先写 unknown
-- **Tuple**：元组类型，表示一个已知数量和类型的数组，这个不算是基础类型吧，`let person: [string, number] = ["Alice", 25];`,要求你固定顺序且固定类型, 然后 T[number] 代表提取元组 T 中的所有值，形成一个联合类型。这里的 number 是虚值,也是代表这个元组数组的所有索引。
+- **Tuple**：元组类型，表示一个已知数量和类型的数组，这个不算是基础类型吧，`let person: [string, number] = ["Alice", 25];`,要求你固定顺序且固定类型, 然后 T[number] 代表提取元组 T 中的所有值，形成一个联合类型。这里的 number 是虚值,也是代表这个元组数组的所有索引。然后T['length']就是获取长度
 
 </details>
 
