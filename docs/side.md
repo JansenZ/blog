@@ -2,6 +2,8 @@
 
 * [JS](review/js.md)
 
+* [TS](review/js.md)
+
 * [CSS](review/css.md)
 
 * [React](review/react.md)
