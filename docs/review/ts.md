@@ -1,4 +1,4 @@
-类型体操[https://github.com/type-challenges/type-challenges/blob/main/README.zh-CN.md]
+[类型体操](https://github.com/type-challenges/type-challenges/blob/main/README.zh-CN.md)
 
 ### 1. TypeScript 和 JavaScript 有哪些主要区别？
 
