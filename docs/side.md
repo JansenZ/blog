@@ -2,7 +2,7 @@
 
 * [JS](review/js.md)
 
-* [TS](review/js.md)
+* [TS](review/ts.md)
 
 * [CSS](review/css.md)
 
