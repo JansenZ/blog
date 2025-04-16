@@ -26,7 +26,7 @@
 - **void**：通常用于函数没有返回值的情况，如 `function sayHello(): void { console.log("Hello"); }`。
 - **never**：TypeScript 中的 never 类型表示永远不会出现的值（如抛出异常或无限循环的函数），比如一个函数，根本不可能走完，因为你抛出异常了，这个时候就可以给它的返回值写 never
 - **unknown**：TypeScript 中的 unknown 类型表示未知类型，必须经过类型检查后才能使用，比如需要类型检查的时候，参数可以先写 unknown
-- **Tuple**：元组类型，表示一个已知数量和类型的数组，这个不算是基础类型吧，`let person: [string, number] = ["Alice", 25];`,要求你固定顺序且固定类型
+- **Tuple**：元组类型，表示一个已知数量和类型的数组，这个不算是基础类型吧，`let person: [string, number] = ["Alice", 25];`,要求你固定顺序且固定类型, 然后 T[number] 代表提取元组 T 中的所有值，形成一个联合类型。这里的 number 是虚值,也是代表这个元组数组的所有索引。
 
 </details>
 
@@ -131,12 +131,12 @@ function processValue(value: unknown) {
 
 </details>
 
-### 7. 描述一下 keyof 操作符的作用，它在实际开发中有哪些应用场景？
+### 7. 描述一下 keyof 、 in 操作符的作用，它在实际开发中有哪些应用场景？
 
 <details>
 <summary>展开答案</summary>
 
-- **作用**：`keyof` 操作符用于获取一个类型的所有属性名组成的联合类型。
+- **作用**：`keyof` 操作符用于获取一个类型的所有属性名组成的联合类型。`in` 用于映射类型，表示遍历一个联合类型的每个成员，并将其作为键来构造一个新的类型。
 - **应用场景**：
   - **类型安全的属性访问**：可以确保访问的属性名是合法的。
   - **泛型约束**：在泛型中约束类型的属性。
@@ -155,6 +155,12 @@ function getProperty<T, K extends keyof T>(obj: T, key: K) {
 
 let person: Person = { name: 'John', age: 30 };
 let name = getProperty(person, 'name');
+
+type TupleToObject<T extends readonly any[]> = {
+    [K in T[number]]: true;
+};
+
+// 比如这里的 in，就是映射遍历这个联合类型，而T[number] 代表提取元组 T 中的所有值，形成一个联合类型。
 ```
 
 </details>
