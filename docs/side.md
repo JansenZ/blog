@@ -32,8 +32,6 @@
 
 * [Docker](review/docker.md)
 
-* [链表动画](animate/index.html)
-
 * [书：数据结构](book/dataset/index.html)
 
 * [书：Docker](book/docker/index.html)
