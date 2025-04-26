@@ -1,31 +1,31 @@
-1.  JS 中基本数据类型有哪些?
+1. JS 中基本数据类型有哪些?
     <details open>
 
     Number、String、Boolean、Null、Undefined、Symbol(es6)、BigInt(es11)
     原始类型的值直接存储在栈内存中，访问速度快。与原始类型相对的是引用类型，包括 Object、Array、Function 等。引用类型存储的是内存地址，值是可变的。
 
-2.  ECMAscript 发展进程中，都有哪些东西的添加？
+2. ECMAscript 发展进程中，都有哪些东西的添加？
     <details open>
 
-    -   es6 增加的最多。包含类，模块，迭代器，生成器、箭头函数、反代理和数据类型
-    -   es7 只包含少量语法层面增强，比如 includes,和指数操作符
-    -   es8 增加了异步函数 async/await 和 Object.values/Object.entries 等
-    -   es9 增加 promise.finally 和异步迭代、剩余和扩展属性
-    -   es10 增加了 flat/flatMap，固定了 sort 的顺序等等
+    - es6 增加的最多。包含类，模块，迭代器，生成器、箭头函数、反代理和数据类型
+    - es7 只包含少量语法层面增强，比如 includes,和指数操作符
+    - es8 增加了异步函数 async/await 和 Object.values/Object.entries 等
+    - es9 增加 promise.finally 和异步迭代、剩余和扩展属性
+    - es10 增加了 flat/flatMap，固定了 sort 的顺序等等
 
-3.  `ES6`中暂时性死区`TDZ`是什么？
+3. `ES6`中暂时性死区`TDZ`是什么？
      <details open>
 
     暂时性死区就是说如果函数外面写了一个 let a = 1;
     结果里面用的时候，先用了 a，又声明了 let a，会报错，因为它会形成一个封闭作用域。
     而且，用了`let`的话，就代表`typeof`不是绝对安全的了。
 
-4.  BABEL 是怎么编译 let 的？
+4. BABEL 是怎么编译 let 的？
      <details open>
 
     如果对应变量没有相关性的话，会直接给变成`var`，但是如果有类似于多个相同的，不同地方引用的话，就是改变量名，使内外层的变量名称不一样。
 
-5.  什么是标签模板？模板字符串函数的参数你知道是啥吗？
+5. 什么是标签模板？模板字符串函数的参数你知道是啥吗？
      <details open>
 
     标签模板就是在模板字符串前面加个函数，然后通过函数处理这个模板字符串。
@@ -34,7 +34,7 @@
 
     实际上这个功能意义我觉得不大，因为进了函数处理后，我要先把它拼接起来。那我为什么不直接把整个字符串拿到后在用函数处理一下呢？
 
-6.  weakmap 用过吗？ 知道它的使用场景吗？
+6. weakmap 用过吗？ 知道它的使用场景吗？
      <details open>
 
     `weakmap`就是弱引用，这样对于`gc`会更友好，而且只支持对象，但是它不可迭代，使用场景的话，比如写一个偏向公共的类
@@ -68,7 +68,7 @@
 
     然后写个 get 方法，那么这些 props 只能通过 get 获取了。
 
-7.  Set WeakSet Map WeakMap
+7. Set WeakSet Map WeakMap
     <details open>
 
     首先，Set 和 Map 都很相似，只是 API 略有不同，Set 是通过 add 加值，Map 是通过 set 加值
@@ -79,7 +79,7 @@
 
     ![weak](../img/weak.jpg)
 
-8.  class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
+8. class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
      <details open>
 
     [ES6 系列之 Babel 是如何编译 Class 的(上)](https://juejin.cn/post/6844903704873664520)
@@ -122,13 +122,13 @@
 
     **类不能直接执行，Person()会报错**
 
-9.  私有变量的实现方式
+9. 私有变量的实现方式
      <details open>
 
-    -   最新的提案可以直接前面写#，这样就成为了私有变量
-    -   或者使用`weakmap`，把 this set 进去。
-    -   或者是原来的闭包的方式
-    -   或者使用`Symbol`,这样外面根本无法使用。但是可以通过 `Object.getOwnPropertySymbols`来获取 symbol
+    - 最新的提案可以直接前面写#，这样就成为了私有变量
+    - 或者使用`weakmap`，把 this set 进去。
+    - 或者是原来的闭包的方式
+    - 或者使用`Symbol`,这样外面根本无法使用。但是可以通过 `Object.getOwnPropertySymbols`来获取 symbol
 
     ```js
     var dd = Symbol('aaa');
@@ -142,10 +142,10 @@
 
     装饰器的话，从函数的角度来看，如果只是作用在`class`组件上的话，其实和`HOC`没多少区别，
 
-    -   作用在`class`组件的话，它的第一个参数`target`指向的就是这个类组件，可以利用这个来写 controller()
-    -   作用在类下的方法的话，它的第一个参数是类的原型，第二个参数就是方法名，第三个参数就是一个`description`对象，下面会有枚举，`value`,可写这样的属性.
-    -   作用在类下的 get name() {} 这样的话，第三个参数就不会有 value 这样的东西了。第三个参数会有 set get。这里就说到了数据描述符和存储描述符互斥的问题了。
-    -   如果直接作用在一个属性上的话，第三个参数是没有 value 或 set get 的，因为那个属性不是在原型本身上的，是在实例化的时候才会有，而装饰器是在编译阶段就执行的，所以也就没有。
+    - 作用在`class`组件的话，它的第一个参数`target`指向的就是这个类组件，可以利用这个来写 controller()
+    - 作用在类下的方法的话，它的第一个参数是类的原型，第二个参数就是方法名，第三个参数就是一个`description`对象，下面会有枚举，`value`,可写这样的属性.
+    - 作用在类下的 get name() {} 这样的话，第三个参数就不会有 value 这样的东西了。第三个参数会有 set get。这里就说到了数据描述符和存储描述符互斥的问题了。
+    - 如果直接作用在一个属性上的话，第三个参数是没有 value 或 set get 的，因为那个属性不是在原型本身上的，是在实例化的时候才会有，而装饰器是在编译阶段就执行的，所以也就没有。
         直接作用在类上面，比如
 
     ```js
@@ -250,12 +250,12 @@
 
     HOC 的好处有
 
-    -   支持`ES6`，光这一项就战胜了`mixins`
-    -   复用性强，`HOC`是纯函数且返回值仍为组件，在使用时可以多层嵌套，在不同情境下使用特定的`HOC`组合也方便调试。
-    -   同样由于`HOC`是纯函数，支持传入多个参数，增强了其适用范围。
+    - 支持`ES6`，光这一项就战胜了`mixins`
+    - 复用性强，`HOC`是纯函数且返回值仍为组件，在使用时可以多层嵌套，在不同情境下使用特定的`HOC`组合也方便调试。
+    - 同样由于`HOC`是纯函数，支持传入多个参数，增强了其适用范围。
         缺点是
-    -   当有多个`HOC`一同使用时，无法直接判断子组件的`props`是哪个`HOC`负责传递的。在里面的组件只接受`props`。也不知道这是几级传下来的。
-    -   嵌套比较深，阅读起来会有一点障碍
+    - 当有多个`HOC`一同使用时，无法直接判断子组件的`props`是哪个`HOC`负责传递的。在里面的组件只接受`props`。也不知道这是几级传下来的。
+    - 嵌套比较深，阅读起来会有一点障碍
 
     render Props
 
@@ -281,11 +281,11 @@
 12. 箭头函数和普通函数的区别
      <details open>
 
-    -   箭头函数的 this 是透传的
-    -   箭头函数不能作为构造函数，所以就不能用 new
-    -   箭头函数不能用 arguments，只能用...args
-    -   箭头函数没有原型属性
-    -   箭头函数不能通过 apply.call.bind 改变 this。
+    - 箭头函数的 this 是透传的
+    - 箭头函数不能作为构造函数，所以就不能用 new
+    - 箭头函数不能用 arguments，只能用...args
+    - 箭头函数没有原型属性
+    - 箭头函数不能通过 apply.call.bind 改变 this。
 
 13. 为啥 let 用 window 访问不到
     <details open>
@@ -324,14 +324,14 @@
 
     BOM 其实就是浏览器的扩展，通常把任何特定于浏览器的扩展都归于 BOM 里
 
-    -   弹出新窗口的能力
-    -   移动和缩放和关闭窗口能力
-    -   navigator 对象，提供浏览器信息
-    -   location 对象，提供地址信息
-    -   screen 对象，提供屏幕信息
-    -   performance 对象，提供浏览器内存占用，时间统计等信息
-    -   对 cookie 的支持
-    -   XMLHttpRequest
+    - 弹出新窗口的能力
+    - 移动和缩放和关闭窗口能力
+    - navigator 对象，提供浏览器信息
+    - location 对象，提供地址信息
+    - screen 对象，提供屏幕信息
+    - performance 对象，提供浏览器内存占用，时间统计等信息
+    - 对 cookie 的支持
+    - XMLHttpRequest
 
 17. reduce 方法知道吗？
      <details open>
@@ -392,7 +392,7 @@
 
     以上的 hw，可以通过 for of 遍历，但是不会看到 ending，只能遍历 yield 出来的，如果不用，就是 hw.next()，
 
-    -   next 方法里其实可以带参数，该参数就会被当作上一个 yield 表达式的返回值。这样可以无限执行。
+    - next 方法里其实可以带参数，该参数就会被当作上一个 yield 表达式的返回值。这样可以无限执行。
 
     ```js
     function* f() {
@@ -411,7 +411,7 @@
     g.next(true); // { value: 0, done: false }
     ```
 
-    -   `yeild *`是一个比较有意思的语句，它可以用来在生成器里，执行另外一个生成器函数。
+    - `yeild *`是一个比较有意思的语句，它可以用来在生成器里，执行另外一个生成器函数。
 
     ```js
      function* foo() {
@@ -425,9 +425,9 @@
      for of bar(), 会执行,x,a,b
     ```
 
-    -   实际上，任何数据结构只要有 Iterator 接口，就可以被 (yield*) 遍历, 当然，前提是外层有 function* ，不然你也用不了 yield 啊
-    -   扩展运算符...默认调用 Iterator 接口
-    -   如果是作为对象属性的话，直接方法前跟 \* 即可
+    - 实际上，任何数据结构只要有 Iterator 接口，就可以被 (yield*) 遍历, 当然，前提是外层有 function* ，不然你也用不了 yield 啊
+    - 扩展运算符...默认调用 Iterator 接口
+    - 如果是作为对象属性的话，直接方法前跟 \* 即可
 
     ```js
      let obj = {
@@ -473,19 +473,19 @@
 22. fetch 怎么用，如何封装一下它
      <details open>
 
-    -   `fetch`算是新一点的`api`，用法简单点
-    -   通过`promise`链的方式来输出数据,
-    -   封装的话就是把`header`封装下，然后把结果封装下就可以了,
-    -   要提的就是`header`下的`body`部分，`post`的话需要自己拼装的,
-    -   然后`credentials`需要写`include`，代表可以带`cookie`参数,
-    -   mode:"cors",是走 cors 模式跨域
-    -   不过`fetch`不支持`node`，所有如果是有`ssr`的话，可以用`axios`
+    - `fetch`算是新一点的`api`，用法简单点
+    - 通过`promise`链的方式来输出数据,
+    - 封装的话就是把`header`封装下，然后把结果封装下就可以了,
+    - 要提的就是`header`下的`body`部分，`post`的话需要自己拼装的,
+    - 然后`credentials`需要写`include`，代表可以带`cookie`参数,
+    - mode:"cors",是走 cors 模式跨域
+    - 不过`fetch`不支持`node`，所有如果是有`ssr`的话，可以用`axios`
 
 23. Object.freeze（浅冻结）Object.seal 区别，如何深冻结一个对象？
      <details open>
 
-    -   Object.freeze 是把对象的属性冻结，不能修改不能添加不能删除，但是是浅冻结
-    -   Object.seal 是封闭一个对象。是可以修改属性的值的（前提是本来就可写）。但是不能删除不能新增。
+    - Object.freeze 是把对象的属性冻结，不能修改不能添加不能删除，但是是浅冻结
+    - Object.seal 是封闭一个对象。是可以修改属性的值的（前提是本来就可写）。但是不能删除不能新增。
 
     所以`seal`比`freeze`少一个限制修改属性值。所以更像是封闭对象结构。
 
@@ -638,9 +638,9 @@
 25. Number.isNaN 和 isNaN 的区别
      <details open>
 
-    -   isNaN 意思是这个是不是不是一个数字，比如它是 isNaN('abc') 就是 true。
-    -   Number.isNaN 只有 Number.isNaN(NaN)才是 true
-    -   Number.isNaN 是 es6 的，如果自己写的话，就是利用 typeof NaN 是 number 来写
+    - isNaN 意思是这个是不是不是一个数字，比如它是 isNaN('abc') 就是 true。
+    - Number.isNaN 只有 Number.isNaN(NaN)才是 true
+    - Number.isNaN 是 es6 的，如果自己写的话，就是利用 typeof NaN 是 number 来写
 
 26. String.raw
     <details open>
@@ -741,14 +741,14 @@
 32. 手写一个 promise
     <details open>
 
-    -   第一步，先写这里的回调函数 三个状态，then 里的函数可以不传。
-    -   第二步，回调里是可以写异步的，也就是说，到了 then 里可能还在 pending
-    -   第三步，p 是一个链式调用的，所以要包装一个 promise2 return 出来 并且里面的执行需要 try catch，抓错。
-    -   第四步，防止 then 里返回 promise 本身，以及返回的还是一个 promise，需要加一个判断函数。如果是本身，reject，如果是 promise，继续 then，最后 resolve。
-    -   第五步，加 catch 方法，其实就是调用 this.then(null,rejectCallBack);
-    -   第六步，原型上加一个 Resolve 和 Reject 方法，就是调用自己，new Promise()执行对应的方法
-    -   第七步，all 方法，all 方法返回的所有 promise 结果的合集，然后做一个下标，挨个执行 promise，然后 index++,最后 index = promise.length 的时候，resolve(result);
-    -   第八步，race 方法，这个直接挨个执行 then，resolve 即可。这也说明 race 其他的还是会跑完的。只不过不管结果而已。
+    - 第一步，先写这里的回调函数 三个状态，then 里的函数可以不传。
+    - 第二步，回调里是可以写异步的，也就是说，到了 then 里可能还在 pending
+    - 第三步，p 是一个链式调用的，所以要包装一个 promise2 return 出来 并且里面的执行需要 try catch，抓错。
+    - 第四步，防止 then 里返回 promise 本身，以及返回的还是一个 promise，需要加一个判断函数。如果是本身，reject，如果是 promise，继续 then，最后 resolve。
+    - 第五步，加 catch 方法，其实就是调用 this.then(null,rejectCallBack);
+    - 第六步，原型上加一个 Resolve 和 Reject 方法，就是调用自己，new Promise()执行对应的方法
+    - 第七步，all 方法，all 方法返回的所有 promise 结果的合集，然后做一个下标，挨个执行 promise，然后 index++,最后 index = promise.length 的时候，resolve(result);
+    - 第八步，race 方法，这个直接挨个执行 then，resolve 即可。这也说明 race 其他的还是会跑完的。只不过不管结果而已。
 
     [promise](https://zhenglin.vip/js/promise.js)
 
@@ -760,11 +760,11 @@
 34. 原型、作用域、原型链、作用域链
     <details open>
 
-    -   js 本质上一切皆对象，每个对象都要有原型，这也是为什么有继承关系。
-    -   原型链的话就是比如某个 a 是继承于 A，那么 a 怎么能找到 A 就是通过原型链，instanceof 实际上就是个原型链查找。
-    -   作用域就是遍历或者函数能作用的范围，作用域链就是某一个变量在某个地方使用到了，在编译的过程中，会保留一条它的作用域链，让它能够通过该作用域链找到对应的自己那个属性。
-    -   函数有一个内部属性 [[scope]] ,当函数创建的时候，就会保存所有的父变量对象到其中。
-    -   [[scope]] 可以理解为所有父级变量对象的层级链
+    - js 本质上一切皆对象，每个对象都要有原型，这也是为什么有继承关系。
+    - 原型链的话就是比如某个 a 是继承于 A，那么 a 怎么能找到 A 就是通过原型链，instanceof 实际上就是个原型链查找。
+    - 作用域就是遍历或者函数能作用的范围，作用域链就是某一个变量在某个地方使用到了，在编译的过程中，会保留一条它的作用域链，让它能够通过该作用域链找到对应的自己那个属性。
+    - 函数有一个内部属性 [[scope]] ,当函数创建的时候，就会保存所有的父变量对象到其中。
+    - [[scope]] 可以理解为所有父级变量对象的层级链
 
 35. instanceof 原理是啥？
     <details open>
@@ -796,11 +796,11 @@
 36. null,undefined,未声明的变量的区别
     <details open>
 
-    -   未声明的变量就是不用 let ,var, const 关键字的比如直接写 a = 2;这样的，如果是在严格模式下，会报错
-    -   undefined 就是这个变量已经声明，但是没有赋值，所以会是 undefined.
-    -   函数作用域下 undefined 可以被重写，这也是为什么最好用 void 0 替代的原因。
-    -   null 的话只能显式的被赋值，标识空值。
-    -   null == undefined；没有隐式转换。
+    - 未声明的变量就是不用 let ,var, const 关键字的比如直接写 a = 2;这样的，如果是在严格模式下，会报错
+    - undefined 就是这个变量已经声明，但是没有赋值，所以会是 undefined.
+    - 函数作用域下 undefined 可以被重写，这也是为什么最好用 void 0 替代的原因。
+    - null 的话只能显式的被赋值，标识空值。
+    - null == undefined；没有隐式转换。
 
 37. foreach 和 map 的区别
     <details open>
@@ -818,17 +818,17 @@
 38. 宿主对象和原生对象的区别
     <details open>
 
-    -   原生对象是由 `ECMAScript`规范定义的 `JavaScript`内置对象，比如`String`、`Math`、`RegExp`、`Object`、`Function`等等。
-    -   宿主对象是由运行时环境（浏览器或 `Node`）提供，比如`window`、`XMLHTTPRequest`等等。比如`Node`的`process`,`setImmediate`。
+    - 原生对象是由 `ECMAScript`规范定义的 `JavaScript`内置对象，比如`String`、`Math`、`RegExp`、`Object`、`Function`等等。
+    - 宿主对象是由运行时环境（浏览器或 `Node`）提供，比如`window`、`XMLHTTPRequest`等等。比如`Node`的`process`,`setImmediate`。
 
 39. call,apply,bind 区别
     <details open>
 
-    -   call 第二个参数是一个一个的
-    -   apply 第二个参数是数组
-    -   bind 是和 call 一样，但是生成了一个新的函数。
-    -   实现 bind 就更简单了，context 不用动，传递下 this 函数，然后 return 个 function，参数和之前的组合一下，调用 apply 就可以了。
-    -   call 比 apply 快，因为 apply 内部还要判断参数是不是数组，还需要获取数组 length 等等，而 call 就没这些事
+    - call 第二个参数是一个一个的
+    - apply 第二个参数是数组
+    - bind 是和 call 一样，但是生成了一个新的函数。
+    - 实现 bind 就更简单了，context 不用动，传递下 this 函数，然后 return 个 function，参数和之前的组合一下，调用 apply 就可以了。
+    - call 比 apply 快，因为 apply 内部还要判断参数是不是数组，还需要获取数组 length 等等，而 call 就没这些事
 
 40. 事件循环 event loop
     <details open>
@@ -860,9 +860,9 @@
 
     这段代码的执行顺序是不一定的
 
-    -   首先 setTimeout(fn, 0) === setTimeout(fn, 1)，这是由源码决定的
-    -   进入事件循环也是需要成本的，如果在准备时候花费了大于 1ms 的时间，那么在 timer 阶段就会直接执行 setTimeout 回调
-    -   那么如果准备时间花费小于 1ms，那么就是 setImmediate 回调先执行了
+    - 首先 setTimeout(fn, 0) === setTimeout(fn, 1)，这是由源码决定的
+    - 进入事件循环也是需要成本的，如果在准备时候花费了大于 1ms 的时间，那么在 timer 阶段就会直接执行 setTimeout 回调
+    - 那么如果准备时间花费小于 1ms，那么就是 setImmediate 回调先执行了
 
     但是如果写在 IO 里面的话，就是 setImmediate 先执行了，因为这个就等于在 poll 阶段，队列为空，立马去执行后者
 
@@ -1022,17 +1022,17 @@
     Counter.increment();
     ```
 
-    -   用 let 封闭作用域
-    -   用 settimeout 第三个参数就是传给 settimeout 里面的函数的入参。
+    - 用 let 封闭作用域
+    - 用 settimeout 第三个参数就是传给 settimeout 里面的函数的入参。
 
 44. 实现继承的几种方式
     <details open>
 
-    -   原型链继承
+    - 原型链继承
         `sub.prototype = new Parent();`
         缺点 1 就是 Parent 的原型大家共享了，一荣俱荣。2 在创建 Child 的实例时，不能向 Parent 传参
 
-    -   寄生组合继承
+    - 寄生组合继承
 
     ```js
     function Sub() {
@@ -1051,7 +1051,7 @@
     Sub.prototype.constructor = Sub;
     ```
 
-    -   类继承
+    - 类继承
         `xx extends`
 
     普通继承和类继承是有区别的，es5 是借助构造函数实现，实质上是**先创造子类的实例对象 this，然后再将父类的方法添加到这个 this 上去**
@@ -1133,15 +1133,15 @@
 46. 正则
     <details open>
 
-    -   \s 空格
-    -   \w 包括下划线在内的单个字符
-    -   [A-Za-z0-9_]
-    -   \b 单次边界
-    -   \i 忽略大小写
+    - \s 空格
+    - \w 包括下划线在内的单个字符
+    - [A-Za-z0-9_]
+    - \b 单次边界
+    - \i 忽略大小写
 
     实例属性有
 
-    -   reg.flags ,返回 flags 属性中的标志以字典序排序（从左到右，即"gimuy"）。 u 是编码方面的。
+    - reg.flags ,返回 flags 属性中的标志以字典序排序（从左到右，即"gimuy"）。 u 是编码方面的。
 
     ```js
     // polyfill
@@ -1155,10 +1155,10 @@
     }
     ```
 
-    -   reg.source， 返回正则本身，不包含 i g 那些
-    -   reg.global, 是否用了 g
-    -   reg.ignoreCase, 是否用了 i， 大小写
-    -   reg.multiline , 是否用了 m 多行标志
+    - reg.source， 返回正则本身，不包含 i g 那些
+    - reg.global, 是否用了 g
+    - reg.ignoreCase, 是否用了 i， 大小写
+    - reg.multiline , 是否用了 m 多行标志
 
 47. 千位分割符正则
     <details open>
@@ -1252,15 +1252,37 @@
 48. observer 的几个 API
     <details open>
 
-    -   Intersection Observer，可以用它来做懒加载，比使用 getBoundingClientRect()的好处是它的性能会更好。
-
-    两个参数，一个 callback,一个 options，opts 里可以设置根元素和边界大小。
-
-    callback 里用来检测变化进行对应的改变
-
-    -   MutationObserver 利用它可以检测 DOM 节点元素，比如禁止删除水印功能。
+    - Intersection Observer，可以用它来做懒加载，比使用 getBoundingClientRect()的好处是它的性能会更好。也可以用于广告曝光统计等场景。
 
     ```js
+    // 两个参数，一个 callback,一个 options，opts 里可以设置根元素和边界大小。
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    console.log('元素进入视口，Do something');
+                }
+            });
+        },
+        {
+            root: null, // 设置为视口
+            rootMargin: '0px 0px -50px 0px', // 视口的扩展范围
+            threshold: [0, 0.5, 1] // 触发回调的交叉比例
+        }
+    );
+
+    const target = document.querySelector('#lazy-load');
+    observer.observe(target); // 开始观察目标元素
+    ```
+
+    - MutationObserver 利用它可以检测 DOM 节点元素，比如禁止删除水印功能。
+
+    ```js
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+            console.log('DOM 发生变化', mutation);
+        });
+    });
     mutationObserver.observe(content, {
         attributes: true, // Boolean - 观察目标属性的改变
         characterData: true, // Boolean - 目标节点或子节点树中节点所包含的字符数据的变化
@@ -1272,34 +1294,38 @@
     });
     ```
 
-    -   PerformanceObserver，监控浏览器性能的，我也没用的上。
+    - Resize Observer, 用于监听元素尺寸的变化。
+
+    - PerformanceObserver，监控浏览器性能，回调里上报指标。
+
+    ```js
+    const observer = new PerformanceObserver((list) => {
+        const entries = list.getEntries();
+        entries.forEach((entry) => {
+            console.log('性能指标', entry);
+        });
+    });
+
+    observer.observe({ entryTypes: ['paint', 'resource', 'longtask'] });
+    ```
 
 49. requestIdleCallback 和 requestAnimationFrame 的区别
     <details open>
 
-    浏览器一帧里 16ms 要完成的任务
+    浏览器一帧里 16ms 要完成的任务，当 Eventloop 执行完 Microtasks 后，会判断 document 是否需要更新，假设浏览器是 60Hz 的刷新率，每 16.6ms 才会更新一次。
 
-    -   老：
+    1. 执行 JavaScript。包括定时器回调（如 setTimeout、setInterval）。事件回调（如 click、keydown）。微任务（如 Promise.then、MutationObserver）。更新 DOM 或 CSSOM。
+    2. 检查窗口变化，resize 和 scroll 事件自带节流功能，至少每 16ms 才会触发一次，避免频繁触发导致性能问题。
+    3. 检查 media query，检查是否有 CSS 的 media query 条件发生变化，如有变化，浏览器会重新计算样式并更新页面。
+    4. 执行动画相关任务，动画通常通过 requestAnimationFrame 或 CSS 动画实现。
+    5. 执行 requestAnimationFrame 回调，requestAnimationFrame 的回调会在下一帧开始前执行，确保动画的流畅性。
+    6. 执行 IntersectionObserver 回调，用于检测元素是否进入视口（可见区域）。
+    7. Layout（布局），浏览器会重新计算页面元素的布局，包括重新计算元素的尺寸和位置。
+    8. Paint（绘制），浏览器会重新绘制页面元素，将计算好的样式和布局信息应用到页面上。
+    9. Composite（合成），浏览器会将绘制好的页面元素合并成最终的屏幕显示。
+    10. 执行 requestIdleCallback 回调，requestIdleCallback 的回调会在浏览器有空闲时间时执行。
 
-        1. 处理用户的交互
-        2. JS 解析执行
-        3. 帧开始。窗口尺寸变更，页面滚去等的处理
-        4. rAF(requestAnimationFrame)
-        5. 布局
-        6. 绘制
-
-    -   新：
-
-        1. 当 Eventloop 执行完 Microtasks 后，会判断 document 是否需要更新，因为浏览器是 60Hz 的刷新率，每 16.6ms 才会更新一次。
-        2. 然后判断是否有 resize 或者 scroll 事件，有的话会去触发事件，所以 resize 和 scroll 事件也是至少 16ms 才会触发一次，并且自带节流功能。
-        3. 判断是否触发了 media query
-        4. 更新动画并且发送事件
-        5. 判断是否有全屏操作事件
-        6. 执行 requestAnimationFrame 回调
-        7. 执行 IntersectionObserver 回调，该方法用于判断元素是否可见，可以用于懒加载上，但是兼容性不好
-        8. 更新界面
-
-    以上就是一帧中可能会做的事情。如果在一帧中有空闲时间，就会去执行 requestIdleCallback 回调。
+    以上就是一帧中可能会做的事情。如果在一帧中有空闲时间，还会去执行 requestIdleCallback 回调。
 
     `requestAnimationFrame`的回调会在每一帧确定执行，属于高优先级任务，而`requestIdleCallback`的回调则不一定，属于低优先级任务。
 
@@ -1324,10 +1350,10 @@
 52. for in, Object.keys,Object.getOwnPropertyNames,Reflect.ownKeys 区别
     <details open>
 
-    -   for in 遍历会把原型上的属性遍历出来。
-    -   Object.keys 不会把原型上的属性遍历出来。
-    -   Object.getOwnProPropertyNames 不会把原型上的属性遍历出来，但是即使自己下的不可枚举属性，也是可以遍历出来的。
-    -   Reflect.ownKeys 不会把原型上的属性遍历出来，不可枚举属性，但是 Symbol 是可以遍历出来，
+    - for in 遍历会把原型上的属性遍历出来。
+    - Object.keys 不会把原型上的属性遍历出来。
+    - Object.getOwnProPropertyNames 不会把原型上的属性遍历出来，但是即使自己下的不可枚举属性，也是可以遍历出来的。
+    - Reflect.ownKeys 不会把原型上的属性遍历出来，不可枚举属性，但是 Symbol 是可以遍历出来，
         相当于 Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))
 
 53. 为何 try 里面放 return，finally 还会执行，理解其内部机制
@@ -1394,9 +1420,9 @@
 55. base64 的编码原理
     <details open>
 
-    -   `btoa('abc') = 'YWJj'` base64 编码 byte to ascii
-    -   `atob('YWJj') = 'abc'` base64 解码 ascii to byte
-    -   如果需要支持中文的话，需要先 encodeURLComponent 一下。
+    - `btoa('abc') = 'YWJj'` base64 编码 byte to ascii
+    - `atob('YWJj') = 'abc'` base64 解码 ascii to byte
+    - 如果需要支持中文的话，需要先 encodeURLComponent 一下。
 
     Base64 的编码方法要求把每三个 8bit 的字节转换成四个 6bit 的字节。相当于 3 个字符变 4 个字符。所以会变大 33%左右。
 
@@ -1439,9 +1465,9 @@
 56. 几种进制的相互转换计算方法，在 JavaScript 中如何表示和转换
     <details open>
 
-    -   十进制转其他进制
+    - 十进制转其他进制
         xx.toString(radix); radix 2 ~ 36 的整数，默认是 10
-    -   其他进制的整数转 10 进制。parseInt('8 进制的数', 8); 如果有小数的话，不处理。 所以如果小数也要的话，自己写一个函数，把小数的部分拆出来，这样小数就会转换回 10 进制。
+    - 其他进制的整数转 10 进制。parseInt('8 进制的数', 8); 如果有小数的话，不处理。 所以如果小数也要的话，自己写一个函数，把小数的部分拆出来，这样小数就会转换回 10 进制。
 
     ```js
     // 二进制转十六进制
@@ -1461,15 +1487,15 @@
 57. 位运算有哪些呢？
     <details open>
 
-    -   这里插一个\*\*， 就是乘方，不过它是右结合的， 4\*\*3\*\*2 会先求 3\*\*2
-    -   9，二进制是 1001。 8，二进制是 1000
-    -   & 按位与 9&8 = 8
-    -   | 按位或 9|8 = 9
-    -   ^ 异或，异或的意思就是位上是一样的就是 0，不一样的就是 1。 9 ^ 8 = 0001 = 1
-    -   ~ 按位非，就是取反， 0 变 1，1 变 0。 这个因为符号位的问题，所以不好写，~9 = -10
-    -   << 左移一位 将 a 的二进制形式向左移 b (< 32) 比特位，右边用 0 填充。 9 << 1 = 10010 = 18
-    -   (>>) 有符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位。根据符号位填充，正数填 0，负数填 1。
-    -   (>>>) 无符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位，并使用 0 在左侧填充。这两个很不好计算，一般还是别用了。
+    - 这里插一个\*\*， 就是乘方，不过它是右结合的， 4\*\*3\*\*2 会先求 3\*\*2
+    - 9，二进制是 1001。 8，二进制是 1000
+    - & 按位与 9&8 = 8
+    - | 按位或 9|8 = 9
+    - ^ 异或，异或的意思就是位上是一样的就是 0，不一样的就是 1。 9 ^ 8 = 0001 = 1
+    - ~ 按位非，就是取反， 0 变 1，1 变 0。 这个因为符号位的问题，所以不好写，~9 = -10
+    - << 左移一位 将 a 的二进制形式向左移 b (< 32) 比特位，右边用 0 填充。 9 << 1 = 10010 = 18
+    - (>>) 有符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位。根据符号位填充，正数填 0，负数填 1。
+    - (>>>) 无符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位，并使用 0 在左侧填充。这两个很不好计算，一般还是别用了。
 
 58. 利用异或来交换 2 个数
 
@@ -1499,10 +1525,10 @@
     主要是在词法分析阶段会出毛病。
     真正会导致上下文解析出问题的 token 有 5 个。
 
-    -   括号（认为是参数要执行）
-    -   方括号（认为是数组或者是对象属性）
-    -   正则开头的斜杠（和前面的字符串组起来了）
-    -   加号，减号（这更不用说了）
+    - 括号（认为是参数要执行）
+    - 方括号（认为是数组或者是对象属性）
+    - 正则开头的斜杠（和前面的字符串组起来了）
+    - 加号，减号（这更不用说了）
 
     所以如果 IIFE 前面不加，就会被误认为要执行，所以最好加个分号用来阻断。
 
@@ -1543,9 +1569,9 @@
 65. JavaScript 可以存储的最大数字、最大安全数字，超过了咋办？
     <details open>
 
-    -   Number.MAX_VALUE 可存储的最大数字 == (Math.pow(2,53) - 1) \* Math.pow(2, 971) 。 971 = 1023 - 52； 971 是 指数偏移量（1023）2 的 10 次方-1， 减去 尾数位数（52）
-    -   Number.MAX_SAFE_INTEGER 最大安全值 == Math.pow(2,53) - 1;
-    -   一旦超过安全最大值精度就开始不准了。所以解决办法就是用 bigint 或者是变成字符串，小数字的话可以转换成整数。通常和钱相关，可以先乘 100，转成分。
+    - Number.MAX_VALUE 可存储的最大数字 == (Math.pow(2,53) - 1) \* Math.pow(2, 971) 。 971 = 1023 - 52； 971 是 指数偏移量（1023）2 的 10 次方-1， 减去 尾数位数（52）
+    - Number.MAX_SAFE_INTEGER 最大安全值 == Math.pow(2,53) - 1;
+    - 一旦超过安全最大值精度就开始不准了。所以解决办法就是用 bigint 或者是变成字符串，小数字的话可以转换成整数。通常和钱相关，可以先乘 100，转成分。
 
     ```js
     console.log(Number.MAX_VALUE); // 1.7976931348623157e+308`
@@ -1608,17 +1634,17 @@
     this 是一个指针，指向当前执行上下文的对象。
     它的值在函数调用时动态确定。
 
-    -   call、apply、bind 可以显示的修改函数的 this 指向，显式指定的对象
-    -   全局上下文
+    - call、apply、bind 可以显示的修改函数的 this 指向，显式指定的对象
+    - 全局上下文
         this 指向 window,严格模式下为 undefined
-    -   直接调用函数
+    - 直接调用函数
         this 指向 window,严格模式下为 undefined
-    -   作为对象的方法调用
+    - 作为对象的方法调用
         obj.foo()。 this 指向对象 obj
-    -   DOM 事件的绑定
+    - DOM 事件的绑定
         onclick 和 addEventerListener 中 this 默认指向绑定事件的元素。
-    -   new 构造函数绑定，当函数通过 new 关键字调用时，this 指向新创建的实例对象。
-    -   箭头函数
+    - new 构造函数绑定，当函数通过 new 关键字调用时，this 指向新创建的实例对象。
+    - 箭头函数
         箭头函数没有 this, 在箭头函数里的 this 会指向 外层的非箭头函数的 this。
 
 69. Object.is 和 === 的区别
@@ -1648,9 +1674,9 @@
     false 是冒泡，true 是捕获，默认是冒泡
     参数也可以是个对象的形式
 
-    -   capture: 是否在捕获阶段执行（默认 false）,
-    -   once: 是否只执行一次（默认 false）
-    -   passive: 是否禁止调用 event.preventDefault()（默认 false）。
+    - capture: 是否在捕获阶段执行（默认 false）,
+    - once: 是否只执行一次（默认 false）
+    - passive: 是否禁止调用 event.preventDefault()（默认 false）。
 
 71. 如何写一个自定义事件
     <details open>
@@ -1746,10 +1772,10 @@
 76. 数组和链表的对比
     <details open>
 
-    -   数组静态分配内存，链表动态分配内存
-    -   数组在内存中是连续的，而链表不一定是连续的
-    -   数组利用下标定位，时间复杂度是 O(1)，链表只能一个一个查，时间复杂度是 O(n).
-    -   数组插入或者删除动作的的时间复杂度是 O(n),链表的话是 O(1)。因为数组删除或者是插入后要移位。而链表直接解除或者添加即可。不过唯一缺点是它有一个额外的域，存放内存中下一节点的地址。
+    - 数组静态分配内存，链表动态分配内存
+    - 数组在内存中是连续的，而链表不一定是连续的
+    - 数组利用下标定位，时间复杂度是 O(1)，链表只能一个一个查，时间复杂度是 O(n).
+    - 数组插入或者删除动作的的时间复杂度是 O(n),链表的话是 O(1)。因为数组删除或者是插入后要移位。而链表直接解除或者添加即可。不过唯一缺点是它有一个额外的域，存放内存中下一节点的地址。
 
 77. 微信小程序是怎么做到只展示最近的 20 个的？如何实现一个 LRU？
     <details open>
@@ -1994,10 +2020,10 @@
 
     对象在转换类型的时候，会调用内置的 [[ToPrimitive]] 函数，对于该函数来说，算法逻辑一般来说如下：
 
-    -   如果已经是原始类型了，那就不需要转换了
-    -   调用 x.valueOf()，如果转换为基础类型，就返回转换的值
-    -   调用 x.toString()，如果转换为基础类型，就返回转换的值
-    -   如果都没有返回原始类型，就会报错
+    - 如果已经是原始类型了，那就不需要转换了
+    - 调用 x.valueOf()，如果转换为基础类型，就返回转换的值
+    - 调用 x.toString()，如果转换为基础类型，就返回转换的值
+    - 如果都没有返回原始类型，就会报错
 
     ```js
     let a = {
@@ -2045,14 +2071,14 @@
 82. 隐式转换
     <details open>
 
-    -   主要需要知道几点，转 String 的时候
-    -   String([]) = '';
-    -   String([1,2]) = '1,2';
-    -   String([null]) = '';
-    -   String([undefined]) = '';
-    -   转 boolean 的时候
+    - 主要需要知道几点，转 String 的时候
+    - String([]) = '';
+    - String([1,2]) = '1,2';
+    - String([null]) = '';
+    - String([undefined]) = '';
+    - 转 boolean 的时候
         假值只有 false、null、undefined、空字符、0 和 NaN，其它值转为布尔型都为 true。
-    -   转 number 的时候
+    - 转 number 的时候
         Number(只有在字符串里由非数字的时候)NaN
 
         数组空转 0，数组有一个数字就转它，数组有多个就是 NaN
@@ -2060,7 +2086,7 @@
     `{} + {} = '[object Object][object Object]';`
     `2 * {} = NaN`
 
-    -   核心：遇到 == 的时候
+    - 核心：遇到 == 的时候
 
     1. null == undefined 特例
     2. 如果两边是同类型的，特例`NaN == NaN返回false`，其他就比同类型是否真的一样。
@@ -2125,74 +2151,71 @@
             console.log('没有点击到悬浮球');
         }
     });
-    
-    
+
     let isDragging = false;
 
     // 动态生成悬浮球
     function createBall() {
-    const ballElement = document.createElement('div');
-    ballElement.id = 'ball';
-    ballElement.style.width = '50px';
-    ballElement.style.height = '50px';
-    ballElement.style.backgroundColor = 'red';
-    ballElement.style.position = 'absolute';
-    ballElement.style.top = '100px';
-    ballElement.style.left = '100px';
-    ballElement.style.borderRadius = '50%';
-    ballElement.style.cursor = 'pointer';
-    document.body.appendChild(ballElement);
+        const ballElement = document.createElement('div');
+        ballElement.id = 'ball';
+        ballElement.style.width = '50px';
+        ballElement.style.height = '50px';
+        ballElement.style.backgroundColor = 'red';
+        ballElement.style.position = 'absolute';
+        ballElement.style.top = '100px';
+        ballElement.style.left = '100px';
+        ballElement.style.borderRadius = '50%';
+        ballElement.style.cursor = 'pointer';
+        document.body.appendChild(ballElement);
 
-    // 添加拖动逻辑
-    ballElement.addEventListener('mousedown', (event) => {
-        isDragging = false; // 初始化拖动状态
-        const startX = event.clientX;
-        const startY = event.clientY;
+        // 添加拖动逻辑
+        ballElement.addEventListener('mousedown', (event) => {
+            isDragging = false; // 初始化拖动状态
+            const startX = event.clientX;
+            const startY = event.clientY;
 
-        const onMouseMove = (moveEvent) => {
-            isDragging = true; // 标记为拖动
-            const deltaX = moveEvent.clientX - startX;
-            const deltaY = moveEvent.clientY - startY;
-            ballElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-        };
+            const onMouseMove = (moveEvent) => {
+                isDragging = true; // 标记为拖动
+                const deltaX = moveEvent.clientX - startX;
+                const deltaY = moveEvent.clientY - startY;
+                ballElement.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            };
 
-        const onMouseUp = () => {
-            document.removeEventListener('mousemove', onMouseMove);
-            document.removeEventListener('mouseup', onMouseUp);
-        };
+            const onMouseUp = () => {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+            };
 
-        document.addEventListener('mousemove', onMouseMove);
-        document.addEventListener('mouseup', onMouseUp);
-    });
+            document.addEventListener('mousemove', onMouseMove);
+            document.addEventListener('mouseup', onMouseUp);
+        });
 
-    // 添加点击逻辑
-    ballElement.addEventListener('click', (event) => {
-        if (isDragging) {
-            event.stopPropagation(); // 阻止冒泡，避免误判为点击
-            console.log('拖动悬浮球');
-        } else {
-            console.log('点击悬浮球');
-        }
-    });
-
+        // 添加点击逻辑
+        ballElement.addEventListener('click', (event) => {
+            if (isDragging) {
+                event.stopPropagation(); // 阻止冒泡，避免误判为点击
+                console.log('拖动悬浮球');
+            } else {
+                console.log('点击悬浮球');
+            }
+        });
     }
 
     // 动态生成悬浮球
     createBall();
-
     ```
 
 87. async await 对比 promise
 
     <details open>
 
-    -   async/await 优点：
+    - async/await 优点：
 
     1. 它做到了真正的串行的同步写法，代码阅读相对容易
     2. 对于条件语句和其他流程语句比较友好，可以直接写到判断条件里面
     3. 处理复杂流程时，在代码清晰度方面有优势
 
-    -   async/await 缺点：
+    - async/await 缺点：
 
     1. 无法处理 promise 返回的 reject 对象，要借助 try...catch...
     2. 用 await 可能会导致性能问题，因为 await 会阻塞代码，也许之后的异步代码并不依赖于前者，但仍然需要等待前者完成，导致代码失去了并发性。需要用 promise.all
@@ -2200,7 +2223,7 @@
     4. 但 async/await 确确实实是解决了 promise 一些问题的。更加灵活的处理异步
     5. 而且可以用 await to。
 
-    -   promise 的一些问题：
+    - promise 的一些问题：
 
     1. 一旦执行，无法中途取消，链式调用多个 then 中间不能随便跳出来
     2. Promise 内部如何执行，监测起来很难，当处于 pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）
