@@ -146,7 +146,7 @@
     - 作用在类下的方法的话，它的第一个参数是类的原型，第二个参数就是方法名，第三个参数就是一个`description`对象，下面会有枚举，`value`,可写这样的属性.
     - 作用在类下的 get name() {} 这样的话，第三个参数就不会有 value 这样的东西了。第三个参数会有 set get。这里就说到了数据描述符和存储描述符互斥的问题了。
     - 如果直接作用在一个属性上的话，第三个参数是没有 value 或 set get 的，因为那个属性不是在原型本身上的，是在实例化的时候才会有，而装饰器是在编译阶段就执行的，所以也就没有。
-        直接作用在类上面，比如
+      直接作用在类上面，比如
 
     ```js
     @weapon
@@ -253,7 +253,7 @@
     - 支持`ES6`，光这一项就战胜了`mixins`
     - 复用性强，`HOC`是纯函数且返回值仍为组件，在使用时可以多层嵌套，在不同情境下使用特定的`HOC`组合也方便调试。
     - 同样由于`HOC`是纯函数，支持传入多个参数，增强了其适用范围。
-        缺点是
+      缺点是
     - 当有多个`HOC`一同使用时，无法直接判断子组件的`props`是哪个`HOC`负责传递的。在里面的组件只接受`props`。也不知道这是几级传下来的。
     - 嵌套比较深，阅读起来会有一点障碍
 
@@ -1029,8 +1029,8 @@
     <details open>
 
     - 原型链继承
-        `sub.prototype = new Parent();`
-        缺点 1 就是 Parent 的原型大家共享了，一荣俱荣。2 在创建 Child 的实例时，不能向 Parent 传参
+      `sub.prototype = new Parent();`
+      缺点 1 就是 Parent 的原型大家共享了，一荣俱荣。2 在创建 Child 的实例时，不能向 Parent 传参
 
     - 寄生组合继承
 
@@ -1052,7 +1052,7 @@
     ```
 
     - 类继承
-        `xx extends`
+      `xx extends`
 
     普通继承和类继承是有区别的，es5 是借助构造函数实现，实质上是**先创造子类的实例对象 this，然后再将父类的方法添加到这个 this 上去**
 
@@ -1354,7 +1354,7 @@
     - Object.keys 不会把原型上的属性遍历出来。
     - Object.getOwnProPropertyNames 不会把原型上的属性遍历出来，但是即使自己下的不可枚举属性，也是可以遍历出来的。
     - Reflect.ownKeys 不会把原型上的属性遍历出来，不可枚举属性，但是 Symbol 是可以遍历出来，
-        相当于 Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))
+      相当于 Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))
 
 53. 为何 try 里面放 return，finally 还会执行，理解其内部机制
     <details open>
@@ -1466,7 +1466,7 @@
     <details open>
 
     - 十进制转其他进制
-        xx.toString(radix); radix 2 ~ 36 的整数，默认是 10
+      xx.toString(radix); radix 2 ~ 36 的整数，默认是 10
     - 其他进制的整数转 10 进制。parseInt('8 进制的数', 8); 如果有小数的话，不处理。 所以如果小数也要的话，自己写一个函数，把小数的部分拆出来，这样小数就会转换回 10 进制。
 
     ```js
@@ -1497,7 +1497,8 @@
     - (>>) 有符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位。根据符号位填充，正数填 0，负数填 1。
     - (>>>) 无符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位，并使用 0 在左侧填充。这两个很不好计算，一般还是别用了。
 
-58. 利用异或来交换 2 个数
+58. 如何利用异或来交换 2 个数
+    <details open>
 
     ```js
     let a = 9,
@@ -1636,16 +1637,16 @@
 
     - call、apply、bind 可以显示的修改函数的 this 指向，显式指定的对象
     - 全局上下文
-        this 指向 window,严格模式下为 undefined
+      this 指向 window,严格模式下为 undefined
     - 直接调用函数
-        this 指向 window,严格模式下为 undefined
+      this 指向 window,严格模式下为 undefined
     - 作为对象的方法调用
-        obj.foo()。 this 指向对象 obj
+      obj.foo()。 this 指向对象 obj
     - DOM 事件的绑定
-        onclick 和 addEventerListener 中 this 默认指向绑定事件的元素。
+      onclick 和 addEventerListener 中 this 默认指向绑定事件的元素。
     - new 构造函数绑定，当函数通过 new 关键字调用时，this 指向新创建的实例对象。
     - 箭头函数
-        箭头函数没有 this, 在箭头函数里的 this 会指向 外层的非箭头函数的 this。
+      箭头函数没有 this, 在箭头函数里的 this 会指向 外层的非箭头函数的 this。
 
 69. Object.is 和 === 的区别
     <details open>
@@ -2077,9 +2078,9 @@
     - String([null]) = '';
     - String([undefined]) = '';
     - 转 boolean 的时候
-        假值只有 false、null、undefined、空字符、0 和 NaN，其它值转为布尔型都为 true。
+      假值只有 false、null、undefined、空字符、0 和 NaN，其它值转为布尔型都为 true。
     - 转 number 的时候
-        Number(只有在字符串里由非数字的时候)NaN
+      Number(只有在字符串里由非数字的时候)NaN
 
         数组空转 0，数组有一个数字就转它，数组有多个就是 NaN
 
