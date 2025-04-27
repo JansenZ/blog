@@ -20,12 +20,7 @@
     结果里面用的时候，先用了 a，又声明了 let a，会报错，因为它会形成一个封闭作用域。
     而且，用了`let`的话，就代表`typeof`不是绝对安全的了。
 
-4. BABEL 是怎么编译 let 的？
-     <details open>
-
-    如果对应变量没有相关性的话，会直接给变成`var`，但是如果有类似于多个相同的，不同地方引用的话，就是改变量名，使内外层的变量名称不一样。
-
-5. 什么是标签模板？模板字符串函数的参数你知道是啥吗？
+4. 什么是标签模板？模板字符串函数的参数你知道是啥吗？
      <details open>
 
     标签模板就是在模板字符串前面加个函数，然后通过函数处理这个模板字符串。
@@ -34,7 +29,7 @@
 
     实际上这个功能意义我觉得不大，因为进了函数处理后，我要先把它拼接起来。那我为什么不直接把整个字符串拿到后在用函数处理一下呢？
 
-6. weakmap 用过吗？ 知道它的使用场景吗？
+5. weakmap 用过吗？ 知道它的使用场景吗？
      <details open>
 
     `weakmap`就是弱引用，这样对于`gc`会更友好，而且只支持对象，但是它不可迭代，使用场景的话，比如写一个偏向公共的类
@@ -68,7 +63,7 @@
 
     然后写个 get 方法，那么这些 props 只能通过 get 获取了。
 
-7. Set WeakSet Map WeakMap
+6. Set WeakSet Map WeakMap
     <details open>
 
     首先，Set 和 Map 都很相似，只是 API 略有不同，Set 是通过 add 加值，Map 是通过 set 加值
@@ -79,7 +74,7 @@
 
     ![weak](../img/weak.jpg)
 
-8. class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
+7. class 中把方法写 constructor 里和写外面区别是什么？class 转 es5
      <details open>
 
     [ES6 系列之 Babel 是如何编译 Class 的(上)](https://juejin.cn/post/6844903704873664520)
@@ -99,7 +94,7 @@
     }
     // 或者是
     Person.sayHello = function () {
-        return 'HELLO';
+        return 'hello';
     };
     Person.name = 'kk';
 
@@ -109,7 +104,6 @@
     kevin.sayHello(); // TypeError: kevin.sayHello is not a function
 
     // ES5
-
     function Person() {}
 
     Person.sayHello = function () {
@@ -122,7 +116,7 @@
 
     **类不能直接执行，Person()会报错**
 
-9. 私有变量的实现方式
+8. 私有变量的实现方式
      <details open>
 
     - 最新的提案可以直接前面写#，这样就成为了私有变量
@@ -137,7 +131,7 @@
     // {Symbol(): "haha"}
     ```
 
-10. 装饰器
+9. 装饰器
      <details open>
 
     装饰器的话，从函数的角度来看，如果只是作用在`class`组件上的话，其实和`HOC`没多少区别，
@@ -227,7 +221,7 @@
     这两种是不可以混合使用的，使用会报错。
     具体所有类型的我都写在了 decoratorTest 上了，可以去看。
 
-11. HOC 和 renderprops
+10. HOC 和 renderprops
      <details open>
 
     HOC 和 renderprops 其实都是属于增强组件
@@ -278,7 +272,7 @@
 
     [hoc vs renderprops vs hook](https://jishuin.proginn.com/p/763bfbd36ecc)
 
-12. 箭头函数和普通函数的区别
+11. 箭头函数和普通函数的区别
      <details open>
 
     - 箭头函数的 this 是透传的
@@ -287,7 +281,7 @@
     - 箭头函数没有原型属性
     - 箭头函数不能通过 apply.call.bind 改变 this。
 
-13. 为啥 let 用 window 访问不到
+12. 为啥 let 用 window 访问不到
     <details open>
 
     let 在全局中创建的变量存在于一个块级作用域（Script）中,它与 window(Global)平级,
@@ -298,28 +292,47 @@
     ```js
     let a = 10;
     const b = 20;
-    相当于：
-    (function(){
-            var  a = 10;
-            var b = 20;
-    })()
+    // 相当于：
+    (function () {
+        var a = 10;
+        var b = 20;
+    })();
     ```
 
     ES5 没有块级作用域的概念，只有函数作用域，可以近似理解成这样。
     所以外层 window 必然无法访问。
 
-14. 为什么 for > forEach > map
+13. 为什么 for > forEach > map
     <details open>
 
     其实这三个循环方法并不完全等价：
 
     1. for 循环当然是最简单的，因为它没有任何额外的函数调用栈和上下文；
-    2. forEach 其次，因为它其实比我们想象得要复杂一些，它的函数签名实际上是 `array.forEach(function(currentValue, index, arr), thisValue)`它不是普通的 for 循环的语法糖，还有诸多参数和上下文需要在执行的时候考虑进来，这里可能拖慢性能；
-    3. map 最慢，因为它的返回值是一个等长的全新的数组，数组创建和赋值产生的性能开销很大。
+    2. forEach 其次，因为它其实比我们想象得要复杂一些，它的函数签名实际上是
+    3. `array.forEach(function(currentValue, index, arr), thisValue)`它不是普通的 for 循环的语法糖，还有诸多参数和上下文需要在执行的时候考虑进来，这里会拖慢性能；
+    4. map 最慢，因为它的返回值是一个等长的全新的数组，数组创建和赋值产生的性能开销很大。
 
-15. 类数组加上 push 方法，length 会增加， 因为 push 设计的就是一个通用的[mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push#description)
+14. 类数组加上 push 方法，length 会增加， 因为 push 设计的就是一个通用的[mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push#description)
 
-16. 什么是 BOM？
+    <details open>
+
+    ```js
+    // 创建一个类数组对象
+    const arrayLike = {
+        0: 'a',
+        1: 'b',
+        length: 2
+    };
+
+    // 使用 Array.prototype.push
+    Array.prototype.push.call(arrayLike, 'c');
+
+    // key就是新增的那个length的索引，val就是值
+    console.log(arrayLike);
+    // 输出：{ 0: 'a', 1: 'b', 2: 'c', length: 3 }
+    ```
+
+15. 什么是 BOM？
     <details open>
 
     BOM 其实就是浏览器的扩展，通常把任何特定于浏览器的扩展都归于 BOM 里
@@ -333,7 +346,7 @@
     - 对 cookie 的支持
     - XMLHttpRequest
 
-17. reduce 方法知道吗？
+16. reduce 方法知道吗？
      <details open>
 
     用于处理数组，比较好用。可以用来拼接字符串，求和,数组降维以及其他一些需要的数据操作
@@ -344,16 +357,15 @@
 
     第二个参数是初始值，如果没给的话，默认使用第一个值，这也是为什么如果空数组 reduce 的时候，如果不给初始值会报错的原因。
 
-18. array.some, array.every 方法里只写个 Array.isArray 是啥意思
+17. array.some, array.every 方法里只写个 Array.isArray 是啥意思
      <details open>
 
     array.some 里本来就是写一个函数用的，会把每一个参数自动投放进去，Array.isArray 不正好是一个函数吗？
 
-    但是反过来说，如果只写个 Array.map(parseInt) 就要小心了，因为我 parseInt 收两个参数，正好第二个是进制，也就是说，0,1,2 执行过来的话
-
+    但是反过来说，如果只写个 Array.map(parseInt) 就要小心了，因为我 parseInt 收两个参数，正好第二个是进制，也就是说，0,1,2 执行 var arr = [1, 2, 3]
     结果应该是 1，NaN, NaN， 因为 3 如果执行 2 进制，因为 2 进制里没有 3，所以解析不了。0 的话就当它是 10 进制
 
-19. 你知道迭代器吗？如何自己写一个简单的迭代器
+18. 你知道迭代器吗？如何自己写一个简单的迭代器
      <details open>
 
     迭代器就是一个拥有 next 方法的对象，每次调用会返回一个结果对象，该对象上有两个属性，`value`和`done`
@@ -376,7 +388,7 @@
     }
     ```
 
-20. 你知道生成器吗？
+19. 你知道生成器吗？
      <details open>
 
     生成器，就是 Generator ，它就是一个状态机。
@@ -437,7 +449,7 @@
      };
     ```
 
-21. for of, for in 的区别
+20. for of, for in 的区别
      <details open>
 
     for of 就是可以遍历拥有 iterator 属性的对象或数组,
@@ -470,7 +482,7 @@
 
     for in 主要用于遍历对象的属性，当然也可以用来遍历数组元素
 
-22. fetch 怎么用，如何封装一下它
+21. fetch 怎么用，如何封装一下它
      <details open>
 
     - `fetch`算是新一点的`api`，用法简单点
@@ -481,7 +493,7 @@
     - mode:"cors",是走 cors 模式跨域
     - 不过`fetch`不支持`node`，所有如果是有`ssr`的话，可以用`axios`
 
-23. Object.freeze（浅冻结）Object.seal 区别，如何深冻结一个对象？
+22. Object.freeze（浅冻结）Object.seal 区别，如何深冻结一个对象？
      <details open>
 
     - Object.freeze 是把对象的属性冻结，不能修改不能添加不能删除，但是是浅冻结
@@ -500,7 +512,7 @@
     }
     ```
 
-24. Object.defineProperty,Proxy 对象,Reflect 对象
+23. Object.defineProperty,Proxy 对象,Reflect 对象
      <details open>
 
     ```js
@@ -635,20 +647,20 @@
     Reflect.get(myObject, 'baz', myReceiverObject); // 8
     ```
 
-25. Number.isNaN 和 isNaN 的区别
+24. Number.isNaN 和 isNaN 的区别
      <details open>
 
     - isNaN 意思是这个是不是不是一个数字，比如它是 isNaN('abc') 就是 true。
     - Number.isNaN 只有 Number.isNaN(NaN)才是 true
     - Number.isNaN 是 es6 的，如果自己写的话，就是利用 typeof NaN 是 number 来写
 
-26. String.raw
+25. String.raw
     <details open>
 
     如果一串字符串，里面有\n 之类的，可能会被转译，如果不想让它被转译，想直出，
     用`String.raw`abc \n ss``,会把换行符号也返回出来，就是一个未加工的值，实际应用感觉没有。
 
-27. 描述一下事件传播
+26. 描述一下事件传播
     <details open>
 
     当事件发生在`DOM`元素上时，该事件并不完全发生在那个元素上。
@@ -663,20 +675,20 @@
 
     阻止冒泡使用的是`e.stoppropagation`,阻止捕获用的是`e.stopImmediatePropagation`
 
-28. 适合事件捕获的场景有哪些？
+27. 适合事件捕获的场景有哪些？
     <details open>
 
     1. 事件足够「抽象」：比如 load 事件，本身的定义就是基于父元素的内容，捕获阶段处理它会更加直观
     2. 事件足够「特别」：比如 scroll 事件，这是个触发很频繁的事件，因为操作是连续的，捕获阶段可以减少性能损失
     3. 事件足够「反常」：比如定义一个点击事件，让用户以为可以点击到某个元素但实际上父元素想发挥一个阻拦层区域效果的时候
 
-29. JavaScript 中的虚值是什么
+28. JavaScript 中的虚值是什么
     <details open>
 
     `const falsyValues = ['', 0, null, undefined, NaN, false];`
     这里面的都是虚值，虚值就是在转化成 boolean 时为 false 的值。
 
-30. Object.create 创建出来的对象和正常的区别是什么？如何创建一个没有原型的对象？
+29. Object.create 创建出来的对象和正常的区别是什么？如何创建一个没有原型的对象？
     <details open>
 
     通过 Object.create 创建出来的对象的原型指向传入的对象，也就是说
@@ -725,7 +737,7 @@
     };
     ```
 
-31. new 关键字有什么用？它到底做了啥？
+30. new 关键字有什么用？它到底做了啥？
     <details open>
 
     new 和构造函数创造一个对象。
@@ -738,7 +750,7 @@
 
     其实从这段代码就可以看出，虽然最后创建出来的对象是一致的，但是多赋值了一次，obj.\_\_proto\_\_ = Object.prototype,因为字面量创建的本来就是个对象了。所以，还是字面量方式更好
 
-32. 手写一个 promise
+31. 手写一个 promise
     <details open>
 
     - 第一步，先写这里的回调函数 三个状态，then 里的函数可以不传。
@@ -752,12 +764,12 @@
 
     [promise](https://zhenglin.vip/js/promise.js)
 
-33. 事件委托的原理
+32. 事件委托的原理
     <details open>
 
     因为事件传播正常是先捕获后冒泡，那么捕获/或者冒泡的时候，一定会经过目标元素的上级，这就是事件委托的原理。
 
-34. 原型、作用域、原型链、作用域链
+33. 原型、作用域、原型链、作用域链
     <details open>
 
     - js 本质上一切皆对象，每个对象都要有原型，这也是为什么有继承关系。
@@ -766,7 +778,7 @@
     - 函数有一个内部属性 [[scope]] ,当函数创建的时候，就会保存所有的父变量对象到其中。
     - [[scope]] 可以理解为所有父级变量对象的层级链
 
-35. instanceof 原理是啥？
+34. instanceof 原理是啥？
     <details open>
 
     instanceof 其实就是利用原型链去查找，找到了就返回 true
@@ -793,7 +805,7 @@
     console.log('hello world' instanceof PrimitiveString); // true
     ```
 
-36. null,undefined,未声明的变量的区别
+35. null,undefined,未声明的变量的区别
     <details open>
 
     - 未声明的变量就是不用 let ,var, const 关键字的比如直接写 a = 2;这样的，如果是在严格模式下，会报错
@@ -802,7 +814,7 @@
     - null 的话只能显式的被赋值，标识空值。
     - null == undefined；没有隐式转换。
 
-37. foreach 和 map 的区别
+36. foreach 和 map 的区别
     <details open>
 
     foreach 是遍历数组中的元素，没有返回值，通常需要修改原始数组的时候可以用 foreach, 如果直接`item = 2`， 这样 foreach 也不会改变原数组的，是没有意义的，只有`item.a = 2`,这样才是有意义的，虽然 map 也会改变，但是约定
@@ -815,13 +827,13 @@
 
     foreach 不能用 await，无法保证顺序，而 for of 就可以，因为用的是迭代器。
 
-38. 宿主对象和原生对象的区别
+37. 宿主对象和原生对象的区别
     <details open>
 
     - 原生对象是由 `ECMAScript`规范定义的 `JavaScript`内置对象，比如`String`、`Math`、`RegExp`、`Object`、`Function`等等。
     - 宿主对象是由运行时环境（浏览器或 `Node`）提供，比如`window`、`XMLHTTPRequest`等等。比如`Node`的`process`,`setImmediate`。
 
-39. call,apply,bind 区别
+38. call,apply,bind 区别
     <details open>
 
     - call 第二个参数是一个一个的
@@ -830,7 +842,7 @@
     - 实现 bind 就更简单了，context 不用动，传递下 this 函数，然后 return 个 function，参数和之前的组合一下，调用 apply 就可以了。
     - call 比 apply 快，因为 apply 内部还要判断参数是不是数组，还需要获取数组 length 等等，而 call 就没这些事
 
-40. 事件循环 event loop
+39. 事件循环 event loop
     <details open>
 
     我们知道`JavaScript`的一大特点就是单线程，而这个线程中拥有唯一的一个事件循环。
@@ -975,7 +987,7 @@
 
     输出是 time1, 2s 后输出 pthen1, time2, pthen2，一样论证了 settimeout 等待。
 
-41. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
+40. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
     <details open>
 
     基本完整版本参见 [deepCopy.js](https://zhenglin.vip/js/deepcopy.js)
@@ -992,7 +1004,7 @@
     }
     ```
 
-42. typeof null 为啥是 object？
+41. typeof null 为啥是 object？
     <details open>
 
     原理是这样的，不同的对象在底层都表示为二进制，在`Javascript`中二进制前三位用来表示 `TYPE_TAG`
@@ -1001,7 +1013,7 @@
 
     null 在设计的时候是一个空指针，它的二进制表示全为 0，自然前三位也是 0，所以执行 typeof 时会返回"object"。
 
-43. 什么是闭包，闭包经典问题解法有哪几种？
+42. 什么是闭包，闭包经典问题解法有哪几种？
     <details open>
 
     闭包就是函数内可以访问函数外的变量，就属于闭包。但是我们常说的，是属于调用栈出栈了，依然能够中找到那个变量。
@@ -1025,11 +1037,11 @@
     - 用 let 封闭作用域
     - 用 settimeout 第三个参数就是传给 settimeout 里面的函数的入参。
 
-44. 实现继承的几种方式
+43. 实现继承的几种方式
     <details open>
 
     - 原型链继承
-      `sub.prototype = new Parent();`
+      `Sub.prototype = new Parent();`
       缺点 1 就是 Parent 的原型大家共享了，一荣俱荣。2 在创建 Child 的实例时，不能向 Parent 传参
 
     - 寄生组合继承
@@ -1119,7 +1131,7 @@
 
     但是如果是**原生对象**，就不行了，是拿不到内部属性的
 
-45. 手写 call, apply, bind 出来
+44. 手写 call, apply, bind 出来
     <details open>
 
     call 和 apply，就是传一个上下文进去，没有就赋值 window
@@ -1130,7 +1142,7 @@
 
     [Object(this)的原因](https://stackoverflow.com/questions/44079391/what-is-the-purpose-of-doing-objectthis/44080309)
 
-46. 正则
+45. 正则
     <details open>
 
     - \s 空格
@@ -1139,9 +1151,7 @@
     - \b 单次边界
     - \i 忽略大小写
 
-    实例属性有
-
-    - reg.flags ,返回 flags 属性中的标志以字典序排序（从左到右，即"gimuy"）。 u 是编码方面的。
+    - reg.flags, 返回 flags 属性中的标志以字典序排序（从左到右，即"gimuy"）。 u 是编码方面的。
 
     ```js
     // polyfill
@@ -1160,20 +1170,53 @@
     - reg.ignoreCase, 是否用了 i， 大小写
     - reg.multiline , 是否用了 m 多行标志
 
+46. 断言和捕获的区别？
+    断言和捕获是正则表达式中两种完全不同的概念，它们的作用、行为和结果都有显著区别。
+
+    - 断言用于 检查条件，但不会捕获内容，也不会消耗字符。匹配的是一个“位置”。而且要注意，断言一定有括号的，括号是跟着断言一起用的。
+
+        - 正向断言：(?=...)，检查当前位置后面是否满足条件。
+        - 正向捕获断言：(?<=...)，检查当前位置前面是否满足条件。
+        - 负向断言：(?!...)，检查当前位置后面是否不满足条件。
+        - 负向捕获断言：(?<!...)，检查当前位置前面是否不满足条件。
+
+        ```js
+        const str = '123abc456';
+        const regex = /\d(?=abc)/g;
+        console.log(str.match(regex)); // 输出：['3']
+        ```
+
+    - 捕获用于 提取匹配的内容，可以通过 $1, $2 等引用捕获的内容。
+
+    ```js
+    const str = '123abc456';
+    const regex = /(\d)(abc)/g;
+    const result = str.replace(regex, '$1-');
+    console.log(result); // 输出：123-456
+    // 这里的$1就是3，$2就是abc
+    // str.match(regex) = ["3abc"]，这就是匹配的结果，但是你加了2个括号，所以$1就是3，$2就是abc
+    ```
+
 47. 千位分割符正则
     <details open>
 
-    第二种`reg = /(\d)(?=(\d{3})+$)/g`， 这样就可以用 `str.replace(/(\d)(?=(\d{3})+$)/g, '$1,')`了
+    ```js
+    // 正则1
+    var reg = /(\d)(?=(\d{3})+$)/g;
+    var str = '12345678';
+    str.replace(/(\d)(?=(\d{3})+$)/g, '$1,');
 
-    第三种 `str.replace(/\d(?=(\d{3})+$)/g, (target)=> target + ',')`
-
-    `reg = /\d(?=(\d{3})+$)/g`
-
-    `str.replace(reg, '$&,')`
+    // 正则2
+    var reg = /\d(?=(\d{3})+$)/g;
+    var str = '12345678';
+    str.replace(/\d(?=(\d{3})+$)/g, (target) => target + ',');
+    // 或者
+    str.replace(reg, '$&,');
+    ```
 
     拆解来说，第一个，必须要有一个\d，用来占一个数字，防止出现 ,233,333 这样的情况
 
-    关于 `?=` 的意思，就是用了这个，就是正向预查， `\d(?=)` 就是指前面有一个数字，后面满足啥啥条件的
+    关于 `?=` 的意思，就是用了这个，就是正向预查， `\d(?=)` 就是指前面有一个数字，后面满足啥啥条件的，但不会消耗字符，也不会将断言内容包含在结果中。
 
     这样的情况下，字符串会从前往后匹配，并不是从后往前匹配，不过关系其实不大。
 
@@ -1245,9 +1288,16 @@
 
     $1、$2、...、$99 与 regexp 中的第 1 到第 99 个子表达式相匹配的文本。
 
-    $& 是与 regexp 相匹配的子串。
-
-    如果让你实现 get(ob, 'name.sex.k[a][b]'),就不能用$&的了
+    ```js
+    // 以上一题举例
+    var str = '123abc566';
+    var reg = /(\d)(abc)/g;
+    // 因为这里写了两个括号，所以一个是$1,一个是$2，很容易理解
+    // 但是假如2个括号都去掉
+    var reg = /\dabc/g;
+    // 这个时候$1就取不到了，但是可以直接$&,$&这里的结果就是 3abc，
+    str.replace(reg, '$&,'); // 123abc-566
+    ```
 
 48. observer 的几个 API
     <details open>
