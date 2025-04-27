@@ -482,7 +482,7 @@
 
     for in 主要用于遍历对象的属性，当然也可以用来遍历数组元素
 
-21. fetch 怎么用，如何封装一下它
+21. fetch 怎么用
      <details open>
 
     - `fetch`算是新一点的`api`，用法简单点
@@ -500,6 +500,13 @@
     - Object.seal 是封闭一个对象。是可以修改属性的值的（前提是本来就可写）。但是不能删除不能新增。
 
     所以`seal`比`freeze`少一个限制修改属性值。所以更像是封闭对象结构。
+
+    |特性 |Object.freeze |Object.seal
+    |添加新属性 |不允许 |不允许
+    |删除已有属性| 不允许 |不允许
+    |修改已有属性的值| 不允许 |允许
+    |重新配置属性描述符| 不允许 |不允许
+    |嵌套对象的属性是否可修改| 可以（浅冻结）| 可以（浅密封）
 
     ```js
     // 深冻结
@@ -524,20 +531,18 @@
 
         set:function() {}
         get:function() {}
-
-        enumerable: 是否是可枚举的，默认是false，通过字面量创建的默认是true。
-
-        configurable: 是否可以配置
+        enumerable: // 是否是可枚举的，默认是false，通过字面量创建的默认是true。
+        configurable: // 是否可以配置
 
      })
 
     ```
 
-    set，get 不能和 value,writable 同时出现。因为前者是存取描述符，后者是数据描述符，强行会报错。
+    set，get 不能和 value、writable 同时出现。因为前者是存取描述符，后者是数据描述符，强行会报错。
 
     除了`value`, `writable`以外其他属性是否可以配置。`configurable`当且仅当 `configurable`为 `true`时，该属性才能够被改变，也能够被删除（`delete`），默认为 `false`
 
-    此外，`descriptor`这里所有属性都是非必须的，但是，只要写了`defineProperty`，至少要给第三个参数一个空对象。
+    此外，`descriptor` 这里所有属性都是非必须的，但是，只要写了`defineProperty`，至少要给第三个参数一个空对象。
 
     应用实例，`Vue`之前就是靠它来实现数据监控的。
 
@@ -545,9 +550,10 @@
 
     defineProperty 不能监控数组的变化，而且只能监听对象的属性。如果一个对象很多属性，需要遍历。
 
-    像 Vue 里，他监控数组的方式是复写数组的方法， `push() pop() shift() unshift() splice() sort() reverse()`
+    像 Vue 里，他监控数组的方式是复写数组的方法。
 
     ```js
+    // push() pop() shift() unshift() splice() sort() reverse()
     const aryMethods = [
         'push',
         'pop',
@@ -564,16 +570,31 @@
         // 将push, pop等封装好的方法定义在对象arrayAugmentations的属性上
         // 注意：是属性而非原型属性
         arrayAugmentations[method] = function () {
-            console.log('我被改变啦!');
+            // 获取数组的观察者对象
+            const ob = this.__ob__;
+
+            // 如果是 push、unshift、splice，需要对新增的元素进行响应式处理
+            let inserted;
+            switch (method) {
+                case 'push':
+                case 'unshift':
+                    inserted = args;
+                    break;
+                case 'splice':
+                    inserted = args.slice(2);
+                    break;
+            }
+            if (inserted) ob.observeArray(inserted);
+
+            // 通知依赖更新
+            ob.dep.notify();
             // 调用对应的原生方法并返回结果
             return original.apply(this, arguments);
         };
     });
     ```
 
-    proxy 相当于一个中间层，proxy 是直接监听对象的，而且可以操作的 handler 很多，比如 set,has,get,apply,call 等等。它比 defineProperty 强大很多。<b>至于属性也是对象的情况下，两者都还是需要递归监听的。</b>
-
-    举个例子
+    Proxy 相当于一个中间层，Proxy 是直接监听对象的，而且可以操作的 handler 很多，比如 set、has、get、apply、call 等等。它比 defineProperty 强大很多。 <b>至于属性也是对象的情况下，两者都还是需要递归监听的。vue3 内部就是递归调用监听的</b>
 
     ```js
     var obj = { name: 1, sex: 'male', in: { k: 1, d: 2 } };
@@ -585,17 +606,17 @@
         },
         get(target, key, receiver) {
             console.log('我听到我被动了');
-            // 可以在这里判断get出来的是不是对象，然后递归proxy？
+            // 可以在这里判断get出来的是不是对象，然后递归proxy
             return Reflect.get(target, key, receiver);
         }
     });
     ```
 
-    在上面这个代码里，访问 cc.name，会触发 log， 访问 cc.in.k，也会触发
+    在上面这个代码里，访问 cc.name，会触发 log， 访问`cc.in.k`，也会触发
 
-    修改 cc.name 会被加上一个 ‘强制改成’，但是修改 cc.in.k，不会，因为修改 cc.in.k，cc.in 是一个对象引用类型，所以不会变。而 get 之所以会触发，是因为访问 `cc.in.k`，也就等于访问到了`cc.in`了啊，所以才会触发的。
+    修改 cc.name 会被加上一个 **强制改成**，但是修改 `cc.in.k`，不会，因为修改 `cc.in.k`，`cc.in` 是一个对象引用类型，所以不会变。而 get 之所以会触发，是因为访问 `cc.in.k`，也就等于访问到了`cc.in`，所以才会触发的。
 
-    里面好多方法第三个参数其实就是一个新的 OBJ 指向。
+    里面好多方法第三个参数其实就是一个新的 obj 指向。
 
     如果一个属性不可配置（configurable）且不可写（writable），则 Proxy 不能修改该属性，否则通过 Proxy 对象访问该属性会报错。
 
@@ -606,7 +627,7 @@
         name: 'aaa',
         age: 1
     };
-    var ss = new Proxy(obj, {
+    var ageAdd = new Proxy(obj, {
         get(target, key, recevier) {
             if (key === 'age') {
                 let vv = target[key];
@@ -657,8 +678,12 @@
 25. String.raw
     <details open>
 
-    如果一串字符串，里面有\n 之类的，可能会被转译，如果不想让它被转译，想直出，
-    用`String.raw`abc \n ss``,会把换行符号也返回出来，就是一个未加工的值，实际应用感觉没有。
+    是 JavaScript 中的一个静态方法，属于 String 对象。它主要用于处理模板字符串中的转义字符，返回一个“原始”字符串（即不对反斜杠 \ 转义的字符串）。
+
+    ```js
+    const rawString = String.raw`Hello\nWorld`;
+    console.log(rawString); // 输出: Hello\nWorld
+    ```
 
 26. 描述一下事件传播
     <details open>
@@ -671,7 +696,31 @@
 
     `addeventlistener`就是监听目标用的，然后第三个参数是`boolean`类型，默认`false`是冒泡阶段，`true`就是捕获阶段。
 
-    事件传播到了目标后，触发的顺序按照 声明的顺序来，也就是说，完全可能是先冒泡后捕获。
+    在 JavaScript 的事件传播机制中，事件到达目标元素后，触发的事件处理函数的顺序是按照事件监听器的声明顺序来决定的，而不是严格按照“捕获阶段优先”或“冒泡阶段优先”的规则。
+
+    ```js
+    const button = document.querySelector('button');
+
+    // 冒泡阶段监听器
+    button.addEventListener(
+        'click',
+        () => {
+            console.log('冒泡阶段监听器');
+        },
+        false
+    );
+
+    // 捕获阶段监听器
+    button.addEventListener(
+        'click',
+        () => {
+            console.log('捕获阶段监听器');
+        },
+        true
+    );
+    // 冒泡阶段监听器
+    // 捕获阶段监听器
+    ```
 
     阻止冒泡使用的是`e.stoppropagation`,阻止捕获用的是`e.stopImmediatePropagation`
 
