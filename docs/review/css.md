@@ -3,23 +3,23 @@
 
     flex 布局核心就是：容器和子元素
 
-    1. 容器
+    - 容器
         1. display: flex;
         2. 定义方向：flex-direction: row | column | row-reverse | column-reverse;
         3. 定义子项是否换行：flex-wrap: nowrap | wrap;
         4. 定义子元素在主轴上的对齐方式。 justify-content: flex-start | flex-end | center | space-between | space-around;
         5. 定义子元素在交叉轴上的对齐方式。 align-items: flex-start | flex-end | center | baseline | stretch;
         6. 怎么理解主轴和交叉轴呢，主轴是 flex-direction 定义的方向，交叉轴是垂直于主轴的轴。
-    2. 容器内子元素
+    - 容器内子元素
         1. flex: 1;是简写形式，flex: 1; 等同于 flex: 1 1 auto;包含三个值：flex-grow、flex-shrink、flex-basis。分别代表：子项的放大比例、子项的缩小比例、子项的基准值。
         2. 定义单个子项在交叉轴上的对齐方式。会覆盖 align-items align-self: auto | flex-start | flex-end | center | baseline | stretch;
 
 2. 详细说说 Grid 布局
-    <details open>
+     <details open>
 
     grid 布局核心同样是容器和子元素
 
-    1. 容器
+    - 容器
         1. display: grid;
         2. grid-template-columns: 100px 100px 100px; 是指子元素的宽度。三个值分别代表三个子元素的宽度。如果有更多的列，会重复。
         3. grid-template-rows: 100px 100px 100px; 是指子元素的高度。三个值分别代表三个子元素的高度。如果有更多的行，会重复。
@@ -28,23 +28,19 @@
         6. justify-items: start | end | center | stretch;
         7. align-items: start | end | center | stretch;
         8. justify-content: start | end | center | stretch | space-around | space-between | space-evenly;
-    2. 子元素
-        1. grid-column-start: 1; 定义子元素在网格中的开始列
-        2. grid-column-end: 3; 定义子元素在网格中的结束列
-        3. grid-row-start: 1; 定义子元素在网格中的开始行
-        4. grid-row-end: 3; 定义子元素在网格中的结束行
+    - 子元素 9. grid-column-start: 1; 定义子元素在网格中的开始列 10. grid-column-end: 3; 定义子元素在网格中的结束列 11. grid-row-start: 1; 定义子元素在网格中的开始行 12. grid-row-end: 3; 定义子元素在网格中的结束行
 
 3. flex 布局与 grid 布局的区别
    **Flex 布局与 Grid 布局对比**
 
-    1. 布局维度
+    - 布局维度
 
         | **特性**     | **Flex 布局**            | **Grid 布局**      |
         | ------------ | ------------------------ | ------------------ |
         | **布局维度** | 一维布局（行或列）       | 二维布局（行和列） |
         | **适用场景** | 适合简单的内容对齐或分布 | 适合复杂的页面布局 |
 
-    2. 容器属性
+    - 容器属性
 
         | **特性**     | **Flex 布局**                  | **Grid 布局**                               |
         | ------------ | ------------------------------ | ------------------------------------------- |
@@ -52,28 +48,28 @@
         | **子项对齐** | justify-content 和 align-items | justify-items 和 align-items                |
         | **间距**     | 通过 margin 或 gap             | 通过 grid-gap 或 gap                        |
 
-    3. 子项属性
+    - 子项属性
 
         | **特性**     | **Flex 布局**                      | **Grid 布局**              |
         | ------------ | ---------------------------------- | -------------------------- |
         | **子项大小** | flex-grow、flex-shrink、flex-basis | grid-row 和 grid-column    |
         | **子项对齐** | align-self                         | justify-self 和 align-self |
 
-    4. 响应式设计
+    - 响应式设计
 
         | **特性**     | **Flex 布局**                | **Grid 布局**                    |
         | ------------ | ---------------------------- | -------------------------------- |
         | **适用场景** | 更适合简单的响应式设计       | 更适合复杂的响应式设计           |
         | **动态调整** | 子项可以根据内容动态调整大小 | 网格可以根据屏幕大小动态调整布局 |
 
-    5. 使用场景
+    - 使用场景
 
         | **场景**         | **Flex 布局**   | **Grid 布局**                         |
         | ---------------- | --------------- | ------------------------------------- |
         | **简单对齐**     | Flex 布局更适合 | Grid 布局也可以实现，但不如 Flex 简洁 |
         | **复杂网格布局** | 不适合          | Grid 布局更适合                       |
 
-    6. 优缺点对比
+    - 优缺点对比
 
         | **特性** | **Flex 布局**          | **Grid 布局**                      |
         | -------- | ---------------------- | ---------------------------------- |
