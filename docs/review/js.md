@@ -2682,7 +2682,7 @@
 91. ES6 模块和 CommonJS 模块的主要区别是什么？
     <details open>
 
-    ### 1. 加载方式
+    - 加载方式
 
     ```js
     // ES6模块 - 静态加载
@@ -2692,7 +2692,7 @@
     const { foo } = require('./module.js');
     ```
 
-    ### 2. 输出方式
+    - 输出方式
 
     ```js
     // ES6模块 - 输出值的引用
@@ -2709,18 +2709,17 @@
     module.exports = { count, increment };
     ```
 
-    ### 3. 主要区别
-
-    - ES6 模块是静态的，CommonJS 是动态的
-    - ES6 模块支持 tree-shaking，CommonJS 不支持
-    - ES6 模块是异步加载，CommonJS 是同步加载
-    - ES6 模块输出的是值的引用，CommonJS 输出的是值的拷贝
-    - ES6 模块的 this 指向 undefined，CommonJS 的 this 指向当前模块
+    - 主要区别
+        - ES6 模块是静态的，CommonJS 是动态的
+        - ES6 模块支持 tree-shaking，CommonJS 不支持
+        - ES6 模块是异步加载，CommonJS 是同步加载
+        - ES6 模块输出的是值的引用，CommonJS 输出的是值的拷贝
+        - ES6 模块的 this 指向 undefined，CommonJS 的 this 指向当前模块
 
 92. 请解释 ES6 模块的加载机制和解析过程
     <details open>
 
-    ### 1. 加载阶段
+    - 加载阶段
 
     ```js
     // 模块的静态分析
@@ -2733,29 +2732,29 @@
     module.evaluate();
     ```
 
-    ### 2. 解析过程
+    - 解析过程
 
-    1. 静态分析阶段
+        1. 静态分析阶段
 
-        - 解析 import 和 export 语句
-        - 建立模块依赖图
-        - 检查语法错误
+            - 解析 import 和 export 语句
+            - 建立模块依赖图
+            - 检查语法错误
 
-    2. 实例化阶段
+        2. 实例化阶段
 
-        - 创建模块实例
-        - 分配内存空间
-        - 建立模块间的连接
+            - 创建模块实例
+            - 分配内存空间
+            - 建立模块间的连接
 
-    3. 求值阶段
-        - 执行模块代码
-        - 初始化变量
-        - 处理副作用
+        3. 求值阶段
+            - 执行模块代码
+            - 初始化变量
+            - 处理副作用
 
 93. 如何使用动态导入？它有什么优势？
     <details open>
 
-    ### 1. 基本用法
+    - 基本用法
 
     ```js
     // 动态导入
@@ -2778,18 +2777,17 @@
     }
     ```
 
-    ### 2. 优势
-
-    - 按需加载，提高初始加载速度
-    - 代码分割，优化打包体积
-    - 条件加载，根据运行时条件决定
-    - 错误处理更灵活
-    - 支持 Promise，便于异步处理
+    - 优势
+        - 按需加载，提高初始加载速度
+        - 代码分割，优化打包体积
+        - 条件加载，根据运行时条件决定
+        - 错误处理更灵活
+        - 支持 Promise，便于异步处理
 
 94. 模块作用域和全局作用域有什么区别？
     <details open>
 
-    ### 1. 作用域隔离
+    - 作用域隔离
 
     ```js
     // 模块作用域
@@ -2800,18 +2798,17 @@
     window.globalVar = 'global';
     ```
 
-    ### 2. 主要区别
-
-    - 模块作用域是封闭的，变量不会泄漏到全局
-    - 模块默认使用严格模式
-    - 模块的 this 指向 undefined
-    - 模块的变量提升行为与全局不同
-    - 模块可以通过 export 共享变量
+    - 主要区别
+        - 模块作用域是封闭的，变量不会泄漏到全局
+        - 模块默认使用严格模式
+        - 模块的 this 指向 undefined
+        - 模块的变量提升行为与全局不同
+        - 模块可以通过 export 共享变量
 
 95. 如何优化 JavaScript 模块的加载性能？
     <details open>
 
-    ### 1. 代码分割
+    - 代码分割
 
     ```js
     // 动态导入实现代码分割
@@ -2826,110 +2823,10 @@
     ];
     ```
 
-    ### 2. 优化策略
+    - 优化策略
 
-    - 使用代码分割减少初始加载体积
-    - 实现按需加载
-    - 使用预加载和预获取
-    - 优化模块缓存策略
-    - 压缩和优化模块代码
-
-96. JavaScript 中有哪些常见的模块模式？
-    <details open>
-
-    ### 1. IIFE 模块模式
-
-    ```js
-    const module = (function () {
-        let privateVar = 'private';
-
-        function privateMethod() {
-            return privateVar;
-        }
-
-        return {
-            publicMethod: function () {
-                return privateMethod();
-            }
-        };
-    })();
-    ```
-
-    ### 2. 命名空间模式
-
-    ```js
-    const MYAPP = {
-        module1: {
-            foo: function () {}
-        },
-        module2: {
-            bar: function () {}
-        }
-    };
-    ```
-
-97. 如何对 JavaScript 模块进行单元测试？
-    <details open>
-
-    ### 1. 测试示例
-
-    ```js
-    // 模块代码
-    export function add(a, b) {
-        return a + b;
-    }
-
-    // 测试代码
-    import { add } from './math.js';
-
-    describe('add function', () => {
-        it('should add two numbers', () => {
-            expect(add(1, 2)).toBe(3);
-        });
-    });
-    ```
-
-    ### 2. 测试策略
-
-    - 使用依赖注入
-    - 实现模块隔离
-    - 编写单元测试
-    - 进行集成测试
-    - 确保测试覆盖率
-
-98. JavaScript 模块中有哪些安全考虑？
-    <details open>
-
-    ### 1. 安全措施
-
-    ```js
-    // 输入验证
-    export function processData(data) {
-        if (!isValid(data)) {
-            throw new Error('Invalid data');
-        }
-        // 处理数据
-    }
-
-    // 错误处理
-    export async function fetchData() {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Network error');
-            }
-            return await response.json();
-        } catch (error) {
-            console.error('Error:', error);
-            throw error;
-        }
-    }
-    ```
-
-    ### 2. 安全考虑
-
-    - 实现输入验证
-    - 处理错误情况
-    - 控制模块权限
-    - 记录安全日志
-    - 实现数据加密
+        - 使用代码分割减少初始加载体积
+        - 实现按需加载
+        - 使用预加载和预获取
+        - 优化模块缓存策略
+        - 压缩和优化模块代码
