@@ -7,27 +7,140 @@
 2. ECMAscript 发展进程中，都有哪些东西的添加？
     <details open>
 
-    - es6 增加的最多。包含类，模块，迭代器，生成器、箭头函数、反代理和数据类型
+    - es6 增加的最多。包含类，模块，迭代器，生成器、箭头函数、代理(Proxy)和数据类型
+      示例：
+
+        ```js
+        // 类
+        class Person {
+            constructor(name) {
+                this.name = name;
+            }
+        }
+
+        // 模块
+        import { something } from './module.js';
+        export const value = 42;
+
+        // 箭头函数
+        const add = (a, b) => a + b;
+
+        // 代理
+        const handler = {
+            get: function (target, prop) {
+                return prop in target ? target[prop] : 37;
+            }
+        };
+        ```
+
     - es7 只包含少量语法层面增强，比如 includes,和指数操作符
+      示例：
+
+        ```js
+        // includes
+        [1, 2, 3].includes(2); // true
+
+        // 指数操作符
+        2 ** 3; // 8
+        ```
+
     - es8 增加了异步函数 async/await 和 Object.values/Object.entries 等
-    - es9 增加 promise.finally 和异步迭代、剩余和扩展属性
-    - es10 增加了 flat/flatMap，固定了 sort 的顺序等等
+      示例：
+
+        ```js
+        // async/await
+        async function fetchData() {
+            const response = await fetch('url');
+            const data = await response.json();
+            return data;
+        }
+
+        // Object.values/Object.entries
+        const obj = { a: 1, b: 2 };
+        Object.values(obj); // [1, 2]
+        Object.entries(obj); // [['a', 1], ['b', 2]]
+        ```
+
+    - es9 增加 promise.finally 和异步迭代、剩余参数和扩展运算符
+      示例：
+
+        ```js
+        // Promise.finally
+        fetch('url')
+            .then((response) => response.json())
+            .catch((error) => console.error(error))
+            .finally(() => console.log('Done'));
+
+        // 异步迭代
+        for await (const item of asyncIterable) {
+            console.log(item);
+        }
+
+        // 剩余参数和扩展运算符
+        const [first, ...rest] = [1, 2, 3];
+        const obj = { ...otherObj };
+        ```
+
+    - es10 增加了 flat/flatMap，规范了 sort 的稳定性等等
+      示例：
+
+        ```js
+        // flat/flatMap
+        [1, [2, [3]]].flat(2); // [1, 2, 3]
+        [1, 2, 3].flatMap((x) => [x * 2]); // [2, 4, 6]
+
+        // 稳定的 sort
+        const arr = [
+            { name: 'a', age: 20 },
+            { name: 'b', age: 20 }
+        ];
+        arr.sort((a, b) => a.age - b.age); // 保持相对顺序
+        ```
+
+    - es11 增加了?.可选链
 
 3. `ES6`中暂时性死区`TDZ`是什么？
      <details open>
 
-    暂时性死区就是说如果函数外面写了一个 let a = 1;
+    暂时性死区(Temporal Dead Zone)就是说如果函数外面写了一个 let a = 1;
     结果里面用的时候，先用了 a，又声明了 let a，会报错，因为它会形成一个封闭作用域。
     而且，用了`let`的话，就代表`typeof`不是绝对安全的了。
+
+    ```js
+    // 正常情况
+    let x = 1;
+    console.log(x); // 1
+
+    // TDZ 示例
+    console.log(y); // ReferenceError: y is not defined
+    let y = 2;
+
+    // typeof 在 TDZ 中也不安全
+    console.log(typeof z); // ReferenceError
+    let z = 3;
+    ```
 
 4. 什么是标签模板？模板字符串函数的参数你知道是啥吗？
      <details open>
 
     标签模板就是在模板字符串前面加个函数，然后通过函数处理这个模板字符串。
+    标签模板函数的参数：
 
-    函数里的参数第一个就是非变量的数组合集，后面的参数是...，代表各个参数。
+    1. 第一个参数：字符串数组，包含模板字符串中的所有静态文本
+    2. 剩余参数：模板字符串中的表达式值
 
-    实际上这个功能意义我觉得不大，因为进了函数处理后，我要先把它拼接起来。那我为什么不直接把整个字符串拿到后在用函数处理一下呢？
+    示例：
+
+    ```js
+    function tag(strings, ...values) {
+        console.log(strings); // ['Hello ', ' world ', '']
+        console.log(values); // ['foo', 'bar']
+        return 'Processed';
+    }
+
+    const result = tag`Hello ${'foo'} world ${'bar'}`;
+    console.log(result); // 'Processed'
+    ```
 
 5. weakmap 用过吗？ 知道它的使用场景吗？
      <details open>
@@ -131,100 +244,279 @@
     // {Symbol(): "haha"}
     ```
 
-9. 装饰器
+9. 箭头函数和普通函数的区别
      <details open>
 
-    装饰器的话，从函数的角度来看，如果只是作用在`class`组件上的话，其实和`HOC`没多少区别，
+    - 箭头函数的 this 是透传的
+    - 箭头函数不能作为构造函数，所以就不能用 new
+    - 箭头函数不能用 arguments，只能用...args
+    - 箭头函数没有原型属性
+    - 箭头函数不能通过 apply.call.bind 改变 this。
 
-    - 作用在`class`组件的话，它的第一个参数`target`指向的就是这个类组件，可以利用这个来写 controller()
-    - 作用在类下的方法的话，它的第一个参数是类的原型，第二个参数就是方法名，第三个参数就是一个`description`对象，下面会有枚举，`value`,可写这样的属性.
-    - 作用在类下的 get name() {} 这样的话，第三个参数就不会有 value 这样的东西了。第三个参数会有 set get。这里就说到了数据描述符和存储描述符互斥的问题了。
-    - 如果直接作用在一个属性上的话，第三个参数是没有 value 或 set get 的，因为那个属性不是在原型本身上的，是在实例化的时候才会有，而装饰器是在编译阶段就执行的，所以也就没有。
-      直接作用在类上面，比如
+10. 为啥 let 用 window 访问不到
+    <details open>
+
+    let 在全局中创建的变量存在于一个块级作用域（Script）中,它与 window(Global)平级,
+    var 在全局中创建的变量存在于 window(Global)中;
+
+    const 和 let 会生成块级作用域，可以理解为
 
     ```js
-    @weapon
-    class AAA {}
+    let a = 10;
+    const b = 20;
+
+    // 相当于ES5中的实现方式
+    (function () {
+        var a = 10;
+        var b = 20;
+    })();
     ```
 
-    这样的形式，`weapon`这个函数里的第一个参数，就是这个类，也就是这个函数
+    ES5 没有块级作用域的概念，只有函数作用域，可以近似理解成这样。
+    所以外层 window 必然无法访问。
 
-    而只要在类里面，所有的`target`，也就是装饰器的第一个参数，都是这个类的原型。
+11. 类数组加上 push 方法，length 会增加， 因为 push 设计的就是一个通用的[mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push#description)
+
+    <details open>
+
+    ```js
+    // 创建一个类数组对象
+    const arrayLike = {
+        0: 'a', // 第一个元素
+        1: 'b', // 第二个元素
+        length: 2 // 初始长度
+    };
+
+    // 使用Array.prototype.push方法添加新元素
+    Array.prototype.push.call(arrayLike, 'c');
+
+    // key就是新增的那个length的索引，val就是值
+    console.log(arrayLike);
+    // 输出：{ 0: 'a', 1: 'b', 2: 'c', length: 3 }
+    ```
+
+12. 什么是 BOM？
+    <details open>
+
+    BOM（Browser Object Model，浏览器对象模型）是浏览器提供的用于与浏览器窗口进行交互的对象集合。它包含以下主要组件：
+
+    - window：浏览器窗口的顶层对象
+    - location：当前页面的 URL 信息
+    - history：浏览历史记录
+    - navigator：浏览器信息
+    - screen：屏幕信息
+    - document：当前页面文档（虽然属于 DOM，但也是 BOM 的一部分）
+
+    这些对象提供了与浏览器交互的接口，允许 JavaScript 代码：
+
+    1. 控制浏览器窗口
+    2. 获取浏览器信息
+    3. 操作浏览历史
+    4. 获取屏幕信息
+    5. 处理页面导航
+
+    示例：
+
+    ```js
+    // 获取浏览器信息
+    console.log(navigator.userAgent);
+
+    // 获取屏幕信息
+    console.log(screen.width, screen.height);
+
+    // 操作浏览历史
+    history.back(); // 返回上一页
+    history.forward(); // 前进到下一页
+    ```
+
+13. 宿主对象和原生对象的区别
+    <details open>
+
+    - 原生对象是由 `ECMAScript`规范定义的 `JavaScript`内置对象，比如`String`、`Math`、`RegExp`、`Object`、`Function`等等。
+    - 宿主对象是由运行时环境（浏览器或 `Node`）提供，比如`window`、`XMLHTTPRequest`等等。比如`Node`的`process`,`setImmediate`。
+
+14. reduce 方法知道吗？
+     <details open>
+
+    用于处理数组，比较好用。可以用来拼接字符串，求和,数组降维以及其他一些需要的数据操作
+
+    `reduce((accumulator, currentValue, currentIndex, array))`
+
+    第一个大参数里的 第一个参数是聚合，第二个是当前的值，第三个是当前的 index，第四个是原始 array。
+
+    第二个参数是初始值，如果没给的话，默认使用第一个值，这也是为什么如果空数组 reduce 的时候，如果不给初始值会报错的原因。
+
+15. array.some, array.every 方法里只写个 Array.isArray 是啥意思
+     <details open>
+
+    array.some 里本来就是写一个函数用的，会把每一个参数自动投放进去，Array.isArray 不正好是一个函数吗？
+
+    但是反过来说，如果只写个 Array.map(parseInt) 就要小心了，因为我 parseInt 收两个参数，正好第二个是进制，也就是说，0,1,2 执行 var arr = [1, 2, 3]
+    结果应该是 1，NaN, NaN， 因为 3 如果执行 2 进制，因为 2 进制里没有 3，所以解析不了。0 的话就当它是 10 进制
+
+16. 什么是装饰器？
+    <details open>
+
+    JavaScript 中的装饰器（Decorators）是一种用于增强类、方法、属性或参数功能的特殊语法，它通过高阶函数的形式实现元编程。是在 ES7 提案（Stage 3），需通过 Babel 或 TypeScript 转译。由于未通过，所以在 chrome 控制台中目前还无法使用
+
+    装饰器可以作用在类上、方法上、属性上、参数上。基本接受三个参数，`target、name、description`，作用不同的地方参数个数不一样，但是最多就这 3 个。
+
+    **作用在类本身上基本如下几个功能：**
+
+    - 日志记录：记录类的创建、方法调用等。
+    - 权限控制：为类或方法添加权限检查。
+    - 元数据管理：为类或方法添加元数据。
+    - 行为修改：动态修改类或方法的行为。
+    - 封装：冻结类、限制类的扩展等。
+
+    ```js
+    function logClass(target) {
+        console.log(`Class ${target.name} has been created.`);
+    }
+
+    @logClass
+    class Person {}
+    // 输出: Class Person has been created.
+
+    // 增加静态方法或者属性
+    function addStaticMethod(target) {
+        target.sayHello = function () {
+            console.log('Hello from static method!');
+        };
+    }
+
+    @addStaticMethod
+    class Person {}
+    Person.sayHello(); // 输出: Hello from static method!
+
+    // 增加元信息
+    function addMetadata(metadata) {
+        // 如果装饰器里要额外加参数，就需要二次return一个function
+        return function (target) {
+            target.metadata = metadata;
+        };
+    }
+
+    @addMetadata({ role: 'admin' })
+    class User {}
+    console.log(User.metadata); // 输出: { role: 'admin' }
+    ```
+
+    类装饰器只有一个参数。在类里面，所有的`target`，都是这个类的原型。
 
     可以发现，这些装饰器函数，都在实例化前就全部打印了
 
-    说明啥，说明是在编译阶段就给弄进去了，所以更不可能指向实例了，因为那时候还没有，所以指向的是原型
+    这更加印证了装饰器需要靠 babel 编译，所以在编译阶段就合进去了，更不可能指向实例了，因为那时候还没有实例被生成，所以指向的是原型。
 
-    第二个参数，目前看来都是`name`，也就是对应的方法名
+    **作用在类下的方法:**
 
-    第三个参数，就是`description`。也就是对象的描述。
+    它的第一个参数是类的原型，第二个参数就是方法名，第三个参数就是一个`description`对象。
 
     ```js
-    @property
-    name = 'jansen';
-    @wrapee
-    arrowfn= () => {
-
+    // 方法装饰器
+    function logMethod(target, name, descriptor) {
+        console.log(target, name, descriptor);
+        // {add: ƒ} 其实就是Calculator.prototype
+        // add, 就是装饰的方法名字
+        // {value: ƒ, writable: true, enumerable: false, configurable: true}
+        // 是数据描述符，value就是方法本身，剩下的我们可以根据特性做一些操作。
+        const original = descriptor.value;
+        descriptor.value = function (...args) {
+            console.log(`Calling ${name} with`, args);
+            return original.apply(this, args);
+        };
+        return descriptor;
     }
+
+    class Calculator {
+        @logMethod
+        add(a, b) {
+            return a + b;
+        }
+    }
+    var obj = new Calculator();
+    obj.add(1, 2);
     ```
 
-    `property`作用在`name`上第三个参数有/`wrapee` 作用在`arrowfn`上第三个参数有
+    **作用在类下的 get/set 属性上：**
 
-    ```js
-    configurable: false
-    enumerable: true
-    可枚举，如果设置为false,以下3种迭代不会发现这个name
-    * for..in循环  ：只遍历对象自身的和继承的可枚举的属性
-    * Object.keys方法 ：返回对象自身的所有可枚举的属性的键名
-    * JSON.stringify方法：只串行化对象自身的可枚举的属性
-    * Object.assign()(ES6）:只拷贝对象自身的可枚举的属性
-    使用这个Object.getOwnPropertyNames，可以破解，详情见对比No.36
-    initializer: ƒ () 初始化，return初始化的值。
-    writable: true 是否可写，设置为false，原地实现readonly
-    ```
+    作用在类下的 get name() {} 这样的话，前两个参数是一样的，但是第三个参数不一样，这里就说到了数据描述符和存取描述符互斥的问题了。
 
     ```js
     @setget
     get selfname() {
     }
-    ```
-
-    `setget`作用在`get selfname`上，第三个参数有
-
-    ```js
+    // setget第三个参数会有如下,是存取描述符
     configurable: true;
     enumerable: false;
     get: ƒ();
     set: undefined;
     ```
 
-    可以发现，它没有 writable，它只有 set 和 get
+    可以发现，它没有 writable，它只有 set 和 get，这就是因为一种是数据描述符，一种是存取描述符。
 
     ```js
-    @deprecate("我已经废弃了")
-    callBad() {
+    const obj = {};
+
+    // 数据描述符
+    Object.defineProperty(obj, 'name', {
+        value: 'Alice',
+        writable: true,
+        enumerable: true,
+        configurable: true
+    });
+
+    // 存取描述符
+    let value = 'Alice';
+    Object.defineProperty(obj, 'name', {
+        get() {
+            return value;
+        },
+        set(newValue) {
+            console.log(`Setting name to ${newValue}`);
+            value = newValue;
+        },
+        enumerable: true,
+        configurable: true
+    });
+    ```
+
+    第三个参数是没有 value 或 set/get 的，因为那个属性不是在原型本身上的，是在实例化的时候才会有，而装饰器是在编译阶段就执行的，所以也就没有。
+
+    **作用在类下的属性上：**
+
+    如果直接作用在一个属性上的话，第三个参数现在都是不给了，所以针对属性的操作可以想下面一样，通过 `target[name]`来获得第三个参数的 value。然后手动 Object.defineProperty 来对属性进行操作。
+
+    ```js
+    function logProperty(target, name) {
+        let value = target[name];
+
+        const getter = () => {
+            console.log(`Getting value of ${name}: ${value}`);
+            return value;
+        };
+
+        const setter = (newValue) => {
+            console.log(`Setting value of ${name} to: ${newValue}`);
+            if (newValue < 0) {
+                throw new Error('Age must be a positive number');
+            }
+            value = newValue;
+        };
+
+        Object.defineProperty(target, name, {
+            get: getter,
+            set: setter,
+            enumerable: true,
+            configurable: true
+        });
     }
     ```
 
-    `deprecate`作用在`callbad`方法上，第三个参数有
-
-    ```js
-    configurable: true;
-    enumerable: false;
-    value: ƒ(params);
-    writable: true;
-    ```
-
-    方法有个 value，可以在 value 里说我废弃啦。
-
-    有的有 value,有的有 set get， 其实就是因为一个是数据描述符，一个是存取描述符，它内部帮你排斥好了。
-    这两种是不可以混合使用的，使用会报错。
-    具体所有类型的我都写在了 decoratorTest 上了，可以去看。
-
-10. HOC 和 renderprops
+17. HOC 和 RenderProps
      <details open>
 
-    HOC 和 renderprops 其实都是属于增强组件
+    HOC 和 RenderProps 其实都是属于增强组件
 
     HOC 就是接受一个组件作为参数，返回一个新的组件。应用的话，就举例子，比如利用 HOC，结合 hook 和 context，自己写一个 connect 函数。
 
@@ -270,106 +562,15 @@
 
     然后再 ProductData 组件的 render 方法里，`render() { this.props.render(this.state.data) }`
 
-    [hoc vs renderprops vs hook](https://jishuin.proginn.com/p/763bfbd36ecc)
-
-11. 箭头函数和普通函数的区别
-     <details open>
-
-    - 箭头函数的 this 是透传的
-    - 箭头函数不能作为构造函数，所以就不能用 new
-    - 箭头函数不能用 arguments，只能用...args
-    - 箭头函数没有原型属性
-    - 箭头函数不能通过 apply.call.bind 改变 this。
-
-12. 为啥 let 用 window 访问不到
-    <details open>
-
-    let 在全局中创建的变量存在于一个块级作用域（Script）中,它与 window(Global)平级,
-    var 在全局中创建的变量存在于 window(Global)中;
-
-    const 和 let 会生成块级作用域，可以理解为
-
-    ```js
-    let a = 10;
-    const b = 20;
-    // 相当于：
-    (function () {
-        var a = 10;
-        var b = 20;
-    })();
-    ```
-
-    ES5 没有块级作用域的概念，只有函数作用域，可以近似理解成这样。
-    所以外层 window 必然无法访问。
-
-13. 为什么 for > forEach > map
-    <details open>
-
-    其实这三个循环方法并不完全等价：
-
-    1. for 循环当然是最简单的，因为它没有任何额外的函数调用栈和上下文；
-    2. forEach 其次，因为它其实比我们想象得要复杂一些，它的函数签名实际上是
-    3. `array.forEach(function(currentValue, index, arr), thisValue)`它不是普通的 for 循环的语法糖，还有诸多参数和上下文需要在执行的时候考虑进来，这里会拖慢性能；
-    4. map 最慢，因为它的返回值是一个等长的全新的数组，数组创建和赋值产生的性能开销很大。
-
-14. 类数组加上 push 方法，length 会增加， 因为 push 设计的就是一个通用的[mdn](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/push#description)
-
-    <details open>
-
-    ```js
-    // 创建一个类数组对象
-    const arrayLike = {
-        0: 'a',
-        1: 'b',
-        length: 2
-    };
-
-    // 使用 Array.prototype.push
-    Array.prototype.push.call(arrayLike, 'c');
-
-    // key就是新增的那个length的索引，val就是值
-    console.log(arrayLike);
-    // 输出：{ 0: 'a', 1: 'b', 2: 'c', length: 3 }
-    ```
-
-15. 什么是 BOM？
-    <details open>
-
-    BOM 其实就是浏览器的扩展，通常把任何特定于浏览器的扩展都归于 BOM 里
-
-    - 弹出新窗口的能力
-    - 移动和缩放和关闭窗口能力
-    - navigator 对象，提供浏览器信息
-    - location 对象，提供地址信息
-    - screen 对象，提供屏幕信息
-    - performance 对象，提供浏览器内存占用，时间统计等信息
-    - 对 cookie 的支持
-    - XMLHttpRequest
-
-16. reduce 方法知道吗？
-     <details open>
-
-    用于处理数组，比较好用。可以用来拼接字符串，求和,数组降维以及其他一些需要的数据操作
-
-    `reduce((accumulator, currentValue, currentIndex, array))`
-
-    第一个大参数里的 第一个参数是聚合，第二个是当前的值，第三个是当前的 index，第四个是原始 array。
-
-    第二个参数是初始值，如果没给的话，默认使用第一个值，这也是为什么如果空数组 reduce 的时候，如果不给初始值会报错的原因。
-
-17. array.some, array.every 方法里只写个 Array.isArray 是啥意思
-     <details open>
-
-    array.some 里本来就是写一个函数用的，会把每一个参数自动投放进去，Array.isArray 不正好是一个函数吗？
-
-    但是反过来说，如果只写个 Array.map(parseInt) 就要小心了，因为我 parseInt 收两个参数，正好第二个是进制，也就是说，0,1,2 执行 var arr = [1, 2, 3]
-    结果应该是 1，NaN, NaN， 因为 3 如果执行 2 进制，因为 2 进制里没有 3，所以解析不了。0 的话就当它是 10 进制
+    [hoc vs RenderProps vs hook](https://jishuin.proginn.com/p/763bfbd36ecc)
 
 18. 你知道迭代器吗？如何自己写一个简单的迭代器
      <details open>
 
-    迭代器就是一个拥有 next 方法的对象，每次调用会返回一个结果对象，该对象上有两个属性，`value`和`done`
-    自己实现一个就是
+    在 JavaScript 中，迭代器（Iterator） 是一种机制，允许我们逐一访问集合中的每个元素，而无需暴露集合的底层实现细节。迭代器是实现 迭代协议 的核心概念，广泛应用于 for...of 循环、解构赋值、spread 操作符等场景。
+
+    特点：是一个对象，提供 `next` 方法，每次调用都会返回一个结果对象，该对象上有两个属性，`value` 和 `done`
+    分别代表当前迭代的结果和是否迭代结束。
 
     ```js
     function createIterator(items) {
@@ -388,6 +589,19 @@
     }
     ```
 
+    一个对象要成为可迭代对象，必须实现 `Symbol.iterator` 方法，该方法返回一个迭代器。
+    JavaScript 中许多内置对象都实现了迭代协议，因此它们是可迭代的：Array、Map、Set、String、TypedArray、arguments 等。
+
+    ```js
+    const array = [1, 2, 3];
+    const iterator = array[Symbol.iterator]();
+
+    console.log(iterator.next()); // { value: 1, done: false }
+    console.log(iterator.next()); // { value: 2, done: false }
+    console.log(iterator.next()); // { value: 3, done: false }
+    console.log(iterator.next()); // { value: undefined, done: true }
+    ```
+
 19. 你知道生成器吗？
      <details open>
 
@@ -400,11 +614,19 @@
         return 'ending';
     }
     var hw = helloWorldGenerator();
+    for(var vof hw) {
+        console.log(v) // hello、world
+    }
     ```
 
-    以上的 hw，可以通过 for of 遍历，但是不会看到 ending，只能遍历 yield 出来的，如果不用，就是 hw.next()，
+    通过 for of 遍历可以看到 hello 和 world，但是没有 ending，这是因为 for...of 循环只会处理 done: false 的值，如果想看到 ending，可以手动调用 next() 或在循环结束后单独处理。
 
-    - next 方法里其实可以带参数，该参数就会被当作上一个 yield 表达式的返回值。这样可以无限执行。
+    这是 for...of 的设计特点，旨在简化对可迭代对象的遍历，而不关注迭代结束时的返回值。
+
+    - next 方法里还可以带参数。可以利用这个特点无限执行一个函数。
+        - 当生成器运行到 yield 时，它会暂停执行，并等待外部调用 next()。
+        - 外部调用 next(value) 时，value 会作为上一个 yield 表达式的返回值。
+        - 生成器继续执行，直到遇到下一个 yield 或结束。
 
     ```js
     function* f() {
@@ -420,7 +642,25 @@
 
     g.next(); // { value: 0, done: false }
     g.next(); // { value: 1, done: false }
+    g.next(); // { value: 2, done: false }
     g.next(true); // { value: 0, done: false }
+
+    // 理解 value 会作为上一个 yield 表达式的返回值。
+    function* generator() {
+        const x = yield 'First yield';
+        console.log('Received1:', x);
+
+        const y = yield 'Second yield';
+        console.log('Received2:', y);
+
+        return 'Done';
+    }
+
+    const gen = generator();
+
+    console.log(gen.next()); // { value: 'First yield', done: false }
+    console.log(gen.next(42)); // { value: 'Second yield', done: false }, logs: "Received1: 42"
+    console.log(gen.next('Hello')); // { value: 'Done', done: true }, logs: "Received2: Hello"
     ```
 
     - `yeild *`是一个比较有意思的语句，它可以用来在生成器里，执行另外一个生成器函数。
@@ -437,7 +677,7 @@
      for of bar(), 会执行,x,a,b
     ```
 
-    - 实际上，任何数据结构只要有 Iterator 接口，就可以被 (yield*) 遍历, 当然，前提是外层有 function* ，不然你也用不了 yield 啊
+    - 实际上，任何数据结构只要有 Iterator 接口，就可以被 (yield*) 遍历, 当然，前提是外层有 function* ，不然你也用不了 yield
     - 扩展运算符...默认调用 Iterator 接口
     - 如果是作为对象属性的话，直接方法前跟 \* 即可
 
@@ -482,7 +722,39 @@
 
     for in 主要用于遍历对象的属性，当然也可以用来遍历数组元素
 
-21. fetch 怎么用
+21. foreach 和 map 的区别
+    <details open>
+
+    foreach 是遍历数组中的元素，没有返回值，通常需要修改原始数组的时候可以用 foreach, 如果直接`item = 2`， 这样 foreach 也不会改变原数组的，是没有意义的，只有`item.a = 2`,这样才是有意义的，虽然 map 也会改变，但是约定
+
+    map 的话就是生成一个新的数组。如果不想修改原数组可以用 map
+
+    上述两个方法都会跳过稀松数组。
+
+    foreach 不能打断，如果要强行打断，就用 try catch，想要打断的循环可以用 for, for of, every 返回 false, some 返回 true。
+
+    foreach 不能用 await，无法保证顺序，而 for of 就可以，因为用的是迭代器。
+
+22. 为什么 for > forEach > map
+    <details open>
+
+    其实这三个循环方法并不完全等价：
+
+    1. for 循环当然是最简单的，因为它没有任何额外的函数调用栈和上下文；
+    2. forEach 其次，因为它其实比我们想象得要复杂一些，它的函数签名实际上是
+    3. `array.forEach(function(currentValue, index, arr), thisValue)`它不是普通的 for 循环的语法糖，还有诸多参数和上下文需要在执行的时候考虑进来，这里会拖慢性能；
+    4. map 最慢，因为它的返回值是一个等长的全新的数组，数组创建和赋值产生的性能开销很大。
+
+23. for in, Object.keys,Object.getOwnPropertyNames,Reflect.ownKeys 区别
+    <details open>
+
+    - for in 遍历会把原型上的属性遍历出来。
+    - Object.keys 不会把原型上的属性遍历出来。
+    - Object.getOwnProPropertyNames 不会把原型上的属性遍历出来，但是即使自己下的不可枚举属性，也是可以遍历出来的。
+    - Reflect.ownKeys 不会把原型上的属性遍历出来，不可枚举属性，但是 Symbol 是可以遍历出来，
+      相当于 Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))
+
+24. fetch 怎么用
      <details open>
 
     - `fetch`算是新一点的`api`，用法简单点
@@ -493,7 +765,7 @@
     - mode:"cors",是走 cors 模式跨域
     - 不过`fetch`不支持`node`，所有如果是有`ssr`的话，可以用`axios`
 
-22. Object.freeze（浅冻结）Object.seal 区别，如何深冻结一个对象？
+25. Object.freeze（浅冻结）Object.seal 区别，如何深冻结一个对象？
      <details open>
 
     - Object.freeze 是把对象的属性冻结，不能修改不能添加不能删除，但是是浅冻结
@@ -501,12 +773,13 @@
 
     所以`seal`比`freeze`少一个限制修改属性值。所以更像是封闭对象结构。
 
-    |特性 |Object.freeze |Object.seal
-    |添加新属性 |不允许 |不允许
-    |删除已有属性| 不允许 |不允许
-    |修改已有属性的值| 不允许 |允许
-    |重新配置属性描述符| 不允许 |不允许
-    |嵌套对象的属性是否可修改| 可以（浅冻结）| 可以（浅密封）
+    | 特性                     | Object.freeze  | Object.seal    |
+    | ------------------------ | -------------- | -------------- |
+    | 添加新属性               | 不允许         | 不允许         |
+    | 删除已有属性             | 不允许         | 不允许         |
+    | 修改已有属性的值         | 不允许         | 允许           |
+    | 重新配置属性描述符       | 不允许         | 不允许         |
+    | 嵌套对象的属性是否可修改 | 可以（浅冻结） | 可以（浅密封） |
 
     ```js
     // 深冻结
@@ -519,7 +792,7 @@
     }
     ```
 
-23. Object.defineProperty,Proxy 对象,Reflect 对象
+26. Object.defineProperty,Proxy 对象,Reflect 对象
      <details open>
 
     ```js
@@ -668,24 +941,24 @@
     Reflect.get(myObject, 'baz', myReceiverObject); // 8
     ```
 
-24. Number.isNaN 和 isNaN 的区别
+27. Number.isNaN 和 isNaN 的区别
      <details open>
 
     - isNaN 意思是这个是不是不是一个数字，比如它是 isNaN('abc') 就是 true。
     - Number.isNaN 只有 Number.isNaN(NaN)才是 true
     - Number.isNaN 是 es6 的，如果自己写的话，就是利用 typeof NaN 是 number 来写
 
-25. String.raw
+28. String.raw
     <details open>
 
-    是 JavaScript 中的一个静态方法，属于 String 对象。它主要用于处理模板字符串中的转义字符，返回一个“原始”字符串（即不对反斜杠 \ 转义的字符串）。
+    是 JavaScript 中的一个静态方法，属于 String 对象。它主要用于处理模板字符串中的转义字符，返回一个"原始"字符串（即不对反斜杠 \ 转义的字符串）。
 
     ```js
     const rawString = String.raw`Hello\nWorld`;
     console.log(rawString); // 输出: Hello\nWorld
     ```
 
-26. 描述一下事件传播
+29. 描述一下事件传播
     <details open>
 
     当事件发生在`DOM`元素上时，该事件并不完全发生在那个元素上。
@@ -696,7 +969,7 @@
 
     `addeventlistener`就是监听目标用的，然后第三个参数是`boolean`类型，默认`false`是冒泡阶段，`true`就是捕获阶段。
 
-    在 JavaScript 的事件传播机制中，事件到达目标元素后，触发的事件处理函数的顺序是按照事件监听器的声明顺序来决定的，而不是严格按照“捕获阶段优先”或“冒泡阶段优先”的规则。
+    在 JavaScript 的事件传播机制中，事件到达目标元素后，触发的事件处理函数的顺序是按照事件监听器的声明顺序来决定的，而不是严格按照"捕获阶段优先"或"冒泡阶段优先"的规则。
 
     ```js
     const button = document.querySelector('button');
@@ -724,20 +997,62 @@
 
     阻止冒泡使用的是`e.stoppropagation`,阻止捕获用的是`e.stopImmediatePropagation`
 
-27. 适合事件捕获的场景有哪些？
+30. 适合事件捕获的场景有哪些？
     <details open>
 
     1. 事件足够「抽象」：比如 load 事件，本身的定义就是基于父元素的内容，捕获阶段处理它会更加直观
     2. 事件足够「特别」：比如 scroll 事件，这是个触发很频繁的事件，因为操作是连续的，捕获阶段可以减少性能损失
     3. 事件足够「反常」：比如定义一个点击事件，让用户以为可以点击到某个元素但实际上父元素想发挥一个阻拦层区域效果的时候
 
-28. JavaScript 中的虚值是什么
+31. 事件委托的原理
+    <details open>
+
+    因为事件传播正常是先捕获后冒泡，那么捕获/或者冒泡的时候，一定会经过目标元素的上级，这就是事件委托的原理。
+
+32. JavaScript 中的虚值是什么
     <details open>
 
     `const falsyValues = ['', 0, null, undefined, NaN, false];`
     这里面的都是虚值，虚值就是在转化成 boolean 时为 false 的值。
 
-29. Object.create 创建出来的对象和正常的区别是什么？如何创建一个没有原型的对象？
+33. new 关键字有什么用？它到底做了啥？
+    <details open>
+
+    new 是调用构造函数并创造一个新的对象。它的工作原理是
+
+    1. 创建一个空对象 并将其原型 (\_\_proto\_\_) 设置为构造函数的 prototype 属性。
+    2. 将构造函数的作用域赋给新对象（this 指向新对象）
+    3. 执行构造函数中的代码（为这个新对象添加属性）
+    4. 返回新对象
+
+    ```js
+    // 这是new Object的过程。
+    function newObject() {}
+        var obj = {};
+        obj.__proto__ = Obejct.prototype;
+        Object.call(obj);
+        return obj
+    }
+
+    // 这是模拟实现new的过程
+    function myNew(constructor, ...args) {
+        // 1. 创建一个空对象，并将其原型设置为构造函数的 prototype
+        const obj = Object.create(constructor.prototype);
+        // 2. 调用构造函数，并将 `this` 绑定到新对象
+        const result = constructor.apply(obj, args);
+        // 3. 如果构造函数返回一个对象，则返回该对象；否则返回新创建的对象
+        // 这句话的意思是如果下面的Person返回了一个对象，那么就用这个对象替换掉新创建的对象。
+        return typeof result === 'object' && result !== null ? result : obj;
+    }
+    function Person(name, age) {
+        this.name = name;
+        this.age = age;
+    }
+    const person1 = myNew(Person, 'Alice', 25);
+    console.log(person1); // 输出: Person { name: 'Alice', age: 25 }
+    ```
+
+34. Object.create 创建出来的对象和正常的区别是什么？如何创建一个没有原型的对象？
     <details open>
 
     通过 Object.create 创建出来的对象的原型指向传入的对象，也就是说
@@ -755,7 +1070,7 @@
     ```
 
     根据这个特性，可以看出来，Object.create 和 new 还是有区别的，new 多了一个 call 的过程,a 会有 name 属性，而 cc 没有。
-    但是，直接创建一个新的空对象的话，那就一样了。以下三下是一样的。
+    但是，直接创建一个新的空对象的话，那就一样了。以下三种是一样的。
 
     ```js
     var obj = {};
@@ -763,9 +1078,9 @@
     var obj = Object.create(Object.prototype);
     ```
 
-    很多时候，就是只想要一个干净的对象，不需要原型，用于节省性能的话，直接 Object.create(null) 就可以了；
+    很多时候，就是只想要一个干净的对象，不需要原型，用于节省性能的话，直接 `Object.create(null)` 就可以了；
 
-    Object.create 的第二个参数和 defineproperty 第二个一样。也就是说，上述想给 cc 来个 name,咋办
+    Object.create 的第二个参数和 defineproperty 第二个一样。也就是说，如果想给 cc 加个 name
 
     ```js
     Object.create(P.prototype, {
@@ -784,41 +1099,13 @@
         F.prototype = proto;
         return new F();
     };
+    function P() {}
+    var a = Object.create2(P);
+    // a.__proto__指向就是F.prototype，而F.prototype就是传入的参数。
+    a.__proto__ == P; // true
     ```
 
-30. new 关键字有什么用？它到底做了啥？
-    <details open>
-
-    new 和构造函数创造一个对象。
-
-    ```js
-    var obj = {};
-    obj.__proto__ = Obejct.prototype;
-    Object.call(obj);
-    ```
-
-    其实从这段代码就可以看出，虽然最后创建出来的对象是一致的，但是多赋值了一次，obj.\_\_proto\_\_ = Object.prototype,因为字面量创建的本来就是个对象了。所以，还是字面量方式更好
-
-31. 手写一个 promise
-    <details open>
-
-    - 第一步，先写这里的回调函数 三个状态，then 里的函数可以不传。
-    - 第二步，回调里是可以写异步的，也就是说，到了 then 里可能还在 pending
-    - 第三步，p 是一个链式调用的，所以要包装一个 promise2 return 出来 并且里面的执行需要 try catch，抓错。
-    - 第四步，防止 then 里返回 promise 本身，以及返回的还是一个 promise，需要加一个判断函数。如果是本身，reject，如果是 promise，继续 then，最后 resolve。
-    - 第五步，加 catch 方法，其实就是调用 this.then(null,rejectCallBack);
-    - 第六步，原型上加一个 Resolve 和 Reject 方法，就是调用自己，new Promise()执行对应的方法
-    - 第七步，all 方法，all 方法返回的所有 promise 结果的合集，然后做一个下标，挨个执行 promise，然后 index++,最后 index = promise.length 的时候，resolve(result);
-    - 第八步，race 方法，这个直接挨个执行 then，resolve 即可。这也说明 race 其他的还是会跑完的。只不过不管结果而已。
-
-    [promise](https://zhenglin.vip/js/promise.js)
-
-32. 事件委托的原理
-    <details open>
-
-    因为事件传播正常是先捕获后冒泡，那么捕获/或者冒泡的时候，一定会经过目标元素的上级，这就是事件委托的原理。
-
-33. 原型、作用域、原型链、作用域链
+35. 原型、作用域、原型链、作用域链
     <details open>
 
     - js 本质上一切皆对象，每个对象都要有原型，这也是为什么有继承关系。
@@ -827,7 +1114,7 @@
     - 函数有一个内部属性 [[scope]] ,当函数创建的时候，就会保存所有的父变量对象到其中。
     - [[scope]] 可以理解为所有父级变量对象的层级链
 
-34. instanceof 原理是啥？
+36. instanceof 原理是啥？
     <details open>
 
     instanceof 其实就是利用原型链去查找，找到了就返回 true
@@ -847,6 +1134,8 @@
 
     ```js
     class PrimitiveString {
+        // 通过Symbol.hasInstance可以自定义instanceof的行为
+        // 如果return false，就永远都是false了。
         static [Symbol.hasInstance](x) {
             return typeof x === 'string';
         }
@@ -854,7 +1143,7 @@
     console.log('hello world' instanceof PrimitiveString); // true
     ```
 
-35. null,undefined,未声明的变量的区别
+37. null,undefined,未声明的变量的区别
     <details open>
 
     - 未声明的变量就是不用 let ,var, const 关键字的比如直接写 a = 2;这样的，如果是在严格模式下，会报错
@@ -862,25 +1151,6 @@
     - 函数作用域下 undefined 可以被重写，这也是为什么最好用 void 0 替代的原因。
     - null 的话只能显式的被赋值，标识空值。
     - null == undefined；没有隐式转换。
-
-36. foreach 和 map 的区别
-    <details open>
-
-    foreach 是遍历数组中的元素，没有返回值，通常需要修改原始数组的时候可以用 foreach, 如果直接`item = 2`， 这样 foreach 也不会改变原数组的，是没有意义的，只有`item.a = 2`,这样才是有意义的，虽然 map 也会改变，但是约定
-
-    map 的话就是生成一个新的数组。如果不想修改原数组可以用 map
-
-    上述两个方法都会跳过稀松数组。
-
-    foreach 不能打断，如果要强行打断，就用 try catch，想要打断的循环可以用 for, for of, every 返回 false, some 返回 true。
-
-    foreach 不能用 await，无法保证顺序，而 for of 就可以，因为用的是迭代器。
-
-37. 宿主对象和原生对象的区别
-    <details open>
-
-    - 原生对象是由 `ECMAScript`规范定义的 `JavaScript`内置对象，比如`String`、`Math`、`RegExp`、`Object`、`Function`等等。
-    - 宿主对象是由运行时环境（浏览器或 `Node`）提供，比如`window`、`XMLHTTPRequest`等等。比如`Node`的`process`,`setImmediate`。
 
 38. call,apply,bind 区别
     <details open>
@@ -896,19 +1166,19 @@
 
     我们知道`JavaScript`的一大特点就是单线程，而这个线程中拥有唯一的一个事件循环。
 
-    在`promise`之前，`js`其实是没有异步的，`settimeout`是宿主环境的。
+    在`promise`之前，`js`其实是没有异步的，`setTimeout`是宿主环境的。
 
     `JavaScript`代码的执行过程中，除了依靠函数调用栈来搞定函数的执行顺序外，还依靠任务队列(task queue)来搞定另外一些代码的执行。
 
-    事件循环分为宏任务和微任务，其中宏任务就是如同 `settimeout,setInterval，requestAnimationFrame, MessageChannel`
+    事件循环分为宏任务和微任务，其中宏任务就是如同 `setTimeout、setInterval、requestAnimationFrame, MessageChannel`
 
     而微任务就是 `promise.then,MutationObserver`
 
-    在 Node 中，又有些不一样，就单从 API 层面上来理解，Node 新增了两个方法可以用来使用：微任务的 process.nextTick 以及宏任务的 setImmediate。
+    在 Node 中，又有些不一样，就单从 API 层面上来理解，Node 新增了两个方法可以用来使用：微任务的 `process.nextTick` 以及宏任务的 `setImmediate`。
 
-    setTimeout 和 setImmediate 的区别的话就是 settimeout 是时间延迟，setImmediate 是循环延迟。
+    `setTimeout` 和 `setImmediate` 的区别的话就是 `setTimeout` 是时间延迟，`setImmediate` 是循环延迟。
 
-    timers 阶段会执行 setTimeout 和 setInterval 回调，并且是由 poll 阶段控制的。同样，在 Node 中定时器指定的时间也不是准确时间，只能是尽快执行。
+    `timers` 阶段会执行 `setTimeout` 和 `setInterval` 回调，并且是由 `poll` 阶段控制的。同样，在 `Node` 中定时器指定的时间也不是准确时间，只能是尽快执行。
 
     ```js
     setTimeout(() => {
@@ -921,7 +1191,7 @@
 
     这段代码的执行顺序是不一定的
 
-    - 首先 setTimeout(fn, 0) === setTimeout(fn, 1)，这是由源码决定的
+    - 首先 `setTimeout(fn, 0) === setTimeout(fn, 1)`，这是由源码决定的
     - 进入事件循环也是需要成本的，如果在准备时候花费了大于 1ms 的时间，那么在 timer 阶段就会直接执行 setTimeout 回调
     - 那么如果准备时间花费小于 1ms，那么就是 setImmediate 回调先执行了
 
@@ -931,14 +1201,14 @@
 
     而 nodejs 中的微任务是在不同阶段之间执行的。如果是老的 Node 版本，就是先执行完宏任务，在一次性清空微任务，新版本就是在每个阶段里，清空微任务
 
-    关于 process.nextTick 的一点说明
-    process.nextTick 是一个独立于 eventLoop 的任务队列。
-    在每一个 eventLoop 阶段完成后会去检查这个队列，如果里面有 nextTick，会让这部分任务优先于其他微任务执行。
+    关于 `process.nextTick` 的一点说明
+    `process.nextTick` 是一个独立于 `eventLoop` 的任务队列。
+    在每一个 `eventLoop` 阶段完成后会去检查这个队列，如果里面有 `nextTick`，会让这部分任务优先于其他微任务执行。
 
     用两个例子论证上面的说法
 
     ```js
-    setTimeout(()={
+    setTimeout(() => {
         console.log("time1");
         process.nextTick(()=>{
             console.log("nextTick2");
@@ -951,8 +1221,8 @@
             console.log("time2");
         });
     });
-    // node10以上 start nexttick1 time1 ntick2 time2
-    // node10以下 start nexttick1 time1 time2 tick2
+    // node10以上 start nexttick1 time1 nextTick2 time2
+    // node10以下 start nexttick1 time1 time2 nextTick2
 
     setTimeout(() => {
         console.log("time1");
@@ -967,11 +1237,11 @@
             console.log("pthen2");
         });
     });
-    // node9 time1 time2 pthen1 pthen2
-    // node10 time1 pthen1 time2 pthen2
+    // node10以上 time1 pthen1 time2 pthen2
+    // node10以下 time1 time2 pthen1 pthen2
     ```
 
-    以前就是宏任务执行完，清空微任务，现在就是每个小宏任务里，执行完对应的微任务。
+    **以前就是宏任务执行完，清空微任务，现在就是每个小宏任务里，执行完对应的微任务。**
 
     关于 await
 
@@ -986,7 +1256,7 @@
 
     await 后面的代码 则会被放到 Promise 的 then() 方法里。
 
-    还有，比如微任务相当于是添加到宏任务里来的。如果一个 promise 里不写宏任务的话，那外面的 settimeout 可以等死。
+    还有，比如微任务相当于是添加到宏任务里来的。如果一个 promise 里不写宏任务的话，那外面的 setTimeout 可以等死。因为在一次宏任务内，要清空这次里的微任务。
 
     ```js
     setTimeout(() => {
@@ -1012,7 +1282,7 @@
     }).then((res) => console.log(res));
     ```
 
-    这段的话，settimeout 要在 4s 后才能执行，加多少个 then 都得等 then，因为他们属于同一个宏任务下没执行完的微任务。
+    这段的话，setTimeout 要在 4s 后才能执行，加多少个 then 都得等 then，因为他们属于同一个宏任务下没执行完的微任务。
 
     把上面 node 的那个例子改造一下
 
@@ -1034,26 +1304,9 @@
     });
     ```
 
-    输出是 time1, 2s 后输出 pthen1, time2, pthen2，一样论证了 settimeout 等待。
+    输出是 time1, 2s 后输出 pthen1, time2, pthen2, 一样论证了 setTimeout 等待。
 
-40. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
-    <details open>
-
-    基本完整版本参见 [deepCopy.js](https://zhenglin.vip/js/deepcopy.js)
-
-    如果不需要 function 的话，可以异步使用一个 MessageChannel
-
-    ```js
-    function structuralClone(obj) {
-        return new Promise((resolve) => {
-            const { port1, port2 } = new MessageChannel();
-            port2.onmessage = (ev) => resolve(ev.data);
-            port1.postMessage(obj);
-        });
-    }
-    ```
-
-41. typeof null 为啥是 object？
+40. typeof null 为啥是 object？
     <details open>
 
     原理是这样的，不同的对象在底层都表示为二进制，在`Javascript`中二进制前三位用来表示 `TYPE_TAG`
@@ -1062,7 +1315,7 @@
 
     null 在设计的时候是一个空指针，它的二进制表示全为 0，自然前三位也是 0，所以执行 typeof 时会返回"object"。
 
-42. 什么是闭包，闭包经典问题解法有哪几种？
+41. 什么是闭包，闭包经典问题解法有哪几种？
     <details open>
 
     闭包就是函数内可以访问函数外的变量，就属于闭包。但是我们常说的，是属于调用栈出栈了，依然能够中找到那个变量。
@@ -1086,7 +1339,7 @@
     - 用 let 封闭作用域
     - 用 settimeout 第三个参数就是传给 settimeout 里面的函数的入参。
 
-43. 实现继承的几种方式
+42. 实现继承的几种方式
     <details open>
 
     - 原型链继承
@@ -1180,7 +1433,42 @@
 
     但是如果是**原生对象**，就不行了，是拿不到内部属性的
 
-44. 手写 call, apply, bind 出来
+43. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
+    <details open>
+
+    基本完整版本参见 [deepCopy.js](https://zhenglin.vip/js/deepcopy.js)
+
+    如果不需要 function 的话，可以异步使用一个 MessageChannel
+
+    ```js
+    function structuralClone(obj) {
+        return new Promise((resolve) => {
+            const { port1, port2 } = new MessageChannel();
+            port2.onmessage = (ev) => resolve(ev.data);
+            port1.postMessage(obj);
+        });
+    }
+
+    // 弱智版
+    JSON.parse(JSON.stringify(obj)
+
+    ```
+
+44. 手写一个 promise
+    <details open>
+
+    - 第一步，先写这里的回调函数 三个状态，then 里的函数可以不传。
+    - 第二步，回调里是可以写异步的，也就是说，到了 then 里可能还在 pending
+    - 第三步，p 是一个链式调用的，所以要包装一个 promise2 return 出来 并且里面的执行需要 try catch，抓错。
+    - 第四步，防止 then 里返回 promise 本身，以及返回的还是一个 promise，需要加一个判断函数。如果是本身，reject，如果是 promise，继续 then，最后 resolve。
+    - 第五步，加 catch 方法，其实就是调用 this.then(null,rejectCallBack);
+    - 第六步，原型上加一个 Resolve 和 Reject 方法，就是调用自己，new Promise()执行对应的方法
+    - 第七步，all 方法，all 方法返回的所有 promise 结果的合集，然后做一个下标，挨个执行 promise，然后 index++,最后 index = promise.length 的时候，resolve(result);
+    - 第八步，race 方法，这个直接挨个执行 then，resolve 即可。这也说明 race 其他的还是会跑完的。只不过不管结果而已。
+
+    [promise](https://zhenglin.vip/js/promise.js)
+
+45. 手写 call, apply, bind 出来
     <details open>
 
     call 和 apply，就是传一个上下文进去，没有就赋值 window
@@ -1191,7 +1479,7 @@
 
     [Object(this)的原因](https://stackoverflow.com/questions/44079391/what-is-the-purpose-of-doing-objectthis/44080309)
 
-45. 正则
+46. 正则
     <details open>
 
     - \s 空格
@@ -1219,10 +1507,10 @@
     - reg.ignoreCase, 是否用了 i， 大小写
     - reg.multiline , 是否用了 m 多行标志
 
-46. 断言和捕获的区别？
+47. 断言和捕获的区别？
     断言和捕获是正则表达式中两种完全不同的概念，它们的作用、行为和结果都有显著区别。
 
-    - 断言用于 检查条件，但不会捕获内容，也不会消耗字符。匹配的是一个“位置”。而且要注意，断言一定有括号的，括号是跟着断言一起用的。
+    - 断言用于 检查条件，但不会捕获内容，也不会消耗字符。匹配的是一个"位置"。而且要注意，断言一定有括号的，括号是跟着断言一起用的。
 
         - 正向断言：(?=...)，检查当前位置后面是否满足条件。
         - 正向捕获断言：(?<=...)，检查当前位置前面是否满足条件。
@@ -1246,7 +1534,7 @@
     // str.match(regex) = ["3abc"]，这就是匹配的结果，但是你加了2个括号，所以$1就是3，$2就是abc
     ```
 
-47. 千位分割符正则
+48. 千位分割符正则
     <details open>
 
     ```js
@@ -1348,7 +1636,7 @@
     str.replace(reg, '$&,'); // 123abc-566
     ```
 
-48. observer 的几个 API
+49. observer 的几个 API
     <details open>
 
     - Intersection Observer，可以用它来做懒加载，比使用 getBoundingClientRect()的好处是它的性能会更好。也可以用于广告曝光统计等场景。
@@ -1408,7 +1696,7 @@
     observer.observe({ entryTypes: ['paint', 'resource', 'longtask'] });
     ```
 
-49. requestIdleCallback 和 requestAnimationFrame 的区别
+50. requestIdleCallback 和 requestAnimationFrame 的区别
     <details open>
 
     浏览器一帧里 16ms 要完成的任务，当 Eventloop 执行完 Microtasks 后，会判断 document 是否需要更新，假设浏览器是 60Hz 的刷新率，每 16.6ms 才会更新一次。
@@ -1434,26 +1722,17 @@
 
     缺点的话是 requestIdleCallback 的 FPS 只有 20, 一秒只有 20 次调用。
 
-50. 为什么 js 是单线程的？
+51. 为什么 js 是单线程的？
     <details open>
 
     因为 JS 是用来处理页面中的用户交互以及操作 DOM，css 的。
     如果它是多线程的话，可能会造成 UI 冲突。
     上操作锁的话，会增大复杂性，所以设计之初就是选择了单线程。
 
-51. 为什么 js 会阻塞页面加载
+52. 为什么 js 会阻塞页面加载
     <details open>
 
     因为 JS 可以操作页面，如果不阻塞的话，可能会导致数据不一致。
-
-52. for in, Object.keys,Object.getOwnPropertyNames,Reflect.ownKeys 区别
-    <details open>
-
-    - for in 遍历会把原型上的属性遍历出来。
-    - Object.keys 不会把原型上的属性遍历出来。
-    - Object.getOwnProPropertyNames 不会把原型上的属性遍历出来，但是即使自己下的不可枚举属性，也是可以遍历出来的。
-    - Reflect.ownKeys 不会把原型上的属性遍历出来，不可枚举属性，但是 Symbol 是可以遍历出来，
-      相当于 Object.getOwnPropertyNames(target).concat(Object.getOwnPropertySymbols(target))
 
 53. 为何 try 里面放 return，finally 还会执行，理解其内部机制
     <details open>
@@ -1527,7 +1806,7 @@
 
     base64 由字母 a-z、A-Z、0-9 以及+和/, 再加上作为垫字的=, 一共 65 字符组成一个基本字符集, 其他所有字符都可以根据一定规则, 转换成该字符集中的字符。
 
-    如果要编码的二进制数据不是 3 的倍数，最后剩下一个或者两个字节 Base64 会在末尾补零，再在编码的末尾加上一个或者两个‘=’。
+    如果要编码的二进制数据不是 3 的倍数，最后剩下一个或者两个字节 Base64 会在末尾补零，再在编码的末尾加上一个或者两个'='。
 
     ```js
     function base64Encode(str) {
@@ -2399,3 +2678,258 @@
     p 是`Promise {<fulfilled>: "ok"}`
     d 是`Promise {<rejected>: "err"}`
     也就是说，d 拥有改变 promise 的能力，其实 就是 then 也好，catch 也好，都是返回一个 `new promise`,所以 d 拿到的是新的 promise 的状态，如果.then 里返回的 return 222,那么 d 就是`Promise {<fulfilled>: "222"}`，还是个 promise
+
+91. ES6 模块和 CommonJS 模块的主要区别是什么？
+    <details open>
+
+    ### 1. 加载方式
+
+    ```js
+    // ES6模块 - 静态加载
+    import { foo } from './module.js';
+
+    // CommonJS - 动态加载
+    const { foo } = require('./module.js');
+    ```
+
+    ### 2. 输出方式
+
+    ```js
+    // ES6模块 - 输出值的引用
+    export let count = 0;
+    export function increment() {
+        count++;
+    }
+
+    // CommonJS - 输出值的拷贝
+    let count = 0;
+    function increment() {
+        count++;
+    }
+    module.exports = { count, increment };
+    ```
+
+    ### 3. 主要区别
+
+    - ES6 模块是静态的，CommonJS 是动态的
+    - ES6 模块支持 tree-shaking，CommonJS 不支持
+    - ES6 模块是异步加载，CommonJS 是同步加载
+    - ES6 模块输出的是值的引用，CommonJS 输出的是值的拷贝
+    - ES6 模块的 this 指向 undefined，CommonJS 的 this 指向当前模块
+
+92. 请解释 ES6 模块的加载机制和解析过程
+    <details open>
+
+    ### 1. 加载阶段
+
+    ```js
+    // 模块的静态分析
+    import { foo } from './module.js';
+
+    // 模块的实例化
+    const module = new Module();
+
+    // 模块的求值
+    module.evaluate();
+    ```
+
+    ### 2. 解析过程
+
+    1. 静态分析阶段
+
+        - 解析 import 和 export 语句
+        - 建立模块依赖图
+        - 检查语法错误
+
+    2. 实例化阶段
+
+        - 创建模块实例
+        - 分配内存空间
+        - 建立模块间的连接
+
+    3. 求值阶段
+        - 执行模块代码
+        - 初始化变量
+        - 处理副作用
+
+93. 如何使用动态导入？它有什么优势？
+    <details open>
+
+    ### 1. 基本用法
+
+    ```js
+    // 动态导入
+    import('./module.js')
+        .then((module) => {
+            console.log(module.foo);
+        })
+        .catch((err) => {
+            console.error(err);
+        });
+
+    // async/await方式
+    async function loadModule() {
+        try {
+            const module = await import('./module.js');
+            console.log(module.foo);
+        } catch (err) {
+            console.error(err);
+        }
+    }
+    ```
+
+    ### 2. 优势
+
+    - 按需加载，提高初始加载速度
+    - 代码分割，优化打包体积
+    - 条件加载，根据运行时条件决定
+    - 错误处理更灵活
+    - 支持 Promise，便于异步处理
+
+94. 模块作用域和全局作用域有什么区别？
+    <details open>
+
+    ### 1. 作用域隔离
+
+    ```js
+    // 模块作用域
+    const privateVar = 'private';
+    export const publicVar = 'public';
+
+    // 全局作用域
+    window.globalVar = 'global';
+    ```
+
+    ### 2. 主要区别
+
+    - 模块作用域是封闭的，变量不会泄漏到全局
+    - 模块默认使用严格模式
+    - 模块的 this 指向 undefined
+    - 模块的变量提升行为与全局不同
+    - 模块可以通过 export 共享变量
+
+95. 如何优化 JavaScript 模块的加载性能？
+    <details open>
+
+    ### 1. 代码分割
+
+    ```js
+    // 动态导入实现代码分割
+    const loadComponent = () => import('./Component.js');
+
+    // 路由级别的代码分割
+    const routes = [
+        {
+            path: '/dashboard',
+            component: () => import('./Dashboard.js')
+        }
+    ];
+    ```
+
+    ### 2. 优化策略
+
+    - 使用代码分割减少初始加载体积
+    - 实现按需加载
+    - 使用预加载和预获取
+    - 优化模块缓存策略
+    - 压缩和优化模块代码
+
+96. JavaScript 中有哪些常见的模块模式？
+    <details open>
+
+    ### 1. IIFE 模块模式
+
+    ```js
+    const module = (function () {
+        let privateVar = 'private';
+
+        function privateMethod() {
+            return privateVar;
+        }
+
+        return {
+            publicMethod: function () {
+                return privateMethod();
+            }
+        };
+    })();
+    ```
+
+    ### 2. 命名空间模式
+
+    ```js
+    const MYAPP = {
+        module1: {
+            foo: function () {}
+        },
+        module2: {
+            bar: function () {}
+        }
+    };
+    ```
+
+97. 如何对 JavaScript 模块进行单元测试？
+    <details open>
+
+    ### 1. 测试示例
+
+    ```js
+    // 模块代码
+    export function add(a, b) {
+        return a + b;
+    }
+
+    // 测试代码
+    import { add } from './math.js';
+
+    describe('add function', () => {
+        it('should add two numbers', () => {
+            expect(add(1, 2)).toBe(3);
+        });
+    });
+    ```
+
+    ### 2. 测试策略
+
+    - 使用依赖注入
+    - 实现模块隔离
+    - 编写单元测试
+    - 进行集成测试
+    - 确保测试覆盖率
+
+98. JavaScript 模块中有哪些安全考虑？
+    <details open>
+
+    ### 1. 安全措施
+
+    ```js
+    // 输入验证
+    export function processData(data) {
+        if (!isValid(data)) {
+            throw new Error('Invalid data');
+        }
+        // 处理数据
+    }
+
+    // 错误处理
+    export async function fetchData() {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network error');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error:', error);
+            throw error;
+        }
+    }
+    ```
+
+    ### 2. 安全考虑
+
+    - 实现输入验证
+    - 处理错误情况
+    - 控制模块权限
+    - 记录安全日志
+    - 实现数据加密
