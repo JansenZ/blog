@@ -1,4 +1,3 @@
-
 [类型体操](https://github.com/type-challenges/type-challenges/blob/main/README.zh-CN.md)
 
 1. TypeScript 和 JavaScript 有哪些主要区别？
@@ -453,13 +452,14 @@
 
     - **配置方法**：在项目根目录下创建 `tsconfig.json` 文件，通过 JSON 格式配置 TypeScript 编译器的选项。
     - **常见配置项**：
-        1. **target**：指定编译后的 JavaScript 版本，如 `ES5`、`ES6`、`ESNEXT` 等。
-        2. **module**：指定模块系统，如 `commonjs`、`esnext` 等。
-        3. **strict**：启用所有严格类型检查选项。
-        4. **outDir**：指定编译后文件的输出目录。
-        5. **path**：指定需要编译的文件路径。
-        6. **baseUrl**：设置模块解析的基准路径
-         </details>
+        - **target**：指定编译后的 JavaScript 版本，如 `ES5`、`ES6`、`ESNEXT` 等。
+        - **module**：指定模块系统，如 `commonjs`、`esnext` 等。
+        - **strict**：启用所有严格类型检查选项。
+        - **outDir**：指定编译后文件的输出目录。
+        - **path**：指定需要编译的文件路径。
+        - **baseUrl**：设置模块解析的基准路径
+
+    </details>
 
 20. 在 TypeScript 中，如何处理第三方 JavaScript 库的类型定义？
 
