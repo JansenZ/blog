@@ -6,16 +6,16 @@
 
     1. http 网络请求开启 gzip，可以压缩 HTTP 响应的 70%。这个要服务端配置一下，会增大 CPU 的开销去解压、压缩，Webpack 中 用 CompressionWebpackPlugin 插件开启 Gzip ,事实上就是为了在构建过程中去做一部分服务器的工作，为服务器分压。
     2. 使用 CDN 缓存。dns 预解析，dns prefetch，可以预解析。script defer async 防止 js 阻塞。
-    3. 使用 link preload/link prefetch，preload可以as提前加载需要的资源，（比如桥依赖、埋点、异常上报等）prefetch提前加载下个页面需要的资源。
+    3. 使用 link preload/link prefetch，preload 可以 as 提前加载需要的资源，（比如桥依赖、埋点、异常上报等）prefetch 提前加载下个页面需要的资源。
     4. 使用 HTTP 强缓存，cache-control > expires。expire 里面写的是过期日期，是和本地电脑比的，而 cache-control 是过期时间段，所以 cache-control 更准。
-    4. cache-control 值，public，本地和服务器都会缓存走强缓存，private，只有本地缓存走强缓存，no-cache，本地缓存，但是会绕过强缓存去协商。no-store 的话就直接绕过所有全部重新下载了
-    4. 使用 HTTP 协商缓存，协商缓存本身数据也是存在本地的， Last-Modified（请求带上 If-Modified-Since），返回 304，但是如果改了文件名的话，last-modified 就找不到了，就会重新返回。所以还要一个 etag（请求带上 If-None-Match），两者共同配合完成 304.
-    5. 体积不大的会放在 from memory cahce，比如 base64,小的 css，体积稍大会放 from disk cache。
-    6. 还可以使用 service worker。
-    7. 以上 http 的缓存，静态资源 CDN，动态请求靠服务端的 redis。
-    8. 本地存储，cookie,storage。 cookie 里少放信息，因为会跟着 http 请求头跑，很浪费。如果本地存储需求量很大的话，比如你要实现一个 im 的话，可以用 indexDB,本地数据库
-    9. 合并 request，并且并发请求，达到应用层面的多路复用, 避免队头阻塞
-    10. 推行升级到 http2，protocol 协议就是 h2。缩短了 8%。但是要对尾部流量进行特定优化，尾部流量用http2丢包的情况下会比http1.1差很多，需要增加单窗口面积才行。
+    5. cache-control 值，public，本地和服务器都会缓存走强缓存，private，只有本地缓存走强缓存，no-cache，本地缓存，但是会绕过强缓存去协商。no-store 的话就直接绕过所有全部重新下载了
+    6. 使用 HTTP 协商缓存，协商缓存本身数据也是存在本地的， Last-Modified（请求带上 If-Modified-Since），返回 304，但是如果改了文件名的话，last-modified 就找不到了，就会重新返回。所以还要一个 etag（请求带上 If-None-Match），两者共同配合完成 304.
+    7. 体积不大的会放在 from memory cahce，比如 base64,小的 css，体积稍大会放 from disk cache。
+    8. 还可以使用 service worker。
+    9. 以上 http 的缓存，静态资源 CDN，动态请求靠服务端的 redis。
+    10. 本地存储，cookie,storage。 cookie 里少放信息，因为会跟着 http 请求头跑，很浪费。如果本地存储需求量很大的话，比如你要实现一个 im 的话，可以用 indexDB,本地数据库
+    11. 合并 request，并且并发请求，达到应用层面的多路复用, 避免队头阻塞
+    12. 推行升级到 http2，protocol 协议就是 h2。缩短了 8%。但是要对尾部流量进行特定优化，尾部流量用 http2 丢包的情况下会比 http1.1 差很多，需要增加单窗口面积才行。
 
     WEBPACK
 
@@ -27,15 +27,15 @@
     6. 自带的 tree-shaking 移除无用代码, 主要是借助 es6 的模块是静态解析的，所以才能实现，利用内置的 UglifyJSPlugin 来完成。
     7. 使用 PurgecssPlugin 移除无用 CSS
     8. 自带的 hoist-scoping，移除无用计算。
-    9. 利用 import.then 进行懒加载拆分, 生成对应的 hash.chunk.js，比如交易流程主要流程不要懒加载，但是一些用户点击率低的页面，通过懒加载的形式加载。
+    9. 利用 import.then 进行懒加载拆分, 生成对应的 hash.chunk.js，比如交易流程主要流程不要懒加载,但是一些用户点击率低的页面，通过懒加载的形式加载。
 
-    ```js
-    import(/* webpackChunkName:xxxname */ './show').then()
-    output: chunkFilename: "static/js/[name].[contenthash:8].chunk.js",
-    ```
+        ```js
+        import(/* webpackChunkName:xxxname */ './show').then()
+        output: chunkFilename: "static/js/[name].[contenthash:8].chunk.js",
+        ```
 
-    6. babel 设置缓存 cacheDirectory:true
-    7. 通过各方面的构建优化，包从多少缩小到多少，提高了%多少，节省了多少时间。
+    10. babel 设置缓存 cacheDirectory:true
+    11. 通过各方面的构建优化，包从多少缩小到多少，提高了%多少，节省了多少时间。
 
     React 方面
 
@@ -49,7 +49,32 @@
     其他方面
 
     1. 图片也做好压缩，雪碧图, 小图使用 base64 可以减少请求，大图不能用 bas64，因为 base64 会膨胀到 4/3 大小，那时候省的 http 请求还不如膨胀的多。然后 svg 的话渲染成本比较高，而且对设计要求也比较高。
-    2. webp 格式，前端处理的话，包装 src 函数，然后去 caniuse 维护一个浏览器支持的表，然后支持就用 webp 不支持直接把 webp 分割掉就可以了。
+    2. webp 格式，前端处理的话，先做探针，确定自己的用户的设备情况，如果确定支持的话，直接统一替换，如果部分不支持的话，可以维护一个配置表，没必要做实时的判断，或者把下面的这个提前存到全局变量内。
+
+        ```js
+        // 判断浏览器是否支持 WebP 格式
+        function isWebpSupported() {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.onload = () => resolve(img.width > 0 && img.height > 0);
+                img.onerror = () => resolve(false);
+                img.src =
+                    'data:image/webp;base64,UklGRjoAAABXRUJQVlA4TAYAAAAvAAAAAAfQ//73v/+BiOh/AAA=';
+            });
+        }
+
+        // vue代码，自动降级
+        <picture v-if="isUseWebp">
+            <source
+                v-if="preSupportWebP"
+                :class="className"
+                type="image/webp"
+                :srcset="webpSrc"
+            />
+            <img :class="className" :src="baseSrc" alt="" @load="imgLoad" />
+        </picture>
+        ```
+
     3. webp 格式，后端处理的话，就是判断我图片过去的请求头 accept 里有没有 img/webp。有就说明我这浏览器支持，然后就吐给我 webp 的资源就可以了。比如 Chrome 就有，safari 就没有
     4. 比如图片给定好它的高度。也可以减少回流。offsetTop、offsetLeft、 offsetWidth、offsetHeight、scrollTop、scrollLeft、scrollWidth、scrollHeight、clientTop、clientLeft、clientWidth、clientHeight 这些属性的获取，都会触发回流。
     5. 不重要的类似日志打点这样的，放在 requestidlecallback
@@ -59,6 +84,9 @@
     9. 加入白屏检测，对错误进行监控。
     10. XX 迭代很多，数据量变大，进行数据精简，把后端的 DTO 进行清洗。缩短了 10%
     11. 优化布局，去掉更多的 DIV 标签。
+    12. 容器层面的优化、离线化、路由拦截转向更高标准的容器
+    13. 资源离线化
+    14. 接口预取
 
 2. 常见的设计模式
 
@@ -122,12 +150,25 @@
         };
         ```
 
+        ES6 模块实现单例,ES6 模块本身就是单例的，因为模块只会被加载一次。
+
+        ```js
+        // singleton.js
+        const instance = { name: 'Singleton Instance' };
+        export default instance;
+
+        // 使用
+        import singleton1 from './singleton.js';
+        import singleton2 from './singleton.js';
+        console.log(singleton1 === singleton2); // true
+        ```
+
     - 适配器模式
 
         就是通过包装，来解决兼容问题
 
         ```js
-        class Plug {
+        class plug {
             getName() {
                 return '港版插头';
             }
@@ -150,7 +191,7 @@
 
     - 装饰模式
 
-        比如我们的商品详情页的 spucontroller
+        比如我们的商品详情页的 spu controller
 
         ```js
         // 这个base就是装饰里的target
@@ -183,7 +224,9 @@
 
     数据(model)变化主动触发 ui（view）变化，同时 view 变化主动触发数据变化
 
-    而单向数据流，就是通过 setstate 这样的数据驱动，改变数据后，驱动 UI 改变，而 UI 点击，比如通过回调 onChange。这样的好处是数据易于管控。
+    而单向数据流，就是通过 setState 这样的数据驱动，改变数据后，驱动 UI 改变，而 UI 点击，比如通过回调 onChange。这样的好处是数据易于管控。
+
+    一般来说，即使是 Vue，正常也用的是单向数据流，除非是用表单控件，可以减少重复代码，提高开发效率。
 
 4. redux 对比 mobx
 
@@ -200,19 +243,21 @@
 
 5. 状态管理的选择
 
-    为什么要状态管理呢？首先，我们用 react 为什么要用状态管理，因为 react 是单向数据流，如果多个兄弟组件或者跨层级组件需要互相通信，那么就需要把状态提升到多个兄弟组件的负极来做，然后一层一层传递。
+    为什么要状态管理呢？首先，我们用 react 为什么要用状态管理，因为 react 是单向数据流，如果多个兄弟组件或者跨层级组件需要互相通信，那么就需要把状态提升到多个兄弟组件的父级来做，然后一层一层传递。
 
-    也就是说，两个方面的问题，一个是状态提升管理，一个是跨组件传递 props。
+    这里就会出现 2 个问题： 1. 状态提升管理 2. 跨组件通信。
 
-    状态提升的话，可以提升到每个页面级的 container 里写 setState，但是这样的话，每次子组件更新，都会触发全部更新，除非里面都是 pureComponent，而且逻辑都在 container 上了，逻辑没有分离。
+    **问题**：如果是状态提升的话，可以提升到每个页面级的 container 里写 setState，但是这样的话，每次子组件更新，都会触发全部更新，除非里面都是 pureComponent，而且逻辑都在 container 上了，逻辑没有分离。
 
-    所以可以需要状态管理，可以把于服务器交互（请求接口，清洗数据）以及操作数据，都从组件重抽离，组件只需要接收 props，分离了一层出去。
+    **方案**：有了状态管理，可以把于服务器交互（请求接口，清洗数据）以及操作数据，都从组件重抽离，组件只需要接收 props，分离了一层出去。
 
-    而跨组件传递 props 的话，要么自己写 context，要么就是用 react-redux，也是利用的 context 来完成。在 connect 的时候，监听变化后来 update 组件。
+    **问题**：而跨组件传递 props 的话，就是一层一层的写非常麻烦，要么自己写 context，要么就是用 react-redux，也是利用的 context 来完成。Vue 里用 provide/inject。类似与 context。但是这些应对小型应用完全没问题，但是在复杂场景中，设计不当的话，可能导致代码难以维护，所以还是应该用状态管理。
 
     在 redux 中，实际上就是发布订阅的原理，监听数据的变更。在 createStore 的时候，就生成了一个 store,和对应的 dispatch。而 mobx 的数据依赖于运行时。数据劫持。只是思想不一样，一个是函数式，一个是 oop 的形式。
 
     但是有了 hooks 之后，其实利用 useContext 和 useReducer，再通过 hoc 的形式封装一下，小项目的情况下，已经不需要使用任何状态管理器了。复用代码和分层也都非常容易做到。
+
+    React 和 Vue 的状态管理需求确实非常相似，都是为了解决状态提升和跨组件通信的复杂性。两者的状态管理工具（如 Redux 和 Vuex）在设计理念上也非常接近，都是通过集中式管理状态来简化数据流，提高代码的可维护性。选择状态管理工具的原因和解决的问题在两者之间几乎没有本质区别。
 
 6. [redux 原理以及实现](https://juejin.cn/post/6844904080255483912)
 
@@ -269,7 +314,7 @@
 
     <details open>
 
-    当我想在对 react 组件进行性能优化时，需要监测 state 或 props 的变化来判断是否 render，而怎么监测变化=>用浅比较，但浅比较存在更新对象属性时引用没变的问题，然而深拷贝的话浪费性能不说，万一只改了一个属性，亏，所以只要能解决这个问题，浅比较依然是好方案，因此 immutable 的出现解决的就是有变化就返回新引用，故而浅比较+immutable 就是性能优化的利器，然后后面出现的 Immer 是比 immutable 更好的方案
+    当我想在对 react 组件进行性能优化时，需要监测 state 或 props 的变化来判断是否 render，而怎么监测变化 => 用浅比较，但浅比较存在更新对象属性时引用没变的问题，然而深拷贝的话浪费性能不说，万一只改了一个属性，亏，所以只要能解决这个问题，浅比较依然是好方案，因此 immutable 的出现解决的就是有变化就返回新引用，故而浅比较+immutable 就是性能优化的利器，然后后面出现的 Immer 是比 immutable 更好的方案
 
     特点：
     为了避免像 deepCopy 一样 把所有节点都复制一遍带来的性能损耗，Immutable 使用了 Structural Sharing（结构共享），即如果对象树中一个节点发生变化，只修改这个节点和受它影响的父节点，其它节点则进行共享。请看下面动画
@@ -467,16 +512,12 @@
         // 图片符合规范，按原有比例来即可。
         return {
             width: Math.ceil(width),
-            height: Math.ceil(height),
+            height: Math.ceil(height)
         };
     };
     ```
 
-12. rn flatlist 将屏幕外的视图组件回收，达到高性能的目的。
-
-13. rn webview 新闻 难点
-
-14. 调试技巧...
+12. 调试技巧...
 
     <details open>
 
@@ -487,11 +528,11 @@
     5. 阴影这样的可以直接在页面上调，直接点击样式，就唤起弹窗，快速调试
     6. 断点可以加条件，这样不必一直进这个断点，比如 for，判断 i==5 才进。
 
-15. 调试文字样式 debug， document.designModel = 'on'
+13. 调试文字样式 debug， document.designModel = 'on'
 
     把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
 
-16. 监控错误，打点上报，捕获异常。
+14. 监控错误，打点上报，捕获异常。
 
     <details open>
 
@@ -574,19 +615,28 @@
 
     - 在一些可能会出错的地方使用 try catch
     - 在全局就可以使用 window.onerror 来监听，通过 window.onerror 事件，可以得到具体的异常信息、异常文件的 URL、异常的行号与列号及异常的堆栈信息，再捕获异常后，统一上报至我们的日志服务器。
-        ```
-        window.onerror = function(errorMessage, scriptURI, lineNo, columnNo, error) {
-            console.log('errorMessage: ' + errorMessage); // 异常信息
-            console.log('scriptURI: ' + scriptURI); // 异常文件路径
-            console.log('lineNo: ' + lineNo); // 异常行号
-            console.log('columnNo: ' + columnNo); // 异常列号
-            console.log('error: ' + error); // 异常堆栈信息
-            // ...
-            // 异常上报
-        };
-        throw new Error('这是一个错误');
-        ```
-        ![tu](https://user-gold-cdn.xitu.io/2018/7/29/164e673466b32bf3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
+    ```js
+    window.onerror = function (
+        errorMessage,
+        scriptURI,
+        lineNo,
+        columnNo,
+        error
+    ) {
+        console.log('errorMessage: ' + errorMessage); // 异常信息
+        console.log('scriptURI: ' + scriptURI); // 异常文件路径
+        console.log('lineNo: ' + lineNo); // 异常行号
+        console.log('columnNo: ' + columnNo); // 异常列号
+        console.log('error: ' + error); // 异常堆栈信息
+        // ...
+        // 异常上报
+    };
+    throw new Error('这是一个错误');
+    ```
+
+    ![tu](https://user-gold-cdn.xitu.io/2018/7/29/164e673466b32bf3?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+
     - 但是，事件触发默认是冒泡阶段，所以如果想知道是哪个 js 或者 css 报错的话，可以把阶段换成捕获阶段
     - 而且跨域的情况下，window.onerror 是无法捕获的，不过用 SPA 就一个 js 正常不用考虑。不过遇到这样的情况，可以在那些三方 js 里 script 标签上加入 crossorigin="anonymous"这个标签，代表支持跨域。同时，服务端也要设置 Access-control-allow-orgin 的
     - try…catch 单点捕获
@@ -601,7 +651,7 @@
 
     非类组件可以 HOC 包装一下。对于类组件可以装饰器一下。
 
-    <b>打点上报</b>
+    **打点上报**
 
     用 new Image().src = '服务器地址，带参数'，这样方便，而且也不存在跨域的问题，不需要响应。可以给它包一个 requestIdlecallback。这个 imgae 标签最好挂在 window 对象上，防止还没打出去就被回收了。
 
@@ -612,7 +662,7 @@
 
     ```js
     var data = JSON.stringify({
-        name: 'Berwin',
+        name: 'Berwin'
     });
 
     navigator.sendBeacon('/haopv', data);
@@ -634,12 +684,12 @@
         fetch('/analytics', {
             method: 'POST',
             body: 'statistics',
-            keepalive: true,
+            keepalive: true
         });
     };
     ```
 
-17. 前端模块化
+15. 前端模块化
 
     <details open>
 
@@ -681,7 +731,7 @@
     - 而 ES6 的话模块加载是在编译时做的，也就是在编译阶段确定好模块的依赖关系，而不是在运行阶段。
     - 这样的结果就是 CommonJS 规范可能因为循环引用而找不到对应函数发生报错，而 es6 不会。
 
-18. 听过 Style-components 吗？
+16. 听过 Style-components 吗？
 
     <details open>
 
@@ -705,7 +755,7 @@
 
     - css modules，把对应的 css 文件引入成为对象，然后在 div 上的时候，写成 styles.xxx，webpack 配置一下 css-loader 的 options，会去自动添加一串 hash。
 
-19. 路由守卫怎么做的
+17. 路由守卫怎么做的
 
     <details open>
 
@@ -719,7 +769,7 @@
 
     假如是通过 url 直接输入的，可以给每一个页面外面包装一个路由授权组件，在组件里调用上述的方法，好像也可以哦。
 
-20. 二维码扫码登陆原理
+18. 二维码扫码登陆原理
 
     <details open>
 
@@ -729,7 +779,7 @@
 
     在 PC 端，轮训去找服务端问，用户是否扫码，如果已经扫码了，这时候接口应该返回待确认的字段，如果点击确认后，再请求这个接口，服务端会吐出已确认，并且应该会种 cookie，然后重定向到首页，完成登陆。
 
-21. 懒加载怎么实现
+19. 懒加载怎么实现
 
     <details open>
 
@@ -759,12 +809,12 @@
     - 第三个方案：
       不需要 scrollTop，直接把上面的 offsetTop 改成 img.getBoundingClientRect().top 对比 screenH 即可
 
-22. preact
+20. preact
 
     preact 实现 hook 是数组的方式
     preact 没有事件系统，直接用的浏览器的
 
-23. 你知道单点登录吗？如何实现呢？
+21. 你知道单点登录吗？如何实现呢？
 
     <details open>
 
@@ -772,25 +822,29 @@
 
     2. 如果是在一个大域名下的不同子域名，可以到大域名下去登录，把 cookie 存在父域名下，这样所有子域名就可以获得到这个 cookie。
 
-    3. 如果是不同域名的，可以走一个中间 server，访问 A 页面，判断 A 页面是否有 cookie1
+    3. 如果是不同域名的，可以走一个中间认证服务器，访问 A 页面时，判断 A 页面是否有登录凭证（如 Token）。
 
-        如果有的话，直接请求获取用户信息。
+        如果有登录凭证，直接请求认证服务器验证用户信息。
 
-        如果没有的话，说明没有登录，重定向到 Server 下，并带上这个回调页面。
+        如果没有登录凭证，说明用户未登录，重定向到认证服务器，并带上当前页面的回调地址。
 
-        然后 sever 中间页判断用户是否有 cookie2
+        然后认证服务器判断用户是否已登录（通过存储的登录状态或凭证）。
 
-        如果中间页没有 cookie2，说明没有登录，它会重定向到登录页，然后登录后，就会拥有 Cookie2。也就是 TGC，然后重定向回 A 并且带上 ST，
-        回到 A 页面后，拿上这个 ST 会去请求服务端，服务端拿到这个 ST 后，会去找这个 server 验证， 是不是你签发的，如果是的话，setCookie,A 页面登录成功。
+        如果认证服务器检测到用户未登录，会重定向到登录页面，用户登录后，认证服务器生成登录凭证（如 Token），并存储在用户浏览器中（如 Cookie 或 LocalStorage）。登录完成后，认证服务器重定向回 A 页面，并附带登录凭证。
 
-        A 页面下次进来，由于拥有 cookie1，直接登录成功。
+        A 页面接收到登录凭证后，会向认证服务器验证凭证的有效性。如果验证成功，A 页面登录成功，并将登录状态存储在本地（如 Cookie 或 LocalStorage）。
 
-        如果中间页有 cookie2 的话，说明已经在中间 server 上登录过了，至于你是 A 过来的还是 B 过来的，无所谓，假设是 B 吧，直接重定向回 B 页面， 然后 url 上带一个 ST，
-        回到 B 页面后，拿上这个 ST 会去请求服务端，服务端拿到这个 ST 后，会去找这个 server 验证， 是不是你签发的，如果是的话，setCookie,B 页面登录成功。至此，单点登录就完成了。
+        下次用户访问 A 页面时，由于已经有登录凭证，可以直接验证凭证并登录成功。
+
+        如果用户访问 B 页面，B 页面检测到用户未登录，会重定向到认证服务器。
+
+        认证服务器检测到用户已登录（通过浏览器中的登录凭证），直接重定向回 B 页面，并附带登录凭证。
+
+        B 页面接收到登录凭证后，会向认证服务器验证凭证的有效性。如果验证成功，B 页面登录成功。至此，单点登录完成。
 
         ![tu](https://user-gold-cdn.xitu.io/2020/1/5/16f74f3f11a6fbad?imageslim)
 
-24. RN 原理是什么
+22. RN 原理是什么
 
     <details open>
 
@@ -799,7 +853,7 @@
     ios 和安卓对于 rn 来说，是提供一个壳，并且提供了一些原生方法。
     rn 项目下会有一个 native_modules，通过这个模块可以调用原生方法。
 
-25. MVC， MVP, MVVM
+23. MVC， MVP, MVVM
 
     <details open>
 
@@ -816,11 +870,11 @@
       viewmodel。controller。model。
       model 改了动 view，view 改了动 model。就是 vue 那种。我们现在分的层也类似这样。
 
-26. 手写一个双向绑定
+24. 手写一个双向绑定
 
     [vue.js](https://zhenglin.vip/js/vue.js)
 
-27. mobx 原理
+25. mobx 原理
 
     类似于 vue 的数据劫持
 
@@ -845,19 +899,19 @@
 
     这个时候，我修改了 name 的值，set 里就会通知到所有订阅者，而 computed 就订阅到了，它订阅的，就是\_recomputed，这里面，还会去通知所有订阅 computed 的值的订阅者，而 autorun 的 cb 就是它的订阅者，所以会执行过去。这就是 computed 的原理。
 
-28. nginx 知识点
-29. 骨架屏实现方案
-30. 代码生成技术文档
-31. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
+26. nginx 知识点
+27. 骨架屏实现方案
+28. 代码生成技术文档
+29. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
 
     <details open>
 
     1. 初始的时候，发现，点击直接跳转过去的时候，会出现里面的图文加载，导致的内容撑开
        然后我在电脑上试的时候，发现，如果把 timeout 设置为 0 的话，安卓一些比较不错的手机，并不会锚点错位。
        但是一旦我点击过了之后，后续再点锚点的话，是不会有问题的，所以把这个 timeout0 限制为第一次
-    2. 结果还是会有问题，一些低端的手机并没有任何用处，于是我想到的是当滚动完毕的之后，再次矫正一次，也就是说滚动到目的地了，再滚动一次，至少这会会再取一次位置吧。但是结果是，滚动到目的地后，有点时候图片才开始加重，这样做并没有实际的效果。
+    2. 结果还是会有问题，一些低端的手机并没有任何用处，于是我想到的是当滚动完毕的之后，再次矫正一次，也就是说滚动到目的地了，再滚动一次，至少这会会再取一次位置吧。但是结果是，滚动到目的地后，有点时候图片才开始加载，这样做并没有实际的效果。
     3. 使用 MutationObserver，去监控对应的离屏锚点模块，是否发生变化，一旦发生变化，再次矫正锚点位置，并且设置一个超时时间，超过这个矫正超时时间就不用管了，并且，添加用户手势，一旦用户摸了屏幕，oberser.disconnect。(隐藏缺陷就是会来回闪)
-    4. 使用了这个方法后，大多数机型表现正常，但是依然有部分机型不好，所以只能从根本上来解决，就是当第一次点击锚点的时候，也就是 scrollto 到对应位置的这段时间，锁定懒加载，只有滚动结束后，才解放懒加载，这样确实解决了问题，但是衍生出一个问题，就是往回滑动的时候，会触发加载，导致图片框框往下跑，所以呢，需要再加一个判断，默认给这个内容的容器限制在一个高度，然后判断这个容器的底部是否高于屏幕的地步，而当这个容器的底部，再碰到屏幕底部的时候，解开它的高度，这个时候图片就会框框的加载出来了。这样的话，我用户已经化上去了，下面再加载就不会造成当前的视窗抖动了。/ 返回滑的时候不触发懒加载，必须正滑并且在视口内，然后才触发，而且默认只有一张图片，没有懒加载，其他图片高度为 0。
+    4. 使用了这个方法后，大多数机型表现正常，但是依然有部分机型不好，所以只能从根本上来解决，就是当第一次点击锚点的时候，也就是 scrollto 到对应位置的这段时间，锁定懒加载，只有滚动结束后，才解放懒加载，这样确实解决了问题，但是衍生出一个问题，就是往回滑动的时候，会触发加载，导致图片框框往下跑，所以呢，需要再加一个判断，默认给这个内容的容器限制在一个高度，然后判断这个容器的底部是否高于屏幕的底部，而当这个容器的底部，再碰到屏幕底部的时候，解开它的高度，这个时候图片就会框框的加载出来了。这样的话，我用户已经滑上去了，下面再加载就不会造成当前的视窗抖动了。/ 返回滑的时候不触发懒加载，必须正滑并且在视口内，然后才触发，而且默认只有一张图片，没有懒加载，其他图片高度为 0。
     5. 还有一个方案，就是等图片加载完后，再跳过去。
 
     ```js
@@ -897,7 +951,7 @@
     );
     ```
 
-32. SWR
+30. SWR
 
     <details open>
 
@@ -913,13 +967,13 @@
     - 聚焦是重新验证，网络恢复时重新验证，支持 Suspense
     - 获取数据的时候，非常简单，简易
 
-33. Taro 是什么?
+31. Taro 是什么?
 
     <details open>
 
     Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发 微信 / 京东 / 百度 / 支付宝 / 字节跳动 / QQ 小程序 / H5 等应用。现如今市面上端的形态多种多样，Web、React Native、微信小程序等各种端大行其道，当业务要求同时在不同的端都要求有所表现的时候，针对不同的端去编写多套代码的成本显然非常高，这时候只编写一套代码就能够适配到多端的能力就显得极为需要。
 
-34. Recoil
+32. Recoil
 
     <details open>
 
@@ -935,7 +989,7 @@
     }
     const textState = atom({
         key: 'textState', // unique ID (with respect to other atoms/selectors)
-        default: '', // default value (aka initial value)
+        default: '' // default value (aka initial value)
     });
 
     function TextInput() {
@@ -957,7 +1011,7 @@
 
     这样不同的组件都可以共享数据。通过这个 useRecoilState
 
-35. vite
+33. vite
 
     vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，暂时不可能替代 webpack
 
@@ -965,7 +1019,7 @@
 
     它在开发阶段主要就干了两件事情，一个是启动一个 http 服务，第二个就是拦截 import，把 import xx from 'xx'，替换成相对路径或绝对路径或加载到这个包的文件引用过来。因为 esm 只能引用绝对或相对路径去找文件
 
-36. gulp 和 webpack 区别
+34. gulp 和 webpack 区别
 
     gulp 本质上是自动化构建工具， 模块化是靠各类插件，gulp 对比 grunt 都是文件流，taskRunner，但是 grunt 是存到磁盘里，而 gulp 的编译是存在内存中的。
 
@@ -975,7 +1029,7 @@
 
     所以这样看，gulp 更适合 mpa,webpack 更适合 spa
 
-37. JS bridge 原理是什么？
+35. JS bridge 原理是什么？
 
     <details open>
 
@@ -1060,20 +1114,20 @@
 
     因为如果通过 location.href 连续调用 Native，很容易丢失一些调用。
 
-38. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
+36. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
 
     <details open>
 
     - 可以使用 `document.activeElement.scrollIntoViewIfNeeded()` 把对应的元素滚动到可见区域
     - window.resize 的时候，把 button 变成 relative
 
-39. eslint 和 prettier 冲突怎么办
+37. eslint 和 prettier 冲突怎么办
 
     <details open>
 
     其他冲突规则也用类似方法处理，要么修改 eslintrc，要么修改 prettier 配置，但是如果为了少改动老代码，推荐修改 prettier 配置去适应老的 eslint 规则。
 
-40. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
+38. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
 
     <details open>
 
@@ -1163,7 +1217,7 @@
     unVirtual(virtual);
     ```
 
-41. NPM install 运行机制
+39. NPM install 运行机制
 
     <details open>
 
@@ -1177,7 +1231,7 @@
 
     2. 如果你 npm install 具体某个包名，同样会去检查 package.json。保证前后的一致性。
 
-42. 装修拖拽的技术方案
+40. 装修拖拽的技术方案
 
     <details open>
 
@@ -1212,7 +1266,7 @@
 
     复制当前鼠标摸的模块，并计算当前的偏移位置。`this.start = true`
 
-    监听 mousemove ,当然，得摸到任意一个模块，否则直接 return
+    监听 mouseMove ,当然，得摸到任意一个模块，否则直接 return
 
     然后改变当前的模块的 x,y 值，让它跟着鼠标一起走 `this.moved = true`
 
@@ -1224,13 +1278,13 @@
 
     最后执行 onDragEnd;
 
-    同时监听主要展示区域的 mousedown，如果是有组件落在自己的页面下，`this.dragStatus === 'putdown'`。
+    同时监听主要展示区域的 mouseDown，如果是有组件落在自己的页面下，`this.dragStatus === 'putdown'`。
 
     在 onDragEnd 的时候呢，判断当前的 dragStatus ，如果不是 putdown，不做任何执行，说明没有把组件拖进来
 
     如果是 putdown ，说明有组件拖进来了，直接添加组件即可
 
-    在目标区域监听 mousemove 的时候，判断当前拖拽的 X, Y 和整个列表上的模块的 `getBoundingClientRect`比较
+    在目标区域监听 mouseMove 的时候，判断当前拖拽的 X, Y 和整个列表上的模块的 `getBoundingClientRect`比较
 
     ```js
     let rect = tgt.getBoundingClientRect();
@@ -1238,9 +1292,9 @@
     this.setState({ emptyIndex: elemIndex + (event.pageY < boundary ? 0 : 1) });
     ```
 
-    从而确定它拖拽的位子，然后限时一个 释放鼠标将模块添加到此处 的组件，这个组件是插到对应的 index 里的。
+    从而确定它拖拽的位子，然后显示一个 释放鼠标将模块添加到此处 的组件，这个组件是插到对应的 index 里的。
 
-    当然，这个 mousemove 生效的前提是你有一个 draginfo，也就是正在拖拽的模块。
+    当然，这个 mouseMove 生效的前提是你有一个 dragInfo，也就是正在拖拽的模块。
 
     当你选中了对应要编辑的模块后，右侧会出现一个设置界面，用工厂模式根据配置表，渲染出对应的配置，
 
@@ -1254,7 +1308,7 @@
 
     而基础模块就是用来渲染对应模块的 html，css 和一些公共可抽出的数据信息。
 
-43. 如果没有 promise，如何实现一个串行操作？
+41. 如果没有 promise，如何实现一个串行操作？
 
     <details open>
 
@@ -1264,11 +1318,12 @@
     var schemeQueue = [];
     var dirty = false;
     function iteratorRegister(fn) {
-        var next = function () {
+        var next = function (res) {
+            // 所有任务都执行完毕
             if (schemeQueue.length === 0) {
                 return;
             }
-            schemeQueue.shift()(next);
+            schemeQueue.shift()(next, res);
         };
 
         schemeQueue.push(fn);
@@ -1278,27 +1333,43 @@
             schemeQueue.shift()(next);
         }
     }
+    // 定义任务
+    iteratorRegister(function (next) {
+        // setTimeout你就理解为是callback
+        setTimeout(() => {
+            console.log('Task 1 completed');
+            next('Result from Task 1'); // 将结果传递给下一个任务
+        }, 1000);
+    });
+
+    iteratorRegister(function (next, previousResult) {
+        setTimeout(() => {
+            console.log('Task 2 completed, received:', previousResult);
+            next('Result from Task 2'); // 将结果传递给下一个任务
+        }, 1000);
+    });
     ```
 
-    这样在使用的时候，我的 fn 就是一个一个函数，我只需要进来一次，就把它们添加到我的队列，但是这些 fn 会有 callback ，没有 callback 就当它不是异步，直接执行 next ，如果是异步在 callback 里执行 next，从而达到一个串行的目的。
+    这样在使用的时候，我的 fn 就是一个一个函数，我只需要进来一次，就把它们添加到我的队列，但是这些 fn 会有 callback ，如果没有 callback 就当它不是异步，可以直接执行 next ，如果是异步在 callback 里执行 next，从而达到一个串行的目的。
 
-44. 硬链接和软链接的区别
+42. 硬链接和软链接的区别
 
     <details open>
+
+    硬链接（Hard Link）和软链接（Soft Link，也称符号链接）是文件系统中两种不同的链接方式，用于创建文件的引用。它们的主要区别在于链接的方式和行为。
 
     1. 连接方式不同
         - 硬： `ln oldfile newfile`
         - 软： `ln -s old new`, 比如将 `core` 软连接到 `node_modules` 下 (run `ln -s ../../mall-core/ ./node_modules`);
     2. 硬链接只能在同一文件系统中的文件之间进行链接，不能对目录进行创建，而软连接是可以对目录进行连接的
     3. 硬的是多个文件指向同一个索引节点，而软的是指向对方目录的一个索引
-    4. 如果删除硬链接对应的源文件，则硬链接文件仍然存在，而且保存了原有的内容，而软连接删除了源文件的话，就不行了，相关软连接就变成了死链接。
-    5. 为什么？因为删除文件本质上是删除引用节点，软连接如果删除就真没指向了，而硬链接就像复制一样，还会有引用。
+    4. 如果删除硬链接对应的源文件，则硬链接文件仍然存在，而且保存了原有的内容，因为新的文件的指向就是数据，而软连接删除了源文件的话，就不行了，相关软连接就变成了死链接。因为删除文件本质上是删除引用节点，软连接如果删除就真没指向了，而硬链接就像类似复制一样，还会有引用。
 
     ![haard](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8fd6096a17a64d58a73f9e2f2cfc7051~tplv-k3u1fbpfcp-watermark.image)
 
     ![ruan](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5e9d3c5e59454006abde22b822ec22a8~tplv-k3u1fbpfcp-watermark.image)
 
-45. Npm 和 Yarn 和 Pnpm 的区别
+43. Npm 和 Yarn 和 Pnpm 的区别
 
     <details open>
 
@@ -1326,7 +1397,7 @@
     - pnpm 利用 硬链接的形式，可以复用 nodemodules 包, 所以磁盘空间利用非常高效。
     - 在使用 npm/yarn 的时候，由于 node_module 的扁平结构，如果 A 依赖 B， B 依赖 C，那么 A 当中是可以直接使用 C 的，但问题是 A 当中并没有声明 C 这个依赖。因此会出现这种非法访问的情况。但 pnpm 脑洞特别大，自创了一套依赖管理方式，利用软连接的形式，保持的引用的结构，很好地解决了这个问题，保证了安全性
 
-46. 自动化部署 CI/CD [前端自动化部署](https://juejin.cn/post/6844904009333997582)
+44. 自动化部署 CI/CD [前端自动化部署](https://juejin.cn/post/6844904009333997582)
 
     <details open>
 
@@ -1413,7 +1484,7 @@
 
     当我们点击提测的时候，会自动创建一个新的 test 分支，然后当我们在这个开发环境上提交代码的时候，会通过 git hook 的一个钩子，对 jenkins 服务器接口发送一个 post 请求，那边收到这个请求会触发任务，利用 docker 来执行对应的操作。
 
-47. 如何自己发一个 npm 包
+45. 如何自己发一个 npm 包
 
     <details open>
 
@@ -1434,6 +1505,6 @@
 
     完结，很简单对吧
 
-48. 白屏检测的方式
+46. 白屏检测的方式
 
     [document.elementsFromPoint juejin](https://juejin.cn/post/6904135847411941390)
