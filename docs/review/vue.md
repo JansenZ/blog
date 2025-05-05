@@ -851,7 +851,52 @@
     - watch：用于执行副作用。它的主要功能是监听响应式数据的变化，并在变化时执行特定的逻辑（通常是副作用，比如 API 调用、日志记录等）。
     - 简单来说一个是获取值，一个是动作。如果需要计算值并在模板中使用，选择 computed；如果需要监听数据变化并执行副作用，选择 watch。
 
-16. Vue 中需要注意的小 tips
+16. Vue 如何写一个插件？
+    <details open>
+
+    ```js
+    // 定义插件
+    const MyPlugin = {
+        install(Vue, options) {
+            // 添加全局方法
+            Vue.prototype.$myMethod = function () {
+                console.log('这是一个插件方法');
+            };
+
+            // 添加全局指令
+            Vue.directive('focus', {
+                inserted(el) {
+                    el.focus();
+                }
+            });
+
+            // 添加混入
+            Vue.mixin({
+                created() {
+                    console.log('插件混入的生命周期钩子');
+                }
+            });
+
+            // 注册全局组件
+            Vue.component('my-component', {
+                template: '<div>这是一个插件组件</div>'
+            });
+
+            // 添加全局过滤器
+            Vue.filter('capitalize', function (value) {
+                if (!value) return '';
+                value = value.toString();
+                return value.charAt(0).toUpperCase() + value.slice(1);
+            });
+        }
+    };
+
+    // 使用插件
+    import Vue from 'vue';
+    Vue.use(MyPlugin, { someOption: true });
+    ```
+
+17. Vue 中需要注意的小 tips
 
     1. v-show 不支持 `<template>` 元素，也不支持 `v-else`。
     2. 一般来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
