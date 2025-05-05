@@ -228,20 +228,7 @@
 
     一般来说，即使是 Vue，正常也用的是单向数据流，除非是用表单控件，可以减少重复代码，提高开发效率。
 
-4. redux 对比 mobx
-
-    <details open>
-
-    两者对比:
-
-    - redux 将数据保存在单一的 store 中，mobx 将数据保存在分散的多个 store 中
-    - redux 使用 plain object 保存数据，需要手动处理变化后的操作；mobx 适用 observable 保存数据，数据变化后自动处理响应的操作
-    - mobx 相对来说比较简单，在其中有很多的抽象，mobx 更多的使用面向对象的编程思维；redux 会比较复杂，因为其中的函数式编程思想掌握起来不是那么容易，同时需要借助一系列的中间件来处理异步和副作用
-    - mobx 中有更多的抽象和封装，调试会比较困难，同时结果也难以预测；而 redux 提供能够进行时间回溯的开发工具，同时其纯函数以及更少的抽象，让调试变得更加的容易
-    - 设计思想的不同, Redux 的编程范式是函数式的而 Mobx 是面向对象的；
-    - 数据可变性的不同, Redux 是 immutable 的，每次都返回一个新的数据，而 Mobx 从始至终都是一份引用。因此 Redux 是支持数据回溯的；
-
-5. 状态管理的选择
+4. 状态管理的选择
 
     为什么要状态管理呢？首先，我们用 react 为什么要用状态管理，因为 react 是单向数据流，如果多个兄弟组件或者跨层级组件需要互相通信，那么就需要把状态提升到多个兄弟组件的父级来做，然后一层一层传递。
 
@@ -258,6 +245,19 @@
     但是有了 hooks 之后，其实利用 useContext 和 useReducer，再通过 hoc 的形式封装一下，小项目的情况下，已经不需要使用任何状态管理器了。复用代码和分层也都非常容易做到。
 
     React 和 Vue 的状态管理需求确实非常相似，都是为了解决状态提升和跨组件通信的复杂性。两者的状态管理工具（如 Redux 和 Vuex）在设计理念上也非常接近，都是通过集中式管理状态来简化数据流，提高代码的可维护性。选择状态管理工具的原因和解决的问题在两者之间几乎没有本质区别。
+
+5. redux 对比 mobx
+
+    <details open>
+
+    两者对比:
+
+    - redux 将数据保存在单一的 store 中，mobx 将数据保存在分散的多个 store 中
+    - redux 使用 plain object 保存数据，需要手动处理变化后的操作；mobx 适用 observable 保存数据，数据变化后自动处理响应的操作
+    - mobx 相对来说比较简单，在其中有很多的抽象，mobx 更多的使用面向对象的编程思维；redux 会比较复杂，因为其中的函数式编程思想掌握起来不是那么容易，同时需要借助一系列的中间件来处理异步和副作用
+    - mobx 中有更多的抽象和封装，调试会比较困难，同时结果也难以预测；而 redux 提供能够进行时间回溯的开发工具，同时其纯函数以及更少的抽象，让调试变得更加的容易
+    - 设计思想的不同, Redux 的编程范式是函数式的而 Mobx 是面向对象的；
+    - 数据可变性的不同, Redux 是 immutable 的，每次都返回一个新的数据，而 Mobx 从始至终都是一份引用。因此 Redux 是支持数据回溯的；
 
 6. [redux 原理以及实现](https://juejin.cn/post/6844904080255483912)
 
@@ -310,7 +310,32 @@
 
     来完成一个 default，因为 reducer 需要你写 defaut: return state
 
-7. immutable 的特点是什么，它的优势是什么，对比 immer 呢？
+7. mobx 原理
+
+    类似于 vue 的数据劫持
+
+    [mobx](https://zhenglin.vip/js/mobx.js)
+
+    其中 computed 就相当于 即是一个 observerable，又是一个 autorun [模拟](https://github.com/yu-tou/s-mobx/blob/master/src/s-computed.js)
+
+    而且 computed 只能有 get，不能 set，因为它是计算的值。
+
+    举个例子，我们在 autorun 里的 cb 函数中，用到了 computed 的值，那么根据 autorun 的原理，上来肯定会跑一下 cb 函数的，而这个 cb 函数里，用到了 computed 的函数，就会触发 computed 下的 get。在这个 get 里，和 observerable 的 get 一样，依赖收集，但是会多一步，先去执行一个 bindAutoCompute
+
+    在这个 bindAutoCompute 李，一样的，就是和 autorun 基本一样，会先去执行一次\_recomputed，而\_recomputed 里面就是执行这个 computed 的函数，比如你写了
+
+    ```js
+    @computed
+    get fcname() {
+        return this.name + this.sex;
+    }
+    ```
+
+    那是不是就会执行到 this.name 和 this.sex 了啊，对吧。会执行到他们的 get，从而添加依赖。
+
+    这个时候，我修改了 name 的值，set 里就会通知到所有订阅者，而 computed 就订阅到了，它订阅的，就是\_recomputed，这里面，还会去通知所有订阅 computed 的值的订阅者，而 autorun 的 cb 就是它的订阅者，所以会执行过去。这就是 computed 的原理。
+
+8. immutable 的特点是什么，它的优势是什么，对比 immer 呢？
 
     <details open>
 
@@ -416,7 +441,7 @@
     }
     ```
 
-8. 为什么用 React + mobx？
+9. 为什么用 React + mobx？
 
     <details open>
 
@@ -431,26 +456,128 @@
 
     虽然用了 Mobx,但是比如修改数据的时候，还是通过一个文件下的回调，然后完成数据变更。
 
-9. 返回拦截
+10. 返回拦截
 
     <details open>
 
-    返回劫持弹窗，我们的项目的路由不是 react-router，是我们老大自己实现的一个，所以更没有`prompt`，但是好在他在`navigation`返回的时候，判断`isback`的时候，添加了一个事件
+    如果是使用 react-router 的话，可以直接使用 Prompt 组件。
 
-    `beforeback`事件，如果触发事件，会执行回调函数并忽略这次`hashchange`。就是它的`historys`数组不操作。并且跳回当前`url`。具体可以参考 router.md 的一个小例子
+    ```js
+    import React, { useState } from 'react';
+    import { Prompt } from 'react-router-dom';
 
-    现在事件有了，但是它的这个触发需要前面有一张页面，因为我们是`hash`方案，否则在微信打开就会直接退出。
+    function MyComponent() {
+        const [isBlocking, setIsBlocking] = useState(false);
 
-    由于需要在首页，以及一个填写页需要返回劫持。
+        const handleInputChange = (event) => {
+            setIsBlocking(event.target.value.length > 0);
+        };
 
-    那么问题来了，如果单纯的是在一个身份证填写页加返回劫持是好加的，因为这个时候他前面是有页面的。
+        return (
+            <div>
+                <input
+                    type="text"
+                    onChange={handleInputChange}
+                    placeholder="输入内容后尝试离开页面"
+                />
+                <Prompt
+                    when={isBlocking}
+                    message="你确定要离开吗？未保存的更改将丢失。"
+                />
+            </div>
+        );
+    }
+    ```
 
-    并且，身份证填写页面前页是一个支付下单页，是一个公共的，不属于我们应用下的，页就是说，当他进我的身份证页面的时候，是重新刷新所有页面的。
+    如果是使用 hash 路由的话，那就比较麻烦，需要手动监听 hashChange，然后再 hashChange 里判断路由的 length 是否没变。当然肯定要存一个自定义的历史的栈的 history.length，如果没变的话，就简单的认为是返回操作。但是如果刷新页面的情况下，history.length 可能会变空，比较不好，所以最好还是直接 sessionStorage 存一个 hash 的值，然后比对，从而决定是否是返回，当然，返回的时候还要有一个操作，一旦阻止返回，需要手动跳回原来的 hash，比如 history.forward，然后加个 flag，在 hashChange 里判断，防止 2 次触发。
 
-    加上首页页需要。
-    所以我加了一个中间页。由这个中间页跳转到首页，由这个中间页跳转到身份证填写页。
+    ```js
+    import React, { useEffect, useRef } from 'react';
 
-    因为是一个通用的中间页，所以需要把首页或者是身份证页路由参数带上去。我的这个中间页接收三个参数。
+    function HashRouterInterceptor() {
+        const historyStack = useRef([]); // 自定义的历史栈
+        const isNavigating = useRef(false); // 标记是否正在导航
+
+        useEffect(() => {
+            const handleHashChange = () => {
+                const currentHash = window.location.hash;
+
+                if (isNavigating.current) {
+                    // 如果是代码触发的导航，重置标记
+                    isNavigating.current = false;
+                    return;
+                }
+
+                if (
+                    historyStack.current.length > 0 &&
+                    historyStack.current[historyStack.current.length - 1] ===
+                        currentHash
+                ) {
+                    // 如果当前 hash 和栈顶相同，说明是返回操作
+                    const confirmLeave =
+                        window.confirm('你确定要返回吗？未保存的更改将丢失。');
+                    if (!confirmLeave) {
+                        // 阻止返回，跳回原来的 hash
+                        isNavigating.current = true;
+                        window.location.hash =
+                            historyStack.current[
+                                historyStack.current.length - 1
+                            ];
+                    } else {
+                        // 允许返回，弹出栈顶
+                        historyStack.current.pop();
+                    }
+                } else {
+                    // 如果是前进操作，压入栈
+                    historyStack.current.push(currentHash);
+                }
+            };
+
+            // 初始化栈
+            historyStack.current.push(window.location.hash);
+
+            window.addEventListener('hashchange', handleHashChange);
+
+            return () => {
+                window.removeEventListener('hashchange', handleHashChange);
+            };
+        }, []);
+
+        return <div>尝试点击浏览器的返回按钮或更改 hash</div>;
+    }
+
+    export default HashRouterInterceptor;
+    ```
+
+    但是以上 hash 路由的方案是有缺陷的，对于首屏是比较难操作的，你需要判断当前是首屏，而且由于首屏无法触发 hashChange，所以可以用 popState 来做一个返回的判定 或者加个中间页。
+
+    ```js
+    const handlePopState = () => {
+        const storedStack =
+            JSON.parse(sessionStorage.getItem(HISTORY_KEY)) || [];
+
+        if (storedStack.length === 1) {
+            // 首屏返回处理
+            const confirmLeave = window.confirm('你确定要退出吗？');
+            if (confirmLeave) {
+                if (window.WeixinJSBridge) {
+                    // 微信环境
+                    window.WeixinJSBridge.call('closeWindow');
+                } else {
+                    // 其他环境
+                    window.close();
+                }
+            } else {
+                // 阻止关闭，跳回当前 hash
+                window.location.hash = storedStack[0];
+            }
+        }
+    };
+    ```
+
+    如果是加中间页的方案，就是以前公司的做法。如果只是在一个身份证填写页加返回劫持是好加的，因为这个时候他前面是有页面的。 并且，身份证填写页面前页是一个支付下单页，是一个公共的，不属于我们应用下的，也就是说，当他进我的身份证页面的时候，是重新刷新所有页面的。
+
+    因为是一个通用的中间页，所以需要把首页或者是身份证页路由参数带上去。这个中间页接收三个参数。
 
     go = -n, 比如身份证页，返回的时候，需要把之前的路由清掉的，否则就会跳到支付页，再买一次。默认是-1
 
@@ -458,19 +585,127 @@
 
     nextRoute，要跳转的目标页面。
 
-    到了中间页后，我会先去我存的 session，然后获取当前的 historylen，应用里的。第一次进来肯定是没有的。所以我会存取时间戳和当前的 history.length，并跳到目标页。
+    到了中间页后，先取存的 session，然后获取当前的 historyLen，应用里的。第一次进来肯定是没有的。所以我会存取时间戳和当前的 history.length，并跳到目标页。
 
     然后再返回的时候，回到中间页，会再抓取当前的 session 记录，这个时候能抓到了就删除它，然后看这个 session 的值是不是 1，如果是 1，代表它是第一张页面，会尝试关闭 webview
 
-    比如你在微信
-
-    微信的话调用 `window.WeixinJSBridge.call('closeWindow')`。这里还有个坑，这里微信的 js 加载可能会稍慢的情况下，直接返回就会无法退出微信，所以要轮训，超时设置 5s，100ms 一次。
+    如果是微信的话调用 `window.WeixinJSBridge.call('closeWindow')`。这里还有个坑，这里微信的 js 加载可能会稍慢的情况下，直接返回就会无法退出微信，所以要轮训，超时设置 5s，100ms 一次。
 
     如果是 APP 里的话，调用我们 native 提供的方法。
 
     如果不是 1 的话，说明前面还有页面，直接 back
 
-10. rn 热更新原理
+    以上用代码模拟大概是下面的样子，还有 Bug，意会既可
+
+    ```js
+    import React, { useEffect } from 'react';
+
+    function MiddlePage() {
+        const SESSION_KEY = 'middlePageSession';
+
+        useEffect(() => {
+            const currentUrl = window.location.href;
+            const sessionData = JSON.parse(sessionStorage.getItem(SESSION_KEY));
+
+            if (!sessionData) {
+                // 初始化 session 数据
+                const nextRoute = new URLSearchParams(
+                    window.location.search
+                ).get('nextRoute');
+                const timestamp = Date.now();
+                const historyLen = window.history.length;
+
+                sessionStorage.setItem(
+                    SESSION_KEY,
+                    JSON.stringify({
+                        timestamp,
+                        historyLen,
+                        nextRoute
+                    })
+                );
+
+                // 跳转到目标页面
+                if (nextRoute) {
+                    window.location.href = nextRoute;
+                }
+            } else {
+                const { historyLen, timestamp } = sessionData;
+                if (timestamp !== url.timestamp) {
+                    // 说明还是前进，session里加数组设置
+                    // 然后push
+                } else {
+                    // 说明时间戳一样，就是返回
+                    if (historyLen === 1) {
+                        // 如果是首屏，尝试关闭 WebView
+                        if (window.WeixinJSBridge) {
+                            // 微信环境
+                            const closeWindow = () => {
+                                window.WeixinJSBridge.call('closeWindow');
+                            };
+                            const interval = setInterval(() => {
+                                if (window.WeixinJSBridge) {
+                                    closeWindow();
+                                    clearInterval(interval);
+                                }
+                            }, 100);
+                            setTimeout(() => clearInterval(interval), 5000); // 超时设置
+                        } else {
+                            // APP 环境
+                            window.close(); // 或调用 Native 提供的方法
+                        }
+                    } else {
+                        // 如果不是首屏，返回上一页
+                        window.history.back();
+                    }
+                }
+            }
+        }, []);
+
+        return <div>处理中间页逻辑...</div>;
+    }
+
+    export default MiddlePage;
+    ```
+
+    如果是在 native 的导航栏下，一般公司都是可以提供的，所以直接用桥的返回拦截既可
+
+    但是如果是 vue 在小程序和微信情况下，可以靠 popState 判定是不是返回，然后利用路由的 app.beforeEach 来决定是否中断导航，这个看起来挺方便的。
+
+    ```js
+    // 返回打标记
+    window.isBackAction = false
+    window.setActionDisabled = false
+
+    window.addEventListener('popstate', function () {
+      !window.setActionDisabled && (window.isBackAction = true)
+    })
+
+    app.router!.beforeEach((_to, from, next) => {
+      const path = from.path
+
+      // 处理返回
+      if (window.isBackAction) {
+        window.isBackAction = false
+
+        const handleFn = backHandleFns[path]
+        if (handleFn) {
+          // NOTE: 用 Promise 保证 handleFn 最后执行，让当前 beforeEach 先处理完 next(false)
+          // NOTE: 这样可以正常处理 router.back 逻辑，否则会回退 2 次路由
+          Promise.resolve()
+            .then(() => handleFn())
+            .catch(() => null)
+
+          delete backHandleFns[path]
+          next(false)
+          return
+        }
+      }
+
+      next()
+    })
+    ```
+
+11. rn 热更新原理
 
     <details open>
 
@@ -483,7 +718,7 @@
     启动程序的时候，会发一个请求给服务器，带上自己当前`app`的`key`值。服务端会判读两次上传的包的异同来决定是否需要全量热更新还是增量热更新，如果是全量热更新会返回一个`downloadurl`，这个`url`就是自己在 react-native-update 后台配置的那个下载的 url。手机会下载整个 bundlejs 下来完成全量热更新。
     如果是增量热更新的话，会返回一个 pdiffUrl，拿到这个 url 下载下来的就是增量数据，然后客户端进行数据合并完成增量热更新。
 
-11. rn im 的问题
+12. rn im 的问题
 
     <details open>
 
@@ -516,17 +751,6 @@
         };
     };
     ```
-
-12. 调试技巧...
-
-    <details open>
-
-    1. element 是可以 copy 的
-    2. console.log('%c this is a message','color:#f20;') 可以输入带颜色的 log,自己在 vscode 里自定义个预设片段就可以了。
-    3. 点到 element，直接点 h 就可以隐藏，不需要直接 delete 掉了
-    4. command + 上下可以直接移动 element
-    5. 阴影这样的可以直接在页面上调，直接点击样式，就唤起弹窗，快速调试
-    6. 断点可以加条件，这样不必一直进这个断点，比如 for，判断 i==5 才进。
 
 13. 调试文字样式 debug， document.designModel = 'on'
 
@@ -853,56 +1077,8 @@
     ios 和安卓对于 rn 来说，是提供一个壳，并且提供了一些原生方法。
     rn 项目下会有一个 native_modules，通过这个模块可以调用原生方法。
 
-23. MVC， MVP, MVVM
-
-    <details open>
-
-    - MVC
-
-        model, view, controller。
-
-        mvc 里是 view 监听更新事件，model 处理完了后会通知更新事件。model 对于其它无感知的。逻辑分离。view 比较麻烦
-
-    - MVP
-      model, view, p
-      view 点击完了 =》 p, p 控制 model。监听改到了 p 层，由 p 层触发去改版 View。p 作为新的 controller，统一处理。以 p 为核心。p 就比较麻烦了
-    - MVVM
-      viewmodel。controller。model。
-      model 改了动 view，view 改了动 model。就是 vue 那种。我们现在分的层也类似这样。
-
-24. 手写一个双向绑定
-
-    [vue.js](https://zhenglin.vip/js/vue.js)
-
-25. mobx 原理
-
-    类似于 vue 的数据劫持
-
-    [mobx](https://zhenglin.vip/js/mobx.js)
-
-    其中 computed 就相当于 即是一个 observerable，又是一个 autorun [模拟](https://github.com/yu-tou/s-mobx/blob/master/src/s-computed.js)
-
-    而且 computed 只能有 get，不能 set，因为它是计算的值。
-
-    举个例子，我们在 autorun 里的 cb 函数中，用到了 computed 的值，那么根据 autorun 的原理，上来肯定会跑一下 cb 函数的，而这个 cb 函数里，用到了 computed 的函数，就会触发 computed 下的 get。在这个 get 里，和 observerable 的 get 一样，依赖收集，但是会多一步，先去执行一个 bindAutoCompute
-
-    在这个 bindAutoCompute 李，一样的，就是和 autorun 基本一样，会先去执行一次\_recomputed，而\_recomputed 里面就是执行这个 computed 的函数，比如你写了
-
-    ```js
-    @computed
-    get fcname() {
-        return this.name + this.sex;
-    }
-    ```
-
-    那是不是就会执行到 this.name 和 this.sex 了啊，对吧。会执行到他们的 get，从而添加依赖。
-
-    这个时候，我修改了 name 的值，set 里就会通知到所有订阅者，而 computed 就订阅到了，它订阅的，就是\_recomputed，这里面，还会去通知所有订阅 computed 的值的订阅者，而 autorun 的 cb 就是它的订阅者，所以会执行过去。这就是 computed 的原理。
-
-26. nginx 知识点
-27. 骨架屏实现方案
-28. 代码生成技术文档
-29. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
+23. 骨架屏实现方案
+24. 如果一个 tab 锚点，它对应的内容，是懒加载的，也就是说，我再点击这个锚点的时候，它只有一个 container 的话，我如何正确的锚到那里去呢？
 
     <details open>
 
@@ -951,29 +1127,13 @@
     );
     ```
 
-30. SWR
-
-    <details open>
-
-    [原理分析](https://zhuanlan.zhihu.com/p/93824106)
-
-    [中文文档](https://swr.vercel.app/zh-CN)
-
-    特点
-
-    - 相当于封装了 fetch，可以自动不断的获取最新的数据流
-    - 帮助你更好的完成了请求缓存，内置缓存和重复请求去除
-    - 分页和滚动位置恢复
-    - 聚焦是重新验证，网络恢复时重新验证，支持 Suspense
-    - 获取数据的时候，非常简单，简易
-
-31. Taro 是什么?
+25. Taro 是什么?
 
     <details open>
 
     Taro 是一个开放式跨端跨框架解决方案，支持使用 React/Vue/Nerv 等框架来开发 微信 / 京东 / 百度 / 支付宝 / 字节跳动 / QQ 小程序 / H5 等应用。现如今市面上端的形态多种多样，Web、React Native、微信小程序等各种端大行其道，当业务要求同时在不同的端都要求有所表现的时候，针对不同的端去编写多套代码的成本显然非常高，这时候只编写一套代码就能够适配到多端的能力就显得极为需要。
 
-32. Recoil
+26. Recoil
 
     <details open>
 
@@ -1011,7 +1171,7 @@
 
     这样不同的组件都可以共享数据。通过这个 useRecoilState
 
-33. vite
+27. vite
 
     vite 是 vue 出的一个构建工具，开发时候用的 esm 原生模块，非常的快，生产用的 rollup，暂时不可能替代 webpack
 
@@ -1019,7 +1179,7 @@
 
     它在开发阶段主要就干了两件事情，一个是启动一个 http 服务，第二个就是拦截 import，把 import xx from 'xx'，替换成相对路径或绝对路径或加载到这个包的文件引用过来。因为 esm 只能引用绝对或相对路径去找文件
 
-34. gulp 和 webpack 区别
+28. gulp 和 webpack 区别
 
     gulp 本质上是自动化构建工具， 模块化是靠各类插件，gulp 对比 grunt 都是文件流，taskRunner，但是 grunt 是存到磁盘里，而 gulp 的编译是存在内存中的。
 
@@ -1029,7 +1189,7 @@
 
     所以这样看，gulp 更适合 mpa,webpack 更适合 spa
 
-35. JS bridge 原理是什么？
+29. JS bridge 原理是什么？
 
     <details open>
 
@@ -1114,20 +1274,20 @@
 
     因为如果通过 location.href 连续调用 Native，很容易丢失一些调用。
 
-36. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
+30. IOS 键盘遮挡输入框遇到过没有？ 怎么解决
 
     <details open>
 
     - 可以使用 `document.activeElement.scrollIntoViewIfNeeded()` 把对应的元素滚动到可见区域
     - window.resize 的时候，把 button 变成 relative
 
-37. eslint 和 prettier 冲突怎么办
+31. eslint 和 prettier 冲突怎么办
 
     <details open>
 
     其他冲突规则也用类似方法处理，要么修改 eslintrc，要么修改 prettier 配置，但是如果为了少改动老代码，推荐修改 prettier 配置去适应老的 eslint 规则。
 
-38. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
+32. DOM 如何转虚拟 DOM？ 虚拟 DOM 如何转 DOM
 
     <details open>
 
@@ -1217,7 +1377,7 @@
     unVirtual(virtual);
     ```
 
-39. NPM install 运行机制
+33. NPM install 运行机制
 
     <details open>
 
@@ -1231,7 +1391,7 @@
 
     2. 如果你 npm install 具体某个包名，同样会去检查 package.json。保证前后的一致性。
 
-40. 装修拖拽的技术方案
+34. 装修拖拽的技术方案
 
     <details open>
 
@@ -1308,7 +1468,7 @@
 
     而基础模块就是用来渲染对应模块的 html，css 和一些公共可抽出的数据信息。
 
-41. 如果没有 promise，如何实现一个串行操作？
+35. 如果没有 promise，如何实现一个串行操作？
 
     <details open>
 
@@ -1352,7 +1512,7 @@
 
     这样在使用的时候，我的 fn 就是一个一个函数，我只需要进来一次，就把它们添加到我的队列，但是这些 fn 会有 callback ，如果没有 callback 就当它不是异步，可以直接执行 next ，如果是异步在 callback 里执行 next，从而达到一个串行的目的。
 
-42. 硬链接和软链接的区别
+36. 硬链接和软链接的区别
 
     <details open>
 
@@ -1369,7 +1529,7 @@
 
     ![ruan](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/5e9d3c5e59454006abde22b822ec22a8~tplv-k3u1fbpfcp-watermark.image)
 
-43. Npm 和 Yarn 和 Pnpm 的区别
+37. Npm 和 Yarn 和 Pnpm 的区别
 
     <details open>
 
@@ -1397,7 +1557,7 @@
     - pnpm 利用 硬链接的形式，可以复用 nodemodules 包, 所以磁盘空间利用非常高效。
     - 在使用 npm/yarn 的时候，由于 node_module 的扁平结构，如果 A 依赖 B， B 依赖 C，那么 A 当中是可以直接使用 C 的，但问题是 A 当中并没有声明 C 这个依赖。因此会出现这种非法访问的情况。但 pnpm 脑洞特别大，自创了一套依赖管理方式，利用软连接的形式，保持的引用的结构，很好地解决了这个问题，保证了安全性
 
-44. 自动化部署 CI/CD [前端自动化部署](https://juejin.cn/post/6844904009333997582)
+38. 自动化部署 CI/CD [前端自动化部署](https://juejin.cn/post/6844904009333997582)
 
     <details open>
 
@@ -1484,7 +1644,7 @@
 
     当我们点击提测的时候，会自动创建一个新的 test 分支，然后当我们在这个开发环境上提交代码的时候，会通过 git hook 的一个钩子，对 jenkins 服务器接口发送一个 post 请求，那边收到这个请求会触发任务，利用 docker 来执行对应的操作。
 
-45. 如何自己发一个 npm 包
+39. 如何自己发一个 npm 包
 
     <details open>
 
@@ -1505,6 +1665,22 @@
 
     完结，很简单对吧
 
-46. 白屏检测的方式
+40. 白屏检测的方式
 
     [document.elementsFromPoint juejin](https://juejin.cn/post/6904135847411941390)
+
+41. Vue 的全局 filter 带来的问题
+
+    ```js
+    const plugin: Plugin = (ctx: CustomContext, inject: Inject) => {
+        const picture = new PictureUtil(ctx);
+        Vue.filter('webp', (value: string) => {
+            if (!value) return '';
+            return picture.convert2Webp(value);
+        });
+        inject('picture', picture);
+    };
+    ```
+
+    通过如上代码，会注册一个全局的 webp 的 filter，但是这里有个问题，就是虽然 ssr 阶段 filter 代码不生效，但是 filter 的注册会执行。而 Vue 的全局过滤器是一个单例模式，注册后会在整个应用中生效，在 ssr 阶段，代码是跑在服务器上的，而当进入 csr 渲染的时候，由于 Vue.filter 已经注册过了，客户端只会复用，但是假如第一个请求的设备支持 webp，那么后续请求的设备即使不支持 webp，都会复用之前的逻辑，导致客户端渲染结果不正确。
+    所以最佳的方案就是假如真要用，在客户端在注册。或者尽量避免全局注册。不仅仅是 filter，其实是只要是全局操作的东西，都应该要考虑清楚是否在 ssr 阶段有影响。
