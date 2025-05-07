@@ -8,7 +8,7 @@
 
 * [React](review/react.md)
 
-* [React SSR](review/ssr.md)
+* [SSR](review/ssr.md)
 
 * [Vue](review/vue.md)
 
