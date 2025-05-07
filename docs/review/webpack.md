@@ -508,6 +508,8 @@
     10. 最后再后台配置 autoconfig,也就是对应变量的值，从而完成整体配置。
 
 17. webpack 热更新原理
+    <details open>
+
     [参考 1](https://zhuanlan.zhihu.com/p/30669007)
     [参考 2](https://juejin.cn/post/6844904008432222215)
 
