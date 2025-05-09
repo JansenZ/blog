@@ -84,6 +84,7 @@
    4. 事件绑定的时候 React 是用的合成事件，Vue 是原生事件
 
 4. 服务端渲染使用的 renderToString 和客户端使用的 render 的区别？以及 hydrate 和 render 的区别？
+    <details open>
 
    1. renderToString 方法用于将组件渲染为 HTML 字符串。生成的 HTML 包含组件的静态内容，但不包含事件绑定和动态逻辑。
    2. render 方法用于将 React 组件渲染为虚拟 DOM 树。为新生成的 DOM 节点绑定事件监听器
