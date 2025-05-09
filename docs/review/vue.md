@@ -7,18 +7,21 @@
         1. beforeCreate (Vue2) 实例初始化之后，数据观测之前。 / setup (Vue3) 组合式 API 的入口
         2. created (Vue2) 实例创建完成后被调用，此时已完成数据观测，但尚未挂载
         3. asyncData (Nuxt): 在组件加载前调用，用于获取异步数据
-        4. fetch (Nuxt): 在组件加载前调用，用于获取异步数据
-        5. middleware (Nuxt): 在页面渲染前执行中间件
-        6. validate (Nuxt): 验证动态路由参数
-        7. beforeMount (Vue2) / onBeforeMount (Vue3) 组件挂载到节点之前执行
-        8. mounted (Vue2) / onMounted (Vue3) 组件挂载完成后执行
-        9. beforeUpdate (Vue2) / onBeforeUpdate (Vue3) 组件更新之前执行
-        10. updated (Vue2) / onUpdated (Vue3) 组件更新完成之后执行
-        11. beforeDestroy (Vue2) / onBeforeUnmount (Vue3) 组件卸载之前执行
-        12. destroyed (Vue2) / onUnmounted (Vue3) 组件卸载完成之后执行
-        13. onErrorCaptured (Vue3): 捕获后代组件错误时执行
-        14. onRenderTracked (Vue3): 跟踪虚拟 DOM 重新渲染时执行
-        15. onRenderTriggered (Vue3): 触发虚拟 DOM 重新渲染时执行
+        4. serverPrefetch（Vue3），服务端数据预取
+        5. fetch (Nuxt): 在组件加载前调用，用于获取异步数据
+        6. middleware (Nuxt): 在页面渲染前执行中间件
+        7. validate (Nuxt): 验证动态路由参数
+        8. 以下是CSR专属
+        9. beforeMount (Vue2) / onBeforeMount (Vue3) 组件挂载到节点之前执行
+        10. mounted (Vue2) / onMounted (Vue3) 组件挂载完成后执行
+        11. beforeUpdate (Vue2) / onBeforeUpdate (Vue3) 组件更新之前执行
+        12. updated (Vue2) / onUpdated (Vue3) 组件更新完成之后执行
+        13. beforeDestroy (Vue2) / onBeforeUnmount (Vue3) 组件卸载之前执行
+        14. destroyed (Vue2) / onUnmounted (Vue3) 组件卸载完成之后执行
+        15. 以下SSR也会有
+        16. onErrorCaptured (Vue3): 捕获后代组件错误时执行
+        17. onRenderTracked (Vue3): 跟踪虚拟 DOM 重新渲染时执行
+        18. onRenderTriggered (Vue3): 触发虚拟 DOM 重新渲染时执行
     - ![图片](https://cn.vuejs.org/assets/lifecycle_zh-CN.W0MNXI0C.png)
 
 2. 使用 Compositon API 需要注意什么？
