@@ -111,6 +111,8 @@
      - **403 Forbidden** 被拒绝了，服务器理解请求但拒绝执行，通常是权限不足。
      - **404 Not Found** 找不到资源，表示请求的资源在服务器上找不到。
      - **405 Method Not Allowed** 请求方法不被允许（如使用POST时，资源不支持）。
+     - **414 URI Too Long** 请求Url超长了
+     - **413 Payload Too Large** 客户端发送的请求体（Payload）过大，服务器无法处理。请求body过大
      - **429 Too Many Requests** 请求过于频繁，超过了服务器设定的限制，客户端应等待一段时间再尝试。
      - **431 Request Header Fields Too Large** 请求头字段太大，服务器无法处理，通常是因为请求头（如Cookie）过大。
 
