@@ -1,0 +1,50 @@
+.route-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.route-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  will-change: transform, opacity;
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+/* 前进动画 */
+.route-page.enter {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.route-page.enter-active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* 后退动画 */
+.route-page.exit {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.route-page.exit-active {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+/* 暂停状态 */
+.route-page.paused {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+/* 恢复状态 */
+.route-page.resumed {
+  transform: translateX(0);
+  opacity: 1;
+}
