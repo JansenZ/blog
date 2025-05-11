@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Web Components 微前端示例</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .app-container {
+        flex: 1;
+        min-width: 300px;
+      }
+      .theme-switch {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .language-switch {
+        position: fixed;
+        top: 20px;
+        right: 120px;
+        padding: 10px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="language-switch" id="languageSwitch">切换语言</div>
+    <div class="theme-switch" id="themeSwitch">切换主题</div>
+    <div class="container">
+      <div class="app-container">
+        <micro-app name="counter" url="./counter-app.js"></micro-app>
+      </div>
+      <div class="app-container">
+        <micro-app name="todo" url="./todo-app.js"></micro-app>
+      </div>
+    </div>
+
+    <script src="./main-app.js"></script>
+    <script>
+      // 主题切换
+      document.getElementById('themeSwitch').addEventListener('click', () => {
+        const currentTheme = document
+          .querySelector('micro-app')
+          .store.getState('theme')
+        document
+          .querySelector('micro-app')
+          .store.setState('theme', currentTheme === 'light' ? 'dark' : 'light')
+      })
+
+      // 语言切换
+      document
+        .getElementById('languageSwitch')
+        .addEventListener('click', () => {
+          const currentLanguage = document
+            .querySelector('micro-app')
+            .store.getState('language')
+          document
+            .querySelector('micro-app')
+            .store.setState(
+              'language',
+              currentLanguage === 'zh-CN' ? 'en-US' : 'zh-CN'
+            )
+        })
+    </script>
+  </body>
+</html>
