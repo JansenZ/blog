@@ -20,6 +20,8 @@
 
 * [Webpack](review/webpack.md)
 
+* [Vite](review/vite.md)
+
 * [NODE](review/node.md)
 
 * [计算机](review/base.md)
