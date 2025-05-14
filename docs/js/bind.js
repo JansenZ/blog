@@ -1,21 +1,19 @@
-// bind 返回新函数，实际就是换了个this。也就是apply把新的context放进去就可以了
+// bind 返回一个新函数，更换了this的指向，实际bind的传参是按call来的
+// 里面的实现用apply和call都可以，
 // 首先，我们为什么要加原型，
-// 因为bind出来的function是可以new的，并且还要指向原来的函数，所以需要原型
-// 其次，为啥下面的改成用空函数呢
-// 因为如果直接修改res.prototype = self.prototype
-// 一样会改 到原函数的原型。所以用下面的中转一下。
+// 因为bind出来的function是支持new的，如果原来的function下有个getName的原型函数，不加原型你就找不到了。
+// 其次为啥是Object.create呢，因为如果直接写boundFunction.prototype = fun.prototype
+// 这样如果修改了最后新函数的原型，也会改到原来的fun，这也是不愿意看到的。
+// 而用了Object.create，相当于继承，是新的。.__proto__就是通过属性上去找它的原型链。
+// 那如果new新的boundFn，getName就可以通过a.__proto__.__proto__.getName获得。
 Function.prototype.bind2 = function(ctx, ...args1) {
-    const self = this;
-
-    const Fn = function() {};
-
-    const res = function(...args2) {
-        self.apply(ctx, args1.concat(args2));
+    const fun = this;
+    
+    const boundFunction = function(...args2) {
+        fun.apply(ctx, args1.concat(args2));
     };
 
-    Fn.prototype = self.prototype;
+    boundFunction.prototype = Object.create(fun.prototype)
 
-    res.prototype = new Fn();
-
-    return res;
+    return boundFunction;
 };
