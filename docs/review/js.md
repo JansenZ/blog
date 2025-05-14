@@ -1078,11 +1078,12 @@
     // 如果是Function的话
     Fun1.prototype = Object.create(Fun2.prototype)
     var c = new Fun1()
+    var d = new Fun2()
     ```
     假如上面是function那种，不就是 Fun1.prototype.__proto__ == Fun2.prototype , 如果Fun2有个 getname 方法，c.getName 的传播链条是多一层的。
     - c.__proto__ => Fun1.prototype
     - Fun1.prototype.__proto__ => Fun2.prototype 这里就是多的一层。
-    - Fun2.prototype.getName 返回
+    - c.__proto__.__proto.__.getName === d.__proto__.getName
     
     如果是要直接创建一个新的空对象的话，那就一样了。以下三种是一样的。
 
