@@ -1069,8 +1069,22 @@
     var a = new P();
     ```
 
-    根据这个特性，可以看出来，Object.create 和 new 还是有区别的，new 多了一个 call 的过程,a 会有 name 属性，而 cc 没有。
-    但是，直接创建一个新的空对象的话，那就一样了。以下三种是一样的。
+    根据这个特性，可以看出来，Object.create 和 new 还是有区别的，new 多了一个 call 的过程,a 会有 name 属性，而 cc 没有。但是cc这个时候就会具备P原型上的所有方法。以数组为例
+
+    ```js
+    var arr = Object.create(Array.prototype)
+    // 这里的arr虽然没有初始化，但是也是具备数组的方法的。
+
+    // 如果是Function的话
+    Fun1.prototype = Object.create(Fun2.prototype)
+    var c = new Fun1()
+    ```
+    假如上面是function那种，不就是 Fun1.prototype.__proto__ == Fun2.prototype , 如果Fun2有个 getname 方法，c.getName 的传播链条是多一层的。
+    - c.__proto__ => Fun1.prototype
+    - Fun1.prototype.__proto__ => Fun2.prototype 这里就是多的一层。
+    - Fun2.prototype.getName 返回
+    
+    如果是要直接创建一个新的空对象的话，那就一样了。以下三种是一样的。
 
     ```js
     var obj = {};
@@ -1105,7 +1119,7 @@
     a.__proto__ == P; // true
     ```
 
-35. 原型、作用域、原型链、作用域链
+36. 原型、作用域、原型链、作用域链
     <details open>
 
     - js 本质上一切皆对象，每个对象都要有原型，这也是为什么有继承关系。
@@ -1114,7 +1128,7 @@
     - 函数有一个内部属性 [[scope]] ,当函数创建的时候，就会保存所有的父变量对象到其中。
     - [[scope]] 可以理解为所有父级变量对象的层级链
 
-36. instanceof 原理是啥？
+37. instanceof 原理是啥？
     <details open>
 
     instanceof 其实就是利用原型链去查找，找到了就返回 true
@@ -1143,7 +1157,7 @@
     console.log('hello world' instanceof PrimitiveString); // true
     ```
 
-37. null,undefined,未声明的变量的区别
+38. null,undefined,未声明的变量的区别
     <details open>
 
     - 未声明的变量就是不用 let ,var, const 关键字的比如直接写 a = 2;这样的，如果是在严格模式下，会报错
@@ -1152,7 +1166,7 @@
     - null 的话只能显式的被赋值，标识空值。
     - null == undefined；没有隐式转换。
 
-38. call,apply,bind 区别
+39. call,apply,bind 区别
     <details open>
 
     - call 第二个参数是一个一个的
@@ -1161,7 +1175,7 @@
     - 实现 bind 就更简单了，context 不用动，传递下 this 函数，然后 return 个 function，参数和之前的组合一下，调用 apply 就可以了。
     - call 比 apply 快，因为 apply 内部还要判断参数是不是数组，还需要获取数组 length 等等，而 call 就没这些事
 
-39. 事件循环 event loop
+40. 事件循环 event loop
     <details open>
 
     我们知道`JavaScript`的一大特点就是单线程，而这个线程中拥有唯一的一个事件循环。
@@ -1306,7 +1320,7 @@
 
     输出是 time1, 2s 后输出 pthen1, time2, pthen2, 一样论证了 setTimeout 等待。
 
-40. typeof null 为啥是 object？
+41. typeof null 为啥是 object？
     <details open>
 
     原理是这样的，不同的对象在底层都表示为二进制，在`Javascript`中二进制前三位用来表示 `TYPE_TAG`
@@ -1315,7 +1329,7 @@
 
     null 在设计的时候是一个空指针，它的二进制表示全为 0，自然前三位也是 0，所以执行 typeof 时会返回"object"。
 
-41. 什么是闭包，闭包经典问题解法有哪几种？
+42. 什么是闭包，闭包经典问题解法有哪几种？
     <details open>
 
     闭包就是函数内可以访问函数外的变量，就属于闭包。但是我们常说的，是属于调用栈出栈了，依然能够中找到那个变量。
@@ -1339,7 +1353,7 @@
     - 用 let 封闭作用域
     - 用 settimeout 第三个参数就是传给 settimeout 里面的函数的入参。
 
-42. 实现继承的几种方式
+43. 实现继承的几种方式
     <details open>
 
     - 原型链继承
@@ -1433,7 +1447,7 @@
 
     但是如果是**原生对象**，就不行了，是拿不到内部属性的
 
-43. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
+44. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
     <details open>
 
     基本完整版本参见 [deepCopy.js](https://zhenglin.vip/js/deepcopy.js)
@@ -1454,7 +1468,7 @@
 
     ```
 
-44. 手写一个 promise
+45. 手写一个 promise
     <details open>
 
     - 第一步，先写这里的回调函数 三个状态，then 里的函数可以不传。
@@ -1468,7 +1482,7 @@
 
     [promise](https://zhenglin.vip/js/promise.js)
 
-45. 手写 call, apply, bind 出来
+46. 手写 call, apply, bind 出来
     <details open>
 
     call 和 apply，就是传一个上下文进去，没有就赋值 window
@@ -1479,7 +1493,7 @@
 
     [Object(this)的原因](https://stackoverflow.com/questions/44079391/what-is-the-purpose-of-doing-objectthis/44080309)
 
-46. 正则
+47. 正则
     <details open>
 
     - \s 空格
@@ -1507,7 +1521,7 @@
     - reg.ignoreCase, 是否用了 i， 大小写
     - reg.multiline , 是否用了 m 多行标志
 
-47. 断言和捕获的区别？
+48. 断言和捕获的区别？
     断言和捕获是正则表达式中两种完全不同的概念，它们的作用、行为和结果都有显著区别。
 
     - 断言用于 检查条件，但不会捕获内容，也不会消耗字符。匹配的是一个"位置"。而且要注意，断言一定有括号的，括号是跟着断言一起用的。
@@ -1534,7 +1548,7 @@
     // str.match(regex) = ["3abc"]，这就是匹配的结果，但是你加了2个括号，所以$1就是3，$2就是abc
     ```
 
-48. 千位分割符正则
+49. 千位分割符正则
     <details open>
 
     ```js
@@ -1636,7 +1650,7 @@
     str.replace(reg, '$&,'); // 123abc-566
     ```
 
-49. observer 的几个 API
+50. observer 的几个 API
     <details open>
 
     - Intersection Observer，可以用它来做懒加载，比使用 getBoundingClientRect()的好处是它的性能会更好。也可以用于广告曝光统计等场景。
@@ -1696,7 +1710,7 @@
     observer.observe({ entryTypes: ['paint', 'resource', 'longtask'] });
     ```
 
-50. requestIdleCallback 和 requestAnimationFrame 的区别
+51. requestIdleCallback 和 requestAnimationFrame 的区别
     <details open>
 
     浏览器一帧里 16ms 要完成的任务，当 Eventloop 执行完 Microtasks 后，会判断 document 是否需要更新，假设浏览器是 60Hz 的刷新率，每 16.6ms 才会更新一次。
@@ -1722,19 +1736,19 @@
 
     缺点的话是 requestIdleCallback 的 FPS 只有 20, 一秒只有 20 次调用。
 
-51. 为什么 js 是单线程的？
+52. 为什么 js 是单线程的？
     <details open>
 
     因为 JS 是用来处理页面中的用户交互以及操作 DOM，css 的。
     如果它是多线程的话，可能会造成 UI 冲突。
     上操作锁的话，会增大复杂性，所以设计之初就是选择了单线程。
 
-52. 为什么 js 会阻塞页面加载
+53. 为什么 js 会阻塞页面加载
     <details open>
 
     因为 JS 可以操作页面，如果不阻塞的话，可能会导致数据不一致。
 
-53. 为何 try 里面放 return，finally 还会执行，理解其内部机制
+54. 为何 try 里面放 return，finally 还会执行，理解其内部机制
     <details open>
 
     try catch finally 是一个特殊的语法块。
@@ -1766,7 +1780,7 @@
 
     利用这个，可以在一个函数中间插入点东西执行。比如上面的 justLog 中间想在 return 前处理个数据，就可以利用 try catch finally 来搞。
 
-54. 看看这一段代码如何输出
+55. 看看这一段代码如何输出
     <details open>
 
     ```js
@@ -1795,7 +1809,7 @@
 
     其实就是事件循环的原因，还记得`react setstate` 是怎么回事吗？ `try catch finally`,里面也是异步操作。
 
-55. base64 的编码原理
+56. base64 的编码原理
     <details open>
 
     - `btoa('abc') = 'YWJj'` base64 编码 byte to ascii
@@ -1840,7 +1854,7 @@
     console.log(base64Encode('abc')); // 输出 "YWJj"
     ```
 
-56. 几种进制的相互转换计算方法，在 JavaScript 中如何表示和转换
+57. 几种进制的相互转换计算方法，在 JavaScript 中如何表示和转换
     <details open>
 
     - 十进制转其他进制
@@ -1862,7 +1876,7 @@
     console.log(decimal); // 输出 0.625
     ```
 
-57. 位运算有哪些呢？
+58. 位运算有哪些呢？
     <details open>
 
     - 这里插一个\*\*， 就是乘方，不过它是右结合的， 4\*\*3\*\*2 会先求 3\*\*2
@@ -1875,7 +1889,7 @@
     - (>>) 有符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位。根据符号位填充，正数填 0，负数填 1。
     - (>>>) 无符号右移一位 将 a 的二进制表示向右移 b (< 32) 位，丢弃被移出的位，并使用 0 在左侧填充。这两个很不好计算，一般还是别用了。
 
-58. 如何利用异或来交换 2 个数
+59. 如何利用异或来交换 2 个数
     <details open>
 
     ```js
@@ -1887,17 +1901,17 @@
     console.log(a, b); // 输出 8, 9
     ```
 
-59. 利用按位&来检查一个数字是否是奇偶数
+60. 利用按位&来检查一个数字是否是奇偶数
     <details open>
 
     n&1 因为这个是转换二进制计算的，而 1 的二进制假如是 4 位就是，0001，最后一位是 1，如果你的数字是奇数，那么你最后一个一定是 1，如果是偶数，最后一个一定是 0，那么&1，结果是 1 就是奇数，是 0 就是偶数。
 
-60. 12.toString()为什么会报错
+61. 12.toString()为什么会报错
     <details open>
 
     因为 js 在编译的时候，12.会解析成一个数字，它会认为 toString 就是后面的小数，解决办法就是 12..toString()就可以了。
 
-61. 写代码要不要加分号，不加分号有哪些情况会出问题？（IIFE 为啥前面加分号或者！号）
+62. 写代码要不要加分号，不加分号有哪些情况会出问题？（IIFE 为啥前面加分号或者！号）
     <details open>
 
     有些语句会自动加分号，有些不会。
@@ -1911,7 +1925,7 @@
 
     所以如果 IIFE 前面不加，就会被误认为要执行，所以最好加个分号用来阻断。
 
-62. while 和 do while 的区别是什么？
+63. while 和 do while 的区别是什么？
     <details open>
 
     使用 while 的话必须满足条件才能进行，而 do while 的话是不管条件满足与否，都会先执行一次 do
@@ -1924,7 +1938,7 @@
     } while (count < 3);
     ```
 
-63. 零宽空格
+64. 零宽空格
     <details open>
 
     零宽空格就是看不到任何迹象，实际上却占用一个位子
@@ -1936,7 +1950,7 @@
     // \uFEFF或者是\u200B。可以给代码加个料，别人复制了后肯定用不了。
     ```
 
-64. 0.1+0.2 为什么不等于 0.3
+65. 0.1+0.2 为什么不等于 0.3
     <details open>
 
     因为 JavaScript 使用的是 64 位双精度浮点数编码，它的符号位占 **1**位(0 代表正，1 代表负),指数位占 **11** 位，尾数位占 **52** 位。
@@ -1945,7 +1959,7 @@
     `0.2` 的二进制表示是 `0.001100110011001100110011001100110011001100110011001101...`（无限循环）
     所以 `0.1+0.2 = 0.30000000000000004`
 
-65. JavaScript 可以存储的最大数字、最大安全数字，超过了咋办？
+66. JavaScript 可以存储的最大数字、最大安全数字，超过了咋办？
     <details open>
 
     - Number.MAX_VALUE 可存储的最大数字 == (Math.pow(2,53) - 1) \* Math.pow(2, 971) 。 971 = 1023 - 52； 971 是 指数偏移量（1023）2 的 10 次方-1， 减去 尾数位数（52）
@@ -1957,7 +1971,7 @@
     console.log(Number.MAX_VALUE + 1); // Infinity`
     ```
 
-66. 什么是 bigInt?
+67. 什么是 bigInt?
     <details open>
 
     BigInt 是一种新的数据类型，用于当**整数值**大于 Number 数据类型支持的范围时。这种数据类型允许我们安全地对大整数执行算术操作。
@@ -1968,7 +1982,7 @@
 
     给大数字后面加个 n 就可以了，但是缺点是不能表示小数，而且兼容性一般，所以一般都会用 bignumber.js 或者其他第三方库。
 
-67. 理解词法作用域和动态作用域
+68. 理解词法作用域和动态作用域
     <details open>
 
     词法作用域 和 动态作用域 是两种不同的作用域规则，它们决定了变量的访问方式。JavaScript 使用的是 词法作用域。
@@ -2007,7 +2021,7 @@
     outer();
     ```
 
-68. this 的原理以及几种不同使用场景的取值
+69. this 的原理以及几种不同使用场景的取值
     <details open>
 
     this 是一个指针，指向当前执行上下文的对象。
@@ -2026,7 +2040,7 @@
     - 箭头函数
       箭头函数没有 this, 在箭头函数里的 this 会指向 外层的非箭头函数的 this。
 
-69. Object.is 和 === 的区别
+70. Object.is 和 === 的区别
     <details open>
 
     Object 在严格等于的基础上修复了一些特殊情况下的失误，具体来说就是+0 和-0 它修正为 false，NaN 和 NaN 修正为 true，在实际开发中，优先使用 ===，只有在需要处理 +0 和 -0 或 NaN 的特殊情况时，才使用 Object.is。
@@ -2047,7 +2061,7 @@
     console.log('foo' === 'foo'); // true
     ```
 
-70. addEventListener 第三个参数是啥?
+71. addEventListener 第三个参数是啥?
     <details open>
 
     false 是冒泡，true 是捕获，默认是冒泡
@@ -2057,7 +2071,7 @@
     - once: 是否只执行一次（默认 false）
     - passive: 是否禁止调用 event.preventDefault()（默认 false）。
 
-71. 如何写一个自定义事件
+72. 如何写一个自定义事件
     <details open>
 
     ```js
@@ -2083,7 +2097,7 @@
 
     ```
 
-72. array.slice(), arr.splice, str.substr, str.substring
+73. array.slice(), arr.splice, str.substr, str.substring
     <details open>
     1. slice start：起始索引（包含）。end： 结束索引（不包含）
     2. splice start：起始索引（包含）。deleteCount: 要删除的数量。 ...items：要插入的元素
@@ -2104,7 +2118,7 @@
     str.substring(2, 2); //''
     ```
 
-73. 像掘金，复制的时候会有掘金版权声明，如何做到的
+74. 像掘金，复制的时候会有掘金版权声明，如何做到的
     <details open>
 
     先监听用户复制，然后在回调函数里通过 getSelection 拿到复制的文本，当文本大于一定 Length 的时候，添加版权声明，然后把新的值 set 到剪切板里去。
@@ -2136,19 +2150,19 @@
     });
     ```
 
-74. vue 双向绑定的原理 2.0
+75. vue 双向绑定的原理 2.0
     <details open>
 
     利用 Object.defineProperty， 在 get 的时候判断当前值有没有被添加过，没有添加过的话就添加订阅，在初始化的时候 watch，回调里就是 update dom 的方法。然后在 set 的时候，就会通知各订阅更新。然后各订阅收到消息后，调用自己的 update 方法，就是 watch 的回调。完成 update。然后 dom 元素比如 input 发生改变的话，给 input 上一个监听，改变的时候同时改变你 defineproperty 的值就完成双向绑定了。
 
-75. vue 双向绑定原理 3.0
+76. vue 双向绑定原理 3.0
     <details open>
 
     其实就是把上面的方法换成 proxy
 
     [vue](https://zhenglin.vip/js/vue.js)
 
-76. 数组和链表的对比
+77. 数组和链表的对比
     <details open>
 
     - 数组静态分配内存，链表动态分配内存
@@ -2156,7 +2170,7 @@
     - 数组利用下标定位，时间复杂度是 O(1)，链表只能一个一个查，时间复杂度是 O(n).
     - 数组插入或者删除动作的的时间复杂度是 O(n),链表的话是 O(1)。因为数组删除或者是插入后要移位。而链表直接解除或者添加即可。不过唯一缺点是它有一个额外的域，存放内存中下一节点的地址。
 
-77. 微信小程序是怎么做到只展示最近的 20 个的？如何实现一个 LRU？
+78. 微信小程序是怎么做到只展示最近的 20 个的？如何实现一个 LRU？
     <details open>
 
     利用一个双向循环链表，每次新插数据的时候，先查询，如果查到了，把数据移到链表头部，当数据满了，就将链表尾部的丢弃。这个算法叫 LRU。
@@ -2248,7 +2262,7 @@
     console.log(lru.get(4)); // 输出 'D'
     ```
 
-78. MessageChannel 是啥，vue 的 nexttick 实现原理是什么
+79. MessageChannel 是啥，vue 的 nexttick 实现原理是什么
     <details open>
 
     MessageChannel 是 HTML5 提供的一个 API，用于在同一个线程中创建两个端口（port1 和 port2）之间的通信。它的主要作用是实现 异步任务调度 和 双向通信。
@@ -2297,7 +2311,7 @@
 
     最后一版本是`Promise.then,MutationObserver, setImmediate,setTimeout`
 
-79. 一般我们写计时器/倒计时为啥要用 setTimeout 而不是 setInterval？
+80. 一般我们写计时器/倒计时为啥要用 setTimeout 而不是 setInterval？
     <details open>
 
     ```js
@@ -2367,7 +2381,7 @@
 
     每个 setTimeout 产生的任务会直接 push 到任务队列中；而 setInterval 在每次把任务 push 到任务队列前，都要进行一下判断(看上次的任务是否仍在队列中，如果有则不添加，没有则添加)。
 
-80. 实现 get(obj, 'a.b.c', 0), 类可选链
+81. 实现 get(obj, 'a.b.c', 0), 类可选链
     <details open>
 
     ```js
@@ -2394,7 +2408,7 @@
     }
     ```
 
-81. 原始类型的转换优先级是什么？
+82. 原始类型的转换优先级是什么？
     <details open>
 
     对象在转换类型的时候，会调用内置的 [[ToPrimitive]] 函数，对于该函数来说，算法逻辑一般来说如下：
@@ -2447,7 +2461,7 @@
     额外提问，如果是`a==1 && a==2 && a==3`，除了上述写法怎么实现呢？
     可以用 valueOf、也可以默认 a 是个数组，然后用 toString
 
-82. 隐式转换
+83. 隐式转换
     <details open>
 
     - 主要需要知道几点，转 String 的时候
@@ -2479,7 +2493,7 @@
 
     左边是对象，右边是 false，false 转数字是 0，[].tostring = ''; '' 转数字是 0。
 
-83. 为啥[]是调用.toString 而不是 ValueOf?
+84. 为啥[]是调用.toString 而不是 ValueOf?
     <details open>
 
     这个提问本身是错的，不是没有调用，而是调用 valueOf() 后返回了对象本身，不符合原始类型，所以继续调用 toString,
@@ -2491,7 +2505,7 @@
     自定义行为：
     可以通过重写 valueOf() 方法改变默认行为。
 
-84. 如何给映射类型加上反映射？
+85. 如何给映射类型加上反映射？
 
     <details open>
 
@@ -2506,13 +2520,13 @@
 
     这样写即可
 
-85. e.target 和 e.currentTarget 有什么区别
+86. e.target 和 e.currentTarget 有什么区别
 
     <details open>
 
     e.target 指向触发事件的具体元素，如果事件发生在子元素上，e.target 会指向子元素，而 e.currentTarget 指向绑定事件的元素，在事件委托中，它很可能就是 Body 或者是其他的 content。
 
-86. 如果一个悬浮球，结构是 div>div>span，如何判定我是否点到了悬浮球，假如 div 上有个 class？
+87. 如果一个悬浮球，结构是 div>div>span，如何判定我是否点到了悬浮球，假如 div 上有个 class？
     <details open>
 
     首先，为啥需要判定？为啥不直接在悬浮球上添加事件？是因为这个悬浮球是动态追加的，所以要用事件委托。
@@ -2584,7 +2598,7 @@
     createBall();
     ```
 
-87. async await 对比 promise
+88. async await 对比 promise
 
     <details open>
 
@@ -2607,7 +2621,7 @@
     1. 一旦执行，无法中途取消，链式调用多个 then 中间不能随便跳出来
     2. Promise 内部如何执行，监测起来很难，当处于 pending 状态时，无法得知目前进展到哪一个阶段（刚刚开始还是即将完成）
 
-88. Promise 中的 then 的第二个参数处理错误和 catch 有什么区别？
+89. Promise 中的 then 的第二个参数处理错误和 catch 有什么区别？
     <details open>
 
     首先，建议使用 catch 来捕获错误，而不是 then 的二参，因为 catch 定义很明确，区别如下
@@ -2615,7 +2629,7 @@
     1. 如果在 promise 主体里发生了 reject 或者是报错，如果 then 的二参或者是 catch 都写的情况下，只会在 then 的二参里被捕获
     2. 如果你在第一个 then 里发生了任何错误，如果你写的是二参，是无法捕获错误的，而写了 catch 的情况下，catch 是可以捕获的，也就是说，catch 的捕获范围更广
 
-89. axios 中的是怎么实现响应拦截或者请求拦截的？
+90. axios 中的是怎么实现响应拦截或者请求拦截的？
     <details open>
 
     ```js
@@ -2659,7 +2673,7 @@
     }
     ```
 
-90. 看如下一段代码，p 和 d 到底是什么？
+91. 看如下一段代码，p 和 d 到底是什么？
 
     ```js
     var p = new Promise((resolve, reject) => {
@@ -2679,7 +2693,7 @@
     d 是`Promise {<rejected>: "err"}`
     也就是说，d 拥有改变 promise 的能力，其实 就是 then 也好，catch 也好，都是返回一个 `new promise`,所以 d 拿到的是新的 promise 的状态，如果.then 里返回的 return 222,那么 d 就是`Promise {<fulfilled>: "222"}`，还是个 promise
 
-91. ES6 模块和 CommonJS 模块的主要区别是什么？
+92. ES6 模块和 CommonJS 模块的主要区别是什么？
     <details open>
 
     - 加载方式
@@ -2716,7 +2730,7 @@
         - ES6 模块输出的是值的引用，CommonJS 输出的是值的拷贝
         - ES6 模块的 this 指向 undefined，CommonJS 的 this 指向当前模块
 
-92. 请解释 ES6 模块的加载机制和解析过程
+93. 请解释 ES6 模块的加载机制和解析过程
     <details open>
 
     - 加载阶段
@@ -2751,7 +2765,7 @@
             - 初始化变量
             - 处理副作用
 
-93. 如何使用动态导入？它有什么优势？
+94. 如何使用动态导入？它有什么优势？
     <details open>
 
     - 基本用法
@@ -2784,7 +2798,7 @@
         - 错误处理更灵活
         - 支持 Promise，便于异步处理
 
-94. 模块作用域和全局作用域有什么区别？
+95. 模块作用域和全局作用域有什么区别？
     <details open>
 
     - 作用域隔离
@@ -2805,7 +2819,7 @@
         - 模块的变量提升行为与全局不同
         - 模块可以通过 export 共享变量
 
-95. 如何优化 JavaScript 模块的加载性能？
+96. 如何优化 JavaScript 模块的加载性能？
     <details open>
 
     - 代码分割
