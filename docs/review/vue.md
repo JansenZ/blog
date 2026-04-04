@@ -7,7 +7,7 @@
         1. beforeCreate (Vue2) 实例初始化之后，数据观测之前。 / setup (Vue3) 组合式 API 的入口
         2. created (Vue2) 实例创建完成后被调用，此时已完成数据观测，但尚未挂载
         3. asyncData (Nuxt): 在组件加载前调用，用于获取异步数据
-        4. serverPrefetch（Vue3），服务端数据预取
+        4. serverPrefetch（Vue2 2.6+ 和 Vue3 均支持），服务端数据预取，SSR 时在服务端执行
         5. fetch (Nuxt): 在组件加载前调用，用于获取异步数据
         6. middleware (Nuxt): 在页面渲染前执行中间件
         7. validate (Nuxt): 验证动态路由参数
@@ -36,7 +36,7 @@
     - 使用 unref 可以肯定得到值而不是 ref。因为很多时候，你需要的就是 ref 和非 ref 联合操作，如果一个.value，一个没有，会很麻烦，所以直接用 unref 方便很多
 
         ```js
-        funcion unref(r) {
+        function unref(r) {
             return isRef(r) ? r.value : r;
         }
         ```
@@ -63,7 +63,7 @@
       mounted() {
         this.test()
       },
-      methods() {
+      methods: {
          test() {
              const newObj = {}
              this.testObj = newObj
@@ -322,8 +322,7 @@
         - Vue2: 模板编译器生成的代码较为冗余，运行时性能稍低。
         - Vue3: 模板编译器生成更高效的代码，运行时性能更高。
     - TypeScript 友好
-        - Vue2: TypeScript 支持较弱，需要结合 vue-class-component vue-property-decorator
-        - Vue2: 如果在 Nuxt 中，需要结合 @nuxt/types @nuxt/typescript-build nuxt-property-decorator
+        - Vue2: TypeScript 支持较弱，需要结合 vue-class-component vue-property-decorator；在 Nuxt 项目中还需要结合 @nuxt/types @nuxt/typescript-build nuxt-property-decorator
         - Vue3: TypeScript 支持更友好，类型定义更加完善。
 
 9. Vue2 和 Vue3 针对模版编译有哪些区别?[Vue3 编译优化](https://cloud.tencent.com/developer/article/2224683)
@@ -392,7 +391,7 @@
     // 新旧虚拟 DOM 树会通过 diff 算法进行对比，找出差异并更新真实 DOM。
 
     // vue3
-    const _hoisted_1 = /*#__PURE__*/ createElementVNode('p', '静态文本', 1);
+    const _hoisted_1 = /*#__PURE__*/ createElementVNode('p', null, '静态文本', -1 /* HOISTED */);
 
     function render(_ctx, _cache) {
         return (
@@ -844,7 +843,7 @@
 
     <details open>
 
-    v-for 遍历数组/对象的时候，默认获取的是数组项/对象的值，也就是说，实际上是和 js 中的 for of 是一样的。但是 vue2 的语法却是 `v-for="(item, index) in items"`，这和 js 的 for in 不一样。所以在 vue3 的时候，鱿鱼须改了写法，vue3 是可以写 v-for of 的。和 v-for in 是完全一样的。
+    v-for 遍历数组/对象的时候，默认获取的是数组项/对象的值，也就是说，实际上是和 js 中的 for of 是一样的。但是官方语法却是 `v-for="(item, index) in items"`，这和 js 的 for in 不一样（JS 的 for in 遍历的是 key，而 v-for 遍历的是值）。实际上 Vue 2 和 Vue 3 都支持用 `of` 替代 `in`，即 `v-for="item of items"`，效果完全相同，只是 `of` 写法更符合 JS 直觉。
 
 15. watch 和 computed 的区别是什么？
 
@@ -901,6 +900,60 @@
 
 17. Vue 中需要注意的小 tips
 
-    1. v-show 不支持 `<template>` 元素，也不支持 `v-else`。
+    1. v-show 不支持 `<template>` 元素（因为 v-show 是通过 display 控制显示，template 不是真实元素）。v-show 本身可以和 v-else 配合使用，但 v-else 只能跟在 v-if/v-else-if 之后，不能单独跟在 v-show 之后。
     2. 一般来说，v-if 有更高的切换开销，而 v-show 有更高的初始渲染开销。因此，如果需要非常频繁地切换，则使用 v-show 较好；如果在运行时条件很少改变，则使用 v-if 较好。
-    3. v-for 和 v-if 当它们处于同一节点，v-for 的优先级比 v-if 更高，这意味着 v-if 将分别重复运行于每个 v-for 循环中
+    3. v-for 和 v-if 的优先级：**Vue2 中 v-for 优先级高于 v-if**，这意味着 v-if 会在每次循环中分别执行，性能浪费；**Vue3 中 v-if 优先级高于 v-for**，所以在 Vue3 中 v-if 里无法访问 v-for 的循环变量。两个版本中都不建议在同一节点上同时使用，推荐用 `<template>` 包裹来分离。
+    4. v-for 必须加 key，且 key 应该是唯一稳定的值（如 id），不推荐用 index，因为用 index 在列表增删时 diff 算法无法复用节点，会导致不必要的 DOM 操作甚至组件状态错误。
+    5. Vue3 中 `<script setup>` 是推荐写法，组件、变量、函数无需手动 return，编译器自动处理，且 TS 支持更好。
+    6. Vue3 的 `defineProps` 和 `defineEmits` 只能在 `<script setup>` 中使用，是编译器宏，不需要 import。
+
+18. **Vue 3.4+ 新特性 & Vue 与 AI 的集成**
+
+    1. **`defineModel`**（Vue 3.4 稳定版）：简化双向绑定，替代繁琐的 `props` + `emit` 模式。
+
+        ```vue
+        <!-- 子组件 -->
+        <script setup>
+        const modelValue = defineModel(); // 相当于 props: ['modelValue'] + emit('update:modelValue')
+        </script>
+        <template>
+          <input v-model="modelValue" />
+        </template>
+        ```
+
+    2. **`v-bind` 同名简写**（Vue 3.4）：`:id="id"` 可简写为 `:id`，和 JS 的对象简写类似。
+
+    3. **Teleport 支持 `defer`**（Vue 3.5）：允许 Teleport 挂载到组件树内后渲染的 DOM 节点上。
+
+    4. **Vue + AI 流式输出**：
+
+        ```vue
+        <script setup>
+        import { ref } from 'vue'
+
+        const answer = ref('')
+        const loading = ref(false)
+
+        async function ask(prompt) {
+            loading.value = true
+            answer.value = ''
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                body: JSON.stringify({ prompt })
+            })
+            const reader = res.body.getReader()
+            const decoder = new TextDecoder()
+            while (true) {
+                const { done, value } = await reader.read()
+                if (done) break
+                answer.value += decoder.decode(value)
+            }
+            loading.value = false
+        }
+        </script>
+        <template>
+          <div>{{ answer }}<span v-if="loading">▌</span></div>
+        </template>
+        ```
+
+    5. **Pinia + AI 状态管理**：把对话历史、模型选择、API Key 等全局状态放 Pinia store，避免 prop drilling，方便多组件共享。

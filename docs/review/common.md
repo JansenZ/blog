@@ -117,7 +117,6 @@
             }
             const creator = new Creator();
             const p = creator.create(); // 通过工厂对象创建出来的具体对象
-        }
         ```
 
     - 单例模式
@@ -147,6 +146,7 @@
         A.getInstance = () => {
             instance = new A();
             A.getInstance = () => instance;
+            return instance;
         };
         ```
 
@@ -168,7 +168,7 @@
         就是通过包装，来解决兼容问题
 
         ```js
-        class plug {
+        class Plug {
             getName() {
                 return '港版插头';
             }
@@ -752,7 +752,7 @@
     };
     ```
 
-13. 调试文字样式 debug， document.designModel = 'on'
+13. 调试文字样式 debug， document.designMode = 'on'
 
     把这个属性在控制台打上后，可以直接在页面上修改对应的文字，方便看省略号或者是换行之类的效果，不用到 element 里去改。
 
@@ -1011,10 +1011,10 @@
       使用 IntersectionObserver 可以做一个。它的回调接受两个参数，一个是 IntersectionObserverEntry 数组，一个是 obsever 自己
 
         ```js
-        var observer = IntersectionObserver(callback, {
-            root: document.getsxxx,
+        var observer = new IntersectionObserver(callback, {
+            root: null, // null 表示相对于视口
             rootMargin: '0px',
-            threshold: [0.5];
+            threshold: [0.5]
         });
         imgs.forEach((img)=> {
             observer.observe(img);
@@ -1686,3 +1686,158 @@
     所以最佳的方案就是假如真要用，在客户端在注册。或者尽量避免全局注册。不仅仅是 filter，其实是只要是全局操作的东西，都应该要考虑清楚是否在 ssr 阶段有影响。
 
 42. Vue mixins 带来的命名冲突造成的 bug
+
+    <details open>
+
+    mixins 是 Vue 2 中复用逻辑的方式，但它有一个核心问题：**命名冲突是隐式的，难以排查**。
+
+    **典型场景：**
+
+    ```js
+    // mixinA.js
+    export const mixinA = {
+        data() {
+            return { loading: false }; // 定义了 loading
+        },
+        methods: {
+            fetchData() { this.loading = true; /* ... */ }
+        }
+    };
+
+    // mixinB.js
+    export const mixinB = {
+        data() {
+            return { loading: false }; // 也定义了 loading！
+        },
+        methods: {
+            fetchData() { /* 完全不同的逻辑 */ } // 方法名也冲突了！
+        }
+    };
+
+    // 组件里同时引入
+    export default {
+        mixins: [mixinA, mixinB],
+        // 结果：mixinB 的 fetchData 覆盖了 mixinA 的，loading 也被后者覆盖
+        // 但没有任何报错提示！
+    };
+    ```
+
+    **冲突规则：**
+    - `data`：后面的 mixin 覆盖前面的（同名属性以最后一个为准）
+    - `methods / computed`：同样后者覆盖前者，无任何警告
+    - 生命周期钩子：不覆盖，而是**合并**，全部依次执行（这也可能造成重复执行的 bug）
+
+    **排查难点：** mixin 的来源不透明，看组件代码不知道 `this.loading` 是哪个 mixin 定义的，只能全局搜索。
+
+    **Vue 3 的解决方案 Composables：**
+
+    ```js
+    // useLoading.js
+    export function useLoading() {
+        const loading = ref(false); // 有独立作用域，不会污染外部
+        return { loading };
+    }
+
+    // 组件里使用
+    const { loading: loadingA } = useLoading(); // 可以重命名，彻底避免冲突
+    const { loading: loadingB } = useLoading();
+    ```
+
+    Composable 通过函数作用域隔离状态，调用方可以自行重命名返回值，冲突一眼可见，这是 Vue 3 弃用 mixins 的核心原因。
+
+---
+
+43. **微前端（Micro Frontend）**
+
+    <details open>
+
+    微前端是将一个大型前端应用拆分成多个独立子应用的架构方案，类似后端的微服务。每个子应用可以独立开发、独立部署、独立上线，互不影响。
+
+    **解决的问题：**
+    - 巨石应用（Monolith）越来越大，编译慢、发布风险高
+    - 多团队协作时代码耦合严重
+    - 老旧技术栈难以迁移（可以新老并存）
+
+    **核心实现方案：**
+
+    **① qiankun（基于 single-spa）**
+
+    目前国内最流行的微前端框架，阿里出品，基于 `single-spa`。
+
+    ```js
+    // 主应用
+    import { registerMicroApps, start } from 'qiankun';
+
+    registerMicroApps([
+        {
+            name: 'react-app',
+            entry: '//localhost:7100',   // 子应用地址
+            container: '#subapp',        // 挂载的 DOM
+            activeRule: '/react',        // 路由匹配规则
+        },
+        {
+            name: 'vue-app',
+            entry: '//localhost:7200',
+            container: '#subapp',
+            activeRule: '/vue',
+        },
+    ]);
+    start();
+    ```
+
+    ```js
+    // 子应用需要暴露三个生命周期
+    export async function bootstrap() { /* 初始化 */ }
+    export async function mount(props) { /* 挂载，props 是主应用传来的数据 */ }
+    export async function unmount() { /* 卸载，清理副作用 */ }
+    ```
+
+    **JS 沙箱隔离：** qiankun 通过 Proxy 代理 `window`，每个子应用有独立的全局作用域，子应用修改 `window.xxx` 不会污染主应用或其他子应用。
+
+    **CSS 隔离：**
+    - Shadow DOM（严格隔离，但会影响弹窗等挂在 body 上的组件）
+    - scoped CSS（动态给选择器加前缀，兼容性更好）
+
+    **② Module Federation（Webpack 5）**
+
+    Webpack 5 内置的模块联邦，允许多个应用在**运行时**共享代码，不需要主/子应用的概念，更像是"分布式模块"。
+
+    ```js
+    // app1 的 webpack.config.js - 暴露组件
+    new ModuleFederationPlugin({
+        name: 'app1',
+        filename: 'remoteEntry.js',
+        exposes: {
+            './Button': './src/Button',  // 对外暴露 Button 组件
+        },
+        shared: ['react', 'react-dom'], // 共享依赖，避免重复加载
+    });
+
+    // app2 的 webpack.config.js - 使用远程组件
+    new ModuleFederationPlugin({
+        name: 'app2',
+        remotes: {
+            app1: 'app1@http://localhost:3001/remoteEntry.js',
+        },
+    });
+
+    // app2 的代码中
+    const Button = React.lazy(() => import('app1/Button')); // 运行时远程加载
+    ```
+
+    **两种方案对比：**
+
+    | 对比 | qiankun | Module Federation |
+    |------|---------|-------------------|
+    | 隔离性 | 强（JS沙箱+CSS隔离）| 弱（共享运行时）|
+    | 接入成本 | 中（子应用需改造）| 低（纯 webpack 配置）|
+    | 技术栈限制 | 无（任意框架）| 无（任意框架）|
+    | 适用场景 | 多团队独立子应用 | 跨应用共享组件/模块 |
+    | 通信 | props / 全局状态 | 直接 import 共享模块 |
+
+    **微前端的常见问题：**
+    1. **路由冲突**：主子应用都有路由，需要约定好前缀（主应用 `/`，子应用 `/react/*`）
+    2. **样式污染**：全局 CSS reset、UI 库的全局样式会互相影响
+    3. **公共依赖重复加载**：React 可能被加载两次，用 `shared` 配置解决
+    4. **通信复杂**：推荐用发布订阅或轻量状态管理（如 `import-html-entry` 提供的 props），避免强耦合
+

@@ -270,7 +270,7 @@
    - 浏览器发送一个加密方法列表 list 和自己生成的一个随机数 client_random 给服务器
    - 服务器收到后，返回一个加密方法，自己生成随机数 server_random 和公钥给浏览器
    - 浏览器接收后，再生成一个随机数 pre_random ，并且用服务器发来的公钥加密，然后到服务器。(敲黑板！重点操作！)
-   - 然后服务器用私钥解密它。这个时候用这四个数据（3个随机数+一个加密方法）生成密钥，对称加密交互数据即可。
+   - 然后服务器用私钥解密它。这个时候双方都有了三个随机数（client_random、server_random、pre_random），通过协商好的加密方法（如 AES）和 PRF（伪随机函数）生成对称密钥，后续用这个对称密钥加密交互数据即可。
    - 这样第三方即使拿到浏览器生成的第二个随机数没有私钥也解不开。
 
    尽管通过两者加密方式的结合，能够很好地实现加密传输，但实际上还是存在一些问题。
@@ -892,9 +892,15 @@
     3. SYN DDOS攻击
       - 攻击
         1. 就是利用大量不存在的 IP 地址的和服务端建立 TCP 连接，第三次握手频频得不到，导致服务端的半连接队列爆了至崩溃。
-        
+
       - 防御
         1. 解决方案就是缩短超时时间。或者是增加半连接上限。或者使用SYN Cookies：在接收到SYN包时，不立即分配资源，而是通过计算一个特殊的Cookie来进行验证，避免占用服务器资源。
+
+    4. XSS 的额外防御手段：CSP（Content Security Policy）
+      - 通过响应头 `Content-Security-Policy` 限制页面可加载的资源来源，即使注入了脚本，浏览器也会拒绝执行。
+      ```
+      Content-Security-Policy: default-src 'self'; script-src 'self' https://trusted.com
+      ```
 
 ---
 
@@ -1154,18 +1160,18 @@
 
 ---
 
-45. **V8的排序算法了解吗？**  
+45. **V8的排序算法了解吗？**
     <details open>
 
-    数组小于10的时候，插入排序，因为插入排序是稳定的算法，而且小于10的时候，综合速度也不错
+    **注意：以下描述是 V8 旧版本（Node.js 10 以前）的行为，已过时。**
 
-    数组大于10的时候，快速排序
+    ~~数组小于10的时候，插入排序；数组大于10的时候，快速排序~~
 
-    ![tu](https://user-gold-cdn.xitu.io/2017/10/19/cd5fca3bfd1de93d7f723587541f3b30?imageView2/0/w/1280/h/960/format/webp/ignore-error/1)
+    **V8 从 7.0（Node.js 11，Chrome 70）开始，Array.prototype.sort 改用 TimSort 算法**（一种结合了归并排序和插入排序的稳定排序算法），并且从此保证稳定性（ES2019 规范也要求 sort 稳定）。所以在现代浏览器和 Node.js 中，sort 是稳定的，不会出现相同值乱序的问题。
 
-    因为这个，所以，数组打乱的时候，用sort会有问题。
+    不过，用 `sort` 来"打乱"数组仍然是不推荐的（即使算法本身稳定，随机比较函数也不能保证真正均匀分布）。
 
-    真正的乱序代码
+    真正的乱序代码（Fisher-Yates 洗牌算法）
     ```js
     function shuffle(a) {
         for (let i = a.length; i; i--) {
@@ -1183,4 +1189,313 @@
 
     理论上来说是不需要的，但是因为ws应用层的长链接是建立在传输层tcp之上的，tcp也有自己的keep-alive机制，因为中间某些节点会为了减轻自己的负担，会断开长时间不通信的链接，而且tcp心跳时间很长，这样如果真的断开了，是不能及时发现的，所以需要应用层加心跳。
 
-47. sw和workerbox啥区别？这里面有啥门道？
+47. **SW 和 Workbox 啥区别？**
+    <details open>
+
+    Service Worker（SW）是浏览器提供的底层 API，Workbox 是 Google 推出的封装 SW 的工具库。
+
+    **Service Worker 原生的问题：**
+    - 手写缓存策略繁琐，比如"网络优先"、"缓存优先"需要自己写大量判断逻辑
+    - 版本更新麻烦，缓存失效、预缓存文件列表需要手动维护
+    - 调试困难，一旦出问题很难降级
+
+    **Workbox 做了什么：**
+    - 提供了开箱即用的缓存策略：`CacheFirst`、`NetworkFirst`、`StaleWhileRevalidate`、`NetworkOnly`、`CacheOnly`
+    - 提供 `precaching` 预缓存，配合 Webpack/Vite 插件自动生成带 hash 的文件列表，更新时自动失效
+    - 提供路由匹配（`registerRoute`），按 URL 正则或资源类型应用不同策略
+    - 内置后台同步（BackgroundSync）和推送通知（Push）模块
+
+    ```js
+    // Workbox 示例：图片走缓存优先，API 走网络优先
+    import { registerRoute } from 'workbox-routing';
+    import { CacheFirst, NetworkFirst } from 'workbox-strategies';
+
+    // 图片资源：缓存优先，缓存30天
+    registerRoute(
+      ({ request }) => request.destination === 'image',
+      new CacheFirst({
+        cacheName: 'images',
+        plugins: [new ExpirationPlugin({ maxAgeSeconds: 30 * 24 * 60 * 60 })],
+      })
+    );
+
+    // API 请求：网络优先，网络失败才用缓存
+    registerRoute(
+      ({ url }) => url.pathname.startsWith('/api/'),
+      new NetworkFirst({ cacheName: 'api-cache' })
+    );
+    ```
+
+    **StaleWhileRevalidate（用得最多）：** 先返回缓存（快），同时后台请求新数据更新缓存，下次访问就是新的了。适合对实时性要求不高的场景，比如头像、配置文件。
+
+    **总结：** SW 是原材料，Workbox 是加工好的工具箱。生产环境基本都用 Workbox，除非你有非常特殊的定制需求。
+
+---
+
+48. **AI Chat 流式输出原理（SSE + fetch streaming）**
+    <details open>
+
+    现在的 AI 对话产品（ChatGPT、Kimi、DeepSeek 等）都是边生成边输出的，这背后就是 HTTP 流式传输。
+
+    **为什么不能一次性返回？**
+    LLM 逐 token 生成，等全部生成完再返回用户要等很久（TTFT，Time to First Token），体验极差。所以服务端边生成边推送，前端边接收边渲染。
+
+    **为什么 AI Chat 不用 EventSource，而用 fetch + ReadableStream？**
+
+    | 对比点 | EventSource | fetch + ReadableStream |
+    |--------|------------|----------------------|
+    | 请求方法 | 只能 GET | 支持 POST（AI 需要发消息体） |
+    | 自定义 Header | 不支持 | 支持（Authorization、自定义 token）|
+    | 发送请求体 | 不支持 | 支持（发 message、history 等）|
+    | 浏览器支持 | 广泛 | 现代浏览器均支持 |
+    | 适用场景 | 服务端单向推送通知 | AI 对话、文件生成等需要 POST 的流 |
+
+    EventSource 适合**服务端主动推送**的场景（通知、大屏数据），AI Chat 因为需要 POST 发用户消息，所以用 **fetch + ReadableStream**。
+
+    **服务端响应格式（SSE 格式）：**
+    ```
+    Content-Type: text/event-stream
+    Transfer-Encoding: chunked
+
+    data: {"choices":[{"delta":{"content":"你"}}]}
+
+    data: {"choices":[{"delta":{"content":"好"}}]}
+
+    data: [DONE]
+    ```
+
+    **前端实现：**
+    ```js
+    async function streamChat(message, onChunk, signal) {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ message, history: [] }),
+        signal, // 用于中止生成
+      });
+
+      if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        // SSE 格式每行是 "data: {...}\n\n"
+        const lines = chunk.split('\n').filter(line => line.startsWith('data: '));
+
+        for (const line of lines) {
+          const data = line.slice(6); // 去掉 "data: "
+          if (data === '[DONE]') return; // 生成结束
+
+          try {
+            const json = JSON.parse(data);
+            const content = json.choices?.[0]?.delta?.content;
+            if (content) onChunk(content); // 回调渲染
+          } catch (e) {
+            // 忽略非 JSON 行
+          }
+        }
+      }
+    }
+
+    // 使用：支持中止
+    const controller = new AbortController();
+    streamChat(
+      '你好',
+      (text) => { outputEl.textContent += text; }, // 逐字追加
+      controller.signal
+    );
+
+    // 用户点"停止生成"时
+    stopBtn.onclick = () => controller.abort();
+    ```
+
+    **Transfer-Encoding: chunked 是关键：** 服务端不知道最终长度，用分块传输，每个 chunk 带自己的长度前缀，最后发一个长度为 0 的 chunk 表示结束。这是流式输出的传输层保障。
+
+    **断线重连：** 如果用 EventSource，断线会自动重连（内置 retry）；用 fetch 则需要自己实现重连逻辑。AI Chat 一般生成完就断开，不需要重连。
+
+---
+
+49. **AI API 限流与重试策略（429 Too Many Requests）**
+    <details open>
+
+    调用 AI API（OpenAI、Claude、通义千问等）时，429 是最常见的错误，代表触发了限流（Rate Limit）。
+
+    **常见的限流维度：**
+    - RPM（Requests Per Minute）：每分钟请求数
+    - TPM（Tokens Per Minute）：每分钟 token 消耗量
+    - RPD（Requests Per Day）：每日请求数
+
+    **AI API 限流相关响应头：**
+    ```
+    x-ratelimit-limit-requests: 500
+    x-ratelimit-limit-tokens: 40000
+    x-ratelimit-remaining-requests: 12
+    x-ratelimit-remaining-tokens: 8400
+    x-ratelimit-reset-requests: 120s     // 多久后重置
+    x-ratelimit-reset-tokens: 22s
+    Retry-After: 30                      // 建议等待秒数
+    ```
+
+    **指数退避重试（Exponential Backoff）：**
+    遇到 429 不能立刻重试，否则会加剧限流。正确做法是等待时间指数增长，并加上随机抖动（jitter）避免多个客户端同时重试造成"惊群效应"。
+
+    ```js
+    async function fetchWithRetry(url, options, maxRetries = 5) {
+      for (let attempt = 0; attempt <= maxRetries; attempt++) {
+        try {
+          const response = await fetch(url, options);
+
+          if (response.status === 429) {
+            const retryAfter = response.headers.get('Retry-After');
+            // 优先用服务端建议的等待时间，否则指数退避
+            const waitMs = retryAfter
+              ? parseInt(retryAfter) * 1000
+              : Math.min(1000 * 2 ** attempt + Math.random() * 1000, 32000);
+
+            if (attempt === maxRetries) throw new Error('Rate limit exceeded');
+            console.warn(`429 限流，等待 ${waitMs}ms 后重试（第 ${attempt + 1} 次）`);
+            await new Promise(resolve => setTimeout(resolve, waitMs));
+            continue;
+          }
+
+          return response;
+        } catch (err) {
+          if (attempt === maxRetries) throw err;
+        }
+      }
+    }
+    ```
+
+    **等待时间示意：**
+    - 第 1 次失败：等 ~1s
+    - 第 2 次失败：等 ~2s
+    - 第 3 次失败：等 ~4s
+    - 第 4 次失败：等 ~8s
+    - 第 5 次失败：等 ~16s（加随机抖动）
+
+    **前端 AI 产品实践：** 一般还会结合请求队列（限制并发数），避免一次性发出太多请求把 quota 打爆。
+
+---
+
+50. **长轮询 vs SSE vs WebSocket 选型**
+    <details open>
+
+    这三种都能实现"服务端主动推送"，但原理和适用场景差异很大。
+
+    | 对比点 | 长轮询 | SSE | WebSocket |
+    |--------|--------|-----|-----------|
+    | 协议 | HTTP | HTTP | WS（基于 TCP 升级）|
+    | 方向 | 单向（服务端→客户端）| 单向（服务端→客户端）| 双向 |
+    | 连接 | 每次响应后断开，立即再发 | 持久连接 | 持久连接 |
+    | 断线重连 | 手动 | 浏览器自动重连 | 需要手动实现 |
+    | 兼容性 | 极好 | IE 不支持 | IE 不支持 |
+    | 实现难度 | 简单 | 简单 | 中等 |
+    | 适用场景 | 兼容性要求高、简单通知 | 服务端单向推送 | 实时双向通信 |
+
+    **AI 场景怎么选：**
+    - **AI Chat 流式输出** → fetch + ReadableStream（本质是 HTTP chunked）或 SSE，不用 WebSocket（没有双向通信需求）
+    - **AI 语音对话（实时音频）** → WebSocket（需要双向、低延迟）
+    - **AI 任务状态通知**（"你的图片生成完了"）→ SSE 或长轮询都行
+    - **多人协作 AI 文档**（类似飞书）→ WebSocket（多端实时同步，双向）
+
+    **长轮询的本质：** 客户端发请求 → 服务端 hold 住不返回 → 有数据了才返回 → 客户端收到后立刻再发一个新请求。
+    缺点是服务器要维持大量 pending 的连接，资源占用高，已逐渐被 SSE 替代。
+
+---
+
+51. **Playwright / 无头浏览器与 HTTP（AI Agent 场景）**
+    <details open>
+
+    AI Agent（如 LangChain Agent、龙虾 Agent 等）经常需要操控浏览器来完成任务，背后大量用到 Playwright 或 Puppeteer。这些操作本质上都是在控制 HTTP 行为。
+
+    **page.goto() — 发起 HTTP 请求**
+    ```js
+    // 等价于浏览器地址栏输入 URL，会经历：DNS → TCP → TLS → HTTP Request → 重定向处理
+    const response = await page.goto('https://example.com', {
+      waitUntil: 'networkidle', // 等待网络空闲（没有进行中的请求）
+      timeout: 30000,
+    });
+    console.log(response.status()); // HTTP 状态码
+    console.log(response.headers()); // 响应头
+    ```
+    `waitUntil` 选项：
+    - `load`：等 load 事件
+    - `domcontentloaded`：等 DOMContentLoaded
+    - `networkidle`：等网络空闲（AI Agent 常用，确保 AJAX 也加载完）
+
+    **page.route() — 拦截和篡改 HTTP 请求（类似 Service Worker）**
+    ```js
+    // AI Agent 常见用途：mock 接口、屏蔽广告/追踪请求、注入自定义 header
+    await page.route('**/api/chat', async (route) => {
+      const request = route.request();
+      console.log('拦截到请求:', request.url(), request.method());
+
+      // 可以修改请求、直接返回 mock 数据，或放行
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ reply: 'mock response' }),
+      });
+
+      // 或者放行并修改 header
+      // await route.continue({ headers: { ...request.headers(), 'X-Custom': 'value' } });
+    });
+
+    // 屏蔽所有图片请求，加速爬取
+    await page.route('**/*.{png,jpg,gif,svg}', route => route.abort());
+    ```
+
+    **page.waitForResponse() — 等待特定 HTTP 响应**
+    ```js
+    // AI Agent 场景：触发某个操作后，等待接口返回再继续
+    const [response] = await Promise.all([
+      page.waitForResponse(res =>
+        res.url().includes('/api/search') && res.status() === 200
+      ),
+      page.click('#search-button'), // 触发请求
+    ]);
+    const data = await response.json(); // 直接拿到接口数据，不用再爬 DOM
+    ```
+
+    **Cookie / Session 管理 — AI Agent 保持登录态**
+    ```js
+    // 保存登录态（cookie），下次直接复用，不用重新登录
+    const cookies = await context.cookies();
+    fs.writeFileSync('cookies.json', JSON.stringify(cookies));
+
+    // 恢复 cookie
+    const savedCookies = JSON.parse(fs.readFileSync('cookies.json'));
+    await context.addCookies(savedCookies);
+
+    // 设置 localStorage token（SPA 常见鉴权方式）
+    await page.evaluate((token) => {
+      localStorage.setItem('auth_token', token);
+    }, myToken);
+    ```
+
+    **网络请求录制（HAR）— 分析 AI Agent 的请求行为**
+    ```js
+    // 录制所有网络请求，生成 HAR 文件（HTTP Archive），便于调试
+    await context.tracing.start({ screenshots: true, snapshots: true });
+    // ... 执行操作 ...
+    await context.tracing.stop({ path: 'trace.zip' });
+    ```
+
+    **AI Agent 中常见的 HTTP 相关挑战：**
+    1. **反爬检测**：UA 检测、TLS 指纹（JA3）、请求频率检测 → 需要设置真实 UA、控制速率
+    2. **动态 Token**：页面里的 CSRF token、签名参数 → 要先从 DOM 或接口里拿到再带上
+    3. **SSO 登录跳转**：多次 302 重定向，Playwright 会自动跟随，但要注意 Cookie domain
+    4. **接口加密**：部分网站对请求体/响应体加密 → 需要在 `page.evaluate()` 里执行页面自带的解密函数
+    5. **流式接口处理**：如果目标页面本身也用 SSE/stream，要用 `page.on('response')` 配合 `response.body()` 分块处理
+
+    **和直接调 HTTP 接口的区别：** 无头浏览器会完整模拟浏览器行为（执行 JS、处理 Cookie、跟随重定向），能处理 SPA 等纯前端渲染的场景；而直接 fetch/axios 只能拿到 HTML 源码，JS 渲染的内容拿不到。
+
+---

@@ -73,12 +73,12 @@
    3. 服务端调用 renderToString 生成 HTML 字符串并返回给客户端
    4. 客户端接收到 HTML 字符串后，解析 HTML 字符串，生成 DOM 树、同时也执行 js 代码
    5. 客户端拿到 window.initialData 数据后，初始化组件，然后调用 render 方法生成虚拟 DOM
-   6. Vue 用虚拟 dom 和现有的 dom 树做对比，接管后挂载事件，然后正常交互
+   6. React 用虚拟 dom 和现有的 dom 树做对比，接管后挂载事件，然后正常交互
    7. React 则是用 dom 树转换成 Fiber 树，客户端的组件也转换成 Fiber 树，所以前后对比的都是 Fiber 树。
 
    无非就是具体的方法名有些出入，原理是一样的。区别主要是
 
-   1. React，使用 react-dom/server 提供的 renderToString 或 renderToPipeableStream（流失渲染） 方法。
+   1. React，使用 react-dom/server 提供的 renderToString 或 renderToPipeableStream（流式渲染） 方法。
    2. Vue，使用 vue-server-renderer 提供的 renderToString 方法。流式渲染需要额外的插件支持。
    3. 客户端接管的时候，React 用的是 hydrate，Vue 用的是 mount
    4. 事件绑定的时候 React 是用的合成事件，Vue 是原生事件
@@ -437,7 +437,7 @@
       static async getData() {
         //...axios
       }
-      didmount() {
+      componentDidMount() {
         // 判断有没有数据，没有的还得请求
         // 用于如果这个页面是SPA点进进来的情况下，是不会有服务端数据的。
       }
@@ -465,3 +465,44 @@
 
        把数据再次放到之前组件注入的时候的 initialData 下，这样就同步了
        `let initialData =JSON.parse( document.getElementById('ssrTextInitData').value);`
+
+9. **React 18 Selective Hydration 与 React Server Components（RSC）**
+
+   <details open>
+
+   **Selective Hydration（选择性水合）**：React 18 配合 Suspense，可以把页面分成多个独立的水合区域。用户交互到哪个区域，就优先水合哪块，其它区域继续异步水合，不阻塞交互。
+
+   ```jsx
+   // 流式 SSR + Selective Hydration
+   <Suspense fallback={<Spinner />}>
+       <Comments /> {/* 慢速组件，独立水合 */}
+   </Suspense>
+   ```
+
+   **React Server Components（RSC）**：组件在服务端运行，结果以序列化格式传给客户端，**完全不向客户端发送组件代码**。
+
+   | 对比 | Server Component | Client Component |
+   |------|------------------|------------------|
+   | 运行环境 | 服务端（Node.js）| 浏览器 |
+   | 能用 hooks | ❌ | ✅ |
+   | 能直接访问 DB | ✅ | ❌ |
+   | JS bundle | 0（不传给客户端）| 正常打包 |
+   | 交互 | ❌ | ✅ |
+
+   Next.js 13+ App Router 默认所有组件都是 Server Component，需要交互的加 `"use client"` 指令。
+
+   **RSC 与 AI 的结合**：
+   - Server Component 直接调用 AI API（密钥不暴露给前端），返回已生成的内容
+   - 用 `"use client"` 的流式组件处理实时输出
+   - Next.js 的 `generateStaticParams` + AI 可以在构建期生成 SEO 内容
+
+   ```jsx
+   // app/blog/[slug]/page.tsx — 这是 Server Component
+   export default async function BlogPage({ params }) {
+       // 直接在服务端调用 AI，无需暴露 API Key 给客户端
+       const summary = await openai.chat.completions.create({...});
+       return <article>{summary.choices[0].message.content}</article>;
+   }
+   ```
+
+   </details>

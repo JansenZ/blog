@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/jansen/work/blog/**)",
+      "Bash(head -5 grep -n \"[0-9]\\)\" /Users/jansen/work/blog/docs/review/router.md)",
+      "Bash(head -5 grep -n \"流失渲染\\\\|didmount\\(\\)\\\\|6\\\\. Vue 用虚拟\" /Users/jansen/work/blog/docs/review/ssr.md)",
+      "Bash(head -5 grep -n \"funcion\\\\|methods\\(\\)\" /Users/jansen/work/blog/docs/review/vue.md)",
+      "Bash(head -5 grep -n \"SyncWaterHook\\\\|AsyncSeriesWaterHook\\\\|</config>s\\\\|extensions.*\\\\.json''''\\\\];\" /Users/jansen/work/blog/docs/review/webpack.md)",
+      "Bash(grep -n \"changeOrigin\\\\|pathRewrite\\\\|extensions.*json\" /Users/jansen/work/blog/docs/review/webpack.md | head -10\ngrep -n \"SyncWaterfallHook\\\\|AsyncSeriesWaterfallHook\" /Users/jansen/work/blog/docs/review/webpack.md)",
+      "Bash(grep -n \"鱿鱼须\\\\|Vue2: 如果在 Nuxt\\\\|createElementVNode\\('p', '静态\" /Users/jansen/work/blog/docs/review/vue.md)",
+      "WebFetch(domain:shipyard.build)",
+      "WebFetch(domain:marketplace.visualstudio.com)",
+      "WebFetch(domain:deepwiki.com)"
+    ]
+  }
+}

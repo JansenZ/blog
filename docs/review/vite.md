@@ -438,7 +438,7 @@
      export default {
        build: {
          target: 'es2015', // 需要设置目标环境
-         polyfillDynamicImport: true, // 需要动态导入的 polyfill
+         // polyfillDynamicImport 已在 Vite 3+ 移除，兼容旧浏览器请使用 @vitejs/plugin-legacy
        },
      }
      ```
@@ -600,3 +600,49 @@
        },
      }
      ```
+
+5. **Vite 5 新特性与 AI 开发工作流**
+
+   <details open>
+
+   **Vite 5（2023年）重要更新**：
+   - 正式弃用 CommonJS API，全面转向 ESM
+   - 构建性能进一步提升（底层 Rollup 4）
+   - `import.meta.glob` 支持 `eager` + 自定义 query 参数
+
+   **`@vitejs/plugin-legacy`**：Vite 处理旧浏览器兼容的官方方案（替代已移除的 `polyfillDynamicImport`）。
+
+   ```js
+   import legacy from '@vitejs/plugin-legacy'
+
+   export default {
+     plugins: [
+       legacy({
+         targets: ['defaults', 'not IE 11'],
+         additionalLegacyPolyfills: ['regenerator-runtime/runtime'],
+       }),
+     ],
+   }
+   ```
+
+   **Vite 在 AI 开发中的优势**：
+   - **本地 AI 模型热重载**：配合 `vite-plugin-wasm`，可以在浏览器端运行 WASM 格式的小型模型（如 whisper.cpp、llama.cpp 的 WASM 版），文件改动时 HMR 直接更新。
+   - **环境变量管理 AI Keys**：`import.meta.env.VITE_OPENAI_KEY`（只暴露给前端），服务端 Key 放在 `.env` 但不加 `VITE_` 前缀，Vite 自动过滤。
+   - **代理 AI API**：`server.proxy` 配置代理，避免开发时跨域，也可以在代理层做 Key 注入。
+
+   ```js
+   // vite.config.js
+   export default {
+     server: {
+       proxy: {
+         '/api/chat': {
+           target: 'https://api.openai.com',
+           changeOrigin: true,
+           rewrite: (path) => path.replace(/^\/api\/chat/, '/v1/chat/completions'),
+         },
+       },
+     },
+   }
+   ```
+
+   </details>

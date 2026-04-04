@@ -97,7 +97,47 @@
         arr.sort((a, b) => a.age - b.age); // 保持相对顺序
         ```
 
-    - es11 增加了?.可选链
+    - es11 增加了?.可选链、??空值合并运算符、Promise.allSettled、BigInt、globalThis 等
+
+      示例：
+
+        ```js
+        // 可选链
+        const name = user?.profile?.name;
+
+        // 空值合并运算符（只有 null/undefined 才走右侧，区别于 || 会对 0/''/false 也走右侧）
+        const val = input ?? 'default';
+
+        // Promise.allSettled（不管成功失败，等所有都完成）
+        Promise.allSettled([fetch('/a'), fetch('/b')]).then(results => {
+            results.forEach(r => console.log(r.status)); // 'fulfilled' or 'rejected'
+        });
+        ```
+
+    - es12（ES2021）增加了 Promise.any、逻辑赋值运算符（&&=、||=、??=）、数字分隔符等
+
+      示例：
+
+        ```js
+        // Promise.any（只要有一个成功就成功，全部失败才失败）
+        Promise.any([fetch('/a'), fetch('/b')]).then(result => {
+            console.log('第一个成功的结果', result);
+        });
+
+        // 对比四种 Promise 组合方法：
+        // Promise.all     - 全部成功才成功，有一个失败就失败
+        // Promise.race    - 第一个完成（不管成功失败）就结束
+        // Promise.allSettled - 等全部完成，不管成功失败
+        // Promise.any     - 第一个成功就成功，全部失败才失败
+
+        // 逻辑赋值运算符
+        a ||= b;  // 等价于 a = a || b（a 为 falsy 时赋值）
+        a &&= b;  // 等价于 a = a && b（a 为 truthy 时赋值）
+        a ??= b;  // 等价于 a = a ?? b（a 为 null/undefined 时赋值）
+
+        // 数字分隔符（提高可读性）
+        const billion = 1_000_000_000;
+        ```
 
 3. `ES6`中暂时性死区`TDZ`是什么？
      <details open>
@@ -357,9 +397,9 @@
 16. 什么是装饰器？
     <details open>
 
-    JavaScript 中的装饰器（Decorators）是一种用于增强类、方法、属性或参数功能的特殊语法，它通过高阶函数的形式实现元编程。是在 ES7 提案（Stage 3），需通过 Babel 或 TypeScript 转译。由于未通过，所以在 chrome 控制台中目前还无法使用
+    JavaScript 中的装饰器（Decorators）是一种用于增强类、方法、属性或参数功能的特殊语法，它通过高阶函数的形式实现元编程。装饰器提案长期处于 TC39 Stage 2，新版 Decorator 提案于 2022 年底推进至 Stage 3，需通过 Babel 或 TypeScript 转译。与 ES7（ES2016，只包含 Array.prototype.includes 和指数运算符）无关。
 
-    装饰器可以作用在类上、方法上、属性上、参数上。基本接受三个参数，`target、name、description`，作用不同的地方参数个数不一样，但是最多就这 3 个。
+    装饰器可以作用在类上、方法上、属性上、参数上。基本接受三个参数，`target、name、descriptor`（属性描述符），作用不同的地方参数个数不一样，但是最多就这 3 个。
 
     **作用在类本身上基本如下几个功能：**
 
@@ -402,7 +442,7 @@
     console.log(User.metadata); // 输出: { role: 'admin' }
     ```
 
-    类装饰器只有一个参数。在类里面，所有的`target`，都是这个类的原型。
+    类装饰器只有一个参数，`target` 指向**类本身（构造函数）**，而不是原型。方法/属性装饰器的第一个参数才是类的原型。
 
     可以发现，这些装饰器函数，都在实例化前就全部打印了
 
@@ -410,7 +450,7 @@
 
     **作用在类下的方法:**
 
-    它的第一个参数是类的原型，第二个参数就是方法名，第三个参数就是一个`description`对象。
+    它的第一个参数是类的原型，第二个参数就是方法名，第三个参数就是一个`descriptor`（属性描述符）对象。
 
     ```js
     // 方法装饰器
@@ -614,7 +654,7 @@
         return 'ending';
     }
     var hw = helloWorldGenerator();
-    for(var vof hw) {
+    for(var v of hw) {
         console.log(v) // hello、world
     }
     ```
@@ -995,7 +1035,7 @@
     // 捕获阶段监听器
     ```
 
-    阻止冒泡使用的是`e.stoppropagation`,阻止捕获用的是`e.stopImmediatePropagation`
+    阻止事件传播（冒泡和捕获都可以阻止）使用 `e.stopPropagation()`。`e.stopImmediatePropagation()` 的作用是在阻止传播的同时，还阻止同一元素上其他同类型监听器被调用，与"阻止捕获"无关。
 
 30. 适合事件捕获的场景有哪些？
     <details open>
@@ -1027,11 +1067,11 @@
 
     ```js
     // 这是new Object的过程。
-    function newObject() {}
+    function newObject() {
         var obj = {};
-        obj.__proto__ = Obejct.prototype;
+        obj.__proto__ = Object.prototype;
         Object.call(obj);
-        return obj
+        return obj;
     }
 
     // 这是模拟实现new的过程
@@ -1165,7 +1205,7 @@
     - undefined 就是这个变量已经声明，但是没有赋值，所以会是 undefined.
     - 函数作用域下 undefined 可以被重写，这也是为什么最好用 void 0 替代的原因。
     - null 的话只能显式的被赋值，标识空值。
-    - null == undefined；没有隐式转换。
+    - `null == undefined` 结果是 `true`，这是 JS 规范的特例，不走 ToNumber 转换，直接规定二者相等。`null === undefined` 才是 `false`。
 
 39. call,apply,bind 区别
     <details open>
@@ -1206,7 +1246,7 @@
 
     这段代码的执行顺序是不一定的
 
-    - 首先 `setTimeout(fn, 0) === setTimeout(fn, 1)`，这是由源码决定的
+    - 首先 Node.js 中 `setTimeout(fn, 0)` 的最小延时下限是 **1ms**（浏览器在嵌套层级≥5时下限是 4ms），所以 0 会被修正为最小值，行为上接近 `setTimeout(fn, 1)`，这是由源码决定的
     - 进入事件循环也是需要成本的，如果在准备时候花费了大于 1ms 的时间，那么在 timer 阶段就会直接执行 setTimeout 回调
     - 那么如果准备时间花费小于 1ms，那么就是 setImmediate 回调先执行了
 
@@ -1232,7 +1272,7 @@
     console.log("start")
     process.nextTick(()=>{
         console.log("nextTick1");
-        setTimeout(()={
+        setTimeout(()=>{
             console.log("time2");
         });
     });
@@ -1500,8 +1540,8 @@
     - \s 空格
     - \w 包括下划线在内的单个字符
     - [A-Za-z0-9_]
-    - \b 单次边界
-    - \i 忽略大小写
+    - \b 单词边界（word boundary）
+    - i 忽略大小写（修饰符，用于 `/pattern/i`，不是转义字符）
 
     - reg.flags, 返回 flags 属性中的标志以字典序排序（从左到右，即"gimuy"）。 u 是编码方面的。
 
@@ -1733,9 +1773,9 @@
 
     假如在一帧 1000/60~= 16ms，这一帧没用完，还有空闲的话，就可以 requestIdleCallback 来执行想要执行的任务。
 
-    推荐放在 requestIdleCallback 里面的应该是微任务（microTask）并且可预测时间的任务。它的第二个参数就是执行的最晚时机。
+    推荐放在 requestIdleCallback 里面的应该是**低优先级的、可延迟的任务**（如数据上报、预加载等非紧急工作），而不是微任务（微任务由 JS 引擎在每个宏任务结束后自动清空，不需要手动放入）。它的第二个参数就是执行的最晚时机。
 
-    缺点的话是 requestIdleCallback 的 FPS 只有 20, 一秒只有 20 次调用。
+    缺点的话是在没有其他任务时，requestIdleCallback 的最大回调频率约为 **20 次/秒（50ms 间隔）**，这是空闲时的保底频率，实际调用频率由浏览器空闲时间决定。
 
 52. 为什么 js 是单线程的？
     <details open>
@@ -1963,13 +2003,14 @@
 66. JavaScript 可以存储的最大数字、最大安全数字，超过了咋办？
     <details open>
 
-    - Number.MAX_VALUE 可存储的最大数字 == (Math.pow(2,53) - 1) \* Math.pow(2, 971) 。 971 = 1023 - 52； 971 是 指数偏移量（1023）2 的 10 次方-1， 减去 尾数位数（52）
+    - Number.MAX_VALUE 可存储的最大数字 == `(2 - 2^-52) * 2^1023`，约等于 `1.7976931348623157e+308`。注意不要和 MAX_SAFE_INTEGER 混淆，`Math.pow(2,53) - 1` 是最大安全整数，不是最大值。
     - Number.MAX_SAFE_INTEGER 最大安全值 == Math.pow(2,53) - 1;
     - 一旦超过安全最大值精度就开始不准了。所以解决办法就是用 bigint 或者是变成字符串，小数字的话可以转换成整数。通常和钱相关，可以先乘 100，转成分。
 
     ```js
-    console.log(Number.MAX_VALUE); // 1.7976931348623157e+308`
-    console.log(Number.MAX_VALUE + 1); // Infinity`
+    console.log(Number.MAX_VALUE); // 1.7976931348623157e+308
+    console.log(Number.MAX_VALUE + 1); // 仍然是 Number.MAX_VALUE（浮点精度导致加1无效）
+    console.log(Number.MAX_VALUE * 2); // Infinity（乘以足够大的数才会溢出）
     ```
 
 67. 什么是 bigInt?
@@ -2086,8 +2127,8 @@
         detail: {
             key: 'val'
         },
-        bubbles: ,
-        cancelable:
+        bubbles: true,
+        cancelable: false
     });
     xx.addEventListener('name', () => {
         // do
@@ -2285,8 +2326,7 @@
 
     ```
 
-    这也是 vue2.4 以前的 nexttick()实现方式。
-    vue2.5 后，用的是 MutationObserver
+    这也是 Vue 某个版本的 nextTick() 实现方式之一（MessageChannel）。
 
     ```js
     function mynextTick(func) {
@@ -2727,7 +2767,7 @@
     - 主要区别
         - ES6 模块是静态的，CommonJS 是动态的
         - ES6 模块支持 tree-shaking，CommonJS 不支持
-        - ES6 模块是异步加载，CommonJS 是同步加载
+        - ES6 模块是静态解析（编译时确定依赖），浏览器端网络获取是异步的；CommonJS 是运行时同步加载（require 会阻塞执行）
         - ES6 模块输出的是值的引用，CommonJS 输出的是值的拷贝
         - ES6 模块的 this 指向 undefined，CommonJS 的 this 指向当前模块
 
@@ -2845,3 +2885,265 @@
         - 使用预加载和预获取
         - 优化模块缓存策略
         - 压缩和优化模块代码
+
+97. 防抖（debounce）和节流（throttle）的区别及实现
+    <details open>
+
+    - **防抖**：在事件触发 n 毫秒后执行，如果在这 n 毫秒内再次触发，则重新计时。适合输入框搜索、窗口 resize 等场景。
+
+    ```js
+    function debounce(fn, delay) {
+        let timer = null;
+        return function (...args) {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                fn.apply(this, args);
+            }, delay);
+        };
+    }
+    ```
+
+    - **节流**：在 n 毫秒内只执行一次，不管触发多少次。适合滚动事件、mousemove、按钮点击防重复等场景。
+
+    ```js
+    function throttle(fn, interval) {
+        let lastTime = 0;
+        return function (...args) {
+            const now = Date.now();
+            if (now - lastTime >= interval) {
+                lastTime = now;
+                fn.apply(this, args);
+            }
+        };
+    }
+    ```
+
+    - 区别：防抖是"最后一次触发后执行"，节流是"固定频率执行"。
+
+98. 原型链的终点是什么？
+    <details open>
+
+    原型链的终点是 `null`。`Object.prototype.__proto__ === null`，当查找属性沿原型链一路找到 `Object.prototype` 还没找到时，再往上就是 `null`，查找结束返回 `undefined`。
+
+    ```js
+    function Foo() {}
+    const f = new Foo();
+    // f -> Foo.prototype -> Object.prototype -> null
+    console.log(Object.prototype.__proto__); // null
+    ```
+
+99. 深拷贝的现代方案 structuredClone
+    <details open>
+
+    浏览器（Chrome 98+）和 Node.js 17+ 原生支持 `structuredClone()`，它是深拷贝的推荐原生方案，支持比 `JSON.parse(JSON.stringify())` 更多的类型：
+
+    ```js
+    // 支持 Map、Set、Date、RegExp、循环引用等
+    const obj = {
+        date: new Date(),
+        map: new Map([['a', 1]]),
+        set: new Set([1, 2, 3]),
+    };
+    const clone = structuredClone(obj);
+
+    // 局限性：不支持 Function、DOM 节点、Symbol 键
+    // 不支持的情况下仍需手写深拷贝或使用 lodash.cloneDeep
+    ```
+
+    JSON.parse(JSON.stringify()) 的缺陷：不支持 undefined、Function、Symbol、Date（会变字符串）、循环引用（会报错）。
+
+100. AbortController：取消 fetch 和异步操作
+    <details open>
+
+    `AbortController` 是浏览器原生 API，用于主动取消 `fetch` 请求或其他可中止的异步操作。在 AI 流式输出场景中（用户点"停止生成"）是标配。
+
+    ```js
+    // 基本用法
+    const controller = new AbortController();
+    const signal = controller.signal;
+
+    fetch('/api/stream', { signal })
+        .then(res => res.body.getReader())
+        .then(async (reader) => {
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                console.log(new TextDecoder().decode(value));
+            }
+        })
+        .catch(err => {
+            if (err.name === 'AbortError') {
+                console.log('用户手动终止生成');
+            }
+        });
+
+    // 用户点击"停止"按钮时
+    stopButton.addEventListener('click', () => {
+        controller.abort(); // 立即终止请求和 ReadableStream
+    });
+    ```
+
+    **AI 场景**：AI Chat 流式输出（SSE/ReadableStream）时，用户点击"停止生成"按钮，调用 `controller.abort()`，同时后端收到连接断开信号也应停止推理，节省 GPU 算力。
+
+    超时控制也可以用 AbortController：
+    ```js
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s 超时
+    fetch(url, { signal: controller.signal })
+        .finally(() => clearTimeout(timeoutId));
+    ```
+
+101. Web Worker：JS 的多线程
+    <details open>
+
+    JS 主线程是单线程的，但可以通过 Web Worker 在后台线程执行 CPU 密集型任务，避免阻塞 UI。
+
+    ```js
+    // main.js
+    const worker = new Worker('./worker.js');
+
+    worker.postMessage({ data: hugeArray }); // 发送数据（结构化克隆）
+
+    worker.onmessage = (e) => {
+        console.log('Worker 计算结果:', e.data);
+    };
+
+    worker.onerror = (e) => {
+        console.error('Worker 出错:', e.message);
+    };
+
+    // worker.js（独立文件，无法访问 DOM）
+    self.onmessage = (e) => {
+        const result = heavyComputation(e.data);
+        self.postMessage(result);
+    };
+    ```
+
+    **限制**：Worker 中没有 `window`、`document`，不能操作 DOM；通信通过 `postMessage` 结构化克隆（深拷贝），大数据可用 `Transferable` 零拷贝传递：
+    ```js
+    // 零拷贝传递 ArrayBuffer（所有权转移）
+    worker.postMessage(arrayBuffer, [arrayBuffer]);
+    ```
+
+    **AI 场景**：
+    - 在 Worker 里跑 `onnxruntime-web` 或 `transformers.js`，让本地小模型推理不阻塞主线程
+    - 解析 AI 返回的大量 JSON token、向量计算（RAG 相似度）放在 Worker 里
+    - `SharedWorker` 可跨多个 Tab 共享同一个 AI 推理 Worker，节省内存
+
+102. Promise.allSettled 和 Promise.any
+    <details open>
+
+    ES2020/ES2021 新增的两个 Promise 聚合方法，补充了 `Promise.all` 和 `Promise.race` 的不足：
+
+    | 方法 | 成功条件 | 失败条件 | 典型场景 |
+    |------|----------|----------|----------|
+    | `Promise.all` | 全部 fulfilled | 任一 rejected 就失败 | 串行依赖，全部成功才继续 |
+    | `Promise.allSettled` | 全部完成（不管成败）| 不会失败 | 批量请求，需要知道每个结果 |
+    | `Promise.race` | 任一 fulfilled/rejected | 最快的决定结果 | 超时控制 |
+    | `Promise.any` | 任一 fulfilled | 全部 rejected 才失败 | 多源容灾，取最快成功 |
+
+    ```js
+    // allSettled：不管成败，等所有都完成
+    const results = await Promise.allSettled([
+        fetch('/api/a'),
+        fetch('/api/b'), // 即使这个失败了
+        fetch('/api/c'),
+    ]);
+    results.forEach(r => {
+        if (r.status === 'fulfilled') console.log('成功:', r.value);
+        else console.log('失败:', r.reason);
+    });
+
+    // any：多个 AI 节点，哪个最快响应就用哪个
+    const fastestResponse = await Promise.any([
+        fetch('https://api1.ai/chat'),
+        fetch('https://api2.ai/chat'),
+        fetch('https://backup.ai/chat'),
+    ]);
+    ```
+
+    **AI 场景**：AI Agent 并发调用多个工具（搜索、代码执行、数据库查询），用 `Promise.allSettled` 收集所有工具结果，即使部分工具失败也能继续，把成功的结果喂给 LLM 做综合推理。
+
+103. **JS 与 AI 的结合：异步模式在 AI 编程中的应用**
+    <details open>
+
+    JS 的各种异步模式在 AI 应用开发中都有直接对应的场景：
+
+    **1. Generator + 流式解析**
+
+    AI API 返回的 SSE 数据每行是 `data: {...}\n\n`，用 Generator 可以优雅地逐行解析：
+
+    ```js
+    async function* parseSSE(response) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+
+        while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            const lines = buffer.split('\n\n');
+            buffer = lines.pop(); // 保留不完整的最后一段
+
+            for (const line of lines) {
+                if (line.startsWith('data: ')) {
+                    const data = line.slice(6);
+                    if (data === '[DONE]') return;
+                    yield JSON.parse(data); // 每次 yield 一个 token chunk
+                }
+            }
+        }
+    }
+
+    // 消费
+    for await (const chunk of parseSSE(response)) {
+        appendToUI(chunk.choices[0].delta.content);
+    }
+    ```
+
+    **2. Proxy 拦截实现 AI 工具调用**
+
+    LangChain.js 等框架用 Proxy 包装工具对象，实现函数调用的自动 schema 生成和参数校验：
+
+    ```js
+    const toolProxy = new Proxy(toolFunctions, {
+        get(target, prop) {
+            return async (...args) => {
+                console.log(`[Tool Call] ${prop}(${JSON.stringify(args)})`);
+                const result = await target[prop](...args);
+                console.log(`[Tool Result] ${JSON.stringify(result)}`);
+                return result;
+            };
+        }
+    });
+    ```
+
+    **3. WeakRef + FinalizationRegistry 做 AI 响应缓存**
+
+    对话历史、embedding 向量可以用 `WeakRef` 软引用缓存，内存不足时 GC 自动回收：
+
+    ```js
+    const cache = new Map();
+    const registry = new FinalizationRegistry((key) => {
+        cache.delete(key); // 对象被 GC 时自动清除缓存条目
+    });
+
+    function cacheEmbedding(text, vector) {
+        const ref = new WeakRef(vector);
+        cache.set(text, ref);
+        registry.register(vector, text);
+    }
+
+    function getEmbedding(text) {
+        return cache.get(text)?.deref(); // 如果已被回收返回 undefined
+    }
+    ```
+
+    **4. 事件循环与 AI streaming 的关系**
+
+    AI 流式响应本质上就是 Node.js/浏览器事件循环的体现：
+    - `fetch` 发起请求后主线程不阻塞（非阻塞 I/O）
+    - 每个 SSE chunk 到达时触发一个微任务（ReadableStream 的 `read()` resolve）
+    - UI 更新（append token 到 DOM）在每帧的宏任务中执行
+    - 这就是为什么 AI 流式输出能一边生成一边显示，不卡 UI

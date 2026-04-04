@@ -38,7 +38,9 @@
 
     <details open>
 
-    因为即使写的是函数式代码，实际上 Babel 都会转译成 `React.createElement`,不引入的话就不能使用了。
+    **React 17 之前**：即使写的是函数式代码，Babel 都会转译成 `React.createElement`，不引入的话就不能使用了，所以必须 `import React from 'react'`。
+
+    **React 17 之后**：引入了新的 JSX 转换（New JSX Transform），Babel/TypeScript 会自动从 `react/jsx-runtime` 引入相关方法，不再需要手动 `import React`。所以在 React 17+ 的项目中，写 JSX 不再需要显式导入 React（除非你用了 `React.useState` 等 API）。
 
 5. this.setState 里参数是函数的时候和 Object 区别是什么
 
@@ -52,7 +54,7 @@
 
     都还是批处理异步的。
 
-6. this.forceUdate 是干嘛用的
+6. this.forceUpdate 是干嘛用的
 
     <details open>
 
@@ -99,13 +101,13 @@
          props: {
              id: 'app'
          },
-         chidren: [
+         children: [
          {
              tag: 'p',
              props: {
              className: 'text'
          },
-             chidren: [
+             children: [
                  'hello world!!!'
              ]
          }
@@ -446,7 +448,7 @@
 
     `listenTo`方法进本就是事件的入口方法，它里会获取已订阅的事件列表和依赖组，并且判断当前的事件类型有没有已经在订阅事件列表里，如果有就不再注册了，也就是说，事件处理器只需在`Document`订阅一次，所以相比在每个元素上订阅事件会节省很多资源.
 
-    接下来会判读昂当前事件类型，是冒泡还是捕获，然后分配`trapCapturedEvent`还是`trapBubbledEvent`。像`scroll`,`focus`之类的属于捕获，而`onclick`这一的属于冒泡。
+    接下来会判断当前事件类型，是冒泡还是捕获，然后分配`trapCapturedEvent`还是`trapBubbledEvent`。像`scroll`,`focus`之类的属于捕获，而`onclick`这一的属于冒泡。
 
     `trapBubbleEvent`方法里会根据当前事件的优先级分配不同的`dispatch`，然后把这个`dispatch`作为`listener`真正的加入`dom`的监听事件。
 
@@ -1869,3 +1871,88 @@ if (next === null) {
         写多个`useState`也好，多个`useReducer`也好，会根据里面的核心`mountWorkInProgressHook`来通过链表`next`的形式，创建各个位置的`hook`的引用。
 
     3. 当点击了`setState`触发事件后，会执行添加进队列的那个`dispatchAction`方法，然后根据新值，赋值给`update`对象，然后触发`schedulework`，接下来，重新进入`renderHooks`函数，然后这个时候，`current`其实就已经有值了，`current`就会指向`update`的那个对象。然后`useState`也好，其它的也好，都会调用`update`对应的方法，而且会把指针指向最新的那个变更过的状态值。
+
+8. React 18 有哪些重要新特性？
+
+    <details open>
+
+    1. **并发模式（Concurrent Mode）正式稳定**：通过 `createRoot` 替代 `ReactDOM.render` 启用并发特性，允许 React 中断、暂停、恢复渲染工作。
+
+    2. **自动批处理（Automatic Batching）**：React 18 之前只在 React 事件处理函数中批处理 setState，18 之后所有场景（setTimeout、Promise、原生事件）都会自动批处理，减少不必要的重渲染。
+
+    ```js
+    // React 18 之前：setTimeout 中两次 setState 触发两次渲染
+    // React 18 之后：自动批处理，只触发一次渲染
+    setTimeout(() => {
+        setCount(c => c + 1);
+        setFlag(f => !f);
+        // 只渲染一次
+    }, 1000);
+    ```
+
+    3. **新 Hook**：
+       - `useTransition`：标记非紧急更新，让紧急更新（如输入）优先渲染，非紧急更新（如列表过滤）延后。
+       - `useDeferredValue`：类似防抖，延迟某个值的更新，让 UI 保持响应。
+       - `useId`：生成稳定的唯一 ID，适用于 SSR 场景。
+
+    4. **Suspense 改进**：支持在服务端渲染中使用 Suspense，实现流式 SSR（Streaming SSR）。
+
+    ```js
+    // useTransition 示例
+    const [isPending, startTransition] = useTransition();
+    startTransition(() => {
+        setSearchQuery(input); // 非紧急更新
+    });
+    ```
+
+    </details>
+
+9. **React 在 AI 应用中的最佳实践**
+
+    <details open>
+
+    **流式输出 UI（Streaming UI）**：LLM 逐 token 输出，React 需要配合流式渲染实时更新。常见模式：
+
+    ```jsx
+    function ChatMessage() {
+        const [content, setContent] = useState('');
+        const [done, setDone] = useState(false);
+
+        async function sendMessage(prompt) {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                body: JSON.stringify({ prompt }),
+            });
+            const reader = res.body.getReader();
+            const decoder = new TextDecoder();
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) { setDone(true); break; }
+                setContent(prev => prev + decoder.decode(value));
+            }
+        }
+        return <div>{content}{!done && <Cursor />}</div>;
+    }
+    ```
+
+    **useTransition + AI 搜索**：搜索框输入时，用 `startTransition` 把 AI 推荐列表更新标记为低优先级，保证输入框响应不卡顿。
+
+    **Suspense + 懒加载 AI 组件**：AI 对话框、代码编辑器等重型组件用 `React.lazy` + `Suspense` 按需加载，不影响首屏。
+
+    ```jsx
+    const AIChat = React.lazy(() => import('./AIChat'));
+
+    function App() {
+        return (
+            <Suspense fallback={<Spinner />}>
+                <AIChat />
+            </Suspense>
+        );
+    }
+    ```
+
+    **Error Boundary 包裹 AI 调用**：AI 接口不稳定，用 Error Boundary 兜底，避免整个页面崩溃。
+
+    **Vercel AI SDK**：`useChat` / `useCompletion` hooks 封装了流式请求、消息历史管理、loading 状态，是目前 React + LLM 集成的主流方案。
+
+    </details>

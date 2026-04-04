@@ -11,7 +11,7 @@
         5. 定义子元素在交叉轴上的对齐方式。 align-items: flex-start | flex-end | center | baseline | stretch;
         6. 怎么理解主轴和交叉轴呢，主轴是 flex-direction 定义的方向，交叉轴是垂直于主轴的轴。
     - 容器内子元素
-        1. flex: 1;是简写形式，flex: 1; 等同于 flex: 1 1 auto;包含三个值：flex-grow、flex-shrink、flex-basis。分别代表：子项的放大比例、子项的缩小比例、子项的基准值。
+        1. flex: 1;是简写形式，flex: 1; 等同于 `flex: 1 1 0`（注意 flex-basis 是 0，不是 auto）。包含三个值：flex-grow、flex-shrink、flex-basis。分别代表：子项的放大比例、子项的缩小比例、子项的基准值。`flex: auto` 才等同于 `flex: 1 1 auto`。
         2. 定义单个子项在交叉轴上的对齐方式。会覆盖 align-items align-self: auto | flex-start | flex-end | center | baseline | stretch;
 
 2. 详细说说 Grid 布局
@@ -28,7 +28,11 @@
         6. justify-items: start | end | center | stretch;
         7. align-items: start | end | center | stretch;
         8. justify-content: start | end | center | stretch | space-around | space-between | space-evenly;
-    - 子元素 9. grid-column-start: 1; 定义子元素在网格中的开始列 10. grid-column-end: 3; 定义子元素在网格中的结束列 11. grid-row-start: 1; 定义子元素在网格中的开始行 12. grid-row-end: 3; 定义子元素在网格中的结束行
+    - 子元素
+        9. `grid-column-start: 1;` 定义子元素在网格中的开始列
+        10. `grid-column-end: 3;` 定义子元素在网格中的结束列（简写：`grid-column: 1 / 3`）
+        11. `grid-row-start: 1;` 定义子元素在网格中的开始行
+        12. `grid-row-end: 3;` 定义子元素在网格中的结束行（简写：`grid-row: 1 / 3`）
 
 3. flex 布局与 grid 布局的区别
    **Flex 布局与 Grid 布局对比**
@@ -85,28 +89,34 @@
     如果只要单边的边框的话，对应的那边的 after 标签 border-XX-width: 0 即可。
 
     ```css
-    position: absolute;
-    content: '';
-    display: block;
-    top: 0;
-    right: -100%;
-    left: 0;
-    bottom: -100%;
-    pointer-events: none;
-    z-index: 1;
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
-    transform-origin: 0 0;
-    border: 1px solid #ddd;
-    border-radius: 0;
+    .border_1px::after {
+        position: absolute;
+        content: '';
+        display: block;
+        top: 0;
+        right: -100%;
+        left: 0;
+        bottom: -100%;
+        pointer-events: none;
+        z-index: 1;
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        transform-origin: 0 0;
+        border: 1px solid #ddd;
+        border-radius: 0;
+    }
+    ```
 
+    也可以配合 media query，根据 dpr 精确缩放：
+
+    ```css
     @media only screen and (-webkit-min-device-pixel-ratio: 2) {
-        .border_1px:before {
+        .border_1px::after {
             transform: scaleY(0.5);
         }
     }
     @media only screen and (-webkit-min-device-pixel-ratio: 3) {
-        .border_1px:before {
+        .border_1px::after {
             transform: scaleY(0.33);
         }
     }
@@ -139,7 +149,7 @@
 
      <details open>
 
-    device-width / 750 \* 100;
+    `document.documentElement.style.fontSize = document.documentElement.clientWidth / 750 * 100 + 'px'`
 
     以 iphone6 为例，375/750 \* 100=50px;
 
@@ -271,7 +281,7 @@
 
     1. 避免逐项更改样式。最好一次性更改 style 属性，或者将样式列表定义为 class 并一次性更改 class 属性。
     2. 避免循环读取 offsetLeft 等属性。在循环之前把它们存起来。
-    3. 绝对定位具有复杂动画的元素。绝对定位使它脱离文档刘，否则会引起父元素及后续元素大量的回流。
+    3. 绝对定位具有复杂动画的元素。绝对定位使它脱离文档流，否则会引起父元素及后续元素大量的回流。
     4. 使用 transform 进合成层
     5. **避免循环操作 DOM。创建一个 documentFragment (文档片段) 或 div (display: none)，在它上面应用所有 DOM 操作，最后再把它添加到 window.document。**
 
@@ -411,9 +421,10 @@
         }
     }
     @keyframes example {
-        0% {
-            background-color: red;
-        }
+        0%   { background-color: red; }
+        50%  { background-color: blue; }
+        100% { background-color: yellow; }
+    }
     ```
 
 29. overflow-anchor 这个属性的意义
@@ -427,3 +438,215 @@
 30. 如果在 ios 里，容器宽度发生变化的情况下，如何保证内容的第一行位置不变？
 
     [张鑫旭 滚动容器 elementsFromPoint](https://www.zhangxinxu.com/wordpress/2018/02/container-scroll-position-hold/)
+
+---
+
+31. **CSS 变量（Custom Properties）**
+
+    <details open>
+
+    CSS 变量是现代 CSS 的核心特性，用 `--` 前缀定义，用 `var()` 引用。
+
+    ```css
+    /* 定义：通常挂在 :root 上实现全局共享 */
+    :root {
+        --primary-color: #1890ff;
+        --font-size-base: 14px;
+        --spacing: 8px;
+    }
+
+    /* 使用 */
+    .button {
+        color: var(--primary-color);
+        font-size: var(--font-size-base);
+        padding: var(--spacing) calc(var(--spacing) * 2);
+    }
+
+    /* var() 支持默认值，变量未定义时回退 */
+    .title {
+        color: var(--title-color, #333);
+    }
+    ```
+
+    **与 SCSS 变量的区别：**
+
+    | 对比 | CSS 变量 | SCSS 变量 |
+    |------|---------|-----------|
+    | 运行时机 | 运行时，可动态修改 | 编译时，静态替换 |
+    | JS 操作 | 支持（`getPropertyValue` / `setProperty`）| 不支持 |
+    | 作用域 | 遵循 CSS 级联，可局部覆盖 | 无级联 |
+    | 继承 | 可被子元素继承 | 不可 |
+
+    **用 JS 动态修改 CSS 变量（主题切换的核心）：**
+
+    ```js
+    // 读取
+    getComputedStyle(document.documentElement).getPropertyValue('--primary-color');
+
+    // 修改（实现一键换肤）
+    document.documentElement.style.setProperty('--primary-color', '#ff4d4f');
+    ```
+
+    ```css
+    /* 局部变量覆盖：暗色主题 */
+    [data-theme='dark'] {
+        --primary-color: #177ddc;
+        --bg-color: #141414;
+    }
+    ```
+
+---
+
+32. **`aspect-ratio` — 现代定宽高比写法**
+
+    <details open>
+
+    第9题中用 `padding-top: 100%` hack 实现定宽高比，现代 CSS 直接用 `aspect-ratio` 一行解决：
+
+    ```css
+    /* 始终保持 16:9 */
+    .video-wrapper {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+    }
+
+    /* 正方形头像 */
+    .avatar {
+        width: 48px;
+        aspect-ratio: 1;  /* 等同于 1 / 1 */
+    }
+
+    /* 配合 object-fit 保持图片比例不变形 */
+    .card-image {
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        object-fit: cover;
+    }
+    ```
+
+    兼容性：Chrome 88+、Safari 15+、Firefox 89+，现代项目可放心使用。老项目降级方案仍用 `padding-top` hack。
+
+---
+
+33. **`clamp()` — 响应式数值利器**
+
+    <details open>
+
+    `clamp(最小值, 理想值, 最大值)` — 让数值在一个范围内弹性变化，超出范围自动夹紧。
+
+    ```css
+    /* 字体大小：最小 14px，最大 24px，中间随视口线性缩放 */
+    .title {
+        font-size: clamp(14px, 2.5vw, 24px);
+    }
+
+    /* 容器宽度：最小 320px，最大 1200px，中间 90% 视口宽 */
+    .container {
+        width: clamp(320px, 90vw, 1200px);
+    }
+
+    /* 间距随屏幕弹性变化 */
+    .section {
+        padding: clamp(16px, 5vw, 64px);
+    }
+    ```
+
+    **与 `min()` / `max()` 的关系：**
+    `clamp(MIN, VAL, MAX)` 等价于 `max(MIN, min(VAL, MAX))`，三个函数可以互相组合使用，完全替代响应式中大量的 `@media` 断点。
+
+---
+
+34. **现代 CSS 选择器：`:is()` `:where()` `:has()`**
+
+    <details open>
+
+    **`:is()` — 选择器分组简写，保留最高优先级**
+
+    ```css
+    /* 传统写法：重复啰嗦 */
+    header a:hover, main a:hover, footer a:hover { color: red; }
+
+    /* :is() 简写 */
+    :is(header, main, footer) a:hover { color: red; }
+
+    /* 优先级取参数中最高的那个 */
+    :is(#id, .class) { } /* 优先级按 #id 算（0,1,0,0）*/
+    ```
+
+    **`:where()` — 与 `:is()` 功能相同，但优先级永远为 0**
+
+    ```css
+    /* 适合写基础样式库，方便外部覆盖 */
+    :where(h1, h2, h3) { margin: 0; } /* 优先级为 0，随时可覆盖 */
+    ```
+
+    **`:has()` — "父选择器"，CSS 的革命性升级**
+
+    `:has()` 可以根据子元素或后续兄弟的状态来选中父元素，这在以前只能用 JS 实现。
+
+    ```css
+    /* 选中含有 img 的 p 标签 */
+    p:has(img) { display: flex; align-items: center; }
+
+    /* 表单项有错误时，给整个 .form-item 加红色边框 */
+    .form-item:has(.error-msg) { border-color: red; }
+
+    /* 选中紧跟在 h2 后面的 p */
+    h2:has(+ p) { margin-bottom: 4px; }
+
+    /* 导航栏在有下拉菜单展开时改变样式 */
+    .nav-item:has(.dropdown:hover) { background: #f0f0f0; }
+    ```
+
+    兼容性：Chrome 105+、Safari 15.4+、Firefox 121+，2023 年后主流浏览器全面支持。
+
+---
+
+35. **容器查询 `@container`**
+
+    <details open>
+
+    传统响应式用 `@media` 根据**视口宽度**来响应，但组件放在不同位置（宽侧边栏 vs 窄侧边栏）时，视口宽度相同而容器宽度不同，`@media` 无能为力。`@container` 让组件根据**自身容器宽度**来响应，实现真正的组件级响应式。
+
+    ```css
+    /* 第一步：给容器声明 containment */
+    .card-wrapper {
+        container-type: inline-size;
+        container-name: card; /* 可选，用于具名查询 */
+    }
+
+    /* 第二步：在组件内部根据容器宽度响应 */
+    .card {
+        display: block;
+    }
+
+    @container (min-width: 400px) {
+        .card {
+            display: flex;  /* 容器够宽时变成横向布局 */
+            gap: 16px;
+        }
+        .card-image {
+            width: 120px;
+            flex-shrink: 0;
+        }
+    }
+
+    /* 具名容器查询 */
+    @container card (min-width: 600px) {
+        .card-title { font-size: 24px; }
+    }
+    ```
+
+    **和 `@media` 的本质区别：**
+
+    ```
+    @media：组件感知的是视口 → 同一组件在不同位置表现一样（不合理）
+    @container：组件感知的是父容器 → 同一组件自适应所在位置（合理）
+    ```
+
+    **`container-type` 取值：**
+    - `inline-size`：只监听行内尺寸（宽度），最常用
+    - `size`：同时监听宽高
+    - `normal`：不建立尺寸容器，只建立样式容器
+
+    兼容性：Chrome 105+、Safari 16+、Firefox 110+，2023 年后主流浏览器全面支持，可在新项目中放心使用。

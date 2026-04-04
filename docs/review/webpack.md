@@ -320,15 +320,15 @@
     const {
         SyncHook,
         SyncBailHook,
-        SyncWaterHook,
+        SyncWaterfallHook,
         SyncLoopHook,
         AsyncParallelHook,
         AsyncParallelBailHook,
         AsyncSeriesHook,
         AsyncSeriesBailHook,
-        AsyncSeriesWaterHook
+        AsyncSeriesWaterfallHook
     } = require('tapable');
-    // Water = 同步方法，会传值给下一个函数。
+    // Waterfall = 同步方法，会传值给下一个函数。
     // Bail = 是当函数有返回值，在当前执行函数会停止。
     // Loop = 监听函数返回true代表继续，返回undefined代表结束
     ```
@@ -374,8 +374,8 @@
                     * 那么就需要将 index 前面的值替换掉, 或者说是替换掉根地址,
                     *你可能发现了index也是需要替换的, 没错, 我会在后续操作中处理.
                     */
-                    target: 'http://10.20.30.120:8080' //这个是被替换的目标地址
-                    changeOrigin: true // 默认是false,如果需要代理需要改成true
+                    target: 'http://10.20.30.120:8080', //这个是被替换的目标地址
+                    changeOrigin: true, // 默认是false,如果需要代理需要改成true
                     pathRewrite: {
                         '^/index': '/' //在这里 http://localhost:8080/index/xxx 已经被替换成 http://10.20.30.120:8080/
                     }
@@ -502,7 +502,7 @@
                 <generate template=".env.vm" destfile=".env" charset="UTF-8"/>
                 <generate template="package.json.vm" destfile="package.json" charset="UTF-8"/>
             </script>
-        </config>s
+        </config>
         ```
 
     10. 最后再后台配置 autoconfig,也就是对应变量的值，从而完成整体配置。
@@ -753,7 +753,7 @@
 
         ```js
         resolve: {
-            extensions: ['.js', '.jsx', '.json'];
+            extensions: ['.js', '.jsx', '.json'],
         }
         ```
 
@@ -772,3 +772,47 @@
     28. 如果使用了第三方的包的时候，自己的代码需要用到 `import $ from 'jquery'`，可以配置 externals: { 'jquery': 'jQuery'} ,这样全局就会有 jQuery 变量了。
     29. webpack 自己会有 `tree-shaking` 功能，没有 import 的代码它不会打包出来。
     30. 使用 `scope hosting`，可以自动省略不必要的代码。比如只写了 `let a = 1;let b = 2;let c = a+b;console.log(c);`它会直接打包成 console.log(3);前面的都没了。而这个本身实际上是把多个模块的包裹函数，尽可能的变成一个。
+
+21. **Webpack 与 AI 应用构建优化**
+
+    <details open>
+
+    **AI SDK 体积问题**：`@anthropic-ai/sdk`、`openai` 等包体积较大，且大部分代码在前端用不到。推荐：
+    - **externals**：服务端（Node.js BFF）使用的 AI SDK 配置为 externals，不打包进客户端 bundle。
+    - **Code Splitting**：AI 对话功能单独打包成异步 chunk，用户点击才加载。
+
+    ```js
+    // webpack.config.js
+    module.exports = {
+        externals: {
+            // 服务端专用，不打进客户端 bundle
+            'openai': 'commonjs openai',
+        },
+        optimization: {
+            splitChunks: {
+                cacheGroups: {
+                    aiVendor: {
+                        test: /[\\/]node_modules[\\/](@anthropic-ai|openai)[\\/]/,
+                        name: 'ai-vendor',
+                        chunks: 'async', // 只在异步加载时分割
+                    },
+                },
+            },
+        },
+    };
+    ```
+
+    **WASM 支持**：本地 AI 推理（llama.cpp 的 WASM 版）需要配置 webpack 支持 `.wasm` 文件。
+
+    ```js
+    // webpack 5 内置 WASM 支持
+    module.exports = {
+        experiments: {
+            asyncWebAssembly: true,
+        },
+    };
+    ```
+
+    **Worker 构建**：浏览器端跑 AI 推理建议用 Web Worker 防止阻塞主线程，webpack 5 内置 `new Worker(new URL('./worker.js', import.meta.url))` 语法，无需额外 loader。
+
+    </details>

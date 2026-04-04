@@ -1,5 +1,7 @@
 * [浏览器/HTTP](review/http.md)
 
+* [AI Agent](review/ai-agent.md)
+
 * [JS](review/js.md)
 
 * [TS](review/ts.md)

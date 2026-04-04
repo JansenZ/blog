@@ -5,8 +5,8 @@
 
     从低阶到高阶有：O(1)、O(logn)、O(n)、O(nlogn)、O(n2)，几乎所有的都逃不开这几个。
 
-    1. 最坏情况时间复杂度：代码在最理想情况下执行的时间复杂度。
-    2. 最好情况时间复杂度：代码在最坏情况下执行的时间复杂度。
+    1. 最坏情况时间复杂度：代码在最坏情况下执行的时间复杂度。
+    2. 最好情况时间复杂度：代码在最理想情况下执行的时间复杂度。
     3. 平均时间复杂度：用代码在所有情况下执行的次数的加权平均值表示。
     4. 均摊时间复杂度：在代码执行的所有复杂度情况中绝大部分是低级别的复杂度，个别情况是高级别复杂度且发生具有时序关系时，可以将个别高级别复杂度均摊到低级别复杂度上。基本上均摊结果就等于低级别复杂度。
 
@@ -158,8 +158,8 @@
         if(n < 4) {
             return n;
         }
-        Var s1 = 1; s2=2;s3 = 3;
-        for(var i = 4; i < n; i++) {
+        var s1 = 1, s2 = 2, s3 = 3;
+        for(var i = 4; i <= n; i++) {
             var res = s1 + s3;
             s1 = s2;
             s2 = s3;
@@ -294,7 +294,7 @@ function TreeNode(val, left, right) {
 
 [filename](../algorithm/inorder.js ':include :type=code')
 
-3. 后序号遍历
+3. 后序遍历
 
     先左，后右，然后中
 
@@ -600,7 +600,7 @@ function TreeNode(val, left, right) {
         var arr = [];
         for (var i = 0; i < k; i++) {
             arr.push(heap.top());
-            heap.deleteMax();
+            heap.deleteRoot();
         }
         return arr;
     };
@@ -644,7 +644,7 @@ function TreeNode(val, left, right) {
             if (i > this.min) return;
             let lc = i * 2 + 1;
             let rc = (i + 1) * 2;
-            if (rc && this.arr[lc] > this.arr[rc]) {
+            if (rc < this.len && this.arr[lc] > this.arr[rc]) {
                 this.swap(i, (i + 1) * 2);
             } else {
                 this.swap(i, i * 2 + 1);
@@ -685,6 +685,195 @@ function TreeNode(val, left, right) {
 [filename](../algorithm/kmp.js ':include :type=code')
 
 ### 单调栈类问题
+
+单调栈维护一个单调递增或递减的栈，核心思路：**遍历时，如果当前元素破坏了单调性，就弹出栈顶并处理，直到满足单调性为止**。时间复杂度 O(n)，每个元素最多入栈出栈各一次。
+
+1. 每日温度（单调递减栈）[leetcode 739](https://leetcode-cn.com/problems/daily-temperatures/)
+
+    给定每天气温，返回每天需要等几天才能等到更高温度。
+
+    ```js
+    // 思路：维护一个单调递减栈，存下标
+    // 当前温度 > 栈顶温度时，说明栈顶那天等到了更高温度，弹出并计算差值
+    var dailyTemperatures = function(temperatures) {
+        const n = temperatures.length;
+        const result = new Array(n).fill(0);
+        const stack = []; // 存下标，单调递减（栈底温度最高）
+
+        for (let i = 0; i < n; i++) {
+            while (stack.length && temperatures[i] > temperatures[stack[stack.length - 1]]) {
+                const idx = stack.pop();
+                result[idx] = i - idx; // 等了多少天
+            }
+            stack.push(i);
+        }
+        return result;
+    };
+    ```
+
+2. 接雨水（单调递减栈）[leetcode 42](https://leetcode-cn.com/problems/trapping-rain-water/)
+
+    给定柱子高度数组，计算能接多少雨水。
+
+    ```js
+    // 思路：维护单调递减栈
+    // 当出现比栈顶高的柱子时，说明出现了一个"坑"，可以接水
+    // 雨水量 = 宽度 * (min(左边界, 右边界) - 坑底高度)
+    var trap = function(height) {
+        let result = 0;
+        const stack = [];
+
+        for (let i = 0; i < height.length; i++) {
+            while (stack.length && height[i] > height[stack[stack.length - 1]]) {
+                const bottom = stack.pop();           // 坑底
+                if (!stack.length) break;
+                const left = stack[stack.length - 1]; // 左边界
+                const width = i - left - 1;
+                const h = Math.min(height[left], height[i]) - height[bottom];
+                result += width * h;
+            }
+            stack.push(i);
+        }
+        return result;
+    };
+    ```
+
+3. 下一个更大元素 / 柱状图中最大矩形（单调递增栈）
+
+    找每个元素右边第一个比它大的值，模板和每日温度一样，换成单调递增栈就能找每个元素右边第一个更小的值。
+
+    **选栈方向口诀：找右边第一个更大 → 单调递减栈；找右边第一个更小 → 单调递增栈。**
+
+---
+
+### 二分查找
+
+二分查找的核心：每次排除一半的搜索空间，时间复杂度 O(logn)。**写二分的关键是边界条件**，用左闭右闭 `[left, right]` 最不容易出错。
+
+1. 标准二分查找模板
+
+    ```js
+    function binarySearch(nums, target) {
+        let left = 0, right = nums.length - 1; // 左闭右闭
+
+        while (left <= right) {  // 注意是 <=
+            const mid = left + Math.floor((right - left) / 2); // 防止溢出，不用 (left+right)/2
+            if (nums[mid] === target) {
+                return mid;
+            } else if (nums[mid] < target) {
+                left = mid + 1;  // 目标在右半，排除 mid
+            } else {
+                right = mid - 1; // 目标在左半，排除 mid
+            }
+        }
+        return -1;
+    }
+    ```
+
+2. 查找左边界（第一个 >= target 的位置）
+
+    ```js
+    function lowerBound(nums, target) {
+        let left = 0, right = nums.length - 1;
+        while (left <= right) {
+            const mid = left + Math.floor((right - left) / 2);
+            if (nums[mid] < target) {
+                left = mid + 1;
+            } else {
+                right = mid - 1; // 找到也继续收缩右边，确保找到最左
+            }
+        }
+        return left; // left 就是第一个 >= target 的位置
+    }
+    ```
+
+3. 二分的本质：搜索区间收缩
+
+    二分不只用于有序数组，**只要能判断「答案在左半还是右半」就能用二分**。常见变体：
+    - 旋转排序数组中查找 [leetcode 33]
+    - 找峰值元素 [leetcode 162]
+    - 搜索二维矩阵 [leetcode 74]
+    - **二分答案**：把「求最大/最小值」转换成「判断 x 是否可行」，比如「最小化最大值」、「运输能力」等题
+
+---
+
+### 双指针 / 滑动窗口
+
+双指针分两类：**对撞指针**（从两端向中间走）和 **快慢指针**（同方向，速度不同）。滑动窗口是快慢指针的延伸，维护一个可变长的区间。
+
+1. 对撞指针模板（两数之和 / 三数之和）
+
+    ```js
+    // 有序数组中找两数之和等于 target
+    function twoSum(nums, target) {
+        let left = 0, right = nums.length - 1;
+        while (left < right) {
+            const sum = nums[left] + nums[right];
+            if (sum === target) return [left, right];
+            else if (sum < target) left++;
+            else right--;
+        }
+        return [];
+    }
+    ```
+
+2. 快慢指针（链表找环 / 找中点）
+
+    ```js
+    // 链表找中点：快指针走两步，慢指针走一步，快指针到头时慢指针在中点
+    function findMid(head) {
+        let slow = head, fast = head;
+        while (fast && fast.next) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+
+    // 链表找环：如果有环，快慢指针一定会相遇
+    function hasCycle(head) {
+        let slow = head, fast = head;
+        while (fast && fast.next) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (slow === fast) return true;
+        }
+        return false;
+    }
+    ```
+
+3. 滑动窗口模板（最长/最短子串问题）
+
+    ```js
+    // 通用模板：找满足条件的最长子串
+    function slidingWindow(s) {
+        let left = 0, right = 0;
+        let result = 0;
+        const window = new Map(); // 维护窗口内的状态
+
+        while (right < s.length) {
+            // 1. 右指针扩张，把 s[right] 加入窗口
+            const c = s[right];
+            window.set(c, (window.get(c) || 0) + 1);
+            right++;
+
+            // 2. 判断窗口是否需要收缩（根据题意决定收缩条件）
+            while (/* 窗口不满足条件 */ false) {
+                const d = s[left];
+                window.set(d, window.get(d) - 1);
+                left++;
+            }
+
+            // 3. 更新结果
+            result = Math.max(result, right - left);
+        }
+        return result;
+    }
+    ```
+
+    上面第7题「最长不含重复字符的子字符串」就是这个模板的一个具体应用。
+
+---
 
 ### 通用
 
@@ -816,3 +1005,57 @@ function TreeNode(val, left, right) {
         return reg.test(number.toString(4));
     }
     ```
+
+---
+
+### 算法在 AI 场景中的应用
+
+1. **TopK 与 LLM 采样**
+
+    LLM 生成文字时，并不是直接取概率最高的词（贪心），而是用 **Top-K 采样** 或 **Top-P（核采样）**：
+    - **Top-K**：每次只从概率最高的 K 个词里随机采样，K 越小越保守，K 越大越有创意。背后就是堆排序 / 快速选择求 TopK。
+    - **Top-P（Nucleus Sampling）**：累计概率超过 P 的最小词集合里采样，比 Top-K 更自适应。
+    - **Temperature**：在 softmax 之前对 logits 除以 temperature，控制概率分布的"尖锐度"，temperature→0 趋向贪心，temperature→∞ 趋向均匀随机。
+
+    ```
+    贪心（temperature=0）：永远选最高概率词 → 输出稳定但缺乏创意
+    高temperature         ：概率分布被"拉平" → 输出更多样但可能不连贯
+    Top-K + temperature   ：两者结合，大多数 LLM 的默认配置
+    ```
+
+2. **BFS / DFS 在 Agent 任务规划中的应用**
+
+    AI Agent 把复杂任务拆分成子任务时，本质上在构建一棵**任务树**，遍历这棵树就是在用 BFS 或 DFS：
+
+    - **DFS（深度优先）**：沿着一条路径一直做下去，失败了再回溯换方向。适合有明确目标路径的任务（写一段代码 → 运行 → 报错 → 修复 → 再运行）。类似递归 + 回溯。
+    - **BFS（广度优先）**：先探索所有浅层可能性，再深入。适合需要对比多个方案的任务（生成3个方案 → 评估 → 选最优 → 继续深化）。
+
+    ```
+    用户：帮我调研竞品并写报告
+
+    BFS 式 Agent 规划：
+    第1层：并行搜索 A/B/C 三个竞品
+    第2层：对每个竞品并行抓取详情页
+    第3层：汇总对比，生成报告
+
+    DFS 式 Agent 规划（ReAct 模式）：
+    搜索竞品A → 发现链接 → 点进去 → 抓内容 → 分析 → 搜索竞品B → ...
+    ```
+
+    Multi-Agent 框架（如 LangGraph）里，图的拓扑排序算法决定了哪些子 Agent 可以并行执行，哪些必须串行等待，本质就是 DAG（有向无环图）的拓扑遍历。
+
+3. **向量检索与 KNN（RAG 的核心）**
+
+    RAG（检索增强生成）中，查找最相似的文档片段，本质是 **K 近邻（KNN）** 问题：
+    - 每个文档片段被 Embedding 模型转成一个高维向量（比如 1536 维）
+    - 用户问题同样转成向量
+    - 找到与问题向量距离最近的 K 个文档向量（余弦相似度）
+    - 暴力搜索是 O(n)，生产环境用 **HNSW（分层小世界导航图）** 等近似最近邻算法，将搜索降到 O(logn)，Pinecone/Milvus/Faiss 底层都是这类算法
+
+4. **动态规划与 Beam Search**
+
+    LLM 推理时，**Beam Search** 是一种启发式的序列生成策略，思路和动态规划很像：
+    - 每步保留概率最高的 K 条候选序列（beam width = K），而不是只保留 1 条（贪心）
+    - 最终选择整体概率最高的序列
+    - 相比贪心更准确，但 K 越大计算量越大
+    - 现代对话模型更多用采样（Top-K/Top-P）而非 Beam Search，因为 Beam Search 输出往往过于"正确"而缺乏多样性

@@ -21,7 +21,6 @@
     - **boolean**：表示布尔类型，只有两个值 `true` 和 `false`，如 `let isDone: boolean = false;`。
     - **null**：表示空值，只有一个值 `null`，如 `let n: null = null;`。
     - **undefined**：表示未定义的值，只有一个值 `undefined`，如 `let u: undefined = undefined;`。
-    -
     - **any**：表示任意类型，当你不确定变量的具体类型时可以使用，如 `let value: any = "hello"; value = 10;`。
     - **void**：通常用于函数没有返回值的情况，如 `function sayHello(): void { console.log("Hello"); }`。
     - **never**：TypeScript 中的 never 类型表示永远不会出现的值（如抛出异常或无限循环的函数），比如一个函数，根本不可能走完，因为你抛出异常了，这个时候就可以给它的返回值写 never
@@ -456,8 +455,10 @@
         - **module**：指定模块系统，如 `commonjs`、`esnext` 等。
         - **strict**：启用所有严格类型检查选项。
         - **outDir**：指定编译后文件的输出目录。
-        - **path**：指定需要编译的文件路径。
+        - **paths**：配置路径别名映射（需要配合 baseUrl 使用），如 `"@/*": ["src/*"]`。
         - **baseUrl**：设置模块解析的基准路径
+        - **include / exclude**：指定需要编译或排除的文件路径。
+        - **lib**：指定编译时包含的内置类型定义库，如 `["ES2020", "DOM"]`。
 
     </details>
 
@@ -602,7 +603,7 @@
         }
     }
     // 使用
-    window.myLibrary.doSomething();
+    window.a = 1;
 
     declare const _globalInitialData: {
         url: string;
@@ -718,5 +719,118 @@
     - **使用场景**：
         - **enum**：当需要在运行时访问枚举对象，或者需要枚举成员的反向映射（通过值获取名称）时使用。
         - **const enum**：当只需要枚举成员的值，并且希望减少编译后的代码体积时使用。需要注意的是，`const enum` 只能使用常量枚举表达式，不能使用计算值。
+
+    </details>
+
+29. 模板字面量类型（Template Literal Types）是什么？
+
+    <details>
+    <summary>展开答案</summary>
+
+    模板字面量类型允许在类型层面拼接字符串，类似 JS 的模板字符串。
+
+    ```typescript
+    type EventName = 'click' | 'focus' | 'blur';
+    type Handler = `on${Capitalize<EventName>}`; // "onClick" | "onFocus" | "onBlur"
+
+    // 实际应用：生成 getter/setter 名称
+    type Getters<T> = {
+        [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
+    };
+
+    interface Person {
+        name: string;
+        age: number;
+    }
+    type PersonGetters = Getters<Person>;
+    // { getName: () => string; getAge: () => number; }
+    ```
+
+    </details>
+
+30. `satisfies` 操作符的作用是什么？（TS 4.9+）
+
+    <details>
+    <summary>展开答案</summary>
+
+    `satisfies` 用于在不改变推断类型的前提下，验证一个值是否满足某个类型约束。与 `as` 断言不同，`satisfies` 会保留更精确的推断类型，同时进行类型检查。
+
+    ```typescript
+    type Colors = 'red' | 'green' | 'blue';
+    type ColorMap = Record<Colors, string | [number, number, number]>;
+
+    // 使用 as 断言：丢失精确类型
+    const palette1 = {
+        red: [255, 0, 0],
+        green: '#00ff00',
+        blue: [0, 0, 255],
+    } as ColorMap;
+    // palette1.red 类型是 string | [number, number, number]，不够精确
+
+    // 使用 satisfies：保留精确类型
+    const palette2 = {
+        red: [255, 0, 0],
+        green: '#00ff00',
+        blue: [0, 0, 255],
+    } satisfies ColorMap;
+    // palette2.red 类型是 [number, number, number]，更精确
+    // palette2.green 类型是 string
+    ```
+
+    </details>
+
+27. **TypeScript 在 AI SDK 中的常见类型模式**
+
+    <details open>
+
+    **AI 工具调用（Tool Call）类型定义**：LLM 函数调用���参数需要用 JSON Schema 描述，TypeScript 可以用泛型确保类型安全。
+
+    ```ts
+    // 工具定义
+    type Tool<TParams extends Record<string, unknown>> = {
+        name: string;
+        description: string;
+        parameters: TParams;
+        execute: (params: TParams) => Promise<unknown>;
+    };
+
+    // 消息类型
+    type Message =
+        | { role: 'user'; content: string }
+        | { role: 'assistant'; content: string | null; tool_calls?: ToolCall[] }
+        | { role: 'tool'; tool_call_id: string; content: string };
+    ```
+
+    **泛型推断 AI 响应**：用 `infer` 从 API 响应类型中提取嵌套类型。
+
+    ```ts
+    type ExtractContent<T> =
+        T extends { choices: Array<{ message: { content: infer C } }> }
+        ? C
+        : never;
+
+    // 提取 OpenAI ChatCompletion 的 content 类型
+    type Content = ExtractContent<ChatCompletion>; // string | null
+    ```
+
+    **流式响应类型**：`AsyncGenerator` 处理 SSE 流。
+
+    ```ts
+    async function* streamChat(prompt: string): AsyncGenerator<string> {
+        const stream = await openai.chat.completions.create({
+            stream: true,
+            messages: [{ role: 'user', content: prompt }],
+            model: 'gpt-4o',
+        });
+        for await (const chunk of stream) {
+            const delta = chunk.choices[0]?.delta?.content;
+            if (delta) yield delta;
+        }
+    }
+    ```
+
+    **TypeScript 5.x 新特性**：
+    - **`const` 类型参数**（TS 5.0）：`function tag<const T extends string[]>(arr: T)` 推断出字面量元组类型而非 `string[]`
+    - **`using` 声明**（TS 5.2）：基于 `Symbol.dispose` 的资源自动释放，适合 DB 连接、文件句柄管理
 
     </details>

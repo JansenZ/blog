@@ -542,7 +542,7 @@
       - 模板内容不会立即渲染
       - 可以动态实例化
 
-9) customElements 的生命周期有哪些？
+9. customElements 的生命周期有哪些？
     <details open>
 
    1. constructor()
@@ -676,7 +676,7 @@
       }
       ```
 
-10) 介绍下 shadow DOM 吧
+10. 介绍下 shadow DOM 吧
     <details open>
 
     1. 基本概念
@@ -824,7 +824,7 @@
     }
     ```
 
-11) qiankun 是如何做到沙箱隔离的？
+11. qiankun 是如何做到沙箱隔离的？
 
     <details open>
 
@@ -934,7 +934,7 @@
        })(proxy1.proxy)
        ```
 
-12) 原生 hash 实现路由
+12. 原生 hash 实现路由
 
     <details open>
 
@@ -1065,7 +1065,7 @@
     button.addEventListener('click', router.backOff, false)
     ```
 
-13) react hash 实现参考
+13. react hash 实现参考
     <details open>
 
     不管是 hash 还是 history， 只要是 react 组件下的，无非就是三个组件
@@ -1118,7 +1118,7 @@
     export default ({ to, ...props }) => <a {...props} href={'#' + to} />
     ```
 
-14) 原生 js history 参考
+14. 原生 js history 参考
     <details open>
 
     ```js
@@ -1157,7 +1157,7 @@
     }
     ```
 
-15) history react 参考
+15. history react 参考
     <details open>
 
     ```js
@@ -1215,7 +1215,7 @@
     )
     ```
 
-16) 动态路由，怎么识别
+16. 动态路由，怎么识别
     <details open>
 
     核心就 4 个步骤
@@ -1323,3 +1323,35 @@
     //   }
     // }
     ```
+
+17. **路由在 AI 应用中的应用场景**
+
+    <details open>
+
+    **AI 对话历史持久化与 URL 同步**：把对话 session ID 放到路由参数里，刷新页面可以恢复对话，也方便分享。
+
+    ```js
+    // /chat/:sessionId
+    // React Router
+    const { sessionId } = useParams();
+    useEffect(() => {
+        loadSession(sessionId); // 从服务端恢复对话历史
+    }, [sessionId]);
+    ```
+
+    **流式响应与路由跳转**：用户在 AI 回复未完成时切换路由，需要用 `AbortController` 取消未完成的流式请求，防止内存泄漏。
+
+    ```js
+    // React Router v6 loader 中取消请求
+    export async function loader({ request }) {
+        const res = await fetch('/api/chat', { signal: request.signal });
+        return streamResponse(res);
+    }
+    // request.signal 在路由切换时自动 abort
+    ```
+
+    **微前端 + AI 工具集成**：不同 AI 功能（对话、图像生成、代码补全）拆分为独立的微前端应用，通过 qiankun/Module Federation 按需加载，避免主应用 bundle 过大。
+
+    **路由懒加载与 AI 重型组件**：代码编辑器（Monaco Editor）、AI 图表组件等体积大，配合 `React.lazy` / Vue 异步组件 + 路由懒加载，只在进入对应路由时才下载。
+
+    </details>
