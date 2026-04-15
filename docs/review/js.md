@@ -1423,70 +1423,64 @@
     - 类继承
       `xx extends`
 
-    普通继承和类继承是有区别的，es5 是借助构造函数实现，实质上是**先创造子类的实例对象 this，然后再将父类的方法添加到这个 this 上去**
-
-    而 es6 的继承机制完全不同，实质上是**先创造父类的实例对象 this（所以必须先调用 super 方法，）然后再用子类的构造函数修改 this。**
-
-    es6 在继承的语法上不仅继承了类的原型对象，还继承了类的**静态属性和静态方法**。
+    用一个完整示例对比 ES5 和 ES6 继承的所有区别：
 
     ```js
+    // ===== 父类 =====
     // ES5
-    function P() {}
-    P.getName = function () {
-        return 'h';
-    };
-    function C() {
-        P.apply(this, arguments);
+    function Animal(name) {
+        this.name = name;
     }
-    C.prototype = Object.create(P.prototype);
-    C.prototype.constructor = C;
-    C.getName(); // Uncaught TypeError: C.getName is not a function
+    Animal.prototype.speak = function () { return this.name + ' speaks'; };
+    Animal.staticHello = function () { return 'static hello'; }; // 静态方法
 
-    //ES6
-    class A {}
-    A.getName = function () {
-        return 'h';
-    };
-    A.getName(); // "h"
-    class B extends A {}
-    B.getName(); // "h" 没有报错哦
+    // ES6
+    class Animal {
+        constructor(name) { this.name = name; }
+        speak() { return this.name + ' speaks'; }
+        static staticHello() { return 'static hello'; }
+    }
+
+    // ===== 子类 =====
+    // ES5 寄生组合继承
+    function Dog(name) {
+        Animal.call(this, name);   // 继承实例属性（先有娃，再认爹）
+    }
+    Dog.prototype = Object.create(Animal.prototype);
+    Dog.prototype.constructor = Dog;
+    Dog.staticHello(); // ❌ TypeError：ES5 继承不到静态方法
+
+    // ES6 类继承
+    class Dog extends Animal {
+        constructor(name) {
+            // this.type = 'dog'; // ❌ ReferenceError！super 前 this 不存在
+            super(name);          // 父类先创建 this（先认爹，才有娃）
+            this.type = 'dog';    // ✅ super 后才能用 this
+        }
+    }
+    Dog.staticHello(); // ✅ 'static hello'：ES6 自动继承静态方法
     ```
 
-    生成实例化对象的时候，如果是原生对象，类实例化出来可以继承到，而 es5 的不行。
+    **三大核心区别：**
 
-    通过代码来解释
+    | 区别 | ES5 | ES6 |
+    |------|-----|-----|
+    | **this 创建顺序** | 子类先创建 this，再挂父类属性（先有娃，再认爹） | 父类先创建 this（super），子类再修改（先认爹，才有娃） |
+    | **静态方法继承** | ❌ 不继承 | ✅ 自动继承 |
+    | **继承原生对象** | ❌ length 等内部属性无效 | ✅ 完全正常 |
+
+    **为什么有 `extends` 就必须先 `super()` 才能用 `this`？**
+    派生类放弃了自己创建 `this` 的权利，`this` 由父类负责创建。`super()` 执行前 `this` 根本不存在，用了直接 ReferenceError。这样设计是为了能正确继承原生对象（Array/Error 等），让父类先创建带有引擎内部属性的 `this`。
 
     ```js
-    function MyArray() {
-        Array.call(this);
-    }
+    // 继承原生 Array 的区别
+    function MyArray() { Array.call(this); }
+    MyArray.prototype = Object.create(Array.prototype);
+    var a = new MyArray(); a[0] = 'x'; a.length; // 0 ❌ 内部属性挂不上
 
-    MyArray.prototype = Object.create(Array.prototype, {
-        constructor: {
-            value: MyArray,
-            writable: true,
-            configurable: true
-        }
-    });
-
-    var colors = new MyArray();
-    colors[0] = 'red';
-    colors.length; // 0
-
-    class MyArray extends Array {
-        constructor() {
-            super();
-        }
-    }
-
-    var arr = new MyArray();
-    arr[0] = 12;
-    arr.length; // 1
+    class MyArray extends Array {}
+    var b = new MyArray(); b[0] = 'x'; b.length; // 1 ✅ 父类创建 this，内部属性天然有
     ```
-
-    在不是继承原生构造函数的情况下，A.call(this) 与 super() 在功能上是没有区别的
-
-    但是如果是**原生对象**，就不行了，是拿不到内部属性的
 
 44. 如何实现一个深拷贝（[Object xxxx]）[loadsh](https://github.com/lodash/lodash/blob/4.17.15/lodash.js#L11087)
     <details open>
