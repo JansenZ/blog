@@ -1042,31 +1042,36 @@
 
     <details open>
 
-    1. 如果是同域名下的，直接用 cookie 就可以了。
+    三种场景，从简单到复杂：
 
-    2. 如果是在一个大域名下的不同子域名，可以到大域名下去登录，把 cookie 存在父域名下，这样所有子域名就可以获得到这个 cookie。
+    **场景一：同域名**
+    直接用 Cookie，Cookie 设置 domain 为 .example.com，所有子域名都能访问。
 
-    3. 如果是不同域名的，可以走一个中间认证服务器，访问 A 页面时，判断 A 页面是否有登录凭证（如 Token）。
+    **场景二：同父域名，不同子域名**
+    a.example.com 和 b.example.com，登录时把 Cookie 设置在父域名 .example.com 上，所有子域名共享。
 
-        如果有登录凭证，直接请求认证服务器验证用户信息。
+    **场景三：完全不同域名（最常见，核心方案）**
+    引入一个"认证中心"（CAS），流程如下：
 
-        如果没有登录凭证，说明用户未登录，重定向到认证服务器，并带上当前页面的回调地址。
+    1. 用户访问 a.com，a.com 发现没有登录凭证
+    2. a.com 重定向到认证中心：cas.com/login?callback=a.com/callback
+    3. 用户在 cas.com 登录，cas.com 种下自己的 Cookie（cas.com 域名下）
+    4. 登录成功后，cas.com 生成一个 token，重定向回 a.com/callback?token=xxx
+    5. a.com 拿 token 去 cas.com 验证，验证通过，a.com 自己种 Cookie
 
-        然后认证服务器判断用户是否已登录（通过存储的登录状态或凭证）。
+    此时用户访问 b.com：
+    1. b.com 发现没有登录凭证
+    2. b.com 重定向到 cas.com/login?callback=b.com/callback
+    3. cas.com 发现自己域名下有 Cookie（步骤 3 种的），说明已登录
+    4. 直接生成新 token，重定向回 b.com/callback?token=xxx
+    5. b.com 验证通过，种自己的 Cookie
 
-        如果认证服务器检测到用户未登录，会重定向到登录页面，用户登录后，认证服务器生成登录凭证（如 Token），并存储在用户浏览器中（如 Cookie 或 LocalStorage）。登录完成后，认证服务器重定向回 A 页面，并附带登录凭证。
+    关键点：
+    - 认证中心的 Cookie 只在 cas.com 域名下
+    - 每个业务站点各自有各自的 Cookie
+    - 认证中心负责"知道你已登录"，业务站点负责"验证 token"
 
-        A 页面接收到登录凭证后，会向认证服务器验证凭证的有效性。如果验证成功，A 页面登录成功，并将登录状态存储在本地（如 Cookie 或 LocalStorage）。
-
-        下次用户访问 A 页面时，由于已经有登录凭证，可以直接验证凭证并登录成功。
-
-        如果用户访问 B 页面，B 页面检测到用户未登录，会重定向到认证服务器。
-
-        认证服务器检测到用户已登录（通过浏览器中的登录凭证），直接重定向回 B 页面，并附带登录凭证。
-
-        B 页面接收到登录凭证后，会向认证服务器验证凭证的有效性。如果验证成功，B 页面登录成功。至此，单点登录完成。
-
-        ![tu](https://user-gold-cdn.xitu.io/2020/1/5/16f74f3f11a6fbad?imageslim)
+    一句话：认证中心统一登录，各站点各自存凭证。
 
 22. RN 原理是什么
 
