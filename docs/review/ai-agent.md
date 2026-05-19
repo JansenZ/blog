@@ -729,3 +729,591 @@ async function withGuardrails(response) {
 **为什么这个角色越来越重要：** 随着越来越多的产品用 LLM 驱动核心功能，"AI 的行为是否可控、可预期、可审计"变成了工程问题。Harness Engineer 就是解决这个问题的人。
 
 ---
+
+14. **模型幻觉（Hallucination）是什么？怎么应对？**
+<details open>
+
+**幻觉**：LLM 生成的内容看起来很流畅、很自信，但实际上是错的或编造的。模型不会说"我不知道"，它会一本正经地胡说八道。
+
+**为什么会产生幻觉：**
+- LLM 本质是"下一个 token 的概率预测"，它不理解事实，只理解语言模式
+- 训练数据有截止日期，不知道最新信息
+- 模型倾向于"补全"而不是"拒绝"，宁可编一个也不说不知道
+
+**幻觉的分类：**
+
+| 类型 | 例子 | 危害 |
+|------|------|------|
+| 事实性幻觉 | "爱因斯坦在1921年获得诺贝尔化学奖"（实际是物理学） | 误导用户 |
+| 捏造引用 | 编造一个不存在的论文/URL | 学术不端 |
+| 逻辑幻觉 | 推理过程看起来对，但结论错误 | 难以发现 |
+| 指令幻觉 | 执行了用户没要求的操作 | Agent 场景尤其危险 |
+
+**应对策略：**
+
+```js
+// 1. RAG — 让模型基于检索到的事实回答，而不是凭空编造
+const context = await retrieveFromVectorDB(userQuestion);
+const prompt = `基于以下参考资料回答问题，如果资料中没有相关信息，请明确说"我不知道"。
+参考资料：${context}
+问题：${userQuestion}`;
+
+// 2. 结构化输出 + 校验 — 强制模型输出 JSON，前端校验格式
+const response = await llm.chat({
+  messages,
+  response_format: { type: 'json_object' }  // OpenAI 的 JSON Mode
+});
+const parsed = JSON.parse(response);
+// 用 zod / joi 校验 schema
+const result = schema.safeParse(parsed);
+if (!result.success) {
+  // 格式不对，重试或降级
+}
+
+// 3. 自洽性检验 — 让模型自己检查自己的答案
+const checkPrompt = `请检查以下回答是否准确，指出可能的错误：
+问题：${question}
+回答：${answer}
+请列出回答中不确定或可能有误的部分。`;
+
+// 4. 多模型交叉验证 — 重要场景用多个模型回答，对比结果
+const [answer1, answer2] = await Promise.all([
+  llm1.chat(messages),
+  llm2.chat(messages)
+]);
+if (answer1 !== answer2) {
+  // 结果不一致，标记为不确定
+}
+```
+
+**面试话术：** "幻觉是 LLM 的本质缺陷，不能完全消除，只能通过 RAG、结构化输出、自洽性检验等工程手段来控制。在产品设计上，要给用户明确的边界提示，比如'AI 生成内容仅供参考'。"
+
+---
+
+15. **Claude Code / AI Coding Agent 的权限系统设计**
+<details open>
+
+AI Coding Agent（如 Claude Code、Cursor Agent、Windsurf 等）能读写文件、执行命令、访问网络，权限管控是核心安全问题。
+
+**权限模型设计：**
+
+```
+┌─────────────────────────────────────────┐
+│           权限层级（从低到高）            │
+├─────────────────────────────────────────┤
+│  Level 0: 只读 — 读文件、搜索代码        │
+│  Level 1: 写文件 — 创建/修改/删除文件     │
+│  Level 2: 执行命令 — 运行 shell 命令     │
+│  Level 3: 网络访问 — 调 API、下载资源     │
+│  Level 4: 系统操作 — 安装包、修改配置     │
+└─────────────────────────────────────────┘
+```
+
+**Claude Code 的权限策略：**
+
+```
+┌─────────────────────────────────────────────────────┐
+│  自动允许（不需要用户确认）：                         │
+│  - 读取当前项目目录下的文件                           │
+│  - 运行只读命令（ls、cat、grep）                     │
+│  - 搜索代码（ripgrep）                              │
+├─────────────────────────────────────────────────────┤
+│  需要用户确认：                                      │
+│  - 修改文件（write_file、patch）                     │
+│  - 执行可能有副作用的命令（npm install、git push）    │
+│  - 访问项目目录外的文件                               │
+├─────────────────────────────────────────────────────┤
+│  始终拒绝：                                         │
+│  - 执行 rm -rf / 等危险命令                         │
+│  - 修改系统文件（/etc、~/.bashrc）                   │
+│  - 访问敏感目录（~/.ssh、~/.aws）                    │
+└─────────────────────────────────────────────────────┘
+```
+
+**实现原理：**
+
+```js
+// 工具定义时就带上权限元数据
+const tools = [
+  {
+    name: 'read_file',
+    description: '读取文件内容',
+    permission: 'auto',  // 自动允许
+    parameters: { path: { type: 'string' } }
+  },
+  {
+    name: 'write_file',
+    description: '写入文件',
+    permission: 'confirm',  // 需要用户确认
+    parameters: { path: { type: 'string' }, content: { type: 'string' } }
+  },
+  {
+    name: 'terminal',
+    description: '执行 shell 命令',
+    permission: 'confirm',
+    dangerous_commands: ['rm -rf', 'sudo', 'chmod 777'],  // 黑名单
+    parameters: { command: { type: 'string' } }
+  }
+];
+
+// 执行工具前检查权限
+async function executeToolWithPermission(toolCall) {
+  const tool = tools.find(t => t.name === toolCall.name);
+
+  if (tool.permission === 'auto') {
+    return await execute(toolCall);
+  }
+
+  if (tool.permission === 'confirm') {
+    // 检查是否命中危险命令黑名单
+    if (isDangerous(toolCall)) {
+      return { error: '该命令被安全策略禁止' };
+    }
+    // 弹窗让用户确认
+    const approved = await askUser(`允许执行：${toolCall.name}(${JSON.stringify(toolCall.args)})？`);
+    if (!approved) return { error: '用户拒绝' };
+    return await execute(toolCall);
+  }
+}
+```
+
+**沙箱隔离方案：**
+
+| 方案 | 原理 | 适用场景 |
+|------|------|----------|
+| Docker 容器 | 每个 Agent 任务启动一个容器，任务结束销毁 | 服务端 Agent |
+| Firecracker 微虚拟机 | 更轻量的 VM，启动 < 125ms | AWS Lambda 级别隔离 |
+| 浏览器沙箱 | iframe sandbox、Web Worker | 前端 Agent |
+| 权限白名单 | 只允许访问特定目录/域名/端口 | 所有场景 |
+
+**面试话术：** "AI Agent 的权限设计遵循最小权限原则，默认只读，写操作需要确认，危险操作直接拒绝。同时通过沙箱隔离限制爆炸半径——即使 Agent 被 Prompt Injection 攻击，也只能在沙箱内造成有限损害。"
+
+---
+
+16. **AI Coding Agent 的技术路线对比**
+<details open>
+
+当前主流的 AI Coding Agent 有几条技术路线：
+
+| Agent | 核心思路 | 工具调用方式 | 适用场景 |
+|-------|---------|-------------|----------|
+| Claude Code | CLI 终端 Agent，直接操作文件系统和 shell | Tool Calling + 权限确认 | 本地开发、代码重构 |
+| Cursor / Windsurf | IDE 内嵌 Agent，编辑器即运行环境 | LSP + Tool Calling | 日常编码、补全 |
+| Devin / Manus | 浏览器 + 终端的全能 Agent | Computer Use + DOM 操控 | 全栈任务、部署 |
+| GitHub Copilot Workspace | PR 级别的 Agent，基于 issue 生成代码 | Git API + Tool Calling | 代码审查、Bug 修复 |
+
+**Hermes Agent 的特点（你正在用的这个）：**
+
+```
+┌─────────────────────────────────────────────────┐
+│  Hermes Agent 架构                               │
+│                                                  │
+│  用户输入（CLI / Telegram / Discord）            │
+│       ↓                                          │
+│  [Orchestrator] ← 主 Agent，负责规划和调度       │
+│       ├── terminal    — 执行 shell 命令          │
+│       ├── read/write  — 文件读写                 │
+│       ├── browser     — 浏览器自动化             │
+│       ├── web search  — 网络搜索                 │
+│       ├── sub-agents  — 子 Agent 并行执行        │
+│       └── skills      — 可复用的技能库           │
+│                                                  │
+│  关键设计：                                       │
+│  - Skill 系统：把常用操作保存为技能，跨会话复用   │
+│  - Memory 系统：持久化记忆，跨会话保持上下文      │
+│  - Sub-agent：复杂任务拆分给子 Agent 并行处理     │
+│  - Cron job：定时任务，无人值守执行               │
+└─────────────────────────────────────────────────┘
+```
+
+**和纯 CLI Agent（如 Claude Code）的区别：**
+- Hermes 是多通道的（CLI + IM + 定时任务），Claude Code 是纯终端
+- Hermes 有持久化记忆和技能系统，Claude Code 每次会话独立
+- Hermes 可以作为后台服务运行，Claude Code 是交互式的
+
+---
+
+17. **Browser Agent 靠的是什么？**
+<details open>
+
+Browser Agent 是让 AI 操控浏览器完成任务的技术，核心有三种方案：
+
+**方案一：DOM 操控（Playwright / Puppeteer）**
+
+```js
+// 通过 CSS 选择器直接操作 DOM
+await page.goto('https://github.com');
+await page.fill('input[name="q"]', 'AI Agent');
+await page.press('input[name="q"]', 'Enter');
+await page.waitForSelector('.repo-list');
+const results = await page.$$eval('.repo-list-item', items =>
+  items.map(el => ({
+    name: el.querySelector('.repo-name').textContent,
+    stars: el.querySelector('.stars').textContent,
+  }))
+);
+```
+
+优点：精准、快速、token 消耗低
+缺点：依赖页面结构，改版就挂
+
+**方案二：截图 + 视觉模型（Computer Use）**
+
+```
+┌─────────────────────────────────────────────┐
+│  1. 截图当前页面                              │
+│  2. 把截图发给视觉 LLM（Claude / GPT-4V）    │
+│  3. LLM 返回操作指令：                        │
+│     - click(120, 350)  ← 点击坐标            │
+│     - type("AI Agent") ← 输入文字            │
+│     - scroll(down)     ← 滚动               │
+│  4. 执行操作                                  │
+│  5. 再截图验证结果                             │
+│  6. 循环直到任务完成                           │
+└─────────────────────────────────────────────┘
+```
+
+优点：不依赖 DOM，能操作任意界面（桌面应用、Canvas、PDF）
+缺点：慢、贵、坐标可能不准
+
+**方案三：语义理解 + DOM 混合（实际产品用的）**
+
+```js
+// 先用 DOM 找到元素，拿不到再回退到视觉
+async function smartClick(page, description) {
+  // 策略1：用文字匹配
+  let element = await page.getByText(description).first();
+  if (await element.count()) {
+    await element.click();
+    return;
+  }
+
+  // 策略2：用 role 匹配
+  element = await page.getByRole('button', { name: description });
+  if (await element.count()) {
+    await element.click();
+    return;
+  }
+
+  // 策略3：回退到视觉模型
+  const screenshot = await page.screenshot({ encoding: 'base64' });
+  const { coordinate } = await visionModel.analyze(screenshot, `点击"${description}"`);
+  await page.mouse.click(coordinate[0], coordinate[1]);
+}
+```
+
+**面试话术：** "实际的 Browser Agent 是混合方案——优先用 DOM 操作（快、准），找不到元素时回退到视觉模型（通用但慢）。同时会做错误恢复，操作失败时把错误信息反馈给 LLM，让它调整策略重试。"
+
+---
+
+18. **Prompt Engineering 实战技巧**
+<details open>
+
+Prompt 是前端工程师和 LLM 打交道的核心接口，写好 prompt 直接决定输出质量。
+
+**基础技巧：**
+
+```js
+// 1. 角色设定（System Prompt）
+const systemPrompt = `你是一个资深前端面试官。
+要求：
+- 一次只问一个问题
+- 等候选人回答后再问下一个
+- 给出评分（1-10）和具体反馈
+- 如果回答有误，不要直接给答案，用追问引导`;
+
+// 2. Few-shot（给几个示例）
+const fewShot = `请按以下格式提取信息：
+
+输入：张三，25岁，北京，前端工程师
+输出：{"name":"张三","age":25,"city":"北京","role":"前端工程师"}
+
+输入：李四，30岁，上海，后端工程师
+输出：{"name":"李四","age":30,"city":"上海","role":"后端工程师"}
+
+输入：${userInput}
+输出：`;
+
+// 3. Chain-of-Thought（让模型展示推理过程）
+const cotPrompt = `请一步一步思考：
+1. 先分析问题的关键信息
+2. 然后列出可能的解决方案
+3. 最后给出结论
+
+问题：${question}`;
+```
+
+**高级技巧：**
+
+```js
+// 4. 结构化输出约束
+const structuredPrompt = `请严格按以下 JSON 格式回答，不要添加任何额外文字：
+{
+  "answer": "你的回答",
+  "confidence": 0.95,  // 0-1 之间的置信度
+  "sources": ["来源1", "来源2"]
+}`;
+
+// 5. 自洽性检验（让模型自己检查）
+const selfCheckPrompt = `请回答以下问题，然后检查你的回答是否有错误：
+问题：${question}
+回答后，请列出你回答中不确定的部分。`;
+
+// 6. 分治策略（复杂任务拆分）
+const decomposePrompt = `请将以下任务拆分为子任务：
+任务：${task}
+输出格式：
+[
+  {"step": 1, "description": "...", "estimated_time": "2min"},
+  {"step": 2, "description": "...", "estimated_time": "5min"}
+]`;
+```
+
+**Prompt 版本管理：** Prompt 和代码一样需要版本管理，因为微小的措辞变化可能导致输出质量大幅波动。实际项目中会把 prompt 存在代码仓库里，用 A/B 测试验证效果。
+
+---
+
+19. **RAG 完整实现流程**
+<details open>
+
+RAG（检索增强生成）是让 LLM 基于你的私有数据回答问题的技术，是企业级 AI 应用的核心。
+
+**完整流程：**
+
+```
+┌─────────────────────────────────────────────────────┐
+│                    离线阶段（索引构建）               │
+│                                                      │
+│  原始文档 → 切分 chunks → Embedding → 存入向量数据库  │
+└─────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────┐
+│                    在线阶段（查询）                   │
+│                                                      │
+│  用户问题 → Embedding → 向量检索 TopK → 拼入 Prompt  │
+│       → 发给 LLM → 生成答案                          │
+└─────────────────────────────────────────────────────┘
+```
+
+**代码实现：**
+
+```js
+// 1. 文档切分（Chunking）
+function splitIntoChunks(text, chunkSize = 500, overlap = 50) {
+  const chunks = [];
+  for (let i = 0; i < text.length; i += chunkSize - overlap) {
+    chunks.push(text.slice(i, i + chunkSize));
+  }
+  return chunks;
+}
+
+// 2. Embedding（把文本转成向量）
+async function embed(text) {
+  const response = await openai.embeddings.create({
+    model: 'text-embedding-3-small',
+    input: text,
+  });
+  return response.data[0].embedding; // 1536 维向量
+}
+
+// 3. 向量检索（找最相似的文档）
+async function retrieve(query, topK = 5) {
+  const queryVector = await embed(query);
+
+  // 用向量数据库检索（Pinecone / Milvus / pgvector）
+  const results = await vectorDB.query({
+    vector: queryVector,
+    topK,
+    includeMetadata: true,
+  });
+
+  return results.matches.map(m => m.metadata.text);
+}
+
+// 4. 生成答案（检索结果塞进 Prompt）
+async function ragAnswer(question) {
+  const context = await retrieve(question);
+  const prompt = `基于以下参考资料回答问题。
+如果资料中没有相关信息，请说"根据已有资料无法回答"。
+不要编造信息。
+
+参考资料：
+${context.join('\n---\n')}
+
+问题：${question}`;
+
+  const response = await llm.chat({
+    messages: [{ role: 'user', content: prompt }],
+  });
+  return response.content;
+}
+```
+
+**Chunk 策略对比：**
+
+| 策略 | 原理 | 适用场景 |
+|------|------|----------|
+| 固定长度切分 | 每 N 个字符切一刀 | 简单粗暴，适合结构化文本 |
+| 按段落切分 | 以 \n\n 为分隔符 | 文章、文档 |
+| 语义切分 | 用 Embedding 相似度判断断点 | 质量最高但计算量大 |
+| 递归切分 | 先按大块切，再按小块切 | LangChain 默认方案 |
+
+**面试话术：** "RAG 的核心挑战是 chunk 策略和检索质量。chunk 太大检索不精准，太小丢失上下文。实际项目中会用 overlap 重叠来缓解边界问题，同时用混合检索（向量 + 关键词）提高召回率。"
+
+---
+
+20. **Token 计算与成本优化**
+<details open>
+
+Token 是 LLM 计费的基本单位，前端工程师也需要理解，因为直接影响产品成本。
+
+**Token 基础：**
+- 1 个英文单词 ≈ 1-1.5 tokens
+- 1 个中文字 ≈ 1.5-2 tokens
+- GPT-4o：$2.5/百万 input tokens，$10/百万 output tokens
+- Claude Sonnet：$3/百万 input，$15/百万 output
+
+**成本优化策略：**
+
+```js
+// 1. 缓存 — 相同问题不重复调用
+const cache = new Map();
+async function cachedLLMCall(prompt) {
+  const hash = crypto.createHash('md5').update(prompt).digest('hex');
+  if (cache.has(hash)) return cache.get(hash);
+  const result = await llm.chat(prompt);
+  cache.set(hash, result);
+  return result;
+}
+
+// 2. 上下文压缩 — 长对话只保留关键信息
+function compressHistory(messages, maxTokens = 4000) {
+  if (countTokens(messages) <= maxTokens) return messages;
+
+  // 保留 system prompt + 最近 N 条 + 摘要
+  const system = messages.filter(m => m.role === 'system');
+  const recent = messages.slice(-10);
+  const summary = summarize(messages.slice(0, -10)); // 用 LLM 做摘要
+
+  return [...system, { role: 'assistant', content: `历史摘要：${summary}` }, ...recent];
+}
+
+// 3. 选择合适的模型 — 不是所有任务都需要最强模型
+function routeToModel(task) {
+  if (task.complexity === 'low') return 'gpt-4o-mini';  // 便宜
+  if (task.complexity === 'medium') return 'gpt-4o';     // 平衡
+  return 'claude-opus-4-5';                              // 最强但最贵
+}
+
+// 4. 流式输出 — 用户体验好，但 token 消耗一样
+// 关键是让用户"感觉快"，而不是真的减少 token
+```
+
+**面试话术：** "成本优化的核心是缓存、上下文压缩、模型路由。简单任务用小模型，复杂任务用大模型；重复查询用缓存；长对话用摘要压缩。这些是工程层面的优化，不需要改模型。"
+
+---
+
+21. **AI 在前端产品中的落地场景**
+<details open>
+
+面试官经常会问："你在项目中怎么用 AI 的？" 这里给几个实际场景：
+
+**场景一：AI 对话界面**
+```js
+// 核心就是流式输出 + Markdown 渲染
+const response = await fetch('/api/chat', {
+  method: 'POST',
+  body: JSON.stringify({ message }),
+});
+
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+
+  const chunk = decoder.decode(value);
+  // 解析 SSE 格式：data: {"content": "..."}\n\n
+  const lines = chunk.split('\n').filter(l => l.startsWith('data: '));
+  for (const line of lines) {
+    const data = JSON.parse(line.slice(6));
+    outputEl.textContent += data.content;  // 逐字追加
+  }
+}
+```
+
+**场景二：AI 智能搜索**
+```js
+// 传统搜索：关键词匹配
+// AI 搜索：语义理解 + 向量检索
+async function semanticSearch(query) {
+  // 1. 把用户问题转成向量
+  const queryEmbedding = await embed(query);
+
+  // 2. 向量检索
+  const results = await vectorDB.query({ vector: queryEmbedding, topK: 10 });
+
+  // 3. 用 LLM 重新排序和总结
+  const prompt = `根据以下搜索结果回答问题，并按相关性排序：
+问题：${query}
+结果：${JSON.stringify(results)}`;
+
+  return await llm.chat(prompt);
+}
+```
+
+**场景三：代码补全 / 代码审查**
+```js
+// 代码补全：光标位置 + 上下文 → LLM → 补全建议
+async function codeCompletion(fileContent, cursorPosition) {
+  const before = fileContent.slice(0, cursorPosition);
+  const after = fileContent.slice(cursorPosition);
+
+  const prompt = `请补全以下代码，只输出补全部分，不要重复已有代码：
+\`\`\`
+${before}<CURSOR>${after}
+\`\`\``;
+
+  return await llm.chat(prompt);
+}
+
+// 代码审查：diff → LLM → 审查意见
+async function codeReview(diff) {
+  const prompt = `请审查以下代码变更，指出潜在问题：
+${diff}
+输出格式：
+- 问题描述
+- 严重程度（高/中/低）
+- 修改建议`;
+
+  return await llm.chat(prompt);
+}
+```
+
+**场景四：表单智能填写**
+```js
+// 用户上传身份证照片 → OCR + LLM → 自动填写表单
+async function autoFillForm(imageBase64) {
+  const response = await llm.chat({
+    messages: [{
+      role: 'user',
+      content: [
+        { type: 'image', source: { type: 'base64', data: imageBase64 } },
+        { type: 'text', text: '请提取图片中的姓名、身份证号、地址，返回 JSON 格式' }
+      ]
+    }],
+    response_format: { type: 'json_object' }
+  });
+
+  const { name, idNumber, address } = JSON.parse(response.content);
+  // 自动填入表单
+  form.name.value = name;
+  form.idNumber.value = idNumber;
+  form.address.value = address;
+}
+```
+
+**面试话术：** "AI 在前端的落地场景主要是四类：对话界面（流式输出）、智能搜索（语义理解）、代码辅助（补全/审查）、数据提取（OCR+结构化输出）。核心都是调 LLM API + 流式消费 + 结果渲染。"
+
+---
