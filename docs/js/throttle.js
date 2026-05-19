@@ -23,7 +23,6 @@ function throttle(callback, timeout, options) {
 
         !startTime && !options.leading && (startTime = now);
         timer && clearTimeout(timer);
-        // startTime = now;
         // 差值大于timeout执行。
         if (now - startTime > timeout) {
             callback.apply(this, args);
@@ -32,6 +31,8 @@ function throttle(callback, timeout, options) {
             if (options.trailing) {
                 timer = setTimeout(() => {
                     callback.apply(this, args);
+                    // trailing 执行后更新 startTime，避免下次立即执行
+                    startTime = +new Date();
                 }, timeout - now + startTime);
             };
         }
