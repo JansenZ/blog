@@ -1516,7 +1516,99 @@ output = concat(head1, head2, head3) × Wo
 
 ---
 
-27. **KV Cache（键值缓存）是什么**
+27. **Decoder-Only 架构是什么**
+<details open>
+
+原始 Transformer 有两个部分：
+- Encoder（编码器）：双向注意力，能看完整输入
+- Decoder（解码器）：单向注意力，只能看前面的 token，用于生成
+
+GPT 的做法：把 Encoder 去掉，只留 Decoder → Decoder-Only
+
+```
+原始 Transformer（Encoder-Decoder）：
+输入 → [Encoder 双向看全部] → [Decoder 逐个生成] → 输出
+用于：翻译（"我爱你" → "I love you"）
+
+GPT（Decoder-Only）：
+输入 → [Decoder 逐个生成] → 输出
+直接用 Decoder 处理输入 + 生成输出
+```
+
+**三种架构对比：**
+
+```
+1. Encoder-Only（BERT）
+   - 双向注意力
+   - 擅长：理解（分类、NER、情感分析）
+   - 不擅长：生成
+   - 训练方式：完形填空（遮住一些词，预测它们）
+
+2. Decoder-Only（GPT）
+   - 因果注意力（单向）
+   - 擅长：生成（写文章、对话、翻译）
+   - 也能做理解（转换成生成任务）
+   - 训练方式：预测下一个词
+
+3. Encoder-Decoder（T5、BART）
+   - Encoder 双向理解输入
+   - Decoder 单向生成输出
+   - 擅长：翻译、摘要（输入输出都是文本）
+   - 缺点：复杂，两套参数
+```
+
+**因果注意力 vs 双向注意力：**
+
+```
+双向注意力（Encoder）：
+处理 "我 爱 你" 时：
+- "我" 能看到 "我 爱 你"（全部）
+- "爱" 能看到 "我 爱 你"（全部）
+- "你" 能看到 "我 爱 你"（全部）
+→ 每个词都能看到完整句子
+
+因果注意力（Decoder）：
+生成 "I love you" 时：
+- "I" 只能看到 "I"
+- "love" 只能看到 "I love"
+- "you" 只能看到 "I love you"
+→ 从左到右，只能看前面，不能看后面
+
+技术实现：causal mask（因果掩码）
+        我  爱  你
+我    [ ✓   ✗   ✗ ]    ← "我" 只能看 "我"
+爱    [ ✓   ✓   ✗ ]    ← "爱" 能看 "我 爱"
+你    [ ✓   ✓   ✓ ]    ← "你" 能看全部
+```
+
+**为什么 Decoder-Only 胜出：**
+
+1. 简单统一：所有任务都转换成生成
+   - 分类："情感是？" → "正面"
+   - 翻译："翻译：我爱你" → "I love you"
+   - 问答："什么是 KV Cache？" → "..."
+   - 代码："写个快排" → "def quicksort..."
+
+2. 规模定律（Scaling Law）：模型越大效果越好，而且可预测
+   → 公司愿意投钱：砸 GPU 就能变聪明
+
+3. 涌现能力：模型大到一定程度（100B+），突然出现新能力
+   - In-context learning：给几个例子就会了
+   - Chain-of-thought：能推理
+   → 这些能力主要在 Decoder-Only 模型上观察到
+
+4. 工程简单：一个模型一套训练流程
+   Encoder-Decoder 要训练两套，调参更复杂
+
+**一句话总结：**
+原始 Transformer = Encoder + Decoder（为翻译设计）
+BERT = 只用 Encoder（双向，擅长理解）
+GPT = 只用 Decoder（单向，擅长生成，也能理解）
+→ GPT 证明了"只用 Decoder + 足够大 = 通用智能"
+
+---
+
+28. **KV Cache（键值缓存）是什么**
 <details open>
 
 Transformer 生成文字是逐个 token 的：每次预测一个新 token，然后把它加到输入里，继续预测。
@@ -1562,7 +1654,7 @@ KV Cache 大小 ≈ 模型参数量 × 上下文长度 × 2（K和V各一份）
 
 ---
 
-28. **激活参数是什么**
+29. **激活参数是什么**
 <details open>
 
 激活参数 = 模型推理时实际参与计算的参数量。这个概念主要出现在 MoE（混合专家）模型里。
